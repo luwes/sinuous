@@ -1,0 +1,27 @@
+{
+  "name": "sinuous",
+  "version": "0.0.1",
+  "description": "🐍 Sinuous - Reactive render engine",
+  "module": "dist/sinuous.mjs",
+  "main": "dist/sinuous.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "functional",
+    "reactive",
+    "declarative"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "rm README.md && cp ../../README.md . && yarn lint && (cd ../.. && yarn test --single-run && yarn build)"
+  },
+  "repository": "luwes/sinuous",
+  "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/luwes/sinuous/issues"
+  },
+  "homepage": "https://github.com/luwes/sinuous#readme"
+}
