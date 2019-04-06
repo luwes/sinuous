@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>sinuous</title>
+  <style>
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-30px);
+      }
+      60% {
+        transform: translateY(-15px);
+      }
+    }
+    h2.axe {
+      animation: bounce 1s infinite alternate;
+    }
+    h1.red {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="sinuous"></div>
+
+  <script type="module">
+import { root, data, html } from './packages/sinuous/dist/sinuous.mjs';
+
+const title = data('The Shining');
+const byline = data('🔪');
+const className = data('axe');
+
+const template = () => {
+  return html`
+    <div>
+      <h1 className=${() => className()}>
+        ${() => className() == 'red' ? title('REDRUM') : title()}
+      </h1>
+      <h2 className=${() => className()}>
+        ${() => className() == 'axe' ? byline() : byline('RUN!')}
+      </h2>
+    </div>
+  `;
+};
+
+root(() => document.querySelector('.sinuous').append(template()));
+
+setTimeout(() => {
+  className('red');
+}, 2000);
+
+  </script>
+</body>
+</html>
