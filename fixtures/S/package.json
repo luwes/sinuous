@@ -1,0 +1,21 @@
+{
+  "name": "sinuous-S",
+  "version": "0.0.1",
+  "license": "MIT",
+  "source": "src/index.js",
+  "main": "dist/s.js",
+  "module": "dist/s.mjs",
+  "scripts": {
+    "build": "microbundle --external none",
+    "dev": "microbundle watch --external none",
+    "serve": "budo"
+  },
+  "dependencies": {
+    "htm": "^2.1.1",
+    "s-js": "^0.4.9"
+  },
+  "devDependencies": {
+    "budo": "^11.6.2",
+    "microbundle": "^0.11.0"
+  }
+}
