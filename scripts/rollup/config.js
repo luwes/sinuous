@@ -83,7 +83,7 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
           'process.env.NODE_ENV': JSON.stringify('production')
         }
       }),
-      nodeResolve({ module: true }),
+      nodeResolve({ mainFields: ['module'] }),
       commonjs(),
       format === UMD && babel(),
       format === UMD &&
