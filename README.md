@@ -7,6 +7,7 @@ Sinuous is a little experiment to get similar behavior as [Surplus](https://gith
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + [S.js](https://github.com/adamhaile/S) provides the reactivity.
 
 ```js
+// 3.77 kB gzip
 import S from 's-js';
 import sinuous from 'sinuous';
 import htm from 'htm';
