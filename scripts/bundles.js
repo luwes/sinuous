@@ -16,4 +16,18 @@ export const bundles = [
 ];
 
 export const fixtures = [
+  {
+    formats: [UMD],
+    global: 'sinuousS',
+    name: 'sinuous-s',
+    input: 'fixtures/S/src/index.js',
+    sourcemap: true
+  },
+  {
+    formats: [UMD],
+    global: 'sinuousHyperactiv',
+    name: 'sinuous-hyperactiv',
+    input: 'fixtures/hyperactiv/src/index.js',
+    sourcemap: true
+  },
 ];

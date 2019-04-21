@@ -4,6 +4,7 @@ import htm from 'htm';
 
 const h = sinuous.bind(S);
 const html = htm.bind(h);
+const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
 const count = S.data(0);
 const style = S.data('');
@@ -18,5 +19,3 @@ const template = () => {
 
 S.root(() => document.querySelector('.sinuous').append(template()));
 setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
-
-const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
