@@ -4,31 +4,29 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Sinuous is a little experiment to get similar behavior as [Surplus](https://github.com/adamhaile/surplus) but with template literals instead of JSX.  
-[HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expression plugin + [S.js](https://github.com/adamhaile/S) provides the reactivity.
+[HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + [S.js](https://github.com/adamhaile/S) provides the reactivity.
 
 ```js
-import { root, data, html } from 'sinuous';
+import S from 's-js';
+import sinuous from 'sinuous';
+import htm from 'htm';
 
-const title = data('The Shining');
-const byline = data('🔪');
-const className = data('axe');
+const h = sinuous.bind(S);
+const html = htm.bind(h);
+
+const count = S.data(0);
+const style = S.data('');
 
 const template = () => {
   return html`
-    <div>
-      <h1 className=${() => className()}>
-        ${() => className() == 'red' ? title('REDRUM') : title()}
-      </h1>
-      <h2 className=${() => className()}>
-        ${() => className() == 'axe' ? byline() : byline('RUN!')}
-      </h2>
-    </div>
+    <h1 style=${() => style()}>
+      Sinuous <sup>${() => count()}</sup>
+    </h1>
   `;
 };
 
-root(() => document.querySelector('.sinuous').append(template()));
+S.root(() => document.querySelector('.sinuous').append(template()));
+setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
 
-setTimeout(() => {
-  className('red');
-}, 2000);
+const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 ```

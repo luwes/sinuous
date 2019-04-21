@@ -23,9 +23,5 @@
   "bugs": {
     "url": "https://github.com/luwes/sinuous/issues"
   },
-  "homepage": "https://github.com/luwes/sinuous#readme",
-  "dependencies": {
-    "htm": "^2.1.1",
-    "s-js": "^0.4.9"
-  }
+  "homepage": "https://github.com/luwes/sinuous#readme"
 }

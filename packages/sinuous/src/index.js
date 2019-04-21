@@ -1,1 +1,1 @@
-export * from './sinuous.js';
+export { default } from './sinuous.js';
