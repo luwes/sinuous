@@ -1,6 +1,7 @@
 # 🐍 Sinuous
 
 ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/dist/sinuous.js?compression=gzip&label=gzip&style=flat-square)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Sinuous is a little experiment to get similar behavior as [Surplus](https://github.com/adamhaile/surplus) but with template literals instead of JSX.  
@@ -16,7 +17,7 @@ import S from 's-js';
 import sinuous from 'sinuous';
 import htm from 'htm';
 
-const h = sinuous.bind(S);
+const h = sinuous(S);
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
@@ -44,7 +45,7 @@ import htm from 'htm';
 import hyperactiv from 'hyperactiv';
 const { observe, computed } = hyperactiv;
 
-const h = sinuous.bind(computed);
+const h = sinuous(computed);
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 

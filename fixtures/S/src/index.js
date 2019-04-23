@@ -2,7 +2,7 @@ import S from 's-js';
 import sinuous from 'sinuous';
 import htm from 'htm';
 
-const h = sinuous.bind(S);
+const h = sinuous(S);
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 

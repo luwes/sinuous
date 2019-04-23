@@ -2,12 +2,8 @@
   "name": "sinuous-hyperactiv",
   "version": "0.0.1",
   "license": "MIT",
-  "source": "src/index.js",
-  "main": "dist/s.js",
-  "module": "dist/s.mjs",
+  "main": "dist/sinuous-hyperactiv.js",
   "scripts": {
-    "build": "microbundle --external none --no-compress",
-    "dev": "microbundle watch --external none --no-compress",
     "serve": "budo --live"
   },
   "dependencies": {

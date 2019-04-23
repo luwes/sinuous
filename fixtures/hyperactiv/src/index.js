@@ -3,7 +3,7 @@ import htm from 'htm';
 import hyperactiv from 'hyperactiv';
 const { observe, computed } = hyperactiv;
 
-const h = sinuous.bind(computed);
+const h = sinuous(computed);
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 

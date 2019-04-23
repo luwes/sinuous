@@ -2,7 +2,7 @@ plugins:
   - fp
 
 rules:
-  no-var: error
+  no-var: off
   # no-negated-condition: error
   # fp/no-arguments: error
   # fp/no-class: error

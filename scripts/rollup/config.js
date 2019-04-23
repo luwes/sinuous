@@ -5,7 +5,6 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
-import replace from 'rollup-plugin-replace';
 import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
 
@@ -16,7 +15,6 @@ const formatOptions = {
   [UMD]: { ext: '.js' }
 };
 
-const env = process.env.NODE_ENV;
 const argv = minimist(process.argv.slice(2));
 
 const requestedBundleTypes = (argv.type || '')
@@ -76,32 +74,12 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
     },
     plugins: [
       bundleSize(),
-      replace({
-        values: {
-          __DEBUG__: env !== 'production',
-          __DEV__: env === 'dev',
-          'process.env.NODE_ENV': JSON.stringify('production')
-        }
-      }),
       nodeResolve({ mainFields: ['module'] }),
       commonjs(),
       format === UMD && babel(),
       format === UMD &&
         terser({
-          warnings: true,
-          mangle: {
-            properties: {
-              regex: /^_/
-            }
-          },
-          nameCache: {
-            props: {
-              cname: 6,
-              props: {
-                "$_dirty": "__d",
-              }
-            }
-          }
+          warnings: true
         }),
       sourcemap && gzip()
     ].filter(Boolean),

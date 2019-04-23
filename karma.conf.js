@@ -4,7 +4,7 @@
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
-// const alias = require('rollup-plugin-alias');
+const alias = require('rollup-plugin-alias');
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
@@ -44,14 +44,10 @@ module.exports = function(config) {
       },
       preserveSymlinks: true,
       plugins: [
-        // alias({
-        //   'sinuous/hooks': __dirname + '/packages/sinuous/hooks/src/index.js',
-        //   'sinuous/html': __dirname + '/packages/sinuous/html/src/index.js',
-        //   'sinuous': __dirname + '/packages/sinuous/src/index.js'
-        // }),
-        nodeResolve({
-          module: true
+        alias({
+          'sinuous': __dirname + '/packages/sinuous/src/index.js'
         }),
+        nodeResolve(),
         commonjs(),
         istanbul({
           include: config.grep ?
@@ -69,10 +65,6 @@ module.exports = function(config) {
 
     coverageReporter: {
       reporters: [{ type: 'text' }, { type: 'lcov' }]
-    },
-
-    mochaReporter: {
-      showDiff: true
     },
 
     browserLogOptions: { terminal: true },
