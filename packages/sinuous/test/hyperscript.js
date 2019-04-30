@@ -1,77 +1,187 @@
+import test from 'tape';
 import sinuous from 'sinuous';
-const h = sinuous();
+const wrap = fn => fn();
+const h = sinuous(wrap);
 
-it('simple', function() {
-  assert(h('h1').outerHTML, '<h1></h1>');
-  assert(h('h1', 'hello world').outerHTML, '<h1>hello world</h1>');
+test('simple', function(t) {
+  t.equal(h('h1').outerHTML, '<h1></h1>');
+  t.equal(h('h1', 'hello world').outerHTML, '<h1>hello world</h1>');
+  t.end();
 });
 
-it('nested', function() {
-  assert(
+test('nested', function(t) {
+  t.equal(
     h('div', h('h1', 'Title'), h('p', 'Paragraph')).outerHTML,
     '<div><h1>Title</h1><p>Paragraph</p></div>'
   );
+  t.end();
 });
 
-it('arrays for nesting is ok', function() {
-  assert(
+test('arrays for nesting is ok', function(t) {
+  t.equal(
     h('div', [h('h1', 'Title'), h('p', 'Paragraph')]).outerHTML,
     '<div><h1>Title</h1><p>Paragraph</p></div>'
   );
+  t.end();
 });
 
-it('can use namespace in name', function() {
-  assert(h('myns:mytag').outerHTML, '<myns:mytag></myns:mytag>');
+test('can use namespace in name', function(t) {
+  t.equal(h('myns:mytag').outerHTML, '<myns:mytag></myns:mytag>');
+  t.end();
 });
 
-it('can use id selector', function() {
-  assert(h('div#frame').outerHTML, '<div id="frame"></div>');
+test('can use id selector', function(t) {
+  t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
+  t.end();
 });
 
-it('can use class selector', function() {
-  assert(h('div.panel').outerHTML, '<div class="panel"></div>');
+test('can use class selector', function(t) {
+  t.equal(h('div.panel').outerHTML, '<div class="panel"></div>');
+  t.end();
 });
 
-it('can default element types', function() {
-  assert(h('.panel').outerHTML, '<div class="panel"></div>');
-  assert(h('#frame').outerHTML, '<div id="frame"></div>');
+test('can default element types', function(t) {
+  t.equal(h('.panel').outerHTML, '<div class="panel"></div>');
+  t.equal(h('#frame').outerHTML, '<div id="frame"></div>');
+  t.end();
 });
 
-it('can set properties', function() {
+test('can set properties', function(t) {
   let a = h('a', { href: 'http://google.com' });
-  assert(a.href, 'http://google.com/');
+  t.equal(a.href, 'http://google.com/');
   let checkbox = h('input', { name: 'yes', type: 'checkbox' });
-  assert(checkbox.outerHTML, '<input name="yes" type="checkbox">');
+  t.equal(checkbox.outerHTML, '<input name="yes" type="checkbox">');
+  t.end();
 });
 
-it('registers event handlers', function() {
+test('registers an event handler', function(t) {
+  h.wrap = sinon.spy(fn => fn());
+
   let onClick = sinon.spy();
   let btn = h('button', { onclick: onClick }, 'something');
   btn.click();
-  assert(onClick.called);
+  t.assert(onClick.called);
+  t.end();
 });
 
-it('sets styles', function() {
+// test('unregisters an event handler', function(t) {
+//   h.wrap = sinon.spy();
+
+//   let onClick = sinon.spy();
+//   let btn = h('button', { onclick: onClick }, 'something');
+//   btn.click();
+//   t.equal(onClick.called);
+
+//   h(btn, { onclick: false });
+//   btn.click();
+//   t.equal(onClick.called);
+// });
+
+test('registers event handlers', function(t) {
+  h.wrap = sinon.spy(fn => fn());
+
+  let click = sinon.spy();
+  let focus = sinon.spy();
+  let btn = h('button', { events: { click, focus }}, 'something');
+  document.body.append(btn);
+  btn.focus();
+  t.assert(focus.called);
+  btn.click();
+  t.assert(click.called);
+  btn.remove();
+  t.end();
+});
+
+test('can use bindings', function(t) {
+  h.bindings.innerHTML = (el, value) => el.innerHTML = value;
+
+  let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
+  t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
+  t.end();
+});
+
+test('sets styles', function(t) {
   let div = h('div', { style: { color: 'red' } });
-  assert(div.style.color, 'red');
+  t.equal(div.style.color, 'red');
+  t.end();
 });
 
-it('sets styles as text', function() {
+test('sets styles as text', function(t) {
   let div = h('div', { style: 'color: red' });
-  assert(div.style.color, 'red');
+  t.equal(div.style.color, 'red');
+  t.end();
 });
 
-it('sets data attributes', function() {
+test('sets classes', function(t) {
+  let div = h('div', { classList: { play: true, pause: true } });
+  t.assert(div.classList.contains('play'));
+  t.assert(div.classList.contains('pause'));
+  t.end();
+});
+
+test('sets attributes', function(t) {
+  let div = h('div', { attrs: { 'checked': 'checked' }});
+  t.assert(div.hasAttribute('checked'));
+  t.end();
+});
+
+test('sets data attributes', function(t) {
   let div = h('div', { 'data-value': 5 });
-  assert(div.getAttribute('data-value'), '5'); // failing for IE9
+  t.equal(div.getAttribute('data-value'), '5'); // failing for IE9
+  t.end();
 });
 
-it("boolean, number, date, regex get to-string'ed", function() {
+test('sets refs', function(t) {
+  let ref;
+  let div = h('div', { 'ref': (el) => ref = el });
+  t.equal(div, ref);
+  t.end();
+});
+
+test("boolean, number, date, regex get to-string'ed", function(t) {
   let e = h('p', true, false, 4, new Date('Mon Jan 15 2001'), /hello/);
-  assert(e.outerHTML.match(/<p>truefalse4Mon Jan 15.+2001.*\/hello\/<\/p>/));
+  t.assert(e.outerHTML.match(/<p>truefalse4Mon Jan 15.+2001.*\/hello\/<\/p>/));
+  t.end();
 });
 
-it('unicode selectors', function() {
-  assert(h('.⛄').outerHTML, '<div class="⛄"></div>');
-  assert(h('span#⛄').outerHTML, '<span id="⛄"></span>');
+test('unicode selectors', function(t) {
+  t.equal(h('.⛄').outerHTML, '<div class="⛄"></div>');
+  t.equal(h('span#⛄').outerHTML, '<span id="⛄"></span>');
+  t.end();
+});
+
+test('can add insert functions', function(t) {
+  h.insert = sinon.spy(h.insert);
+  const insertCat = () => 'cat';
+  let div = h('div', insertCat);
+  t.assert(h.insert.called);
+  t.equal(div.outerHTML, '<div>cat</div>');
+  t.end();
+});
+
+test('can add wrap functions', function(t) {
+  h.wrap = sinon.spy(fn => fn());
+  const insertCat = () => 'cat';
+  let div = h('div', { innerText: insertCat });
+  t.assert(h.wrap.called);
+  t.equal(div.outerHTML, '<div>cat</div>');
+  t.end();
+});
+
+test('can use fragments', function(t) {
+  h.wrap = sinon.spy(fn => fn());
+  h.insert = sinon.spy(h.insert);
+  const insertCat = () => 'cat';
+
+  let frag = h([
+    h('div', 'First'),
+    insertCat,
+    h('div', 'Last'),
+  ]);
+
+  const div = document.createElement('div');
+  div.appendChild(frag);
+  t.assert(h.insert.called);
+  t.equal(div.innerHTML, '<div>First</div>cat<div>Last</div>');
+  t.end();
 });
