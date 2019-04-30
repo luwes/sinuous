@@ -2,19 +2,19 @@
 import { context } from './h.js';
 
 export default function sinuous(wrap) {
-
-  function insert(parent, accessor, init, marker) {
-    if (typeof accessor !== 'function')
-      return insertExpression(wrap, parent, accessor, init, marker);
-
-    wrap((current = init) =>
-      insertExpression(wrap, parent, accessor(), current, marker)
-    );
-  }
-
   return context({
     wrap,
     insert,
+  });
+}
+
+function insert(wrap, parent, accessor, current, marker) {
+  if (typeof accessor !== 'function') {
+    return insertExpression(wrap, parent, accessor, current, marker);
+  }
+
+  wrap(function() {
+    current = insertExpression(wrap, parent, accessor(), current, marker);
   });
 }
 
@@ -32,19 +32,23 @@ export function insertExpression(wrap, parent, value, current, marker) {
         const node = document.createTextNode(value);
         if (current !== '' && current != null) {
           parent.replaceChild(node, marker.previousSibling);
-        } else parent.insertBefore(node, marker);
+        } else {
+          parent.insertBefore(node, marker);
+        }
       }
       current = value;
     } else {
       if (current !== '' && typeof current === 'string') {
         current = parent.firstChild.data = value;
-      } else current = parent.textContent = value;
+      } else {
+        current = parent.textContent = value;
+      }
     }
   } else if (value == null || t === 'boolean') {
     current = clearAll(parent, current, marker);
   } else if (t === 'function') {
     wrap(function() {
-      current = insertExpression(parent, value(), current, marker);
+      current = insertExpression(wrap, parent, value(), current, marker);
     });
   } else if (value instanceof Node) {
     if (Array.isArray(current)) {

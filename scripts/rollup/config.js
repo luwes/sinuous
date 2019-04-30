@@ -79,7 +79,20 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
       format === UMD && babel(),
       format === UMD &&
         terser({
-          warnings: true
+          warnings: true,
+          mangle: {
+            properties: {
+              regex: /^_/
+            }
+          },
+          nameCache: {
+            props: {
+              cname: 6,
+              props: {
+                "$_closure": "__c",
+              }
+            }
+          }
         }),
       sourcemap && gzip()
     ].filter(Boolean),
