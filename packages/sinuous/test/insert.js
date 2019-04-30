@@ -1,322 +1,197 @@
+import test from 'tape';
 import sinuous from 'sinuous';
-const h = sinuous(fn => fn());
+const wrap = fn => fn();
+const h = sinuous(wrap);
+h.insert = h.insert.bind(h, wrap);
 
-describe("h.insert", () => {
-  // <div>before<!-- insert -->after</div>
-  const container = document.createElement("div");
+const insert = (val) => {
+  const parent = container.cloneNode(true);
+  h.insert(parent, val);
+  return parent;
+};
 
-  it("inserts nothing for null", () => {
-    const res = insert(null);
-    expect(res.innerHTML).to.equal("");
-    expect(res.childNodes.length).to.equal(0);
-  });
+// h.insert
+// <div>before<!-- insert -->after</div>
+const container = document.createElement("div");
 
-  it("inserts nothing for undefined", () => {
-    const res = insert(undefined);
-    expect(res.innerHTML).to.equal("");
-    expect(res.childNodes.length).to.equal(0);
-  });
-
-  it("inserts nothing for false", () => {
-    const res = insert(false);
-    expect(res.innerHTML).to.equal("");
-    expect(res.childNodes.length).to.equal(0);
-  });
-
-  it("inserts nothing for true", () => {
-    const res = insert(true);
-    expect(res.innerHTML).to.equal("");
-    expect(res.childNodes.length).to.equal(0);
-  });
-
-  it("inserts nothing for null in array", () => {
-    const res = insert(["a", null, "b"]);
-    expect(res.innerHTML).to.equal("ab");
-    expect(res.childNodes.length).to.equal(2);
-  });
-
-  it("inserts nothing for undefined in array", () => {
-    const res = insert(["a", undefined, "b"]);
-    expect(res.innerHTML).to.equal("ab");
-    expect(res.childNodes.length).to.equal(2);
-  });
-
-  it("inserts nothing for false in array", () => {
-    const res = insert(["a", false, "b"]);
-    expect(res.innerHTML).to.equal("ab");
-    expect(res.childNodes.length).to.equal(2);
-  });
-
-  it("inserts nothing for true in array", () => {
-    const res = insert(["a", true, "b"]);
-    expect(res.innerHTML).to.equal("ab");
-    expect(res.childNodes.length).to.equal(2);
-  });
-
-  it("can insert strings", () => {
-    const res = insert("foo");
-    expect(res.innerHTML).to.equal("foo");
-    expect(res.childNodes.length).to.equal(1);
-  });
-
-  it("can insert a node", () => {
-    const node = document.createElement("span");
-    node.textContent = "foo";
-    expect(insert(node).innerHTML).to.equal("<span>foo</span>");
-  });
-
-  it("can re-insert a node, thereby moving it", () => {
-    const node = document.createElement("span");
-    node.textContent = "foo";
-
-    const first = insert(node),
-      second = insert(node);
-
-    expect(first.innerHTML).to.equal("");
-    expect(second.innerHTML).to.equal("<span>foo</span>");
-  });
-
-  // it('can spread over element', () => {
-  //   const node = document.createElement("span");
-  //   r.spread(node, () => ({href: '/', for: 'id', classList: {danger: true}, events: {custom: e => e}, style: {color: 'red'}, something: 'good'}))
-  //   expect(node.getAttribute('href')).to.equal('/');
-  //   expect(node.htmlFor).to.equal('id');
-  //   expect(node.className).to.equal('danger');
-  //   expect(node.style.color).to.equal('red');
-  //   expect(node.something).to.equal('good');
-  // });
-
-  it("can insert an array of strings", () => {
-    expect(insert(["foo", "bar"]).innerHTML).to.equal("foobar", "array of strings");
-  });
-
-  it("can insert an array of nodes", () => {
-    const nodes = [ document.createElement("span"), document.createElement("div")];
-    nodes[0].textContent = "foo";
-    nodes[1].textContent = "bar";
-    expect(insert(nodes).innerHTML).to.equal("<span>foo</span><div>bar</div>");
-  });
-
-  it("can insert a changing array of nodes", () => {
-    var parent = document.createElement("div"),
-      current = "",
-      n1 = document.createElement("span"),
-      n2 = document.createElement("div"),
-      n3 = document.createElement("span"),
-      n4 = document.createElement("div"),
-      orig = [n1, n2, n3, n4];
-
-    n1.textContent = "1";
-    n2.textContent = "2";
-    n3.textContent = "3";
-    n4.textContent = "4";
-
-    var origExpected = expected(orig);
-
-    // identity
-    test([n1, n2, n3, n4]);
-
-    // 1 missing
-    test([    n2, n3, n4]);
-    test([n1,     n3, n4]);
-    test([n1, n2,     n4]);
-    test([n1, n2, n3    ]);
-
-    // 2 missing
-    test([        n3, n4]);
-    test([    n2,     n4]);
-    test([    n2, n3    ]);
-    test([n1,         n4]);
-    test([n1,     n3    ]);
-    test([n1, n2,       ]);
-
-    // 3 missing
-    test([n1            ]);
-    test([    n2        ]);
-    test([        n3    ]);
-    test([            n4]);
-
-    // all missing
-    test([              ]);
-
-    // swaps
-    test([n2, n1, n3, n4]);
-    test([n3, n2, n1, n4]);
-    test([n4, n2, n3, n1]);
-
-    // rotations
-    test([n2, n3, n4, n1]);
-    test([n3, n4, n1, n2]);
-    test([n4, n1, n2, n3]);
-
-    // reversal
-    test([n4, n3, n2, n1]);
-
-    function test(array) {
-      current = h.insert(parent, array, current);
-      expect(parent.innerHTML).to.equal(expected(array));
-      current = h.insert(parent, orig, current);
-      expect(parent.innerHTML).to.equal(origExpected);
-    }
-
-    function expected(array) {
-      return array.map(n => n.outerHTML).join("");
-    }
-  });
-
-  it("can insert nested arrays", () => {
-    expect(insert(["foo", ["bar", "blech"]]).innerHTML)
-    .to.equal("foobarblech", "array of array of strings");
-  });
-
-  function insert(val) {
-    const parent = container.cloneNode(true);
-    h.insert(parent, val);
-    return parent;
-  }
+test("inserts nothing for null", (t) => {
+  const res = insert(null);
+  t.equal(res.innerHTML, '');
+  t.equal(res.childNodes.length, 0);
+  t.end();
 });
 
-describe("h.insert with Markers", () => {
-  // <div>before<!-- insert -->after</div>
-  var container = document.createElement("div");
-  container.appendChild(document.createTextNode("before"));
-  container.appendChild(document.createTextNode(""));
-  container.appendChild(document.createTextNode("after"));
+test("inserts nothing for undefined", (t) => {
+  const res = insert(undefined);
+  t.equal(res.innerHTML, "");
+  t.equal(res.childNodes.length, 0);
+  t.end();
+});
 
-  it("inserts nothing for null", () => {
-    const res = insert(null);
-    expect(res.innerHTML).to.equal("beforeafter");
-    expect(res.childNodes.length).to.equal(3);
-  });
+test("inserts nothing for false", (t) => {
+  const res = insert(false);
+  t.equal(res.innerHTML, "");
+  t.equal(res.childNodes.length, 0);
+  t.end();
+});
 
-  it("inserts nothing for undefined", () => {
-    const res = insert(undefined);
-    expect(res.innerHTML).to.equal("beforeafter");
-    expect(res.childNodes.length).to.equal(3);
-  });
+test("inserts nothing for true", (t) => {
+  const res = insert(true);
+  t.equal(res.innerHTML, "");
+  t.equal(res.childNodes.length, 0);
+  t.end();
+});
 
-  it("inserts nothing for false", () => {
-    const res = insert(false);
-    expect(res.innerHTML).to.equal("beforeafter");
-    expect(res.childNodes.length).to.equal(3);
-  });
+test("inserts nothing for null in array", (t) => {
+  const res = insert(["a", null, "b"]);
+  t.equal(res.innerHTML, "ab");
+  t.equal(res.childNodes.length, 2);
+  t.end();
+});
 
-  it("inserts nothing for true", () => {
-    const res = insert(true);
-    expect(res.innerHTML).to.equal("beforeafter");
-    expect(res.childNodes.length).to.equal(3);
-  });
+test("inserts nothing for undefined in array", (t) => {
+  const res = insert(["a", undefined, "b"]);
+  t.equal(res.innerHTML, "ab");
+  t.equal(res.childNodes.length, 2);
+  t.end();
+});
 
-  it("inserts nothing for null in array", () => {
-    const res = insert(["a", null, "b"]);
-    expect(res.innerHTML).to.equal("beforeabafter");
-    expect(res.childNodes.length).to.equal(5);
-  });
+test("inserts nothing for false in array", (t) => {
+  const res = insert(["a", false, "b"]);
+  t.equal(res.innerHTML, "ab");
+  t.equal(res.childNodes.length, 2);
+  t.end();
+});
 
-  it("inserts nothing for undefined in array", () => {
-    const res = insert(["a", undefined, "b"]);
-    expect(res.innerHTML).to.equal("beforeabafter");
-    expect(res.childNodes.length).to.equal(5);
-  });
+test("inserts nothing for true in array", (t) => {
+  const res = insert(["a", true, "b"]);
+  t.equal(res.innerHTML, "ab");
+  t.equal(res.childNodes.length, 2);
+  t.end();
+});
 
-  it("inserts nothing for false in array", () => {
-    const res = insert(["a", false, "b"]);
-    expect(res.innerHTML).to.equal("beforeabafter");
-    expect(res.childNodes.length).to.equal(5);
-  });
+test("can insert strings", (t) => {
+  const res = insert("foo");
+  t.equal(res.innerHTML, "foo");
+  t.equal(res.childNodes.length, 1);
+  t.end();
+});
 
-  it("inserts nothing for true in array", () => {
-    const res = insert(["a", true, "b"]);
-    expect(res.innerHTML).to.equal("beforeabafter");
-    expect(res.childNodes.length).to.equal(5);
-  });
+test("can insert a node", (t) => {
+  const node = document.createElement("span");
+  node.textContent = "foo";
+  t.equal(insert(node).innerHTML, "<span>foo</span>");
+  t.end();
+});
 
-  it("can insert strings", () => {
-    const res = insert("foo");
-    expect(res.innerHTML).to.equal("beforefooafter");
-    expect(res.childNodes.length).to.equal(4);
-  });
+test("can re-insert a node, thereby moving it", (t) => {
+  const node = document.createElement("span");
+  node.textContent = "foo";
 
-  it("can insert a node", () => {
-    const node = document.createElement("span");
-    node.textContent = "foo";
-    expect(insert(node).innerHTML).to.equal("before<span>foo</span>after");
-  });
+  const first = insert(node),
+    second = insert(node);
 
-  it("can re-insert a node, thereby moving it", () => {
-    var node = document.createElement("span");
-    node.textContent = "foo";
+  t.equal(first.innerHTML, "");
+  t.equal(second.innerHTML, "<span>foo</span>");
+  t.end();
+});
 
-    const first = insert(node),
-      second = insert(node);
+// test('can spread over element', (t) => {
+//   const node = document.createElement("span");
+//   r.spread(node, () => ({href: '/', for: 'id', classList: {danger: true}, events: {custom: e => e}, style: {color: 'red'}, something: 'good'}))
+//   t.equal(node.getAttribute('href'), '/');
+//   t.equal(node.htmlFor, 'id');
+//   t.equal(node.className, 'danger');
+//   t.equal(node.style.color, 'red');
+//   t.equal(node.something, 'good');
+// });
 
-    expect(first.innerHTML).to.equal("beforeafter");
-    expect(second.innerHTML).to.equal("before<span>foo</span>after");
-  });
+test("can insert an array of strings", (t) => {
+  t.equal(insert(["foo", "bar"]).innerHTML, "foobar", "array of strings");
+  t.end();
+});
 
-  it("can insert an array of strings", () => {
-    expect(insert(["foo", "bar"]).innerHTML)
-      .to.equal("beforefoobarafter", "array of strings");
-  });
+test("can insert an array of nodes", (t) => {
+  const nodes = [ document.createElement("span"), document.createElement("div")];
+  nodes[0].textContent = "foo";
+  nodes[1].textContent = "bar";
+  t.equal(insert(nodes).innerHTML, "<span>foo</span><div>bar</div>");
+  t.end();
+});
 
-  it("can insert an array of nodes", () => {
-    const nodes = [ document.createElement("span"), document.createElement("div")];
-    nodes[0].textContent = "foo";
-    nodes[1].textContent = "bar";
-    expect(insert(nodes).innerHTML).to.equal("before<span>foo</span><div>bar</div>after");
-  });
+test("can insert a changing array of nodes", (t) => {
+  var parent = document.createElement("div"),
+    current = "",
+    n1 = document.createElement("span"),
+    n2 = document.createElement("div"),
+    n3 = document.createElement("span"),
+    n4 = document.createElement("div"),
+    orig = [n1, n2, n3, n4];
 
-  it("can insert a changing array of nodes", () => {
-    let container = document.createElement("div"),
-      marker = container.appendChild(document.createTextNode("")),
-      span1 = document.createElement("span"),
-      div2 = document.createElement("div"),
-      span3 = document.createElement("span"),
-      current;
-    span1.textContent = "1";
-    div2.textContent = "2";
-    span3.textContent = "3";
+  n1.textContent = "1";
+  n2.textContent = "2";
+  n3.textContent = "3";
+  n4.textContent = "4";
 
-    current = h.insert(container, [], current, marker);
-    expect(container.innerHTML).to.equal("");
+  var origExpected = expected(orig);
 
-    current = h.insert(container, [span1, div2, span3], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<span>1</span><div>2</div><span>3</span>");
+  // identity
+  test([n1, n2, n3, n4]);
 
-    current = h.insert(container, [div2, span3], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<div>2</div><span>3</span>");
+  // 1 missing
+  test([    n2, n3, n4]);
+  test([n1,     n3, n4]);
+  test([n1, n2,     n4]);
+  test([n1, n2, n3    ]);
 
-    current = h.insert(container, [div2, span3], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<div>2</div><span>3</span>");
+  // 2 missing
+  test([        n3, n4]);
+  test([    n2,     n4]);
+  test([    n2, n3    ]);
+  test([n1,         n4]);
+  test([n1,     n3    ]);
+  test([n1, n2,       ]);
 
-    current = h.insert(container, [span3, div2], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<span>3</span><div>2</div>");
+  // 3 missing
+  test([n1            ]);
+  test([    n2        ]);
+  test([        n3    ]);
+  test([            n4]);
 
-    current = h.insert(container, [], current, marker);
-    expect(container.innerHTML)
-      .to.equal("");
+  // all missing
+  test([              ]);
 
-    current = h.insert(container, [span3], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<span>3</span>");
+  // swaps
+  test([n2, n1, n3, n4]);
+  test([n3, n2, n1, n4]);
+  test([n4, n2, n3, n1]);
 
-    current = h.insert(container, [div2], current, marker);
-    expect(container.innerHTML)
-      .to.equal("<div>2</div>");
-  });
+  // rotations
+  test([n2, n3, n4, n1]);
+  test([n3, n4, n1, n2]);
+  test([n4, n1, n2, n3]);
 
-  it("can insert nested arrays", () => {
-    expect(insert(["foo", ["bar", "blech"]]).innerHTML)
-      .to.equal("beforefoobarblechafter", "array of array of strings");
-  });
+  // reversal
+  test([n4, n3, n2, n1]);
 
-  function insert(val) {
-    const parent = container.cloneNode(true);
-    h.insert(parent, val, undefined, parent.childNodes[1]);
-    return parent;
+  function test(array) {
+    current = h.insert(parent, array, current);
+    t.equal(parent.innerHTML, expected(array));
+    current = h.insert(parent, orig, current);
+    t.equal(parent.innerHTML, origExpected);
   }
+
+  function expected(array) {
+    return array.map(n => n.outerHTML).join("");
+  }
+
+  t.end();
+});
+
+test("can insert nested arrays", (t) => {
+  t.equal(
+    insert(["foo", ["bar", "blech"]]).innerHTML,
+    "foobarblech", "array of array of strings"
+  );
+  t.end();
 });
