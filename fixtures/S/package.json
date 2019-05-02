@@ -9,7 +9,7 @@
   "dependencies": {
     "htm": "^2.1.1",
     "s-js": "^0.4.9",
-    "sinuous": "0.1.0"
+    "sinuous": "0.2.0"
   },
   "devDependencies": {
     "budo": "^11.6.2"

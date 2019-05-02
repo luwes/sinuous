@@ -33,30 +33,34 @@ test('observable style', function(t) {
   t.end();
 });
 
-// test('context cleanup removes observable listeners', function(t) {
-//   let _h = h.context();
-//   let text = o();
-//   text('hello');
-//   let color = o();
-//   color('red');
-//   let className = o();
-//   className('para');
-//   let p = _h('p', { style: { color: color }, className: className }, text);
-//   t.equal(p.outerHTML, '<p style="color: red; " class="para">hello</p>');
-//   _h.cleanup();
-//   color('blue');
-//   text('world');
-//   className('section');
-//   t.equal(p.outerHTML, '<p style="color: red; " class="para">hello</p>');
-//   t.end();
-// });
+test('context cleanup removes observable listeners', function(t) {
+  let _h = sinuous();
+  let text = o();
+  text('hello');
+  let color = o();
+  color('red');
+  let className = o();
+  className('para');
+  let p = _h('p', { style: { color: color }, className: className }, text);
+  t.equal(p.outerHTML, '<p class="para" style="color: red;">hello</p>');
+  _h.cleanup();
+  color('blue');
+  text('world');
+  className('section');
+  t.equal(p.outerHTML, '<p class="para" style="color: red;">hello</p>');
+  t.end();
+});
 
-// test('context cleanup removes event handlers', function(t) {
-//   let _h = h.context();
-//   let onClick = sinon.spy();
-//   let button = _h('button', 'Click me!', { onclick: onClick });
-//   _h.cleanup();
-//   simu.click(button);
-//   t.assert(!onClick.called, 'click listener was not triggered');
-//   t.end();
-// });
+test('context cleanup removes event handlers', function(t) {
+  let _h = sinuous((fn) => fn());
+  let onClick = sinon.spy();
+  let closure = () => onClick;
+  let button = _h('button', 'Click me!', { onclick: closure });
+  button.click();
+  t.assert(onClick.calledOnce, 'click listener was triggered');
+
+  _h.cleanup();
+  button.click();
+  t.assert(onClick.calledOnce, 'click listener was not triggered');
+  t.end();
+});

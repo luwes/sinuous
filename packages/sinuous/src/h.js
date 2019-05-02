@@ -1,6 +1,13 @@
 // Inspired by https://github.com/ryansolid/babel-plugin-jsx-dom-expressions
 export function context(options) {
-  options = assign({ bindings: {} }, options);
+  options = assign({
+    bindings: {},
+    _addCleanup,
+    cleanup,
+    context
+  }, options);
+
+  let cleanups = [];
 
   function h() {
     const args = [].slice.call(arguments);
@@ -9,10 +16,11 @@ export function context(options) {
 
     function item(arg) {
       const type = typeof arg;
+      const insertWrap = (fn) => h._addCleanup((h.wrap || arg)(fn));
       if (arg == null);
       else if (type === 'string') {
-        if (!el) el = parseClass(arg);
-        else el.appendChild(document.createTextNode(arg));
+        if (el) el.appendChild(document.createTextNode(arg));
+        else el = parseClass(arg);
       } else if (
         type === 'number' ||
         type === 'boolean' ||
@@ -26,33 +34,21 @@ export function context(options) {
         if (multi) {
           arg.forEach(item);
         } else {
-          h.insert(h.wrap || arg, el, arg);
+          h.insert(insertWrap, el, arg);
         }
       } else if (arg instanceof Node) {
         if (multi) {
           const node = el.appendChild(document.createTextNode(''));
-          h.insert(h.wrap || arg, el, arg, undefined, node);
+          h.insert(insertWrap, el, arg, undefined, node);
         } else {
           el.appendChild(arg);
         }
       } else if (type === 'object') {
-        for (let key in arg) {
-          const value = arg[key];
-          if (typeof value === 'function') {
-            if (key === 'ref') {
-              value(el);
-            } else {
-              (function(k, v) {
-                (h.wrap || v)(() => parseKeyValue(h, el, k, v()));
-              })(key, value);
-            }
-          } else {
-            parseKeyValue(h, el, key, value);
-          }
-        }
-      } else if (typeof arg === 'function') {
-        let node = multi ? el.appendChild(document.createTextNode('')) : undefined;
-        h.insert(h.wrap || arg, el, arg, undefined, node);
+        const ref = (n, value) => value(el);
+        parseNested(h, el, arg, parseKeyValue, { ref });
+      } else if (type === 'function') {
+        const node = multi ? el.appendChild(document.createTextNode('')) : undefined;
+        h.insert(insertWrap, el, arg, undefined, node);
       }
     }
 
@@ -62,17 +58,91 @@ export function context(options) {
     return el;
   }
 
+  function _addCleanup(fn) {
+    fn && cleanups.push(fn);
+    return fn;
+  }
+
+  function cleanup() {
+    cleanups.map((fn) => fn());
+    cleanups = [];
+  }
+
   return assign(h, options);
 }
 
-const h = context();
-h.context = context;
-export default h;
+export default context();
+
+
+export function parseNested(h, el, obj, callback, exception = {}) {
+  // Create scope for every entry.
+  Object.keys(obj).map((name) => {
+    const value = obj[name];
+    if (typeof value === 'function') {
+      if (exception[name]) {
+        exception[name](name, value);
+      } else {
+        h._addCleanup((h.wrap || value)(() => callback(name, value(), h, el)));
+      }
+    } else {
+      callback(name, value, h, el);
+    }
+  });
+}
+
+export function parseKeyValue(name, value, h, el) {
+  if (name[0] === 'o' && name[1] === 'n') {
+    handleEvent(h, el, name, value);
+  } else if (name === 'events') {
+    parseNested(h, el, value, (n, v) => handleEvent(h, el, 'on' + n, v));
+  } else if (name === 'style') {
+    if (typeof value === 'string') {
+      el.style.cssText = value;
+    } else {
+      parseNested(h, el, value, (n, v) => el.style.setProperty(n, v));
+    }
+  } else if (name === 'classList') {
+    parseNested(h, el, value, (n, v) => el.classList.toggle(n, v));
+  } else if (name === 'attrs') {
+    parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
+  } else if (name.substr(0, 5) === 'data-') {
+    el.setAttribute(name, value);
+  } else if (name[0] === '$') {
+    h.bindings[name.slice(1)](el, value);
+  } else {
+    if (name === 'class' || name === 'className') name = 'className';
+    el[name] = value;
+  }
+}
 
 export function isMultiExpression(item) {
   return Array.isArray(item) ?
     item.some(isMultiExpression) :
     typeof item === 'function';
+}
+
+function handleEvent(h, el, name, value) {
+  const useCapture = name !== (name = name.replace(/Capture$/, ''));
+  const kLower = name.toLowerCase();
+  name = (kLower in el ? kLower : name).substring(2);
+
+  const cleanup = h._addCleanup(() =>
+    el.removeEventListener(name, eventProxy, useCapture));
+
+  if (value) el.addEventListener(name, eventProxy, useCapture);
+  else cleanup();
+
+  (el._listeners || (el._listeners = {}))[name] = value;
+}
+
+/**
+ * Proxy an event to hooked event handlers
+ * @param {Event} e The event object from the browser
+ * @private
+ */
+function eventProxy(e) {
+  // eslint-disable-next-line
+  return this._listeners[e.type](e);
 }
 
 /**
@@ -85,26 +155,6 @@ export function isMultiExpression(item) {
 export function assign(obj, props) {
   for (let i in props) obj[i] = props[i];
   return obj;
-}
-
-function handleEvent(el, key, value) {
-  let useCapture = key !== (key = key.replace(/Capture$/, ''));
-  let kLower = key.toLowerCase();
-  key = (kLower in el ? kLower : key).substring(2);
-
-  if (value) el.addEventListener(key, eventProxy, useCapture);
-  else el.removeEventListener(key, eventProxy, useCapture);
-
-  (el._listeners || (el._listeners = {}))[key] = value;
-}
-
-/**
- * Proxy an event to hooked event handlers
- * @param {Event} e The event object from the browser
- * @private
- */
-function eventProxy(e) {
-  return this._listeners[e.type](e);
 }
 
 export function parseClass(string) {
@@ -126,41 +176,4 @@ export function parseClass(string) {
   });
 
   return el;
-}
-
-export function parseKeyValue(h, el, key, value) {
-  if (key[0] === 'o' && key[1] === 'n') {
-    handleEvent(el, key, value);
-  } else if (key === 'events') {
-    parseNested(h, value, (n, v) => handleEvent(el, 'on' + n, v));
-  } else if (key === 'style') {
-    if (typeof value === 'string') {
-      el.style.cssText = value;
-    } else {
-      parseNested(h, value, (n, v) => el.style.setProperty(n, v));
-    }
-  } else if (key === 'classList') {
-    parseNested(h, value, (n, v) => el.classList.toggle(n, v));
-  } else if (key === 'attrs') {
-    parseNested(h, value, (n, v) => el.setAttribute(n, v));
-  } else if (key.substr(0, 5) === 'data-') {
-    el.setAttribute(key, value);
-  } else if (key[0] === '$') {
-    h.bindings[key.slice(1)](el, value);
-  } else {
-    el[key] = value;
-  }
-}
-
-export function parseNested(h, obj, callback) {
-  for (const name in obj) {
-    const value = obj[name];
-    if (typeof value === 'function') {
-      (function(n, v) {
-        (h.wrap || v)(() => callback(n, v()));
-      })(name, value);
-    } else {
-      callback(name, value);
-    }
-  }
 }

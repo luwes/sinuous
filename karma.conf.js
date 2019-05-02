@@ -102,7 +102,7 @@ module.exports = function(config) {
     reporters: ['tap-pretty', 'coverage'],
 
     tapReporter: {
-      prettify: tapSpec
+      prettify: require('faucet') // tapSpec
     },
 
     coverageReporter: {

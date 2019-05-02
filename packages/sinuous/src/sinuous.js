@@ -77,6 +77,7 @@ export function insertExpression(wrap, parent, value, current, marker) {
     });
     current = array;
   } else {
+    // eslint-disable-next-line
     throw new Error('Expected node, string or array of same.');
   }
 
@@ -90,7 +91,9 @@ export function clearAll(parent, current, marker, startNode) {
       parent.removeChild(node);
     });
   } else if (current != null && current != '') {
-    if (startNode !== undefined) {
+    if (startNode === undefined) {
+      parent.removeChild(marker.previousSibling);
+    } else {
       let node = marker.previousSibling,
         tmp;
       while (node !== startNode) {
@@ -98,8 +101,6 @@ export function clearAll(parent, current, marker, startNode) {
         parent.removeChild(node);
         node = tmp;
       }
-    } else {
-      parent.removeChild(marker.previousSibling);
     }
   }
   return '';
