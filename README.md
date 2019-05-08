@@ -9,6 +9,45 @@ Sinuous is a little experiment to get similar behavior as [Surplus](https://gith
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the dom accordingly.
 
+### Example with Sinuous Observable
+
+```js
+// 1.98 kB gzip (with babel-plugin-htm)
+import o, { subscribe } from 'sinuous/observable';
+import sinuous from 'sinuous';
+
+const h = sinuous(subscribe);
+const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
+
+const count = o(0);
+const style = o({});
+const onclick = o(clicked);
+
+function clicked() {
+  onclick(false);
+  console.log('removed click handler');
+
+  setTimeout(() => {
+    h.cleanup();
+    console.log('removed observers');
+  }, 500);
+}
+
+// Closures are only needed for computations.
+const template = () => {
+  return html`
+    <h1 style=${style}>
+      Sinuous <sup>${count}</sup>
+      <div>${() => count() + count()}</div>
+      <button onclick="${onclick}">Click</button>
+    </h1>
+  `;
+};
+
+document.querySelector('.sinuous').append(template());
+setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
+```
+
 ### Example with [S.js](https://github.com/adamhaile/S)
 
 ```js
