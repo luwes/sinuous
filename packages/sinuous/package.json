@@ -6,7 +6,10 @@
   "main": "dist/sinuous.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "observable/dist",
+    "observable/src",
+    "observable/package.json"
   ],
   "keywords": [
     "functional",
