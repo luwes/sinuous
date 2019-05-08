@@ -12,7 +12,13 @@ export const bundles = [
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'
-  }
+  },
+  {
+    formats: [ESM, UMD],
+    global: 'Observable',
+    name: 'observable',
+    input: 'packages/sinuous/observable/src/observable.js'
+  },
 ];
 
 export const fixtures = [
@@ -28,6 +34,13 @@ export const fixtures = [
     global: 'sinuousHyperactiv',
     name: 'sinuous-hyperactiv',
     input: 'fixtures/hyperactiv/src/index.js',
+    sourcemap: true
+  },
+  {
+    formats: [UMD],
+    global: 'sinuousObservable',
+    name: 'sinuous-observable',
+    input: 'fixtures/observable/src/index.js',
     sourcemap: true
   },
 ];

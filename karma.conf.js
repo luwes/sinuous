@@ -37,7 +37,7 @@ module.exports = function(config) {
     //   terminal: false
     // },
 
-    browserNoActivityTimeout: 5 * 60 * 1000,
+    browserNoActivityTimeout: 60 * 60 * 1000,
 
     captureTimeout: 0,
 
@@ -93,7 +93,7 @@ module.exports = function(config) {
             'packages/**/src/**/*.js'
         })
       ],
-      // onwarn: (msg) => /eval/.test(msg) && void 0
+      onwarn: (msg) => /eval/.test(msg) && void 0
     },
 
     // test results reporter to use
