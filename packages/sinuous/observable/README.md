@@ -1,6 +1,6 @@
 # 🐍 Sinuous Observable
 
-![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square)
+![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square&version=0.3.0)
 
 ```js
   import o, { subscribe } from 'sinuous/observable';
