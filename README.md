@@ -9,7 +9,7 @@ Sinuous is a little experiment to get similar behavior as [Surplus](https://gith
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the dom accordingly.
 
-### Example with Sinuous Observable ([Codesandbox](https://codesandbox.io/s/j4vm9yow89))
+### Example with [Sinuous Observable](./packages/sinuous/observable) ([Codesandbox](https://codesandbox.io/s/j4vm9yow89))
 
 ```js
 // 1.98 kB gzip (with babel-plugin-htm)

@@ -4,6 +4,18 @@ import o, { S } from '../src/observable.js';
 
 // Tests from S.js
 
+test("generates a function", function (t) {
+  t.plan(1);
+  var f = S(function () { return 1; });
+  t.assert(typeof f === 'function');
+});
+
+test("returns initial value of wrapped function", function (t) {
+  t.plan(1);
+  var f = S(function () { return 1; });
+  t.equal(f(), 1);
+});
+
 test("occurs once intitially", function (t) {
   var callSpy = spy();
   S(callSpy);
