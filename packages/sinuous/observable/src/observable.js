@@ -42,10 +42,10 @@ export default function observable(value) {
  * when any of the used observable's values are set.
  *
  * @param {Function} listener
+ * @param {*} value - Seed value.
  * @return {Function} Computation which can be used in other computations.
  */
-export function S(listener) {
-  let result;
+export function S(listener, value) {
   let prevUpdate;
 
   // Keep track of which observables trigger updates. Needed for unsubscribe.
@@ -68,7 +68,7 @@ export function S(listener) {
       parentUpdate = update;
     }
 
-    result = listener();
+    value = listener(value);
 
     if (parent) {
       parent = false;
@@ -77,16 +77,16 @@ export function S(listener) {
 
     currentUpdate = prevUpdate;
     prevUpdate = undefined;
-    return result;
+    return value;
   }
 
   function data() {
     if (update._fresh) {
       update._observables.forEach(o => o());
     } else {
-      result = update();
+      value = update();
     }
-    return result;
+    return value;
   }
 
   update();
@@ -95,8 +95,8 @@ export function S(listener) {
 
 /**
  * Subscribe to updates of value.
- * @param  {Function} update
- * @return {Function} unsubscribe
+ * @param  {Function} listener
+ * @return {Function}
  */
 export function subscribe(listener) {
   const update = S(listener)._update;
