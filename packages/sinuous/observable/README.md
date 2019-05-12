@@ -9,35 +9,113 @@ Sinuous Observable is a tiny reactive library. It shares the core functionality 
 - Automatic updates: when an observable changes, any computation that read the old value will re-run.
 - Automatic disposals: any child computations are automatically disposed when the parent is re-run.
 
-## Functions
+# API
 
-#### `observable(<value>)`
-#### `S(() => <code>)`
-#### `subscribe(() => <code>)`
-#### `unsubscribe(() => <code>)`
+###
 
-## Example
+- [sample(fn)](#sample) ⇒ <code>\*</code>
+- [S(listener, value)](#S) ⇒ <code>function</code>
+- [subscribe(listener)](#subscribe) ⇒ <code>function</code>
+- [unsubscribe(listener)](#unsubscribe)
+
+<a name="sample"></a>
+
+### sample(fn) ⇒ <code>\*</code>
+
+Sample the current value of an observable but don't create a dependency on it.
+
+**Kind**: global function
+
+| Param | Type                  |
+| ----- | --------------------- |
+| fn    | <code>function</code> |
+
+**Example**
 
 ```js
-  import observable, { S } from 'sinuous/observable';
+S(() => {
+  if (foo()) bar(sample(bar) + 1);
+});
+```
 
-  var order = "",
-      a = observable(0),
-      b = S(function() { order += "b"; return a() + 1; }),
-      c = S(function() { order += "c"; return b() || d(); }),
-      d = S(function() { order += "d"; return a() + 10; });
+---
 
-  console.log(order); // bcd
+<a name="S"></a>
 
-  order = "";
-  a(-1);
+### S(listener, value) ⇒ <code>function</code>
 
-  console.log(order); // bcd
-  console.log(c()); // 9
+Creates a new computation which runs when defined and automatically re-runs
+when any of the used observable's values are set.
 
-  order = "";
-  a(0);
+**Kind**: global function  
+**Returns**: <code>function</code> - Computation which can be used in other computations.
 
-  console.log(order); // bcd
-  console.log(c()); // 1
+| Param    | Type                  | Description |
+| -------- | --------------------- | ----------- |
+| listener | <code>function</code> |             |
+| value    | <code>\*</code>       | Seed value. |
+
+---
+
+<a name="subscribe"></a>
+
+### subscribe(listener) ⇒ <code>function</code>
+
+Subscribe to updates of value.
+
+**Kind**: global function
+
+| Param    | Type                  |
+| -------- | --------------------- |
+| listener | <code>function</code> |
+
+---
+
+<a name="unsubscribe"></a>
+
+### unsubscribe(listener)
+
+Unsubscribe from a listener.
+
+**Kind**: global function
+
+| Param    | Type                  |
+| -------- | --------------------- |
+| listener | <code>function</code> |
+
+---
+
+# Example
+
+```js
+import observable, { S } from 'sinuous/observable';
+
+var order = '',
+  a = observable(0),
+  b = S(function() {
+    order += 'b';
+    return a() + 1;
+  }),
+  c = S(function() {
+    order += 'c';
+    return b() || d();
+  }),
+  d = S(function() {
+    order += 'd';
+    return a() + 10;
+  });
+
+console.log(order); // bcd
+
+order = '';
+a(-1);
+
+console.log(order); // bcd
+console.log(c()); // 9
+
+order = '';
+a(0);
+
+console.log(order); // bcd
+console.log(c()); // 1
 ```
