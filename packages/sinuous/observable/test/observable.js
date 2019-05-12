@@ -93,7 +93,7 @@ test('nested subscribe', function(t) {
   t.end();
 });
 
-test('nested subscribe cleans up inner subscriptions', function(t) {
+test('one level nested subscribe cleans up inner subscriptions', function(t) {
   let apple = o('apple');
   let lemon = o('lemon');
   let grape = o('grape');
@@ -121,6 +121,73 @@ test('nested subscribe cleans up inner subscriptions', function(t) {
 
   t.equal(onions, 'onion'.repeat(4));
   t.equal(beans, 'bean'.repeat(5));
+  t.end();
+});
+
+test('three level nested subscribe cleans up inner subscriptions', function(t) {
+  let apple = o('apple');
+  let lemon = o('lemon');
+  let grape = o('grape');
+  let onion = o('onion');
+  let bean = o('bean');
+  let carrot = o('carrot');
+  let peanut = o('peanut');
+  let onions = 0;
+  let beans = 0;
+  let carrots = 0;
+  let peanuts = 0;
+
+  const unsubscribe = subscribe(() => {
+    apple();
+    subscribe(() => {
+      bean();
+      beans += 1;
+      subscribe(() => {
+        onions += 1;
+        onion();
+        subscribe(() => peanut() && (peanuts += 1));
+      });
+    });
+    grape();
+    subscribe(() => carrot() && (carrots += 1));
+    lemon();
+  });
+
+  apple('juice');
+  lemon('juice');
+  grape('juice');
+  t.equal(beans, 4);
+
+  bean('bean');
+  t.equal(beans, 5);
+
+  onion('onion');
+  onion('onion');
+  onion('onion');
+  t.equal(onions, 8);
+
+  peanut('peanut');
+  peanut('peanut');
+  t.equal(peanuts, 10);
+
+  unsubscribe();
+
+  apple('juice');
+  lemon('juice');
+  grape('juice');
+
+  bean('bean');
+  t.equal(beans, 5);
+
+  onion('onion');
+  onion('onion');
+  onion('onion');
+  t.equal(onions, 8);
+
+  peanut('peanut');
+  peanut('peanut');
+  t.equal(peanuts, 10);
+
   t.end();
 });
 

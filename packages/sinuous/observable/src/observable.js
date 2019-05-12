@@ -1,7 +1,21 @@
-import { safePush } from './utils.js';
-
 let currentUpdate;
-let parentUpdate;
+
+/**
+ * Sample the current value of an observable but don't create a dependency on it.
+ *
+ * @example
+ * S(() => { if (foo()) bar(sample(bar) + 1); });
+ *
+ * @param  {Function} fn
+ * @return {*}
+ */
+export function sample(fn) {
+  let update = currentUpdate;
+  currentUpdate = undefined;
+  const result = fn();
+  currentUpdate = update;
+  return result;
+}
 
 /**
  * Creates a new observable, returns a function which can be used to get
@@ -17,8 +31,8 @@ export default function observable(value) {
   function data(nextValue) {
     if (typeof nextValue === 'undefined') {
       if (currentUpdate) {
-        safePush(data._listeners, currentUpdate);
-        safePush(currentUpdate._observables, data);
+        data._listeners.push(currentUpdate);
+        currentUpdate._observables.push(data);
       }
       return value;
     }
@@ -28,7 +42,6 @@ export default function observable(value) {
     data._listeners.forEach(update => (update._fresh = false));
     // Update can alter data._listeners, make a copy before running.
     data._listeners.slice().forEach(update => {
-      update._children.forEach(_unsubscribe);
       if (!update._fresh) update();
     });
     return value;
@@ -46,37 +59,25 @@ export default function observable(value) {
  * @return {Function} Computation which can be used in other computations.
  */
 export function S(listener, value) {
-  let prevUpdate;
-
   // Keep track of which observables trigger updates. Needed for unsubscribe.
   update._observables = [];
-  listener._update = data._update = update;
+  update._children = [];
+  listener._update = update;
 
   function update() {
     update._fresh = true;
     _unsubscribe(update);
 
-    prevUpdate = currentUpdate;
+    const prevUpdate = currentUpdate;
+
+    if (currentUpdate) {
+      currentUpdate._children.push(update);
+    }
+
     currentUpdate = update;
-    update._children = [];
-
-    let parent;
-    if (parentUpdate) {
-      safePush(parentUpdate._children, update);
-    } else {
-      parent = true;
-      parentUpdate = update;
-    }
-
     value = listener(value);
-
-    if (parent) {
-      parent = false;
-      parentUpdate = undefined;
-    }
-
     currentUpdate = prevUpdate;
-    prevUpdate = undefined;
+
     return value;
   }
 
@@ -99,8 +100,8 @@ export function S(listener, value) {
  * @return {Function}
  */
 export function subscribe(listener) {
-  const update = S(listener)._update;
-  return () => _unsubscribe(update);
+  S(listener);
+  return () => _unsubscribe(listener._update);
 }
 
 /**
@@ -112,6 +113,9 @@ export function unsubscribe(listener) {
 }
 
 function _unsubscribe(update) {
+  update._children.forEach(_unsubscribe);
+  update._children = [];
+
   update._observables.forEach(o => {
     o._listeners.splice(o._listeners.indexOf(update), 1);
   });
