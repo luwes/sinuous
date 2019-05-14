@@ -4,3 +4,7 @@ import './insert-markers.js';
 import './observable.js';
 import '../observable/test/observable.js';
 import '../observable/test/S.js';
+import '../observable/test/sample.js';
+import '../observable/test/root.js';
+import '../observable/test/dispose.js';
+// import '../each/test/each.js';
