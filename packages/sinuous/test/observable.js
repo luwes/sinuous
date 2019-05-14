@@ -52,7 +52,7 @@ test('context cleanup removes observable listeners', function(t) {
 });
 
 test('context cleanup removes event handlers', function(t) {
-  let _h = sinuous((fn) => fn());
+  let _h = sinuous(fn => fn());
   let onClick = sinon.spy();
   let closure = () => onClick;
   let button = _h('button', 'Click me!', { onclick: closure });

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "lint": "eslint 'packages/{*,*/*}/src/**/*.js'",
-    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**'",
+    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**'",
     "build-tape": "browserify scripts/tape/src.js --standalone tape -o scripts/tape/dist.js",
     "test": "karma start",
     "coverage": "codecov",

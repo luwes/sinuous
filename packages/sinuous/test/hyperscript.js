@@ -82,7 +82,7 @@ test('registers event handlers', function(t) {
 
   let click = sinon.spy();
   let focus = sinon.spy();
-  let btn = h('button', { events: { click, focus }}, 'something');
+  let btn = h('button', { events: { click, focus } }, 'something');
   document.body.append(btn);
   btn.focus();
   t.assert(focus.called);
@@ -93,7 +93,7 @@ test('registers event handlers', function(t) {
 });
 
 test('can use bindings', function(t) {
-  h.bindings.innerHTML = (el, value) => el.innerHTML = value;
+  h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
 
   let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
   t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
@@ -120,7 +120,7 @@ test('sets classes', function(t) {
 });
 
 test('sets attributes', function(t) {
-  let div = h('div', { attrs: { 'checked': 'checked' }});
+  let div = h('div', { attrs: { checked: 'checked' } });
   t.assert(div.hasAttribute('checked'));
   t.end();
 });
@@ -133,7 +133,7 @@ test('sets data attributes', function(t) {
 
 test('sets refs', function(t) {
   let ref;
-  let div = h('div', { 'ref': (el) => ref = el });
+  let div = h('div', { ref: el => (ref = el) });
   t.equal(div, ref);
   t.end();
 });
@@ -173,11 +173,7 @@ test('can use fragments', function(t) {
   h.insert = sinon.spy(h.insert);
   const insertCat = () => 'cat';
 
-  let frag = h([
-    h('div', 'First'),
-    insertCat,
-    h('div', 'Last'),
-  ]);
+  let frag = h([h('div', 'First'), insertCat, h('div', 'Last')]);
 
   const div = document.createElement('div');
   div.appendChild(frag);

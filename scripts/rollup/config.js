@@ -89,10 +89,10 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
             props: {
               cname: 6,
               props: {
-                '$_listeners': '__l',
-                '$_observables': '__o',
-                '$_children': '__c',
-                '$_update': '__u',
+                // $_listeners: '__l',
+                // $_observables: '__o',
+                // $_children: '__c',
+                // $_update: '__u'
               }
             }
           }

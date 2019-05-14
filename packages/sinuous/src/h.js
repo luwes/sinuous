@@ -1,11 +1,16 @@
-// Inspired by https://github.com/ryansolid/babel-plugin-jsx-dom-expressions
+/* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
+import { assign } from './utils.js';
+
 export function context(options) {
-  options = assign({
-    bindings: {},
-    _addCleanup,
-    cleanup,
-    context
-  }, options);
+  options = assign(
+    {
+      bindings: {},
+      _addCleanup,
+      cleanup,
+      context
+    },
+    options
+  );
 
   let cleanups = [];
 
@@ -16,7 +21,7 @@ export function context(options) {
 
     function item(arg) {
       const type = typeof arg;
-      const insertWrap = (fn) => h._addCleanup((h.wrap || arg)(fn));
+      const insertWrap = fn => h._addCleanup((h.wrap || arg)(fn));
       if (arg == null);
       else if (type === 'string') {
         if (el) el.appendChild(document.createTextNode(arg));
@@ -47,8 +52,14 @@ export function context(options) {
         const ref = (n, value) => value(el);
         parseNested(h, el, arg, parseKeyValue, { ref });
       } else if (type === 'function') {
-        const node = multi ? el.appendChild(document.createTextNode('')) : undefined;
-        h.insert(insertWrap, el, arg, undefined, node);
+        const node = multi
+          ? el.appendChild(document.createTextNode(''))
+          : undefined;
+        if (arg.flow) {
+          arg(insertWrap, h.sample, el, node);
+        } else {
+          h.insert(insertWrap, el, arg, undefined, node);
+        }
       }
     }
 
@@ -64,7 +75,7 @@ export function context(options) {
   }
 
   function cleanup() {
-    cleanups.map((fn) => fn());
+    cleanups.map(fn => fn());
     cleanups = [];
   }
 
@@ -73,10 +84,9 @@ export function context(options) {
 
 export default context();
 
-
 export function parseNested(h, el, obj, callback, exception = {}) {
   // Create scope for every entry.
-  Object.keys(obj).map((name) => {
+  Object.keys(obj).map(name => {
     const value = obj[name];
     if (typeof value === 'function') {
       if (exception[name]) {
@@ -116,9 +126,9 @@ export function parseKeyValue(name, value, h, el) {
 }
 
 export function isMultiExpression(item) {
-  return Array.isArray(item) ?
-    item.some(isMultiExpression) :
-    typeof item === 'function';
+  return Array.isArray(item)
+    ? item.some(isMultiExpression)
+    : typeof item === 'function';
 }
 
 function handleEvent(h, el, name, value) {
@@ -127,7 +137,8 @@ function handleEvent(h, el, name, value) {
   name = (kLower in el ? kLower : name).substring(2);
 
   const cleanup = h._addCleanup(() =>
-    el.removeEventListener(name, eventProxy, useCapture));
+    el.removeEventListener(name, eventProxy, useCapture)
+  );
 
   if (value) el.addEventListener(name, eventProxy, useCapture);
   else cleanup();
@@ -136,25 +147,13 @@ function handleEvent(h, el, name, value) {
 }
 
 /**
- * Proxy an event to hooked event handlers
- * @param {Event} e The event object from the browser
- * @private
+ * Proxy an event to hooked event handlers.
+ * @param {Event} e - The event object from the browser.
+ * @return {Function}
  */
 function eventProxy(e) {
   // eslint-disable-next-line
   return this._listeners[e.type](e);
-}
-
-/**
- * Assign properties from `props` to `obj`
- * @template O, P The obj and props types
- * @param {O} obj The object to copy properties to
- * @param {P} props The object to copy properties from
- * @returns {O & P}
- */
-export function assign(obj, props) {
-  for (let i in props) obj[i] = props[i];
-  return obj;
 }
 
 export function parseClass(string) {
@@ -167,7 +166,7 @@ export function parseClass(string) {
     el = document.createElement('div');
   }
 
-  m.forEach((v) => {
+  m.forEach(v => {
     const s = v.substring(1, v.length);
     if (!v) return;
     if (!el) el = document.createElement(v);

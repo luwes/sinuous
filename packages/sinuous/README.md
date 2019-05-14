@@ -65,9 +65,7 @@ const style = S.data('');
 
 const template = () => {
   return html`
-    <h1 style=${() => style()}>
-      Sinuous <sup>${() => count()}</sup>
-    </h1>
+    <h1 style=${() => style()}>Sinuous <sup>${() => count()}</sup></h1>
   `;
 };
 
@@ -95,9 +93,7 @@ const s = observe({
 
 const template = () => {
   return html`
-    <h1 style=${() => s.style}>
-      Sinuous <sup>${() => s.count}</sup>
-    </h1>
+    <h1 style=${() => s.style}>Sinuous <sup>${() => s.count}</sup></h1>
   `;
 };
 

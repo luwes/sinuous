@@ -4,7 +4,7 @@ const wrap = fn => fn();
 const h = sinuous(wrap);
 h.insert = h.insert.bind(h, wrap);
 
-const insert = (val) => {
+const insert = val => {
   const parent = container.cloneNode(true);
   h.insert(parent, val);
   return parent;
@@ -12,87 +12,87 @@ const insert = (val) => {
 
 // h.insert
 // <div>before<!-- insert -->after</div>
-const container = document.createElement("div");
+const container = document.createElement('div');
 
-test("inserts nothing for null", (t) => {
+test('inserts nothing for null', t => {
   const res = insert(null);
   t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
-test("inserts nothing for undefined", (t) => {
+test('inserts nothing for undefined', t => {
   const res = insert(undefined);
-  t.equal(res.innerHTML, "");
+  t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
-test("inserts nothing for false", (t) => {
+test('inserts nothing for false', t => {
   const res = insert(false);
-  t.equal(res.innerHTML, "");
+  t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
-test("inserts nothing for true", (t) => {
+test('inserts nothing for true', t => {
   const res = insert(true);
-  t.equal(res.innerHTML, "");
+  t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
-test("inserts nothing for null in array", (t) => {
-  const res = insert(["a", null, "b"]);
-  t.equal(res.innerHTML, "ab");
+test('inserts nothing for null in array', t => {
+  const res = insert(['a', null, 'b']);
+  t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
-test("inserts nothing for undefined in array", (t) => {
-  const res = insert(["a", undefined, "b"]);
-  t.equal(res.innerHTML, "ab");
+test('inserts nothing for undefined in array', t => {
+  const res = insert(['a', undefined, 'b']);
+  t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
-test("inserts nothing for false in array", (t) => {
-  const res = insert(["a", false, "b"]);
-  t.equal(res.innerHTML, "ab");
+test('inserts nothing for false in array', t => {
+  const res = insert(['a', false, 'b']);
+  t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
-test("inserts nothing for true in array", (t) => {
-  const res = insert(["a", true, "b"]);
-  t.equal(res.innerHTML, "ab");
+test('inserts nothing for true in array', t => {
+  const res = insert(['a', true, 'b']);
+  t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
-test("can insert strings", (t) => {
-  const res = insert("foo");
-  t.equal(res.innerHTML, "foo");
+test('can insert strings', t => {
+  const res = insert('foo');
+  t.equal(res.innerHTML, 'foo');
   t.equal(res.childNodes.length, 1);
   t.end();
 });
 
-test("can insert a node", (t) => {
-  const node = document.createElement("span");
-  node.textContent = "foo";
-  t.equal(insert(node).innerHTML, "<span>foo</span>");
+test('can insert a node', t => {
+  const node = document.createElement('span');
+  node.textContent = 'foo';
+  t.equal(insert(node).innerHTML, '<span>foo</span>');
   t.end();
 });
 
-test("can re-insert a node, thereby moving it", (t) => {
-  const node = document.createElement("span");
-  node.textContent = "foo";
+test('can re-insert a node, thereby moving it', t => {
+  const node = document.createElement('span');
+  node.textContent = 'foo';
 
   const first = insert(node),
     second = insert(node);
 
-  t.equal(first.innerHTML, "");
-  t.equal(second.innerHTML, "<span>foo</span>");
+  t.equal(first.innerHTML, '');
+  t.equal(second.innerHTML, '<span>foo</span>');
   t.end();
 });
 
@@ -106,32 +106,32 @@ test("can re-insert a node, thereby moving it", (t) => {
 //   t.equal(node.something, 'good');
 // });
 
-test("can insert an array of strings", (t) => {
-  t.equal(insert(["foo", "bar"]).innerHTML, "foobar", "array of strings");
+test('can insert an array of strings', t => {
+  t.equal(insert(['foo', 'bar']).innerHTML, 'foobar', 'array of strings');
   t.end();
 });
 
-test("can insert an array of nodes", (t) => {
-  const nodes = [ document.createElement("span"), document.createElement("div")];
-  nodes[0].textContent = "foo";
-  nodes[1].textContent = "bar";
-  t.equal(insert(nodes).innerHTML, "<span>foo</span><div>bar</div>");
+test('can insert an array of nodes', t => {
+  const nodes = [document.createElement('span'), document.createElement('div')];
+  nodes[0].textContent = 'foo';
+  nodes[1].textContent = 'bar';
+  t.equal(insert(nodes).innerHTML, '<span>foo</span><div>bar</div>');
   t.end();
 });
 
-test("can insert a changing array of nodes", (t) => {
-  var parent = document.createElement("div"),
-    current = "",
-    n1 = document.createElement("span"),
-    n2 = document.createElement("div"),
-    n3 = document.createElement("span"),
-    n4 = document.createElement("div"),
+test('can insert a changing array of nodes', t => {
+  var parent = document.createElement('div'),
+    current = '',
+    n1 = document.createElement('span'),
+    n2 = document.createElement('div'),
+    n3 = document.createElement('span'),
+    n4 = document.createElement('div'),
     orig = [n1, n2, n3, n4];
 
-  n1.textContent = "1";
-  n2.textContent = "2";
-  n3.textContent = "3";
-  n4.textContent = "4";
+  n1.textContent = '1';
+  n2.textContent = '2';
+  n3.textContent = '3';
+  n4.textContent = '4';
 
   var origExpected = expected(orig);
 
@@ -139,27 +139,27 @@ test("can insert a changing array of nodes", (t) => {
   test([n1, n2, n3, n4]);
 
   // 1 missing
-  test([    n2, n3, n4]);
-  test([n1,     n3, n4]);
-  test([n1, n2,     n4]);
-  test([n1, n2, n3    ]);
+  test([n2, n3, n4]);
+  test([n1, n3, n4]);
+  test([n1, n2, n4]);
+  test([n1, n2, n3]);
 
   // 2 missing
-  test([        n3, n4]);
-  test([    n2,     n4]);
-  test([    n2, n3    ]);
-  test([n1,         n4]);
-  test([n1,     n3    ]);
-  test([n1, n2,       ]);
+  test([n3, n4]);
+  test([n2, n4]);
+  test([n2, n3]);
+  test([n1, n4]);
+  test([n1, n3]);
+  test([n1, n2]);
 
   // 3 missing
-  test([n1            ]);
-  test([    n2        ]);
-  test([        n3    ]);
-  test([            n4]);
+  test([n1]);
+  test([n2]);
+  test([n3]);
+  test([n4]);
 
   // all missing
-  test([              ]);
+  test([]);
 
   // swaps
   test([n2, n1, n3, n4]);
@@ -182,16 +182,17 @@ test("can insert a changing array of nodes", (t) => {
   }
 
   function expected(array) {
-    return array.map(n => n.outerHTML).join("");
+    return array.map(n => n.outerHTML).join('');
   }
 
   t.end();
 });
 
-test("can insert nested arrays", (t) => {
+test('can insert nested arrays', t => {
   t.equal(
-    insert(["foo", ["bar", "blech"]]).innerHTML,
-    "foobarblech", "array of array of strings"
+    insert(['foo', ['bar', 'blech']]).innerHTML,
+    'foobarblech',
+    'array of array of strings'
   );
   t.end();
 });

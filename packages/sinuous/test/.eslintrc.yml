@@ -1,12 +1,6 @@
 ---
 env:
-  mocha: true
-
-globals:
-  assert: false
-  should: false
-  expect: false
-  sinon: false
+  browser: true
 
 rules:
   fp/no-mutating-methods: off
