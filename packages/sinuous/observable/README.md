@@ -1,8 +1,9 @@
 # 🐍 Sinuous Observable
 
-![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square&version=0.3.0)
+![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square&version=0.4.0)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-Sinuous Observable is a tiny reactive library. It shares the core functionality of [S.js](https://github.com/adamhaile/S) to be the engine driving the reactive dom operations in [Sinuous](https://github.com/luwes/sinuous).
+Sinuous Observable is a tiny reactive library. It shares the core features of [S.js](https://github.com/adamhaile/S) to be the engine driving the reactive dom operations in [Sinuous](https://github.com/luwes/sinuous).
 
 ## Features
 
