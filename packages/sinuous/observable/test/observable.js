@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import o, { subscribe, unsubscribe } from '../src/observable.js';
+import o, { subscribe, unsubscribe, cleanup } from '../src/observable.js';
 
 test('initial value can be set', function(t) {
   let title = o('Groovy!');
@@ -203,5 +203,42 @@ test('standalone unsubscribe works', function(t) {
   carrot('juice');
 
   t.assert(computed.calledTwice);
+  t.end();
+});
+
+test('cleanup cleans up on update', function(t) {
+  let carrot = o();
+  let button = document.createElement('button');
+  let count = 0;
+
+  const computed = spy(() => {
+    carrot();
+    const onClick = () => (count += 1);
+    button.addEventListener('click', onClick);
+  });
+
+  const unsubscribe = subscribe(computed);
+  carrot(9);
+  carrot(10);
+  button.click();
+  t.equal(count, 3);
+  unsubscribe();
+
+  count = 0;
+  button = document.createElement('button');
+
+  const computedWithCleanup = spy(() => {
+    carrot();
+    const onClick = () => (count += 1);
+    button.addEventListener('click', onClick);
+    cleanup(() => button.removeEventListener('click', onClick));
+  });
+
+  subscribe(computedWithCleanup);
+  carrot(9);
+  carrot(10);
+  button.click();
+  t.equal(count, 1);
+
   t.end();
 });

@@ -90,8 +90,8 @@ export function S(listener, value) {
       currentUpdate._children.push(update);
     }
 
-    update._fresh = true;
     _unsubscribe(update);
+    update._fresh = true;
     currentUpdate = update;
     value = listener(value);
 
@@ -112,7 +112,18 @@ export function S(listener, value) {
 }
 
 /**
- * Subscribe to updates of value.
+ * Run the given function just before the enclosing computation updates
+ * or is disposed.
+ * @param  {Function} fn
+ */
+export function cleanup(fn) {
+  if (currentUpdate) {
+    currentUpdate._cleanups.push(fn);
+  }
+}
+
+/**
+ * Subscribe to updates of an observable.
  * @param  {Function} listener
  * @return {Function}
  */
@@ -134,6 +145,7 @@ function _unsubscribe(update) {
   update._observables.forEach(o => {
     o._listeners.splice(o._listeners.indexOf(update), 1);
   });
+  update._cleanups.forEach(c => c());
   resetUpdate(update);
 }
 
@@ -141,5 +153,6 @@ function resetUpdate(update) {
   // Keep track of which observables trigger updates. Needed for unsubscribe.
   update._observables = [];
   update._children = [];
+  update._cleanups = [];
   return update;
 }
