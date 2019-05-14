@@ -1,6 +1,26 @@
 let currentUpdate;
 
 /**
+ * Creates a root and executes the passed function that can contain computations.
+ * The executed function receives an `unsubscribe` argument which can be called to
+ * unsubscribe all inner computations.
+ *
+ * @param  {Function} fn
+ * @return {*}
+ */
+export function root(fn) {
+  const update = currentUpdate;
+  const rootUpdate = () => {};
+  currentUpdate = resetUpdate(rootUpdate);
+  const result = fn(() => {
+    _unsubscribe(rootUpdate);
+    currentUpdate = undefined;
+  });
+  currentUpdate = update;
+  return result;
+}
+
+/**
  * Sample the current value of an observable but don't create a dependency on it.
  *
  * @example
@@ -10,11 +30,11 @@ let currentUpdate;
  * @return {*}
  */
 export function sample(fn) {
-  let update = currentUpdate;
+  const update = currentUpdate;
   currentUpdate = undefined;
-  const result = fn();
+  const value = fn();
   currentUpdate = update;
-  return result;
+  return value;
 }
 
 /**
@@ -59,25 +79,23 @@ export default function observable(value) {
  * @return {Function} Computation which can be used in other computations.
  */
 export function S(listener, value) {
-  // Keep track of which observables trigger updates. Needed for unsubscribe.
-  update._observables = [];
-  update._children = [];
   listener._update = update;
 
+  resetUpdate(update);
+  update();
+
   function update() {
-    update._fresh = true;
-    _unsubscribe(update);
-
     const prevUpdate = currentUpdate;
-
     if (currentUpdate) {
       currentUpdate._children.push(update);
     }
 
+    update._fresh = true;
+    _unsubscribe(update);
     currentUpdate = update;
     value = listener(value);
-    currentUpdate = prevUpdate;
 
+    currentUpdate = prevUpdate;
     return value;
   }
 
@@ -90,7 +108,6 @@ export function S(listener, value) {
     return value;
   }
 
-  update();
   return data;
 }
 
@@ -114,10 +131,15 @@ export function unsubscribe(listener) {
 
 function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
-  update._children = [];
-
   update._observables.forEach(o => {
     o._listeners.splice(o._listeners.indexOf(update), 1);
   });
+  resetUpdate(update);
+}
+
+function resetUpdate(update) {
+  // Keep track of which observables trigger updates. Needed for unsubscribe.
   update._observables = [];
+  update._children = [];
+  return update;
 }
