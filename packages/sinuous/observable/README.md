@@ -13,10 +13,28 @@ Sinuous Observable is a tiny reactive library. It shares the core functionality 
 
 ###
 
+- [root(fn)](#root) ⇒ <code>\*</code>
 - [sample(fn)](#sample) ⇒ <code>\*</code>
 - [S(listener, value)](#S) ⇒ <code>function</code>
+- [cleanup(fn)](#cleanup)
 - [subscribe(listener)](#subscribe) ⇒ <code>function</code>
 - [unsubscribe(listener)](#unsubscribe)
+
+<a name="root"></a>
+
+### root(fn) ⇒ <code>\*</code>
+
+Creates a root and executes the passed function that can contain computations.
+The executed function receives an `unsubscribe` argument which can be called to
+unsubscribe all inner computations.
+
+**Kind**: global function
+
+| Param | Type                  |
+| ----- | --------------------- |
+| fn    | <code>function</code> |
+
+---
 
 <a name="sample"></a>
 
@@ -57,11 +75,26 @@ when any of the used observable's values are set.
 
 ---
 
+<a name="cleanup"></a>
+
+### cleanup(fn)
+
+Run the given function just before the enclosing computation updates
+or is disposed.
+
+**Kind**: global function
+
+| Param | Type                  |
+| ----- | --------------------- |
+| fn    | <code>function</code> |
+
+---
+
 <a name="subscribe"></a>
 
 ### subscribe(listener) ⇒ <code>function</code>
 
-Subscribe to updates of value.
+Subscribe to updates of an observable.
 
 **Kind**: global function
 
