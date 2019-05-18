@@ -45,7 +45,7 @@ export function sample(fn) {
  * @param  {*} value - Initial value.
  * @return {Function}
  */
-export default function observable(value) {
+function observable(value) {
   data._listeners = [];
 
   function data(nextValue) {
@@ -115,11 +115,11 @@ export function S(listener, value) {
  * Run the given function just before the enclosing computation updates
  * or is disposed.
  * @param  {Function} fn
+ * @return {Function}
  */
 export function cleanup(fn) {
-  if (currentUpdate) {
-    currentUpdate._cleanups.push(fn);
-  }
+  currentUpdate && currentUpdate._cleanups.push(fn);
+  return fn;
 }
 
 /**
@@ -156,3 +156,5 @@ function resetUpdate(update) {
   update._cleanups = [];
   return update;
 }
+
+export default observable;

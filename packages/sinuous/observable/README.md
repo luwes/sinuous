@@ -16,8 +16,9 @@ Sinuous Observable is a tiny reactive library. It shares the core features of [S
 
 - [root(fn)](#root) ⇒ <code>\*</code>
 - [sample(fn)](#sample) ⇒ <code>\*</code>
+- [observable(value)](#observable) ⇒ <code>function</code>
 - [S(listener, value)](#S) ⇒ <code>function</code>
-- [cleanup(fn)](#cleanup)
+- [cleanup(fn)](#cleanup) ⇒ <code>function</code>
 - [subscribe(listener)](#subscribe) ⇒ <code>function</code>
 - [unsubscribe(listener)](#unsubscribe)
 
@@ -59,6 +60,22 @@ S(() => {
 
 ---
 
+<a name="observable"></a>
+
+### observable(value) ⇒ <code>function</code>
+
+Creates a new observable, returns a function which can be used to get
+the observable's value by calling the function without any arguments
+and set the value by passing one argument of any type.
+
+**Kind**: global function
+
+| Param | Type            | Description    |
+| ----- | --------------- | -------------- |
+| value | <code>\*</code> | Initial value. |
+
+---
+
 <a name="S"></a>
 
 ### S(listener, value) ⇒ <code>function</code>
@@ -78,7 +95,7 @@ when any of the used observable's values are set.
 
 <a name="cleanup"></a>
 
-### cleanup(fn)
+### cleanup(fn) ⇒ <code>function</code>
 
 Run the given function just before the enclosing computation updates
 or is disposed.
