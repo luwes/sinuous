@@ -4,6 +4,10 @@
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&version=0.1.0)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
+Preact supports modern browsers and IE11+:
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/luwes.svg)](https://saucelabs.com/u/luwes)
+
 Sinuous is a little experiment to get similar behavior as [Surplus](https://github.com/adamhaile/surplus) but with template literals instead of JSX.  
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
 
