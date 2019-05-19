@@ -4,7 +4,7 @@ import each from 'sinuous/each';
 import htm from 'htm';
 
 const subscribe = (fn) => S.root((dispose) => S(fn) && dispose);
-const h = sinuous({ ...S, S, subscribe });
+const h = sinuous({ ...S, subscribe });
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
