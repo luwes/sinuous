@@ -43,12 +43,18 @@ test('context cleanup removes observable listeners', function(t) {
   let className = o();
   className('para');
   let p = _h('p', { style: { color: color }, className: className }, text);
-  t.equal(p.outerHTML, '<p class="para" style="color: red;">hello</p>');
+
+  const validVariants = [
+    '<p class="para" style="color: red;">hello</p>',
+    '<p style="color: red;" class="para">hello</p>'
+  ];
+
+  t.assert(validVariants.indexOf(p.outerHTML) !== -1);
   _h.cleanUp();
   color('blue');
   text('world');
   className('section');
-  t.equal(p.outerHTML, '<p class="para" style="color: red;">hello</p>');
+  t.assert(validVariants.indexOf(p.outerHTML) !== -1);
   t.end();
 });
 
