@@ -32,7 +32,7 @@ function clicked() {
   console.log('removed click handler');
 
   setTimeout(() => {
-    h.cleanup();
+    h.cleanUp();
     console.log('removed observers');
   }, 500);
 }
