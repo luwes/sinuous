@@ -36,12 +36,12 @@ var sauceLabsLaunchers = {
     browserName: 'MicrosoftEdge',
     platform: 'Windows 10'
   },
-  // sl_ie_11: {
-  //   base: 'SauceLabs',
-  //   browserName: 'internet explorer',
-  //   version: '11.0',
-  //   platform: 'Windows 7'
-  // }
+  sl_ie_11: {
+    base: 'SauceLabs',
+    browserName: 'internet explorer',
+    version: '11.0',
+    platform: 'Windows 7'
+  }
 };
 
 var localLaunchers = {
@@ -154,6 +154,9 @@ module.exports = function(config) {
         }),
         nodeResolve(),
         commonjs(),
+        sauceLabs && babel({
+          exclude: 'node_modules/**'
+        }),
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
