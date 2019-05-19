@@ -1,6 +1,3 @@
-// Karma configuration
-// Generated on Fri Jan 18 2019 07:34:40 GMT-0500 (Eastern Standard Time)
-
 const path = require('path');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
@@ -73,27 +70,6 @@ module.exports = function(config) {
       startConnect: false
     },
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['tap-pretty'].concat(
-      coverage ? 'coverage' : [],
-      sauceLabs ? 'saucelabs' : []
-    ),
-
-    tapReporter: {
-      prettify: require('tap-spec') // require('faucet') // require('tap-spec')
-    },
-
-    coverageReporter: {
-      dir: path.join(__dirname, 'coverage'),
-      reporters: [
-        { type: 'text-summary' },
-        { type: 'html' },
-        { type: 'lcovonly', subdir: '.', file: 'lcov.info' }
-      ]
-    },
-
     browserLogOptions: { terminal: true },
     browserConsoleLogOptions: { terminal: true },
     // browserConsoleLogOptions: {
@@ -111,15 +87,33 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    // logLevel: config.LOG_ERROR,
+    logLevel: config.LOG_DISABLE,
 
-    // client: { captureConsole: false },
+    client: { captureConsole: false },
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['tap-pretty'].concat(
+      coverage ? 'coverage' : [],
+      sauceLabs ? 'saucelabs' : []
+    ),
+
+    tapReporter: {
+      prettify: require('faucet') // require('tap-spec')
+    },
+
+    coverageReporter: {
+      dir: path.join(__dirname, 'coverage'),
+      reporters: [
+        { type: 'text-summary' },
+        { type: 'html' },
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' }
+      ]
+    },
+
     frameworks: ['tap', 'sinon'],
 
-    // list of files / patterns to load in the browser
     files: [
       {
         pattern: config.grep || 'packages/sinuous*/**/test.js',
@@ -127,12 +121,6 @@ module.exports = function(config) {
       },
     ],
 
-    // list of files / patterns to exclude
-    // exclude: [
-    // ],
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'packages/sinuous*/**/test.js': ['rollup']
     },
@@ -158,7 +146,7 @@ module.exports = function(config) {
             config.grep.replace('/test/', '/src/') :
             'packages/**/src/**/*.js'
         }),
-        babel({
+        sauceLabs && babel({
           include: [
             'packages/sinuous/**',
             'node_modules/sinon/**'
