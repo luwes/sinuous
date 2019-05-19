@@ -5,20 +5,28 @@ dist: trusty # needs Ubuntu Trusty
 # Note: if you switch to sudo: false, you'll need to launch Chrome with --no-sandbox.
 # See https://github.com/travis-ci/travis-ci/issues/8836
 sudo: required
+
 addons:
   chrome: stable # have Travis install Chrome stable.
+  sauce_connect: true
+
 cache:
   yarn: true
   directories:
     - node_modules
+
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
+
 install:
   - yarn
+
 script:
-  - yarn test --single-run
+  - COVERAGE=true yarn test --single-run
+
 after_success:
   - yarn run coverage
+
 git:
   submodules: false

@@ -5,12 +5,74 @@ const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const alias = require('rollup-plugin-alias');
+const babel = require('rollup-plugin-babel');
 const tapSpec = require('tap-spec');
 
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+var coverage = String(process.env.COVERAGE) === 'true',
+  ci = String(process.env.CI).match(/^(1|true)$/gi),
+  pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
+  masterBranch = String(process.env.TRAVIS_BRANCH).match(/^master$/gi),
+  sauceLabs = ci && !pullRequest && masterBranch;
+
+var sauceLabsLaunchers = {
+  sl_chrome: {
+    base: 'SauceLabs',
+    browserName: 'chrome',
+    platform: 'Windows 10'
+  },
+  sl_firefox: {
+    base: 'SauceLabs',
+    browserName: 'firefox',
+    platform: 'Windows 10'
+  },
+  sl_safari: {
+    base: 'SauceLabs',
+    browserName: 'safari',
+    platform: 'OS X 10.11'
+  },
+  sl_edge: {
+    base: 'SauceLabs',
+    browserName: 'MicrosoftEdge',
+    platform: 'Windows 10'
+  },
+  sl_ie_11: {
+    base: 'SauceLabs',
+    browserName: 'internet explorer',
+    version: '11.0',
+    platform: 'Windows 7'
+  }
+};
+
+var localLaunchers = {
+  ChromeNoSandboxHeadless: {
+    base: 'Chrome',
+    flags: [
+      '--no-sandbox',
+      // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+      '--headless',
+      '--disable-gpu',
+      // Without a remote debugging port, Google Chrome exits immediately.
+      '--remote-debugging-port=9333'
+    ]
+  }
+};
 
 module.exports = function(config) {
   config.set({
+    browsers: sauceLabs
+      ? Object.keys(sauceLabsLaunchers)
+      : Object.keys(localLaunchers),
+
+    customLaunchers: sauceLabs ? sauceLabsLaunchers : localLaunchers,
+
+    sauceLabs: {
+      build: 'CI #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER || ('local'+require('./package.json').version),
+      connectLocationForSERelay: 'localhost',
+      connectPortForSERelay: 4445,
+      startConnect: false
+    },
+
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
@@ -20,10 +82,6 @@ module.exports = function(config) {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeCustom'],
 
     browserLogOptions: {
       terminal: true
@@ -89,19 +147,25 @@ module.exports = function(config) {
         }),
         nodeResolve(),
         commonjs(),
+        sauceLabs && babel({
+          exclude: 'node_modules/**'
+        }),
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
             'packages/**/src/**/*.js'
         })
-      ],
+      ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['tap-pretty', 'coverage'],
+    reporters: ['tap-pretty'].concat(
+      coverage ? 'coverage' : [],
+      sauceLabs ? 'saucelabs' : []
+    ),
 
     tapReporter: {
       prettify: require('faucet') // tapSpec
@@ -112,28 +176,6 @@ module.exports = function(config) {
     },
 
     // web server port
-    port: 9876,
-
-    customLaunchers: {
-      ChromeCustom: {
-        base: 'ChromeHeadless',
-        options: {
-          settings: {
-            webSecurityEnabled: false
-          }
-        },
-        flags: [
-          '--headless',
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-gpu',
-          '--disable-web-security',
-          '--disable-translate',
-          '--disable-extensions',
-          '--remote-debugging-port=9223'
-        ],
-        debug: true
-      }
-    }
+    port: 9876
   });
 };
