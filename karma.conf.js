@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Fri Jan 18 2019 07:34:40 GMT-0500 (Eastern Standard Time)
 
+const path = require('path');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
@@ -19,28 +20,28 @@ var sauceLabsLaunchers = {
     base: 'SauceLabs',
     browserName: 'chrome',
     platform: 'Windows 10'
-  },
-  sl_firefox: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    platform: 'Windows 10'
-  },
-  sl_safari: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    platform: 'OS X 10.11'
-  },
-  sl_edge: {
-    base: 'SauceLabs',
-    browserName: 'MicrosoftEdge',
-    platform: 'Windows 10'
-  },
-  sl_ie_11: {
-    base: 'SauceLabs',
-    browserName: 'internet explorer',
-    version: '11.0',
-    platform: 'Windows 7'
   }
+  // sl_firefox: {
+  //   base: 'SauceLabs',
+  //   browserName: 'firefox',
+  //   platform: 'Windows 10'
+  // },
+  // sl_safari: {
+  //   base: 'SauceLabs',
+  //   browserName: 'safari',
+  //   platform: 'OS X 10.11'
+  // },
+  // sl_edge: {
+  //   base: 'SauceLabs',
+  //   browserName: 'MicrosoftEdge',
+  //   platform: 'Windows 10'
+  // },
+  // sl_ie_11: {
+  //   base: 'SauceLabs',
+  //   browserName: 'internet explorer',
+  //   version: '11.0',
+  //   platform: 'Windows 7'
+  // }
 };
 
 var localLaunchers = {
@@ -73,22 +74,29 @@ module.exports = function(config) {
       startConnect: false
     },
 
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['tap-pretty'].concat(
+      coverage ? 'coverage' : [],
+      sauceLabs ? 'saucelabs' : []
+    ),
 
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
-
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-
-    browserLogOptions: {
-      terminal: true
+    tapReporter: {
+      prettify: require('faucet') // tapSpec
     },
-    browserConsoleLogOptions: {
-      terminal: true
+
+    coverageReporter: {
+      dir: path.join(__dirname, 'coverage'),
+      reporters: [
+        { type: 'text-summary' },
+        { type: 'html' },
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' }
+      ]
     },
+
+    browserLogOptions: { terminal: true },
+    browserConsoleLogOptions: { terminal: true },
     // browserConsoleLogOptions: {
     //   level: 'debug',
     //   format: '%b %T: %m',
@@ -97,14 +105,14 @@ module.exports = function(config) {
 
     browserNoActivityTimeout: 60 * 60 * 1000,
 
-    captureTimeout: 0,
+    // Use only two browsers concurrently, works better with open source Sauce Labs remote testing
+    concurrency: 2,
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+    captureTimeout: 0,
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_ERROR,
+    // logLevel: config.LOG_ERROR,
 
     // client: { captureConsole: false },
 
@@ -116,14 +124,13 @@ module.exports = function(config) {
     files: [
       {
         pattern: config.grep || 'packages/sinuous*/**/test.js',
-        type: 'module',
         watched: false
       },
     ],
 
     // list of files / patterns to exclude
-    exclude: [
-    ],
+    // exclude: [
+    // ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -147,9 +154,6 @@ module.exports = function(config) {
         }),
         nodeResolve(),
         commonjs(),
-        sauceLabs && babel({
-          exclude: 'node_modules/**'
-        }),
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
@@ -157,25 +161,6 @@ module.exports = function(config) {
         })
       ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
-    },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['tap-pretty'].concat(
-      coverage ? 'coverage' : [],
-      sauceLabs ? 'saucelabs' : []
-    ),
-
-    tapReporter: {
-      prettify: require('faucet') // tapSpec
-    },
-
-    coverageReporter: {
-      reporters: [{ type: 'text' }, { type: 'lcov' }]
-    },
-
-    // web server port
-    port: 9876
+    }
   });
 };
