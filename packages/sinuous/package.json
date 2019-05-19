@@ -9,7 +9,10 @@
     "src",
     "observable/dist",
     "observable/src",
-    "observable/package.json"
+    "observable/package.json",
+    "each/dist",
+    "each/src",
+    "each/package.json"
   ],
   "keywords": [
     "functional",

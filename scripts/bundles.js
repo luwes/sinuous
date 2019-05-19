@@ -15,10 +15,17 @@ export const bundles = [
   },
   {
     formats: [ESM, UMD],
-    global: 'Observable',
+    global: 'observable',
     name: 'observable',
     input: 'packages/sinuous/observable/src/observable.js'
   },
+  {
+    external: ['sinuous'],
+    formats: [ESM, UMD],
+    global: 'each',
+    name: 'each',
+    input: 'packages/sinuous/each/src/each.js'
+  }
 ];
 
 export const fixtures = [
@@ -42,5 +49,5 @@ export const fixtures = [
     name: 'sinuous-observable',
     input: 'fixtures/observable/src/index.js',
     sourcemap: true
-  },
+  }
 ];
