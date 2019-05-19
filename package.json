@@ -15,6 +15,7 @@
     "build-tape": "browserify scripts/tape/src.js --standalone tape -o scripts/tape/dist.js",
     "test": "cross-env COVERAGE=true karma start",
     "coverage": "codecov",
+    "postcoverage": "camo-purge",
     "build": "rollup -c scripts/rollup/config.js --silent",
     "watch": "rollup -wc scripts/rollup/config.js --silent",
     "docs": "node scripts/docs.js && npm run format:docs",

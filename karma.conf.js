@@ -158,7 +158,12 @@ module.exports = function(config) {
             config.grep.replace('/test/', '/src/') :
             'packages/**/src/**/*.js'
         }),
-        sauceLabs && babel()
+        babel({
+          include: [
+            'packages/sinuous/**',
+            'node_modules/sinon/**'
+          ]
+        })
       ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
     }

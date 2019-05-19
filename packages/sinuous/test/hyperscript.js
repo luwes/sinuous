@@ -89,7 +89,7 @@ test('registers event handlers', function(t) {
   t.assert(focus.called);
   btn.click();
   t.assert(click.called);
-  btn.remove();
+  btn.parentNode.removeChild(btn);
   t.end();
 });
 

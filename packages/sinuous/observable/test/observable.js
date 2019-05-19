@@ -209,6 +209,8 @@ test('standalone unsubscribe works', function(t) {
 test('cleanup cleans up on update', function(t) {
   let carrot = o();
   let button = document.createElement('button');
+  // IE11 requires the button to be in dom before `button.click()` works.
+  document.body.appendChild(button);
   let count = 0;
 
   const computed = spy(() => {
@@ -226,6 +228,7 @@ test('cleanup cleans up on update', function(t) {
 
   count = 0;
   button = document.createElement('button');
+  document.body.appendChild(button);
 
   const computedWithCleanup = spy(() => {
     carrot();

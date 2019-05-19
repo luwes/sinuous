@@ -7,11 +7,20 @@ h.insert = h.insert.bind(h, subscribe);
 // h.insert with Markers
 // <div>before<!-- insert -->after</div>
 
-const insert = val => {
-  const parent = container.cloneNode(true);
+function insert(val) {
+  const parent = clone(container);
   h.insert(parent, val, undefined, parent.childNodes[1]);
   return parent;
-};
+}
+
+// IE doesn't clone empty text nodes
+function clone(el) {
+  const cloned = el.cloneNode(true);
+  cloned.textContent = '';
+  [].slice.call(el.childNodes).forEach((n) =>
+    cloned.appendChild(n.cloneNode()));
+  return cloned;
+}
 
 const container = document.createElement('div');
 container.appendChild(document.createTextNode('before'));
