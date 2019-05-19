@@ -84,7 +84,7 @@ test('registers event handlers', function(t) {
   let click = spy();
   let focus = spy();
   let btn = h('button', { events: { click, focus } }, 'something');
-  document.body.append(btn);
+  document.body.appendChild(btn);
   btn.focus();
   t.assert(focus.called);
   btn.click();

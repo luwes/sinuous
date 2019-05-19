@@ -7,7 +7,6 @@ const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const alias = require('rollup-plugin-alias');
 const babel = require('rollup-plugin-babel');
-const tapSpec = require('tap-spec');
 
 var coverage = String(process.env.COVERAGE) === 'true',
   ci = String(process.env.CI).match(/^(1|true)$/gi),
@@ -83,7 +82,7 @@ module.exports = function(config) {
     ),
 
     tapReporter: {
-      prettify: require('faucet') // tapSpec
+      prettify: require('tap-spec') // require('faucet') // require('tap-spec')
     },
 
     coverageReporter: {
@@ -154,14 +153,12 @@ module.exports = function(config) {
         }),
         nodeResolve(),
         commonjs(),
-        sauceLabs && babel({
-          exclude: 'node_modules/**'
-        }),
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
             'packages/**/src/**/*.js'
-        })
+        }),
+        sauceLabs && babel()
       ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
     }
