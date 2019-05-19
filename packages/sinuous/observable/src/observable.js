@@ -1,6 +1,14 @@
 let currentUpdate;
 
 /**
+ * Returns true if there is an active listener.
+ * @return {boolean}
+ */
+export function isListening() {
+  return !!currentUpdate;
+}
+
+/**
  * Creates a root and executes the passed function that can contain computations.
  * The executed function receives an `unsubscribe` argument which can be called to
  * unsubscribe all inner computations.

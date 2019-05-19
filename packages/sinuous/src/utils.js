@@ -10,8 +10,7 @@ export function assign(obj, props) {
 }
 
 export function normalizeIncomingArray(normalized, array) {
-  for (let i = 0, len = array.length; i < len; i++) {
-    const item = array[i];
+  array.forEach((item) => {
     if (item instanceof Node) {
       if (item.nodeType === 11) {
         normalizeIncomingArray(normalized, item.childNodes);
@@ -24,7 +23,7 @@ export function normalizeIncomingArray(normalized, array) {
     } else {
       normalized.push(document.createTextNode(item.toString()));
     }
-  }
+  });
   return normalized;
 }
 
@@ -35,9 +34,7 @@ export function clearAll(parent, current, marker, startNode) {
       parent.removeChild(node);
     });
   } else if (current != null && current != '') {
-    if (startNode === undefined) {
-      parent.removeChild(marker.previousSibling);
-    } else {
+    if (startNode) {
       let node = marker.previousSibling;
       let tmp;
       while (node !== startNode) {
@@ -45,6 +42,8 @@ export function clearAll(parent, current, marker, startNode) {
         parent.removeChild(node);
         node = tmp;
       }
+    } else {
+      parent.removeChild(marker.previousSibling);
     }
   }
   return '';

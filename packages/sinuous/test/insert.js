@@ -1,8 +1,8 @@
 import test from 'tape';
 import sinuous from 'sinuous';
-const wrap = fn => fn();
-const h = sinuous(wrap);
-h.insert = h.insert.bind(h, wrap);
+const subscribe = fn => fn();
+const h = sinuous({ subscribe });
+h.insert = h.insert.bind(h, subscribe);
 
 const insert = val => {
   const parent = container.cloneNode(true);

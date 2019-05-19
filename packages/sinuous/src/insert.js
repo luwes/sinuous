@@ -1,16 +1,16 @@
 import { clearAll, normalizeIncomingArray } from './utils.js';
 
-export function insert(wrap, parent, accessor, current, marker) {
+export function insert(subscribe, parent, accessor, current, marker) {
   if (typeof accessor !== 'function') {
-    return insertExpression(wrap, parent, accessor, current, marker);
+    return insertExpression(subscribe, parent, accessor, current, marker);
   }
 
-  wrap(function() {
-    current = insertExpression(wrap, parent, accessor(), current, marker);
+  subscribe(function() {
+    current = insertExpression(subscribe, parent, accessor(), current, marker);
   });
 }
 
-export function insertExpression(wrap, parent, value, current, marker) {
+export function insertExpression(subscribe, parent, value, current, marker) {
   if (value === current) return current;
   parent = (marker && marker.parentNode) || parent;
   const t = typeof value;
@@ -39,8 +39,8 @@ export function insertExpression(wrap, parent, value, current, marker) {
   } else if (value == null || t === 'boolean') {
     current = clearAll(parent, current, marker);
   } else if (t === 'function') {
-    wrap(function() {
-      current = insertExpression(wrap, parent, value(), current, marker);
+    subscribe(function() {
+      current = insertExpression(subscribe, parent, value(), current, marker);
     });
   } else if (value instanceof Node) {
     if (Array.isArray(current)) {

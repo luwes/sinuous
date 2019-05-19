@@ -1,4 +1,5 @@
 import test from 'tape';
+import { spy } from 'sinon';
 import sinuous from 'sinuous';
 const h = sinuous();
 import o from 'observable';
@@ -43,7 +44,7 @@ test('context cleanup removes observable listeners', function(t) {
   className('para');
   let p = _h('p', { style: { color: color }, className: className }, text);
   t.equal(p.outerHTML, '<p class="para" style="color: red;">hello</p>');
-  _h.cleanup();
+  _h.cleanUp();
   color('blue');
   text('world');
   className('section');
@@ -52,14 +53,14 @@ test('context cleanup removes observable listeners', function(t) {
 });
 
 test('context cleanup removes event handlers', function(t) {
-  let _h = sinuous(fn => fn());
-  let onClick = sinon.spy();
+  let _h = sinuous({ subscribe: fn => fn() });
+  let onClick = spy();
   let closure = () => onClick;
   let button = _h('button', 'Click me!', { onclick: closure });
   button.click();
   t.assert(onClick.calledOnce, 'click listener was triggered');
 
-  _h.cleanup();
+  _h.cleanUp();
   button.click();
   t.assert(onClick.calledOnce, 'click listener was not triggered');
   t.end();

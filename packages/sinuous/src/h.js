@@ -1,15 +1,21 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
 import { assign } from './utils.js';
+import { insert } from './insert.js';
 
-export function context(options) {
+export function context(options = {}) {
   options = assign(
+    assign(
+      {
+        bindings: {},
+        cleanUp,
+        context,
+        insert
+      },
+      options
+    ),
     {
-      bindings: {},
-      _addCleanup,
-      cleanup,
-      context
-    },
-    options
+      cleanup // run our own cleanup logic.
+    }
   );
 
   let cleanups = [];
@@ -21,7 +27,7 @@ export function context(options) {
 
     function item(arg) {
       const type = typeof arg;
-      const insertWrap = fn => h._addCleanup((h.wrap || arg)(fn));
+      const cleanupSubscribe = fn => h.cleanup((h.subscribe || arg)(fn));
       if (arg == null);
       else if (type === 'string') {
         if (el) el.appendChild(document.createTextNode(arg));
@@ -39,12 +45,12 @@ export function context(options) {
         if (multi) {
           arg.forEach(item);
         } else {
-          h.insert(insertWrap, el, arg);
+          h.insert(cleanupSubscribe, el, arg);
         }
       } else if (arg instanceof Node) {
         if (multi) {
           const node = el.appendChild(document.createTextNode(''));
-          h.insert(insertWrap, el, arg, undefined, node);
+          h.insert(cleanupSubscribe, el, arg, undefined, node);
         } else {
           el.appendChild(arg);
         }
@@ -56,9 +62,9 @@ export function context(options) {
           ? el.appendChild(document.createTextNode(''))
           : undefined;
         if (arg.flow) {
-          arg(insertWrap, h.sample, el, node);
+          arg(h, el, node);
         } else {
-          h.insert(insertWrap, el, arg, undefined, node);
+          h.insert(cleanupSubscribe, el, arg, undefined, node);
         }
       }
     }
@@ -69,12 +75,12 @@ export function context(options) {
     return el;
   }
 
-  function _addCleanup(fn) {
+  function cleanup(fn) {
     fn && cleanups.push(fn);
     return fn;
   }
 
-  function cleanup() {
+  function cleanUp() {
     cleanups.map(fn => fn());
     cleanups = [];
   }
@@ -92,7 +98,7 @@ export function parseNested(h, el, obj, callback, exception = {}) {
       if (exception[name]) {
         exception[name](name, value);
       } else {
-        h._addCleanup((h.wrap || value)(() => callback(name, value(), h, el)));
+        h.cleanup((h.subscribe || value)(() => callback(name, value(), h, el)));
       }
     } else {
       callback(name, value, h, el);
@@ -136,7 +142,7 @@ function handleEvent(h, el, name, value) {
   const kLower = name.toLowerCase();
   name = (kLower in el ? kLower : name).substring(2);
 
-  const cleanup = h._addCleanup(() =>
+  const cleanup = h.cleanup(() =>
     el.removeEventListener(name, eventProxy, useCapture)
   );
 

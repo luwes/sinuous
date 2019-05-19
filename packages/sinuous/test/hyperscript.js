@@ -1,7 +1,8 @@
 import test from 'tape';
+import { spy } from 'sinon';
 import sinuous from 'sinuous';
-const wrap = fn => fn();
-const h = sinuous(wrap);
+const subscribe = fn => fn();
+const h = sinuous({ subscribe });
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -55,9 +56,9 @@ test('can set properties', function(t) {
 });
 
 test('registers an event handler', function(t) {
-  h.wrap = sinon.spy(fn => fn());
+  h.subscribe = spy(fn => fn());
 
-  let onClick = sinon.spy();
+  let onClick = spy();
   let btn = h('button', { onclick: onClick }, 'something');
   btn.click();
   t.assert(onClick.called);
@@ -65,9 +66,9 @@ test('registers an event handler', function(t) {
 });
 
 // test('unregisters an event handler', function(t) {
-//   h.wrap = sinon.spy();
+//   h.subscribe = spy();
 
-//   let onClick = sinon.spy();
+//   let onClick = spy();
 //   let btn = h('button', { onclick: onClick }, 'something');
 //   btn.click();
 //   t.equal(onClick.called);
@@ -78,10 +79,10 @@ test('registers an event handler', function(t) {
 // });
 
 test('registers event handlers', function(t) {
-  h.wrap = sinon.spy(fn => fn());
+  h.subscribe = spy(fn => fn());
 
-  let click = sinon.spy();
-  let focus = sinon.spy();
+  let click = spy();
+  let focus = spy();
   let btn = h('button', { events: { click, focus } }, 'something');
   document.body.append(btn);
   btn.focus();
@@ -151,7 +152,7 @@ test('unicode selectors', function(t) {
 });
 
 test('can add insert functions', function(t) {
-  h.insert = sinon.spy(h.insert);
+  h.insert = spy(h.insert);
   const insertCat = () => 'cat';
   let div = h('div', insertCat);
   t.assert(h.insert.called);
@@ -159,18 +160,18 @@ test('can add insert functions', function(t) {
   t.end();
 });
 
-test('can add wrap functions', function(t) {
-  h.wrap = sinon.spy(fn => fn());
+test('can add subscribe functions', function(t) {
+  h.subscribe = spy(fn => fn());
   const insertCat = () => 'cat';
   let div = h('div', { innerText: insertCat });
-  t.assert(h.wrap.called);
+  t.assert(h.subscribe.called);
   t.equal(div.outerHTML, '<div>cat</div>');
   t.end();
 });
 
 test('can use fragments', function(t) {
-  h.wrap = sinon.spy(fn => fn());
-  h.insert = sinon.spy(h.insert);
+  h.subscribe = spy(fn => fn());
+  h.insert = spy(h.insert);
   const insertCat = () => 'cat';
 
   let frag = h([h('div', 'First'), insertCat, h('div', 'Last')]);
