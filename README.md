@@ -6,7 +6,7 @@
 
 Sinuous supports modern browsers and IE11+:
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/luwes.svg)](https://saucelabs.com/u/luwes)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
 Sinuous is a little experiment to get similar behavior as [Surplus](https://github.com/adamhaile/surplus) but with template literals instead of JSX.  
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
