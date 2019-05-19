@@ -105,8 +105,8 @@ module.exports = function(config) {
 
     browserNoActivityTimeout: 60 * 60 * 1000,
 
-    // Use only two browsers concurrently, works better with open source Sauce Labs remote testing
-    concurrency: 2,
+    // Use only one browser, works better with open source Sauce Labs remote testing
+    concurrency: 1,
 
     captureTimeout: 0,
 
