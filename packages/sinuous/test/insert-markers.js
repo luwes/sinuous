@@ -17,8 +17,7 @@ function insert(val) {
 function clone(el) {
   const cloned = el.cloneNode(true);
   cloned.textContent = '';
-  [].slice.call(el.childNodes).forEach((n) =>
-    cloned.appendChild(n.cloneNode()));
+  [].slice.call(el.childNodes).forEach(n => cloned.appendChild(n.cloneNode()));
   return cloned;
 }
 

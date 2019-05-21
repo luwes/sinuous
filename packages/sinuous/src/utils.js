@@ -10,12 +10,14 @@ export function assign(obj, props) {
 }
 
 export function normalizeIncomingArray(normalized, array) {
-  array.forEach((item) => {
+  array.forEach(item => {
     if (item instanceof Node) {
       if (item.nodeType === 11) {
         normalizeIncomingArray(normalized, item.childNodes);
-      } else normalized.push(item);
-      // matches null, undefined, true or false
+      } else {
+        normalized.push(item);
+      }
+    // matches null, undefined, true or false
     } else if (item == null || item === true || item === false) {
       // skip
     } else if (Array.isArray(item)) {

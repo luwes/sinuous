@@ -65,18 +65,20 @@ test('registers an event handler', function(t) {
   t.end();
 });
 
-// test('unregisters an event handler', function(t) {
-//   h.subscribe = spy();
+test('unregisters an event handler', function(t) {
+  h.subscribe = spy(fn => fn());
 
-//   let onClick = spy();
-//   let btn = h('button', { onclick: onClick }, 'something');
-//   btn.click();
-//   t.equal(onClick.called);
+  let onClick = spy();
+  let btn = h('button', { onclick: onClick }, 'something');
+  document.body.appendChild(btn);
+  btn.click();
+  t.assert(onClick.calledOnce);
 
-//   h(btn, { onclick: false });
-//   btn.click();
-//   t.equal(onClick.called);
-// });
+  h(btn, { onclick: false });
+  btn.click();
+  t.assert(onClick.calledOnce);
+  t.end();
+});
 
 test('registers event handlers', function(t) {
   h.subscribe = spy(fn => fn());
@@ -180,5 +182,19 @@ test('can use fragments', function(t) {
   div.appendChild(frag);
   t.assert(h.insert.called);
   t.equal(div.innerHTML, '<div>First</div>cat<div>Last</div>');
+  t.end();
+});
+
+test('can use components', function(t) {
+  h.subscribe = spy(fn => fn());
+  h.insert = spy(h.insert);
+  const insertCat = ({ id, drink }) => h('div', { id, textContent: drink });
+
+  let frag = h([h('div', 'First'), h(insertCat, { id: 'cat', drink: 'milk' }), h('div', 'Last')]);
+
+  const div = document.createElement('div');
+  div.appendChild(frag);
+  t.assert(h.insert.called);
+  t.equal(div.innerHTML, '<div>First</div><div id="cat">milk</div><div>Last</div>');
   t.end();
 });

@@ -1,6 +1,5 @@
-
 export function normalizeIncomingArray(normalized, array) {
-  array.forEach((item) => {
+  array.forEach(item => {
     if (item instanceof Node) {
       if (item.nodeType === 11) {
         normalizeIncomingArray(normalized, item.childNodes);

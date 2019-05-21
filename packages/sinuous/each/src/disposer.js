@@ -2,7 +2,7 @@ export default function createDisposer() {
   let _disposables = new Map();
 
   function _disposeAll() {
-    _disposables.forEach((d) => d());
+    _disposables.forEach(d => d());
     _disposables.clear();
   }
 

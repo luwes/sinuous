@@ -17,8 +17,10 @@ export default function each(items, expr) {
     const disposer = createDisposer();
 
     let useFragment = !parent && !afterNode;
-    parent = (afterNode && afterNode.parentNode) ||
-      parent || document.createDocumentFragment();
+    parent =
+      (afterNode && afterNode.parentNode) ||
+      parent ||
+      document.createDocumentFragment();
     const beforeNode = afterNode ? afterNode.previousSibling : null;
 
     function createFn(item, i, afterNode) {

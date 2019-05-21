@@ -2,6 +2,12 @@
 import { assign } from './utils.js';
 import { insert } from './insert.js';
 
+/**
+ * Create a sinuous `h` tag aka hyperscript.
+ * @param  {Object} options
+ * @param {Function} [options.subscribe] - Function that listens to state changes.
+ * @return {Function} `h` tag.
+ */
 export function context(options = {}) {
   options = assign(
     assign(
@@ -48,23 +54,33 @@ export function context(options = {}) {
           h.insert(cleanupSubscribe, el, arg);
         }
       } else if (arg instanceof Node) {
-        if (multi) {
-          const node = el.appendChild(document.createTextNode(''));
-          h.insert(cleanupSubscribe, el, arg, undefined, node);
+        if (el) {
+          if (multi) {
+            const node = el.appendChild(document.createTextNode(''));
+            h.insert(cleanupSubscribe, el, arg, undefined, node);
+          } else {
+            el.appendChild(arg);
+          }
         } else {
-          el.appendChild(arg);
+          // Support updates
+          el = arg;
         }
       } else if (type === 'object') {
         const ref = (n, value) => value(el);
         parseNested(h, el, arg, parseKeyValue, { ref });
       } else if (type === 'function') {
-        const node = multi
-          ? el.appendChild(document.createTextNode(''))
-          : undefined;
-        if (arg.flow) {
-          arg(h, el, node);
+        if (el) {
+          const node = multi
+            ? el.appendChild(document.createTextNode(''))
+            : undefined;
+          if (arg.flow) {
+            arg(h, el, node);
+          } else {
+            h.insert(cleanupSubscribe, el, arg, undefined, node);
+          }
         } else {
-          h.insert(cleanupSubscribe, el, arg, undefined, node);
+          // Support Components
+          el = arg.apply(null, args.splice(0));
         }
       }
     }
