@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import o, { subscribe, unsubscribe, cleanup } from '../src/observable.js';
+import o, { subscribe, unsubscribe, cleanup, isListening } from '../src/observable.js';
 
 test('initial value can be set', function(t) {
   let title = o('Groovy!');
@@ -17,6 +17,16 @@ test('observable can be set without subscription', function(t) {
   let title = o();
   title('Groovy!');
   t.equal(title(), 'Groovy!');
+  t.end();
+});
+
+test('isListening', function(t) {
+  let title = o();
+  t.assert(!isListening());
+  subscribe(() => {
+    title();
+    t.assert(isListening());
+  });
   t.end();
 });
 

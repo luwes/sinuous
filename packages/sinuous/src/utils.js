@@ -12,6 +12,7 @@ export function assign(obj, props) {
 export function normalizeIncomingArray(normalized, array) {
   array.forEach(item => {
     if (item instanceof Node) {
+      // DocumentFragment
       if (item.nodeType === 11) {
         normalizeIncomingArray(normalized, item.childNodes);
       } else {
