@@ -12,10 +12,51 @@ Sinuous supports modern browsers and IE11+:
 **npm**: `npm install sinuous --save`  
 **cdn**: https://unpkg.com/sinuous@latest/dist/sinuous.js
 
+### Intro
+
+Sinuous provides the clarity of declarative views and the performance of direct DOM manipulation.  
+It was built with these ideas in mind.
+
+- Developer experience, [performance](https://github.com/krausest/js-framework-benchmark/pull/566).
+- Small bundle size, made for use in other mini libraries like custom elements.
+- Plain Javascript feel; template literals, standard HTML.
+- Choose your own reactive library:
+  [`Sinuous Observable`](./packages/sinuous/observable)
+  [`S.js`](https://github.com/adamhaile/S)
+  [`hyperactiv`](https://github.com/elbywan/hyperactiv)
+
+### Add-ons
+
+| Size | Name | Description |
+| --- | --- | --- |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/each/dist/each.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/each`](./packages/sinuous/html) | Fast list renderer |
+
+### Concept
+
 Sinuous started as a little experiment to get similar behavior as [Surplus](https://github.com/adamhaile/surplus) but with template literals instead of JSX.
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
 
-Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the dom accordingly.
+Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
+
+### Counter (_1.81kB gzip_)
+
+```js
+import o, { subscribe } from 'sinuous/observable';
+import sinuous from 'sinuous';
+
+const h = sinuous({ subscribe });
+const counter = o(0);
+
+const template = () => {
+  return html`
+    <div>Counter ${counter}</div>
+  `;
+};
+
+document.body.append(template());
+setInterval(() => counter(counter() + 1), 1000);
+```
 
 ### Example with [Sinuous Observable](./packages/sinuous/observable) ([Codesandbox](https://codesandbox.io/s/j4vm9yow89))
 
@@ -108,3 +149,9 @@ const template = () => {
 document.querySelector('.sinuous').append(template());
 setInterval(() => (s.style = { color: randomColor() }) && s.count++, 1000);
 ```
+
+### Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
+
+[homepage]: https://saucelabs.com
