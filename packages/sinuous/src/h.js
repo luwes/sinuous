@@ -56,8 +56,8 @@ export function context(options = {}) {
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
-            const node = el.appendChild(document.createTextNode(''));
-            h.insert(cleanupSubscribe, el, arg, undefined, node);
+            const marker = el.appendChild(document.createTextNode(''));
+            h.insert(cleanupSubscribe, el, arg, undefined, marker);
           } else {
             el.appendChild(arg);
           }
@@ -70,13 +70,13 @@ export function context(options = {}) {
         parseNested(h, el, arg, parseKeyValue, { ref });
       } else if (type === 'function') {
         if (el) {
-          const node = multi
+          const marker = multi
             ? el.appendChild(document.createTextNode(''))
             : undefined;
           if (arg.flow) {
-            arg(h, el, node);
+            arg(h, el, marker);
           } else {
-            h.insert(cleanupSubscribe, el, arg, undefined, node);
+            h.insert(cleanupSubscribe, el, arg, undefined, marker);
           }
         } else {
           // Support Components

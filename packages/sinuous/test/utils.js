@@ -53,10 +53,10 @@ test('clearAll', function(t) {
   parent.appendChild(document.createTextNode('first'));
   parent.appendChild(document.createElement('div'));
   parent.appendChild(document.createElement('b'));
-  let marker = document.createTextNode('');
+  let marker = document.createComment('');
   parent.appendChild(marker);
   clearAll(parent, current, marker);
-  t.equal(parent.innerHTML, 'first<div></div>');
+  t.equal(parent.innerHTML, 'first<div></div><!---->');
   t.equal(parent.childNodes.length, 3);
 
   clearAll(parent);
@@ -65,10 +65,10 @@ test('clearAll', function(t) {
   parent.appendChild(startNode);
   parent.appendChild(document.createElement('div'));
   parent.appendChild(document.createElement('b'));
-  marker = document.createTextNode('');
+  marker = document.createComment('');
   parent.appendChild(marker);
   clearAll(parent, current, marker, startNode);
-  t.equal(parent.innerHTML, 'first<span></span>');
+  t.equal(parent.innerHTML, 'first<span></span><!---->');
   t.equal(parent.childNodes.length, 3);
 
   t.end();
