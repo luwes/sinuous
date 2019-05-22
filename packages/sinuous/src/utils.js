@@ -10,7 +10,8 @@ export function assign(obj, props) {
 }
 
 export function normalizeIncomingArray(normalized, array) {
-  array.forEach(item => {
+  for (let i = 0, len = array.length; i < len; i++) {
+    let item = array[i];
     if (item instanceof Node) {
       // DocumentFragment
       if (item.nodeType === 11) {
@@ -26,7 +27,7 @@ export function normalizeIncomingArray(normalized, array) {
     } else {
       normalized.push(document.createTextNode(item.toString()));
     }
-  });
+  }
   return normalized;
 }
 
