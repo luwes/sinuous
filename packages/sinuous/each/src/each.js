@@ -107,7 +107,7 @@ export function reconcile(
     if (beforeNode !== undefined || afterNode !== undefined) {
       let node =
         beforeNode != undefined ? beforeNode.nextSibling : parent.firstChild;
-      removeNodes(parent, node, afterNode === undefined ? null : afterNode);
+      removeNodes(parent, node, afterNode ? afterNode : null);
     } else {
       parent.textContent = '';
     }
@@ -244,7 +244,9 @@ export function reconcile(
     if (I.has(renderedValues[i])) {
       P[I.get(renderedValues[i])] = i;
       reusingNodes++;
-    } else toRemove.push(i);
+    } else {
+      toRemove.push(i);
+    }
   }
 
   // Fast path for full replace
@@ -340,7 +342,9 @@ function step(node, direction, inner) {
   const key = node[GROUPING];
   if (key) {
     node = node[direction];
-    while (node && node[GROUPING] !== key) node = node[direction];
+    while (node && node[GROUPING] !== key) {
+      node = node[direction];
+    }
   }
   return inner ? node : node[direction];
 }

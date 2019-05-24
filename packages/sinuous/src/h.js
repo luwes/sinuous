@@ -1,6 +1,7 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
-import { assign } from './utils.js';
+import { EMPTY_ARR } from './constants.js';
 import { insert } from './insert.js';
+import { assign } from './utils.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
@@ -15,7 +16,8 @@ export function context(options = {}) {
         bindings: {},
         cleanUp,
         context,
-        insert
+        insert,
+        _makeSubscribe
       },
       options
     ),
@@ -26,14 +28,21 @@ export function context(options = {}) {
 
   let cleanups = [];
 
+  function _makeSubscribe(arg) {
+    // Subscribe w/ root or parent is preferred. They take care of the cleanup.
+    return h.root ? h.subscribe :
+      // Support observable libraries w/ simple subscribe/unsubscribe.
+      fn => h.cleanup((h.subscribe || arg)(fn));
+  }
+
   function h() {
-    const args = [].slice.call(arguments);
+    const args = EMPTY_ARR.slice.call(arguments);
     const multi = isMultiExpression(args);
     let el;
 
     function item(arg) {
       const type = typeof arg;
-      const cleanupSubscribe = fn => h.cleanup((h.subscribe || arg)(fn));
+      const subscribe = h._makeSubscribe(arg);
       if (arg == null);
       else if (type === 'string') {
         if (el) el.appendChild(document.createTextNode(arg));
@@ -51,13 +60,13 @@ export function context(options = {}) {
         if (multi) {
           arg.forEach(item);
         } else {
-          h.insert(cleanupSubscribe, el, arg);
+          h.insert(subscribe, el, arg);
         }
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
             const marker = el.appendChild(document.createTextNode(''));
-            h.insert(cleanupSubscribe, el, arg, undefined, marker);
+            h.insert(subscribe, el, arg, undefined, marker);
           } else {
             el.appendChild(arg);
           }
@@ -76,7 +85,7 @@ export function context(options = {}) {
           if (arg.flow) {
             arg(h, el, marker);
           } else {
-            h.insert(cleanupSubscribe, el, arg, undefined, marker);
+            h.insert(subscribe, el, arg, undefined, marker);
           }
         } else {
           // Support Components
@@ -114,7 +123,7 @@ export function parseNested(h, el, obj, callback, exception = {}) {
       if (exception[name]) {
         exception[name](name, value);
       } else {
-        h.cleanup((h.subscribe || value)(() => callback(name, value(), h, el)));
+        h._makeSubscribe(value)(() => callback(name, value(), h, el));
       }
     } else {
       callback(name, value, h, el);
@@ -184,17 +193,18 @@ export function parseClass(string) {
   // characters like `#`. Don’t use them. More reading:
   // https://mathiasbynens.be/notes/css-escapes .
   const m = string.split(/([.#]?[^\s#.]+)/);
-  if (/^\.|#/.test(m[1])) {
+  if (m[1][0] === '.' || m[1][0] === '#') {
     el = document.createElement('div');
   }
 
-  m.forEach(v => {
+  for (let i = 0; i < m.length; i++) {
+    const v = m[i];
     const s = v.substring(1, v.length);
-    if (!v) return;
+    if (!v) continue;
     if (!el) el = document.createElement(v);
     else if (v[0] === '.') el.classList.add(s);
     else if (v[0] === '#') el.setAttribute('id', s);
-  });
+  }
 
   return el;
 }
