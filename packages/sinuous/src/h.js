@@ -5,7 +5,7 @@ import { assign } from './utils.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
- * @param  {Object} options
+ * @param  {object} options
  * @param {Function} [options.subscribe] - Function that listens to state changes.
  * @return {Function} `h` tag.
  */

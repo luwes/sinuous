@@ -1,8 +1,8 @@
 /**
  * Assign properties from `props` to `obj`.
- * @param {Object} obj - The object to copy properties to.
- * @param {Object} props - The object to copy properties from.
- * @return {Object}
+ * @param {object} obj - The object to copy properties to.
+ * @param {object} props - The object to copy properties from.
+ * @return {object}
  */
 export function assign(obj, props) {
   for (let i in props) obj[i] = props[i];
