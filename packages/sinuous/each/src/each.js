@@ -14,19 +14,15 @@ let groupCounter = 0;
 export default function each(items, expr) {
   function init(h, parent, afterNode) {
     const { subscribe, root, sample, cleanup } = h;
+
     const disposer = createDisposer();
-
-    let useFragment = !parent && !afterNode;
-    parent =
-      (afterNode && afterNode.parentNode) ||
-      parent ||
-      document.createDocumentFragment();
     const beforeNode = afterNode ? afterNode.previousSibling : null;
+    let useFragment = !parent && !afterNode;
 
-    function createFn(item, i, afterNode) {
+    function createFn(parent, item, i, afterNode) {
       return root(disposeFn => {
         const node = addNode(
-          cacheParent(),
+          parent,
           expr(item, i),
           afterNode,
           ++groupCounter
@@ -35,6 +31,11 @@ export default function each(items, expr) {
         return node;
       });
     }
+
+    parent =
+      (afterNode && afterNode.parentNode) ||
+      parent ||
+      document.createDocumentFragment();
 
     let child;
     function afterRender(beforeNodi) {
@@ -121,22 +122,24 @@ export function reconcile(
 
   // Fast path for create
   if (renderedValues.length === 0) {
-    for (let i = 0; i < length; i++) createFn(data[i], i, afterNode);
+    for (let i = 0; i < length; i++) {
+      createFn(parent, data[i], i, afterNode);
+    }
     after();
     return data.slice();
   }
 
-  let prevStart = 0,
-    newStart = 0,
-    loop = true,
-    prevEnd = renderedValues.length - 1,
-    newEnd = length - 1,
-    a,
-    b,
-    prevStartNode = beforeNode ? beforeNode.nextSibling : parent.firstChild,
-    newStartNode = prevStartNode,
-    prevEndNode = afterNode ? afterNode.previousSibling : parent.lastChild,
-    newAfterNode = afterNode;
+  let prevStart = 0;
+  let newStart = 0;
+  let loop = true;
+  let prevEnd = renderedValues.length - 1;
+  let newEnd = length - 1;
+  let a;
+  let b;
+  let prevStartNode = beforeNode ? beforeNode.nextSibling : parent.firstChild;
+  let newStartNode = prevStartNode;
+  let prevEndNode = afterNode ? afterNode.previousSibling : parent.lastChild;
+  let newAfterNode = afterNode;
 
   fixes: while (loop) {
     loop = false;
@@ -222,7 +225,7 @@ export function reconcile(
   if (prevEnd < prevStart) {
     if (newStart <= newEnd) {
       while (newStart <= newEnd) {
-        createFn(data[newStart], newStart, newAfterNode);
+        createFn(parent, data[newStart], newStart, newAfterNode);
         newStart++;
       }
     }
@@ -238,8 +241,8 @@ export function reconcile(
   const I = new Map();
   for (let i = newStart; i <= newEnd; i++) I.set(data[i], i);
 
-  let reusingNodes = 0,
-    toRemove = [];
+  let reusingNodes = 0;
+  let toRemove = [];
   for (let i = prevStart; i <= prevEnd; i++) {
     if (I.has(renderedValues[i])) {
       P[I.get(renderedValues[i])] = i;
@@ -253,8 +256,8 @@ export function reconcile(
   if (reusingNodes === 0) {
     const doRemove =
       prevStartNode !== parent.firstChild || prevEndNode !== parent.lastChild;
-    let node = prevStartNode,
-      mark;
+    let node = prevStartNode;
+    let mark;
     newAfterNode = prevEndNode.nextSibling;
     while (node !== newAfterNode) {
       mark = step(node, FORWARD);
@@ -265,17 +268,19 @@ export function reconcile(
     }
     !doRemove && (parent.textContent = '');
 
-    for (let i = newStart; i <= newEnd; i++) createFn(data[i], i, newAfterNode);
+    for (let i = newStart; i <= newEnd; i++) {
+      createFn(parent, data[i], i, newAfterNode);
+    }
     after();
     return data.slice();
   }
 
   // What else?
-  const longestSeq = longestPositiveIncreasingSubsequence(P, newStart),
-    nodes = [];
-  let tmpC = prevStartNode,
-    lisIdx = longestSeq.length - 1,
-    tmpD;
+  const longestSeq = longestPositiveIncreasingSubsequence(P, newStart);
+  const nodes = [];
+  let tmpC = prevStartNode;
+  let lisIdx = longestSeq.length - 1;
+  let tmpD;
 
   // Collect nodes to work with them
   for (let i = prevStart; i <= prevEnd; i++) {
@@ -284,8 +289,8 @@ export function reconcile(
   }
 
   for (let i = 0; i < toRemove.length; i++) {
-    let index = toRemove[i],
-      node = nodes[index];
+    let index = toRemove[i];
+    let node = nodes[index];
     removeNodes(parent, node, step(node, FORWARD));
     disposer._dispose(node);
   }
@@ -296,7 +301,7 @@ export function reconcile(
       lisIdx--;
     } else {
       if (P[i] === -1) {
-        tmpD = createFn(data[i], i, newAfterNode);
+        tmpD = createFn(parent, data[i], i, newAfterNode);
       } else {
         tmpD = nodes[P[i]];
         insertNodes(parent, tmpD, step(tmpD, FORWARD), newAfterNode);

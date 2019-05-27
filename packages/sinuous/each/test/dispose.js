@@ -1,9 +1,8 @@
 import test from 'tape';
-import { spy } from 'sinon';
 import sinuous from 'sinuous';
 import each from 'sinuous/each';
-import o, * as api from 'sinuous/observable';
-const h = sinuous(api);
+import o, { subscribe, root, sample } from 'sinuous/observable';
+const h = sinuous({ subscribe, root, sample });
 
 function lis(str) {
   return '<li>' + str.split(',').join('</li><li>') + '</li>';

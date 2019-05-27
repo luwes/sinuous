@@ -10,30 +10,15 @@ import { assign } from './utils.js';
  * @return {Function} `h` tag.
  */
 export function context(options = {}) {
-  options = assign(
-    assign(
-      {
-        bindings: {},
-        cleanUp,
-        context,
-        insert,
-        _makeSubscribe
-      },
-      options
-    ),
-    {
-      cleanup // run our own cleanup logic.
-    }
-  );
+  options = assign({
+    bindings: {},
+    cleanUp,
+    context,
+    insert,
+    cleanup
+  }, options);
 
   let cleanups = [];
-
-  function _makeSubscribe(arg) {
-    // Subscribe w/ root or parent is preferred. They take care of the cleanup.
-    return h.root ? h.subscribe :
-      // Support observable libraries w/ simple subscribe/unsubscribe.
-      fn => h.cleanup((h.subscribe || arg)(fn));
-  }
 
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
@@ -42,7 +27,6 @@ export function context(options = {}) {
 
     function item(arg) {
       const type = typeof arg;
-      const subscribe = h._makeSubscribe(arg);
       if (arg == null);
       else if (type === 'string') {
         if (el) el.appendChild(document.createTextNode(arg));
@@ -54,42 +38,49 @@ export function context(options = {}) {
         arg instanceof RegExp
       ) {
         el.appendChild(document.createTextNode(arg.toString()));
-      } else if (Array.isArray(arg)) {
-        // Support Fragments
-        if (!el) el = document.createDocumentFragment();
-        if (multi) {
-          arg.forEach(item);
-        } else {
-          h.insert(subscribe, el, arg);
-        }
-      } else if (arg instanceof Node) {
-        if (el) {
+      } else {
+        // Subscribe w/ root or parent is preferred. They take care of the cleanup.
+        const subscribe = h.root ? h.subscribe :
+          // Support observable libraries w/ simple subscribe/unsubscribe.
+          fn => h.cleanup((h.subscribe || arg)(fn));
+
+        if (Array.isArray(arg)) {
+          // Support Fragments
+          if (!el) el = document.createDocumentFragment();
           if (multi) {
-            const marker = el.appendChild(document.createTextNode(''));
-            h.insert(subscribe, el, arg, undefined, marker);
+            arg.forEach(item);
           } else {
-            el.appendChild(arg);
+            h.insert(subscribe, el, arg);
           }
-        } else {
-          // Support updates
-          el = arg;
-        }
-      } else if (type === 'object') {
-        const ref = (n, value) => value(el);
-        parseNested(h, el, arg, parseKeyValue, { ref });
-      } else if (type === 'function') {
-        if (el) {
-          const marker = multi
-            ? el.appendChild(document.createTextNode(''))
-            : undefined;
-          if (arg.flow) {
-            arg(h, el, marker);
+        } else if (arg instanceof Node) {
+          if (el) {
+            if (multi) {
+              const marker = el.appendChild(document.createTextNode(''));
+              h.insert(subscribe, el, arg, undefined, marker);
+            } else {
+              el.appendChild(arg);
+            }
           } else {
-            h.insert(subscribe, el, arg, undefined, marker);
+            // Support updates
+            el = arg;
           }
-        } else {
-          // Support Components
-          el = arg.apply(null, args.splice(0));
+        } else if (type === 'object') {
+          const ref = (n, value) => value(el);
+          parseNested(h, el, arg, parseKeyValue, { ref });
+        } else if (type === 'function') {
+          if (el) {
+            const marker = multi
+              ? el.appendChild(document.createTextNode(''))
+              : undefined;
+            if (arg.flow) {
+              arg(h, el, marker);
+            } else {
+              h.insert(subscribe, el, arg, undefined, marker);
+            }
+          } else {
+            // Support Components
+            el = arg.apply(null, args.splice(0));
+          }
         }
       }
     }
@@ -123,7 +114,9 @@ export function parseNested(h, el, obj, callback, exception = {}) {
       if (exception[name]) {
         exception[name](name, value);
       } else {
-        h._makeSubscribe(value)(() => callback(name, value(), h, el));
+        const subscribe = h.root ? h.subscribe :
+          fn => h.cleanup((h.subscribe || value)(fn));
+        subscribe(() => callback(name, value(), h, el));
       }
     } else {
       callback(name, value, h, el);
