@@ -1,10 +1,10 @@
 {
-  "name": "sinuous-observable",
+  "name": "sinuous-map",
   "private": true,
   "version": "0.0.1",
-  "description": "Sinuous observable",
-  "module": "dist/observable.mjs",
-  "main": "dist/observable.js",
+  "description": "Sinuous map",
+  "module": "dist/map.mjs",
+  "main": "dist/map.js",
   "files": [
     "dist",
     "src"
@@ -12,8 +12,5 @@
   "scripts": {
     "lint": "eslint src",
     "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
-  },
-  "peerDependencies": {
-    "sinuous": "^0.6.0"
   }
 }

@@ -1,9 +1,9 @@
-import sinuous from 'sinuous';
+import { context } from 'sinuous/h';
 import htm from 'htm';
 import hyperactiv from 'hyperactiv';
 const { observe, computed } = hyperactiv;
 
-const h = sinuous({ subscribe: computed });
+const h = context({ subscribe: computed });
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 

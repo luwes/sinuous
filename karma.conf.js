@@ -134,10 +134,11 @@ module.exports = function(config) {
       preserveSymlinks: true,
       plugins: [
         alias({
-          'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
-          'sinuous/each': __dirname + '/packages/sinuous/each/src/each.js',
-          'tape': __dirname + '/scripts/tape/dist.js',
+          'sinuous/observable': __dirname + '/packages/sinuous/observable/src/index.js',
+          'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
+          'sinuous/map': __dirname + '/packages/sinuous/map/src/map.js',
           'sinuous': __dirname + '/packages/sinuous/src/index.js',
+          'tape': __dirname + '/scripts/tape/dist.js'
         }),
         nodeResolve(),
         commonjs(),

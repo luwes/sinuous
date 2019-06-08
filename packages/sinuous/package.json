@@ -1,18 +1,21 @@
 {
   "name": "sinuous",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "🐍 Sinuous - Reactive render engine",
   "module": "dist/sinuous.mjs",
   "main": "dist/sinuous.js",
   "files": [
     "dist",
     "src",
+    "h/dist",
+    "h/src",
+    "h/package.json",
     "observable/dist",
     "observable/src",
     "observable/package.json",
-    "each/dist",
-    "each/src",
-    "each/package.json"
+    "map/dist",
+    "map/src",
+    "map/package.json"
   ],
   "keywords": [
     "functional",

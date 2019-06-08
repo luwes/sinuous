@@ -1,11 +1,11 @@
 import test from 'tape';
 import sinuous from 'sinuous';
-import each from 'sinuous/each';
+import map from 'sinuous/map';
 import o, * as api from 'sinuous/observable';
 const h = sinuous(api);
 
 (function() {
-  console.log('Testing an only child each control flow');
+  console.log('Testing an only child map control flow');
 
   let div;
   const n1 = 'a',
@@ -14,7 +14,7 @@ const h = sinuous(api);
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
   const Component = () =>
-    h('div', { ref: el => (div = el) }, each(list, item => item));
+    h('div', { ref: el => (div = el) }, map(list, item => item));
 
   function apply(t, array) {
     list(array);
@@ -23,7 +23,7 @@ const h = sinuous(api);
     t.equal(div.innerHTML, 'abcd');
   }
 
-  test('Create each control flow', t => {
+  test('Create map control flow', t => {
     Component();
 
     t.equal(div.innerHTML, 'abcd');
@@ -98,7 +98,7 @@ const h = sinuous(api);
 })();
 
 (function() {
-  console.log('Testing an multi child each control flow');
+  console.log('Testing an multi child map control flow');
 
   const div = document.createElement('div');
   const n1 = 'a',
@@ -106,7 +106,7 @@ const h = sinuous(api);
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const Component = () => each(list, item => item)(h);
+  const Component = () => map(list, item => item)(h);
 
   function apply(t, array) {
     list(array);
@@ -115,7 +115,7 @@ const h = sinuous(api);
     t.equal(div.innerHTML, 'abcd');
   }
 
-  test('Create each control flow', t => {
+  test('Create map control flow', t => {
     const comp = Component();
     div.appendChild(comp);
     t.equal(div.innerHTML, 'abcd');
@@ -190,7 +190,7 @@ const h = sinuous(api);
 })();
 
 (function() {
-  console.log('Testing an only child each control flow with array children');
+  console.log('Testing an only child map control flow with array children');
 
   let div;
   const n1 = 'a',
@@ -200,7 +200,7 @@ const h = sinuous(api);
   const list = o([n1, n2, n3, n4]);
 
   const Component = () =>
-    h('div', { ref: el => (div = el) }, each(list, item => h([item, item])));
+    h('div', { ref: el => (div = el) }, map(list, item => h([item, item])));
 
   function apply(t, array) {
     list(array);
@@ -209,7 +209,7 @@ const h = sinuous(api);
     t.equal(div.innerHTML, 'aabbccdd');
   }
 
-  test('Create each control flow', t => {
+  test('Create map control flow', t => {
     Component();
 
     t.equal(div.innerHTML, 'aabbccdd');

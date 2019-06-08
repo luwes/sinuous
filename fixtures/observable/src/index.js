@@ -1,8 +1,6 @@
-import o, * as api from 'sinuous/observable';
-import each from 'sinuous/each';
-import sinuous from 'sinuous';
+import { o, h } from 'sinuous';
+import map from 'sinuous/map';
 
-const h = sinuous(api);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
 const count = o(5);
@@ -34,7 +32,7 @@ const template = () => {
         <button onclick="${onclick}">Remove click handler + stop observing</button>
       </h1>
       <ul>
-        ${each(list, (item) => html`<li id=${item.id}>${item.text}</li>`)}
+        ${map(list, (item) => html`<li id=${item.id}>${item.text}</li>`)}
       </ul>
     </div>
   `;

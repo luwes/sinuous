@@ -1,10 +1,10 @@
 {
-  "name": "sinuous-each",
+  "name": "sinuous-h",
   "private": true,
   "version": "0.0.1",
-  "description": "Sinuous each",
-  "module": "dist/each.mjs",
-  "main": "dist/each.js",
+  "description": "Sinuous h",
+  "module": "dist/h.mjs",
+  "main": "dist/h.js",
   "files": [
     "dist",
     "src"
