@@ -8,10 +8,12 @@ import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
 
-import { ESM, UMD, bundles, fixtures } from '../bundles.js';
+import { CJS, ESM, IIFE, UMD, bundles, fixtures } from '../bundles.js';
 
 const formatOptions = {
+  [CJS]: { ext: '.js' },
   [ESM]: { ext: '.mjs' },
+  [IIFE]: { ext: '.js' },
   [UMD]: { ext: '.js' }
 };
 
@@ -52,7 +54,8 @@ function shouldSkipBundle(bundleName, bundleType) {
   return false;
 }
 
-function getConfig({ name, global, input, dest, format, external, sourcemap }) {
+function getConfig(options) {
+  const { name, global, input, dest, format, external, sourcemap } = options;
   return {
     input,
     external,
@@ -70,14 +73,17 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
             `dist/${name}${formatOptions[format].ext}`
           ),
       name: global,
-      exports: 'named'
+      exports: 'named',
+      legacy: true,
+      freeze: false,
+      esModule: false
     },
     plugins: [
       bundleSize(),
-      nodeResolve({ mainFields: ['module'] }),
+      nodeResolve(),
       commonjs(),
-      format === UMD && babel(),
-      format === UMD &&
+      [UMD, IIFE].includes(format) && babel(),
+      [UMD, IIFE].includes(format) &&
         terser({
           warnings: true,
           mangle: {

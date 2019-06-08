@@ -1,3 +1,5 @@
+export const IIFE = 'iife';
+export const CJS = 'cjs';
 export const ESM = 'esm';
 export const UMD = 'umd';
 
@@ -14,17 +16,25 @@ export const bundles = [
     input: 'packages/sinuous/src/index.js'
   },
   {
+    external: ['sinuous'],
     formats: [ESM, UMD],
-    global: 'observable',
-    name: 'observable',
-    input: 'packages/sinuous/observable/src/observable.js'
+    global: 'h',
+    name: 'h',
+    input: 'packages/sinuous/h/src/index.js'
   },
   {
     external: ['sinuous'],
     formats: [ESM, UMD],
-    global: 'each',
-    name: 'each',
-    input: 'packages/sinuous/each/src/each.js'
+    global: 'observable',
+    name: 'observable',
+    input: 'packages/sinuous/observable/src/index.js'
+  },
+  {
+    external: ['sinuous'],
+    formats: [ESM, UMD],
+    global: 'map',
+    name: 'map',
+    input: 'packages/sinuous/map/src/map.js'
   }
 ];
 

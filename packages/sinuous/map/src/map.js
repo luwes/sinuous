@@ -11,7 +11,7 @@ const FORWARD = 'nextSibling';
 const BACKWARD = 'previousSibling';
 let groupCounter = 0;
 
-export default function each(items, expr) {
+export default function map(items, expr) {
   function init(h, parent, afterNode) {
     const { subscribe, root, sample, cleanup } = h;
 
@@ -105,9 +105,8 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode !== undefined || afterNode !== undefined) {
-      let node =
-        beforeNode != undefined ? beforeNode.nextSibling : parent.firstChild;
+    if (beforeNode || afterNode) {
+      let node = beforeNode ? beforeNode.nextSibling : parent.firstChild;
       removeNodes(parent, node, afterNode ? afterNode : null);
     } else {
       parent.textContent = '';
@@ -319,12 +318,14 @@ function addNode(parent, node, afterNode, counter) {
     if (!node.length) return;
     node = normalizeIncomingArray([], node);
     let mark = node[0];
-    if (node.length !== 1)
+    if (node.length !== 1) {
       mark[GROUPING] = node[node.length - 1][GROUPING] = counter;
-    for (let i = 0; i < node.length; i++)
+    }
+    for (let i = 0; i < node.length; i++) {
       afterNode
         ? parent.insertBefore(node[i], afterNode)
         : parent.appendChild(node[i]);
+    }
     return mark;
   }
   let mark,

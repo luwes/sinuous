@@ -1,10 +1,10 @@
 import S from 's-js';
-import sinuous from 'sinuous';
-import each from 'sinuous/each';
+import { context } from 'sinuous/h';
+import map from 'sinuous/map';
 import htm from 'htm';
 
 const subscribe = (fn) => S.root((dispose) => S(fn) && dispose);
-const h = sinuous({ ...S, subscribe });
+const h = context({ ...S, subscribe });
 const html = htm.bind(h);
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
@@ -37,7 +37,7 @@ const template = () => {
         <button onclick="${onclick}">Click</button>
       </h1>
       <ul>
-        ${each(list, (item) => html`<li>${item}</li>`)}
+        ${map(list, (item) => html`<li>${item}</li>`)}
       </ul>
     </div>
   `;
