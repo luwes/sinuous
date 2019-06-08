@@ -11,6 +11,7 @@ export const bundleFormats = {
 export const bundles = [
   {
     formats: [ESM, UMD],
+    external: ['sinuous/observable'],
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'

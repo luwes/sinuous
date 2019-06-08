@@ -62,7 +62,7 @@ export function insertExpression(subscribe, parent, value, current, marker) {
     }
     current = value;
   } else if (Array.isArray(value)) {
-    let array = normalizeIncomingArray([], value);
+    const array = normalizeIncomingArray([], value);
     clearAll(parent, current, marker);
     array.forEach(node => {
       parent.insertBefore(node, marker);

@@ -12,8 +12,5 @@
   "scripts": {
     "lint": "eslint src",
     "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
-  },
-  "peerDependencies": {
-    "sinuous": "^0.6.0"
   }
 }
