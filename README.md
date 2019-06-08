@@ -30,7 +30,7 @@ It was built with these ideas in mind.
 | Size | Name | Description |
 | --- | --- | --- |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/map`](./packages/sinuous/html) | Fast list renderer |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/map`](./packages/sinuous/map) | Fast list renderer |
 
 ### Concept
 
@@ -44,9 +44,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 ```js
 import { o, h } from 'sinuous';
 
-const h = sinuous({ subscribe });
 const counter = o(0);
-
 const template = () => {
   return html`
     <div>Counter ${counter}</div>
@@ -63,7 +61,6 @@ setInterval(() => counter(counter() + 1), 1000);
 // 1.98 kB gzip (with babel-plugin-htm)
 import { o, h } from 'sinuous';
 
-const h = sinuous({ subscribe });
 const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 
 const count = o(0);
