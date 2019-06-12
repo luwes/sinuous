@@ -9,6 +9,7 @@ settings:
 
 rules:
   no-var: off
+  no-cond-assign: off
   no-negated-condition: error
   # fp/no-arguments: error
   fp/no-class: error

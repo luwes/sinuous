@@ -5,18 +5,18 @@ import { assign } from './utils.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
- * @param  {object} options
- * @param {Function} [options.subscribe] - Function that listens to state changes.
+ * @param  {object} api
+ * @param {Function} [api.subscribe] - Function that listens to state changes.
  * @return {Function} `h` tag.
  */
-export function context(options = {}) {
-  options = assign({
+export function context(api = {}) {
+  api = assign({
     bindings: {},
     cleanUp,
     context,
     insert,
     cleanup
-  }, options);
+  }, api);
 
   let cleanups = [];
 
@@ -29,8 +29,11 @@ export function context(options = {}) {
       const type = typeof arg;
       if (arg == null);
       else if (type === 'string') {
-        if (el) el.appendChild(document.createTextNode(arg));
-        else el = parseClass(arg);
+        if (el) {
+          el.appendChild(document.createTextNode(arg));
+        } else {
+          el = parseClass(arg);
+        }
       } else if (
         type === 'number' ||
         type === 'boolean' ||
@@ -56,7 +59,7 @@ export function context(options = {}) {
           if (el) {
             if (multi) {
               const marker = el.appendChild(document.createTextNode(''));
-              h.insert(subscribe, el, arg, undefined, marker);
+              h.insert(subscribe, el, arg, marker);
             } else {
               el.appendChild(arg);
             }
@@ -75,7 +78,11 @@ export function context(options = {}) {
             if (arg.flow) {
               arg(h, el, marker);
             } else {
-              h.insert(subscribe, el, arg, undefined, marker);
+              if (arg.$) {
+                arg.$(el, h.insert.bind(h, subscribe));
+              } else {
+                h.insert(subscribe, el, arg, marker);
+              }
             }
           } else {
             // Support Components
@@ -101,31 +108,42 @@ export function context(options = {}) {
     cleanups = [];
   }
 
-  return assign(h, options);
+  return assign(h, api);
 }
 
 export default context();
 
 export function parseNested(h, el, obj, callback, exception = {}) {
-  // Create scope for every entry.
-  Object.keys(obj).map(name => {
-    const value = obj[name];
-    if (typeof value === 'function') {
-      if (exception[name]) {
-        exception[name](name, value);
+  for (let name in obj) {
+    const val = obj[name];
+    // Create scope for every entry.
+    const propAction = function(element, value) {
+      if (typeof value === 'function') {
+        if (exception[name]) {
+          exception[name](name, value);
+        } else {
+          if (value.$) {
+            value.$(element, propAction);
+          } else {
+            const subscribe = h.root ? h.subscribe :
+              fn => h.cleanup((h.subscribe || value)(fn));
+            subscribe(() => callback(name, value(), h, element));
+          }
+        }
       } else {
-        const subscribe = h.root ? h.subscribe :
-          fn => h.cleanup((h.subscribe || value)(fn));
-        subscribe(() => callback(name, value(), h, el));
+        callback(name, value, h, element);
       }
-    } else {
-      callback(name, value, h, el);
-    }
-  });
+    };
+    propAction(el, val);
+  }
 }
 
 export function parseKeyValue(name, value, h, el) {
-  if (name[0] === 'o' && name[1] === 'n') {
+  if (name === 'class' || name === 'className') {
+    el.className = value;
+  } else if (name.slice(0, 5) === 'data-') {
+    el.setAttribute(name, value);
+  } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(h, el, name, value);
   } else if (name === 'events') {
     parseNested(h, el, value, (n, v) => handleEvent(h, el, 'on' + n, v));
@@ -139,12 +157,9 @@ export function parseKeyValue(name, value, h, el) {
     parseNested(h, el, value, (n, v) => el.classList.toggle(n, v));
   } else if (name === 'attrs') {
     parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
-  } else if (name.substr(0, 5) === 'data-') {
-    el.setAttribute(name, value);
   } else if (name[0] === '$') {
     h.bindings[name.slice(1)](el, value);
   } else {
-    if (name === 'class' || name === 'className') name = 'className';
     el[name] = value;
   }
 }
@@ -158,7 +173,7 @@ export function isMultiExpression(item) {
 function handleEvent(h, el, name, value) {
   const useCapture = name !== (name = name.replace(/Capture$/, ''));
   const kLower = name.toLowerCase();
-  name = (kLower in el ? kLower : name).substring(2);
+  name = (kLower in el ? kLower : name).slice(2);
 
   const cleanup = h.cleanup(() =>
     el.removeEventListener(name, eventProxy, useCapture)
@@ -192,7 +207,7 @@ export function parseClass(string) {
 
   for (let i = 0; i < m.length; i++) {
     const v = m[i];
-    const s = v.substring(1, v.length);
+    const s = v.slice(1);
     if (!v) continue;
     if (!el) el = document.createElement(v);
     else if (v[0] === '.') el.classList.add(s);

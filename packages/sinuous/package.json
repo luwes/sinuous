@@ -15,7 +15,10 @@
     "observable/package.json",
     "map/dist",
     "map/src",
-    "map/package.json"
+    "map/package.json",
+    "template/dist",
+    "template/src",
+    "template/package.json"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"

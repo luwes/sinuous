@@ -3,7 +3,6 @@ import { context } from 'sinuous/h';
 import observable, * as api from 'sinuous/observable';
 
 export const h = context(api);
-
 export default context;
 export {
   observable,
