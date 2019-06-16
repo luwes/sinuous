@@ -12,7 +12,7 @@ export function t(key) {
   return tag;
 }
 
-export function s(key) {
+export function o(key) {
   const observedTag = t(key);
   observedTag._observable = 1;
   return observedTag;
