@@ -105,11 +105,14 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode || afterNode) {
+    if (beforeNode || (afterNode && afterNode !== parent.lastChild)) {
       let node = beforeNode ? beforeNode.nextSibling : parent.firstChild;
       removeNodes(parent, node, afterNode ? afterNode : null);
     } else {
       parent.textContent = '';
+      if (afterNode) {
+        parent.appendChild(afterNode);
+      }
     }
 
     disposer._disposeAll();
