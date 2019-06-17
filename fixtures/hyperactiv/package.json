@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "htm": "^2.1.1",
-    "hyperactiv": "^0.6.2",
-    "sinuous": "0.7.1"
+    "hyperactiv": "^0.7.5",
+    "sinuous": "0.8.0"
   },
   "devDependencies": {
     "budo": "^11.6.2"
