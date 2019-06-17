@@ -29,7 +29,7 @@ export function template(fn) {
     let el = action._el;
     let parent;
     while (parent = el.parentNode) {
-      action._paths.unshift(EMPTY_ARR.indexOf.call(parent.children, el));
+      action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
       el = parent;
     }
   });
