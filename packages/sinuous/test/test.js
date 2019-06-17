@@ -11,3 +11,4 @@ import '../observable/test/dispose.js';
 import '../map/test/map.js';
 import '../map/test/dispose.js';
 import '../map/test/utils.js';
+import '../template/test/template.js';
