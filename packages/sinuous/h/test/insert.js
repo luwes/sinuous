@@ -4,7 +4,7 @@ const subscribe = fn => fn();
 const h = sinuous({ subscribe });
 h.insert = h.insert.bind(h, subscribe);
 
-const insert = val => {
+const insert = (val) => {
   const parent = container.cloneNode(true);
   h.insert(parent, val);
   return parent;
@@ -189,10 +189,97 @@ test('can insert a changing array of nodes', t => {
 });
 
 test('can insert nested arrays', t => {
+  let current = insert(['foo', ['bar', 'blech']]);
   t.equal(
-    insert(['foo', ['bar', 'blech']]).innerHTML,
+    current.innerHTML,
     'foobarblech',
     'array of array of strings'
   );
+  t.end();
+});
+
+test('can update arrays of nodes with node', t => {
+  const parent = container.cloneNode(true);
+
+  let current = h.insert(parent, []);
+  t.equal(
+    parent.innerHTML,
+    '',
+    'empty array'
+  );
+
+  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  t.equal(
+    parent.innerHTML,
+    '<h1>⛄️</h1>'
+  );
+
+  current = h.insert(parent, [h('h1')]);
+  t.equal(
+    parent.innerHTML,
+    '<h1></h1>',
+    'array of node'
+  );
+
+  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  t.equal(
+    parent.innerHTML,
+    '<h1>⛄️</h1>'
+  );
+
+  current = h.insert(parent, [h('h1'), h('h1'), h('h1')]);
+  t.equal(
+    parent.innerHTML,
+    '<h1></h1><h1></h1><h1></h1>',
+    'array of nodes'
+  );
+
+  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  t.equal(
+    parent.innerHTML,
+    '<h1>⛄️</h1>'
+  );
+  t.end();
+});
+
+test('can update text with node', t => {
+  const parent = container.cloneNode(true);
+
+  let current = h.insert(parent, '🐍');
+  t.equal(
+    parent.innerHTML,
+    '🐍',
+    'text snake'
+  );
+
+  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  t.equal(
+    parent.innerHTML,
+    '<h1>⛄️</h1>'
+  );
+  t.end();
+});
+
+test('can update array with text with marker', t => {
+  const parent = container.cloneNode(true);
+  const marker = parent.appendChild(document.createTextNode(''));
+
+  let current = h.insert(parent, h('h1', '⛄️'), marker);
+  t.equal(
+    parent.innerHTML,
+    '<h1>⛄️</h1>'
+  );
+
+  h.insert(parent, '⛄️', marker, current);
+  t.equal(
+    parent.innerHTML,
+    '⛄️'
+  );
+  t.end();
+});
+
+test('throws on unsupported value', t => {
+  const parent = container.cloneNode(true);
+  t.throws(() => h.insert(parent, {}));
   t.end();
 });

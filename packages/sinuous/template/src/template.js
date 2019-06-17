@@ -2,6 +2,11 @@ import { EMPTY_ARR } from './constants.js';
 
 let actions;
 
+/**
+ * Template tag.
+ * @param  {string} key
+ * @return {Function}
+ */
 export function t(key) {
   const tag = () => key;
   tag.$ = (el, action) => {
@@ -12,12 +17,22 @@ export function t(key) {
   return tag;
 }
 
+/**
+ * Observable template tag.
+ * @param  {string} key
+ * @return {Function}
+ */
 export function o(key) {
   const observedTag = t(key);
   observedTag._observable = 1;
   return observedTag;
 }
 
+/**
+ * Creates a template.
+ * @param  {Function} fn
+ * @return {Function}
+ */
 export function template(fn) {
   actions = [];
 

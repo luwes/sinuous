@@ -40,7 +40,7 @@ export function context(api = {}) {
         arg instanceof Date ||
         arg instanceof RegExp
       ) {
-        el.appendChild(document.createTextNode(arg.toString()));
+        el.appendChild(document.createTextNode(''+arg));
       } else {
         // Subscribe w/ root or parent is preferred. They take care of the cleanup.
         const subscribe = h.root ? h.subscribe :

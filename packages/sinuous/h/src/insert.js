@@ -2,18 +2,22 @@ import { clearAll, normalizeIncomingArray } from './utils.js';
 
 export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
-  parent = (marker && marker.parentNode) || parent;
+
   const t = typeof value;
   if (t === 'string' || t === 'number') {
-    if (t === 'number') value = value.toString();
+    if (t === 'number') {
+      value = ''+value;
+    }
     if (marker) {
-      if (value === '') clearAll(parent, current, marker);
-      else if (current !== '' && typeof current === 'string') {
-        marker.previousSibling.data = value;
+      const startNode = (marker && marker.previousSibling) || parent.lastChild;
+      if (value === '') {
+        clearAll(parent, current, marker);
+      } else if (current !== '' && typeof current === 'string') {
+        startNode.data = value;
       } else {
         const node = document.createTextNode(value);
         if (current !== '' && current != null) {
-          parent.replaceChild(node, marker.previousSibling);
+          parent.replaceChild(node, startNode);
         } else {
           parent.insertBefore(node, marker);
         }
