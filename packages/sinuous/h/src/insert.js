@@ -1,16 +1,6 @@
 import { clearAll, normalizeIncomingArray } from './utils.js';
 
-export function insert(subscribe, parent, accessor, current, marker) {
-  if (typeof accessor !== 'function') {
-    return insertExpression(subscribe, parent, accessor, current, marker);
-  }
-
-  subscribe(function() {
-    current = insertExpression(subscribe, parent, accessor(), current, marker);
-  });
-}
-
-export function insertExpression(subscribe, parent, value, current, marker) {
+export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
   parent = (marker && marker.parentNode) || parent;
   const t = typeof value;
@@ -40,7 +30,7 @@ export function insertExpression(subscribe, parent, value, current, marker) {
     current = clearAll(parent, current, marker);
   } else if (t === 'function') {
     subscribe(function() {
-      current = insertExpression(subscribe, parent, value(), current, marker);
+      current = insert(subscribe, parent, value(), marker, current);
     });
   } else if (value instanceof Node) {
     if (Array.isArray(current)) {

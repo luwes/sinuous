@@ -10,11 +10,11 @@ export const bundleFormats = {
 
 export const bundles = [
   {
+    external: ['sinuous'],
     formats: [ESM, UMD],
-    external: ['sinuous/observable'],
-    global: 'sinuous',
-    name: 'sinuous',
-    input: 'packages/sinuous/src/index.js'
+    global: 'observable',
+    name: 'observable',
+    input: 'packages/sinuous/observable/src/observable.js'
   },
   {
     external: ['sinuous'],
@@ -26,9 +26,9 @@ export const bundles = [
   {
     external: ['sinuous'],
     formats: [ESM, UMD],
-    global: 'observable',
-    name: 'observable',
-    input: 'packages/sinuous/observable/src/index.js'
+    global: 'template',
+    name: 'template',
+    input: 'packages/sinuous/template/src/template.js'
   },
   {
     external: ['sinuous'],
@@ -36,6 +36,13 @@ export const bundles = [
     global: 'map',
     name: 'map',
     input: 'packages/sinuous/map/src/map.js'
+  },
+  {
+    external: ['sinuous/observable'],
+    formats: [ESM, UMD],
+    global: 'sinuous',
+    name: 'sinuous',
+    input: 'packages/sinuous/src/index.js'
   }
 ];
 

@@ -9,7 +9,7 @@ h.insert = h.insert.bind(h, subscribe);
 
 function insert(val) {
   const parent = clone(container);
-  h.insert(parent, val, undefined, parent.childNodes[1]);
+  h.insert(parent, val, parent.childNodes[1]);
   return parent;
 }
 
@@ -136,28 +136,28 @@ test('can insert a changing array of nodes', t => {
   div2.textContent = '2';
   span3.textContent = '3';
 
-  current = h.insert(container, [], current, marker);
+  current = h.insert(container, [], marker, current);
   t.equal(container.innerHTML, '');
 
-  current = h.insert(container, [span1, div2, span3], current, marker);
+  current = h.insert(container, [span1, div2, span3], marker, current);
   t.equal(container.innerHTML, '<span>1</span><div>2</div><span>3</span>');
 
-  current = h.insert(container, [div2, span3], current, marker);
+  current = h.insert(container, [div2, span3], marker, current);
   t.equal(container.innerHTML, '<div>2</div><span>3</span>');
 
-  current = h.insert(container, [div2, span3], current, marker);
+  current = h.insert(container, [div2, span3], marker, current);
   t.equal(container.innerHTML, '<div>2</div><span>3</span>');
 
-  current = h.insert(container, [span3, div2], current, marker);
+  current = h.insert(container, [span3, div2], marker, current);
   t.equal(container.innerHTML, '<span>3</span><div>2</div>');
 
-  current = h.insert(container, [], current, marker);
+  current = h.insert(container, [], marker, current);
   t.equal(container.innerHTML, '');
 
-  current = h.insert(container, [span3], current, marker);
+  current = h.insert(container, [span3], marker, current);
   t.equal(container.innerHTML, '<span>3</span>');
 
-  current = h.insert(container, [div2], current, marker);
+  current = h.insert(container, [div2], marker, current);
   t.equal(container.innerHTML, '<div>2</div>');
   t.end();
 });

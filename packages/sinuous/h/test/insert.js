@@ -175,9 +175,9 @@ test('can insert a changing array of nodes', t => {
   test([n4, n3, n2, n1]);
 
   function test(array) {
-    current = h.insert(parent, array, current);
+    current = h.insert(parent, array, undefined, current);
     t.equal(parent.innerHTML, expected(array));
-    current = h.insert(parent, orig, current);
+    current = h.insert(parent, orig, undefined, current);
     t.equal(parent.innerHTML, origExpected);
   }
 

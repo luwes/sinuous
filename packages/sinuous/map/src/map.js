@@ -19,11 +19,11 @@ export default function map(items, expr) {
     const beforeNode = afterNode ? afterNode.previousSibling : null;
     let useFragment = !parent && !afterNode;
 
-    function createFn(parent, item, i, afterNode) {
+    function createFn(parent, item, i, data, afterNode) {
       return root(disposeFn => {
         const node = addNode(
           parent,
-          expr(item, i),
+          expr(item, i, data),
           afterNode,
           ++groupCounter
         );
@@ -105,11 +105,14 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode || afterNode) {
+    if (beforeNode || (afterNode && afterNode !== parent.lastChild)) {
       let node = beforeNode ? beforeNode.nextSibling : parent.firstChild;
       removeNodes(parent, node, afterNode ? afterNode : null);
     } else {
       parent.textContent = '';
+      if (afterNode) {
+        parent.appendChild(afterNode);
+      }
     }
 
     disposer._disposeAll();
@@ -122,7 +125,7 @@ export function reconcile(
   // Fast path for create
   if (renderedValues.length === 0) {
     for (let i = 0; i < length; i++) {
-      createFn(parent, data[i], i, afterNode);
+      createFn(parent, data[i], i, data, afterNode);
     }
     after();
     return data.slice();
@@ -224,7 +227,7 @@ export function reconcile(
   if (prevEnd < prevStart) {
     if (newStart <= newEnd) {
       while (newStart <= newEnd) {
-        createFn(parent, data[newStart], newStart, newAfterNode);
+        createFn(parent, data[newStart], newStart, data, newAfterNode);
         newStart++;
       }
     }
@@ -268,7 +271,7 @@ export function reconcile(
     !doRemove && (parent.textContent = '');
 
     for (let i = newStart; i <= newEnd; i++) {
-      createFn(parent, data[i], i, newAfterNode);
+      createFn(parent, data[i], i, data, newAfterNode);
     }
     after();
     return data.slice();
@@ -300,7 +303,7 @@ export function reconcile(
       lisIdx--;
     } else {
       if (P[i] === -1) {
-        tmpD = createFn(parent, data[i], i, newAfterNode);
+        tmpD = createFn(parent, data[i], i, data, newAfterNode);
       } else {
         tmpD = nodes[P[i]];
         insertNodes(parent, tmpD, step(tmpD, FORWARD), newAfterNode);
