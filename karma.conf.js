@@ -137,7 +137,7 @@ module.exports = function(config) {
           'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
           'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
           'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
-          'sinuous/map': __dirname + '/packages/sinuous/map/src/map.js',
+          'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
           'sinuous': __dirname + '/packages/sinuous/src/index.js',
           'tape': __dirname + '/scripts/tape/dist.js'
         }),

@@ -19,7 +19,8 @@ export function isListening() {
 export function root(fn) {
   const update = currentUpdate;
   const rootUpdate = () => {};
-  currentUpdate = resetUpdate(rootUpdate);
+  currentUpdate = rootUpdate;
+  resetUpdate(rootUpdate);
   const result = fn(() => {
     _unsubscribe(rootUpdate);
     currentUpdate = undefined;
@@ -162,7 +163,6 @@ function resetUpdate(update) {
   update._observables = [];
   update._children = [];
   update._cleanups = [];
-  return update;
 }
 
 export default observable;

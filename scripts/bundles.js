@@ -35,7 +35,7 @@ export const bundles = [
     formats: [ESM, UMD],
     global: 'map',
     name: 'map',
-    input: 'packages/sinuous/map/src/map.js'
+    input: 'packages/sinuous/map/src/index.js'
   },
   {
     external: ['sinuous/observable'],

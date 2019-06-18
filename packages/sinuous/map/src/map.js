@@ -1,12 +1,10 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
+import addNode from './add-node.js';
 import createDisposer from './disposer.js';
-import {
-  normalizeIncomingArray,
-  longestPositiveIncreasingSubsequence
-} from './utils.js';
+import { longestPositiveIncreasingSubsequence } from './utils.js';
 
-const GROUPING = '__rGroup';
+export const GROUPING = '__rGroup';
 const FORWARD = 'nextSibling';
 const BACKWARD = 'previousSibling';
 let groupCounter = 0;
@@ -314,37 +312,6 @@ export function reconcile(
 
   after();
   return data.slice();
-}
-
-function addNode(parent, node, afterNode, counter) {
-  if (Array.isArray(node)) {
-    if (!node.length) return;
-    node = normalizeIncomingArray([], node);
-    let mark = node[0];
-    if (node.length !== 1) {
-      mark[GROUPING] = node[node.length - 1][GROUPING] = counter;
-    }
-    for (let i = 0; i < node.length; i++) {
-      afterNode
-        ? parent.insertBefore(node[i], afterNode)
-        : parent.appendChild(node[i]);
-    }
-    return mark;
-  }
-  let mark,
-    t = typeof node;
-  if (t === 'string' || t === 'number') {
-    node = document.createTextNode(node);
-  } else if (
-    node.nodeType === 11 &&
-    (mark = node.firstChild) &&
-    mark !== node.lastChild
-  ) {
-    mark[GROUPING] = node.lastChild[GROUPING] = counter;
-  }
-
-  afterNode ? parent.insertBefore(node, afterNode) : parent.appendChild(node);
-  return mark || node;
 }
 
 function step(node, direction, inner) {
