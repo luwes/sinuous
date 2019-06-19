@@ -10,13 +10,16 @@ import { assign } from './utils.js';
  * @return {Function} `h` tag.
  */
 export function context(api = {}) {
-  api = assign({
-    bindings: {},
-    cleanUp,
-    context,
-    insert,
-    cleanup
-  }, api);
+  api = assign(
+    {
+      bindings: {},
+      cleanUp,
+      context,
+      insert,
+      cleanup
+    },
+    api
+  );
 
   let cleanups = [];
 
@@ -40,12 +43,13 @@ export function context(api = {}) {
         arg instanceof Date ||
         arg instanceof RegExp
       ) {
-        el.appendChild(document.createTextNode(''+arg));
+        el.appendChild(document.createTextNode('' + arg));
       } else {
         // Subscribe w/ root or parent is preferred. They take care of the cleanup.
-        const subscribe = h.root ? h.subscribe :
-          // Support observable libraries w/ simple subscribe/unsubscribe.
-          fn => h.cleanup((h.subscribe || arg)(fn));
+        const subscribe = h.root
+          ? h.subscribe
+          : // Support observable libraries w/ simple subscribe/unsubscribe.
+            fn => h.cleanup((h.subscribe || arg)(fn));
 
         if (Array.isArray(arg)) {
           // Support Fragments
@@ -125,8 +129,9 @@ export function parseNested(h, el, obj, callback, exception = {}) {
           if (value.$) {
             value.$(element, propAction);
           } else {
-            const subscribe = h.root ? h.subscribe :
-              fn => h.cleanup((h.subscribe || value)(fn));
+            const subscribe = h.root
+              ? h.subscribe
+              : fn => h.cleanup((h.subscribe || value)(fn));
             subscribe(() => callback(name, value(), h, element));
           }
         }
@@ -139,9 +144,13 @@ export function parseNested(h, el, obj, callback, exception = {}) {
 }
 
 export function parseKeyValue(name, value, h, el) {
+  let prefix;
   if (name === 'class' || name === 'className') {
     el.className = value;
-  } else if (name.slice(0, 5) === 'data-') {
+  } else if (
+    (prefix = name.slice(0, 5)) &&
+    (prefix === 'data-' || prefix === 'aria-')
+  ) {
     el.setAttribute(name, value);
   } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(h, el, name, value);

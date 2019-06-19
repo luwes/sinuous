@@ -134,6 +134,12 @@ test('sets data attributes', function(t) {
   t.end();
 });
 
+test('sets aria attributes', function(t) {
+  let div = h('div', { 'aria-hidden': true });
+  t.equal(div.getAttribute('aria-hidden'), 'true');
+  t.end();
+});
+
 test('sets refs', function(t) {
   let ref;
   let div = h('div', { ref: el => (ref = el) });
