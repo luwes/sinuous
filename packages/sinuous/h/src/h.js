@@ -72,8 +72,7 @@ export function context(api = {}) {
             el = arg;
           }
         } else if (type === 'object') {
-          const ref = (n, value) => value(el);
-          parseNested(h, el, arg, parseKeyValue, { ref });
+          parseNested(h, el, arg, parseKeyValue);
         } else if (type === 'function') {
           if (el) {
             const marker = multi
@@ -117,14 +116,14 @@ export function context(api = {}) {
 
 export default context();
 
-export function parseNested(h, el, obj, callback, exception = {}) {
+export function parseNested(h, el, obj, callback) {
   for (let name in obj) {
     const val = obj[name];
     // Create scope for every entry.
     const propAction = function(element, value) {
       if (typeof value === 'function') {
-        if (exception[name]) {
-          exception[name](name, value);
+        if (name === 'ref') {
+          value(el);
         } else {
           if (value.$) {
             value.$(element, propAction);
