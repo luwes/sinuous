@@ -17,7 +17,7 @@ Sinuous supports modern browsers and IE11+:
 Sinuous provides the clarity of declarative views and the performance of direct DOM manipulation.  
 It was built with these ideas in mind.
 
-- Developer experience, [performance](https://github.com/krausest/js-framework-benchmark/pull/566).
+- Developer experience, [performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html).
 - Small bundle size, made for use in other mini libraries like custom elements.
 - Plain Javascript feel; template literals, standard HTML.
 - Choose your own reactive library:
@@ -29,8 +29,9 @@ It was built with these ideas in mind.
 
 | Size | Name | Description |
 | --- | --- | --- |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/map`](./packages/sinuous/map) | Fast list renderer |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/template/dist/template.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/template`](./packages/sinuous/template) | Pre-rendered Template |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable |
 
 ### Concept
 
