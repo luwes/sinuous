@@ -106,7 +106,9 @@ const h = sinuous(api);
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const Component = () => map(list, item => item)(h);
+  const parent = document.createDocumentFragment();
+  const afterNode = parent.appendChild(document.createTextNode(''));
+  const Component = () => map(list, item => item)(h, parent, afterNode);
 
   function apply(t, array) {
     list(array);

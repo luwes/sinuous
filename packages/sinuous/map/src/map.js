@@ -1,7 +1,6 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
 import addNode from './add-node.js';
-import createDisposer from './disposer.js';
 import { longestPositiveIncreasingSubsequence } from './utils.js';
 
 export const GROUPING = '__rGroup';
@@ -12,10 +11,19 @@ let groupCounter = 0;
 export default function map(items, expr) {
   function init(h, parent, afterNode) {
     const { subscribe, root, sample, cleanup } = h;
-
-    const disposer = createDisposer();
     const beforeNode = afterNode ? afterNode.previousSibling : null;
-    let useFragment = !parent && !afterNode;
+    let disposables = new Map();
+
+    function disposeAll() {
+      disposables.forEach(d => d());
+      disposables.clear();
+    }
+
+    function dispose(node) {
+      let disposable;
+      (disposable = disposables.get(node)) && disposable();
+      disposables.delete(node);
+    }
 
     function createFn(parent, item, i, data, afterNode) {
       return root(disposeFn => {
@@ -25,51 +33,34 @@ export default function map(items, expr) {
           afterNode,
           ++groupCounter
         );
-        disposer._disposables.set(node, disposeFn);
+        disposables.set(node, disposeFn);
         return node;
       });
-    }
-
-    parent =
-      (afterNode && afterNode.parentNode) ||
-      parent ||
-      document.createDocumentFragment();
-
-    let child;
-    function afterRender(beforeNodi) {
-      child = beforeNodi;
-    }
-
-    function cacheParent() {
-      if (useFragment && child && child.parentNode) {
-        parent = child.parentNode;
-      }
-      return parent;
     }
 
     const unsubscribe = subscribe((renderedValues = []) => {
       const data = items() || [];
       return sample(() =>
         reconcile(
-          disposer,
-          cacheParent(),
+          parent,
           renderedValues,
           data,
-          createFn,
           beforeNode,
           afterNode,
-          afterRender
+          createFn,
+          disposeAll,
+          dispose
         )
       );
     });
 
     cleanup(unsubscribe);
-    cleanup(disposer._disposeAll);
+    cleanup(disposeAll);
 
     return parent;
   }
 
-  init.flow = true;
+  init._flow = true;
   return init;
 }
 
@@ -82,20 +73,22 @@ export default function map(items, expr) {
 // https://github.com/Freak613/stage0/blob/master/reconcile.js
 // This implementation is tailored for fine grained change detection and adds support for fragments
 export function reconcile(
-  disposer,
   parent,
   renderedValues,
   data,
-  createFn,
   beforeNode,
   afterNode,
-  afterRender
+  createFn,
+  onClear,
+  onRemove,
+  onRender
 ) {
   const length = data.length;
+  parent = (afterNode && afterNode.parentNode) || parent;
 
-  function after() {
-    afterRender &&
-      afterRender(
+  function afterRender() {
+    onRender &&
+      onRender(
         beforeNode ? beforeNode.nextSibling : parent.firstChild,
         afterNode
       );
@@ -113,11 +106,9 @@ export function reconcile(
       }
     }
 
-    disposer._disposeAll();
-    if (length === 0) {
-      after();
-      return [];
-    }
+    afterRender();
+    onClear && onClear();
+    return [];
   }
 
   // Fast path for create
@@ -125,7 +116,7 @@ export function reconcile(
     for (let i = 0; i < length; i++) {
       createFn(parent, data[i], i, data, afterNode);
     }
-    after();
+    afterRender();
     return data.slice();
   }
 
@@ -212,12 +203,12 @@ export function reconcile(
         node = step(prevEndNode, BACKWARD, true);
         next = node.previousSibling;
         removeNodes(parent, node, prevEndNode.nextSibling);
-        disposer._dispose(node);
+        onRemove && onRemove(node);
         prevEndNode = next;
         prevEnd--;
       }
     }
-    after();
+    afterRender();
     return data.slice();
   }
 
@@ -229,7 +220,7 @@ export function reconcile(
         newStart++;
       }
     }
-    after();
+    afterRender();
     return data.slice();
   }
 
@@ -261,8 +252,8 @@ export function reconcile(
     newAfterNode = prevEndNode.nextSibling;
     while (node !== newAfterNode) {
       mark = step(node, FORWARD);
-      disposer._dispose(node);
       doRemove && removeNodes(parent, node, mark);
+      onRemove && onRemove(node);
       node = mark;
       prevStart++;
     }
@@ -271,7 +262,7 @@ export function reconcile(
     for (let i = newStart; i <= newEnd; i++) {
       createFn(parent, data[i], i, data, newAfterNode);
     }
-    after();
+    afterRender();
     return data.slice();
   }
 
@@ -292,7 +283,7 @@ export function reconcile(
     let index = toRemove[i];
     let node = nodes[index];
     removeNodes(parent, node, step(node, FORWARD));
-    disposer._dispose(node);
+    onRemove && onRemove(node);
   }
 
   for (let i = newEnd; i >= newStart; i--) {
@@ -310,7 +301,7 @@ export function reconcile(
     }
   }
 
-  after();
+  afterRender();
   return data.slice();
 }
 

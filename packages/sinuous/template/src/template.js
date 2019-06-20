@@ -39,11 +39,11 @@ export function template(fn) {
   const fragment = document.createDocumentFragment();
   fragment.appendChild(fn());
 
-  actions.forEach((action) => {
+  actions.forEach(action => {
     action._paths = [];
     let el = action._el;
     let parent;
-    while (parent = el.parentNode) {
+    while ((parent = el.parentNode)) {
       action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
       el = parent;
     }
@@ -91,7 +91,9 @@ export function template(fn) {
 
 function observeProperty(data, key, value, action, target) {
   Object.defineProperty(data, key, {
-    get() { return value; },
+    get() {
+      return value;
+    },
     set(newValue) {
       value = newValue;
       action(target, newValue);

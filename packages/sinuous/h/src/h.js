@@ -78,7 +78,7 @@ export function context(api = {}) {
             const marker = multi
               ? el.appendChild(document.createTextNode(''))
               : undefined;
-            if (arg.flow) {
+            if (arg._flow) {
               arg(h, el, marker);
             } else {
               if (arg.$) {
