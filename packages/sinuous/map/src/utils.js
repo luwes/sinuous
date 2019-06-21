@@ -1,3 +1,34 @@
+import { GROUPING } from './map.js';
+
+export function step(node, direction, inner) {
+  const key = node[GROUPING];
+  if (key) {
+    node = node[direction];
+    while (node && node[GROUPING] !== key) {
+      node = node[direction];
+    }
+  }
+  return inner ? node : node[direction];
+}
+
+export function removeNodes(parent, node, end) {
+  let tmp;
+  while (node !== end) {
+    tmp = node.nextSibling;
+    parent.removeChild(node);
+    node = tmp;
+  }
+}
+
+export function insertNodes(parent, node, end, target) {
+  let tmp;
+  while (node !== end) {
+    tmp = node.nextSibling;
+    parent.insertBefore(node, target);
+    node = tmp;
+  }
+}
+
 export function normalizeIncomingArray(normalized, array) {
   for (let i = 0, len = array.length; i < len; i++) {
     let item = array[i];

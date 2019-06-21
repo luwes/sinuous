@@ -1,7 +1,12 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
 import addNode from './add-node.js';
-import { longestPositiveIncreasingSubsequence } from './utils.js';
+import {
+  longestPositiveIncreasingSubsequence,
+  insertNodes,
+  removeNodes,
+  step
+} from './utils.js';
 
 export const GROUPING = '__g';
 const FORWARD = 'nextSibling';
@@ -303,33 +308,4 @@ export function reconcile(
 
   afterRender();
   return data.slice();
-}
-
-function step(node, direction, inner) {
-  const key = node[GROUPING];
-  if (key) {
-    node = node[direction];
-    while (node && node[GROUPING] !== key) {
-      node = node[direction];
-    }
-  }
-  return inner ? node : node[direction];
-}
-
-function removeNodes(parent, node, end) {
-  let tmp;
-  while (node !== end) {
-    tmp = node.nextSibling;
-    parent.removeChild(node);
-    node = tmp;
-  }
-}
-
-function insertNodes(parent, node, end, target) {
-  let tmp;
-  while (node !== end) {
-    tmp = node.nextSibling;
-    parent.insertBefore(node, target);
-    node = tmp;
-  }
 }
