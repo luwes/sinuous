@@ -85,21 +85,11 @@ export function reconcile(
   afterNode,
   createFn,
   onClear,
-  onRemove,
-  onRender
+  onRemove
 ) {
   const length = data.length;
-
   // When parent was a DocumentFragment, then items got appended to the DOM.
   parent = afterNode.parentNode;
-
-  function afterRender() {
-    onRender &&
-      onRender(
-        beforeNode ? beforeNode.nextSibling : parent.firstChild,
-        afterNode
-      );
-  }
 
   // Fast path for clear
   if (length === 0) {
@@ -111,7 +101,6 @@ export function reconcile(
       parent.appendChild(afterNode);
     }
 
-    afterRender();
     onClear && onClear();
     return [];
   }
@@ -121,7 +110,6 @@ export function reconcile(
     for (let i = 0; i < length; i++) {
       createFn(parent, data[i], i, data, afterNode);
     }
-    afterRender();
     return data.slice();
   }
 
@@ -213,7 +201,6 @@ export function reconcile(
         prevEnd--;
       }
     }
-    afterRender();
     return data.slice();
   }
 
@@ -225,7 +212,6 @@ export function reconcile(
         newStart++;
       }
     }
-    afterRender();
     return data.slice();
   }
 
@@ -267,7 +253,6 @@ export function reconcile(
     for (let i = newStart; i <= newEnd; i++) {
       createFn(parent, data[i], i, data, newAfterNode);
     }
-    afterRender();
     return data.slice();
   }
 
@@ -306,6 +291,5 @@ export function reconcile(
     }
   }
 
-  afterRender();
   return data.slice();
 }
