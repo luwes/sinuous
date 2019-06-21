@@ -9,7 +9,7 @@
   "dependencies": {
     "htm": "^2.1.1",
     "hyperactiv": "^0.7.5",
-    "sinuous": "0.8.0"
+    "sinuous": "0.8.2"
   },
   "devDependencies": {
     "budo": "^11.6.2"
