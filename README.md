@@ -1,13 +1,9 @@
-# 🐍 Sinuous
+# <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="36" alt="Sinuous" /></a>
 
 [![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
 ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/dist/sinuous.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
-Sinuous supports modern browsers and IE11+:
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
 **npm**: `npm install sinuous --save`  
 **cdn**: https://unpkg.com/sinuous@latest/dist/sinuous.js
@@ -17,7 +13,8 @@ Sinuous supports modern browsers and IE11+:
 Sinuous provides the clarity of declarative views and the performance of direct DOM manipulation.  
 It was built with these ideas in mind.
 
-- Developer experience, [performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html).
+- Developer experience
+- [Performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)
 - Small bundle size, made for use in other mini libraries like custom elements.
 - Plain Javascript feel; template literals, standard HTML.
 - Choose your own reactive library:
@@ -29,7 +26,7 @@ It was built with these ideas in mind.
 
 | Size                                                                                                                                                | Name                                                  | Description           |
 | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square)               | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square&v=1)               | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/template/dist/template.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 
@@ -39,6 +36,12 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
+
+### Browser Support
+
+Sinuous supports modern browsers and IE11+:
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
 ### Counter (_1.81kB gzip_)
 
