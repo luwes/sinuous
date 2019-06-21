@@ -6,7 +6,7 @@ export function insert(subscribe, parent, value, marker, current) {
   const t = typeof value;
   if (t === 'string' || t === 'number') {
     if (t === 'number') {
-      value = ''+value;
+      value = '' + value;
     }
     if (marker) {
       const startNode = (marker && marker.previousSibling) || parent.lastChild;

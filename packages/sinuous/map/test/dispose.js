@@ -8,7 +8,7 @@ function lis(str) {
   return '<li>' + str.split(',').join('</li><li>') + '</li>';
 }
 
-test("explicit h.cleanUp works and disposes observables", function(t) {
+test('explicit h.cleanUp works and disposes observables', function(t) {
   let four = o(4);
   const list = o([1, 2, 3, four]);
   const el = h('ul', map(list, item => h('li', item)));
@@ -31,7 +31,7 @@ test("explicit h.cleanUp works and disposes observables", function(t) {
   t.end();
 });
 
-test("emptying list disposes observables", function(t) {
+test('emptying list disposes observables', function(t) {
   let four = o(4);
   const list = o([1, 2, 3, four]);
 

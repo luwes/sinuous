@@ -11,7 +11,7 @@ export function normalizeIncomingArray(normalized, array) {
     } else if (Array.isArray(item)) {
       normalizeIncomingArray(normalized, item);
     } else {
-      normalized.push(document.createTextNode(''+item));
+      normalized.push(document.createTextNode('' + item));
     }
   }
   return normalized;

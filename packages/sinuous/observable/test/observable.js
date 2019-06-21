@@ -1,6 +1,11 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import o, { subscribe, unsubscribe, cleanup, isListening } from '../src/observable.js';
+import o, {
+  subscribe,
+  unsubscribe,
+  cleanup,
+  isListening
+} from '../src/observable.js';
 
 test('initial value can be set', function(t) {
   let title = o('Groovy!');

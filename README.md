@@ -27,11 +27,11 @@ It was built with these ideas in mind.
 
 ### Add-ons
 
-| Size | Name | Description |
-| --- | --- | --- |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/map`](./packages/sinuous/map) | Fast list renderer |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/template/dist/template.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/template`](./packages/sinuous/template) | Pre-rendered Template |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable |
+| Size                                                                                                                                                | Name                                                  | Description           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square)               | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/template/dist/template.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 
 ### Concept
 

@@ -12,9 +12,9 @@ export default function addNode(parent, node, afterNode, counter) {
       mark[GROUPING] = node[node.length - 1][GROUPING] = counter;
     }
     for (let i = 0; i < node.length; i++) {
-      afterNode ?
-        parent.insertBefore(node[i], afterNode) :
-        parent.appendChild(node[i]);
+      afterNode
+        ? parent.insertBefore(node[i], afterNode)
+        : parent.appendChild(node[i]);
     }
     return mark;
   }
@@ -30,8 +30,6 @@ export default function addNode(parent, node, afterNode, counter) {
   ) {
     mark[GROUPING] = node.lastChild[GROUPING] = counter;
   }
-  afterNode ?
-    parent.insertBefore(node, afterNode) :
-    parent.appendChild(node);
+  afterNode ? parent.insertBefore(node, afterNode) : parent.appendChild(node);
   return mark || node;
 }

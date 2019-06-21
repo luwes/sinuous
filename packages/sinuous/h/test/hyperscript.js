@@ -196,11 +196,18 @@ test('can use components', function(t) {
   h.insert = spy(h.insert);
   const insertCat = ({ id, drink }) => h('div', { id, textContent: drink });
 
-  let frag = h([h('div', 'First'), h(insertCat, { id: 'cat', drink: 'milk' }), h('div', 'Last')]);
+  let frag = h([
+    h('div', 'First'),
+    h(insertCat, { id: 'cat', drink: 'milk' }),
+    h('div', 'Last')
+  ]);
 
   const div = document.createElement('div');
   div.appendChild(frag);
   t.assert(h.insert.called);
-  t.equal(div.innerHTML, '<div>First</div><div id="cat">milk</div><div>Last</div>');
+  t.equal(
+    div.innerHTML,
+    '<div>First</div><div id="cat">milk</div><div>Last</div>'
+  );
   t.end();
 });

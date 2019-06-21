@@ -28,22 +28,15 @@ test('template result fills tags', function(tt) {
 
 test('template result fills observable tags', function(tt) {
   const obj = { title: 'Apple' };
-  const tmpl = template(() => h('h1',
-    h('span', 'Pear'),
-    h('span', o('title'))
-  ))(obj);
+  const tmpl = template(() =>
+    h('h1', h('span', 'Pear'), h('span', o('title')))
+  )(obj);
 
-  tt.equal(
-    tmpl.firstChild.children[1].outerHTML,
-    '<span>Apple</span>'
-  );
+  tt.equal(tmpl.firstChild.children[1].outerHTML, '<span>Apple</span>');
 
   obj.title = '⛄️';
 
   tt.equal(obj.title, '⛄️');
-  tt.equal(
-    tmpl.firstChild.children[1].outerHTML,
-    '<span>⛄️</span>'
-  );
+  tt.equal(tmpl.firstChild.children[1].outerHTML, '<span>⛄️</span>');
   tt.end();
 });

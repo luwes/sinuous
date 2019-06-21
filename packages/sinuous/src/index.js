@@ -4,7 +4,4 @@ import observable, * as api from 'sinuous/observable';
 
 export const h = context(api);
 export default context;
-export {
-  observable,
-  observable as o
-};
+export { observable, observable as o };
