@@ -3,7 +3,7 @@
 import addNode from './add-node.js';
 import { longestPositiveIncreasingSubsequence } from './utils.js';
 
-export const GROUPING = '__rGroup';
+export const GROUPING = '__g';
 const FORWARD = 'nextSibling';
 const BACKWARD = 'previousSibling';
 let groupCounter = 0;
@@ -11,7 +11,7 @@ let groupCounter = 0;
 export default function map(items, expr) {
   function init(h, parent, afterNode) {
     const { subscribe, root, sample, cleanup } = h;
-    const beforeNode = afterNode ? afterNode.previousSibling : null;
+    const beforeNode = afterNode.previousSibling;
     let disposables = new Map();
 
     function disposeAll() {
@@ -84,7 +84,9 @@ export function reconcile(
   onRender
 ) {
   const length = data.length;
-  parent = (afterNode && afterNode.parentNode) || parent;
+
+  // When parent was a DocumentFragment, then items got appended to the DOM.
+  parent = afterNode.parentNode;
 
   function afterRender() {
     onRender &&
@@ -96,14 +98,12 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode || (afterNode && afterNode !== parent.lastChild)) {
+    if (beforeNode || afterNode !== parent.lastChild) {
       let node = beforeNode ? beforeNode.nextSibling : parent.firstChild;
-      removeNodes(parent, node, afterNode ? afterNode : null);
+      removeNodes(parent, node, afterNode);
     } else {
       parent.textContent = '';
-      if (afterNode) {
-        parent.appendChild(afterNode);
-      }
+      parent.appendChild(afterNode);
     }
 
     afterRender();
@@ -129,7 +129,7 @@ export function reconcile(
   let b;
   let prevStartNode = beforeNode ? beforeNode.nextSibling : parent.firstChild;
   let newStartNode = prevStartNode;
-  let prevEndNode = afterNode ? afterNode.previousSibling : parent.lastChild;
+  let prevEndNode = afterNode.previousSibling;
   let newAfterNode = afterNode;
 
   fixes: while (loop) {
