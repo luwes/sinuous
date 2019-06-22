@@ -18,18 +18,15 @@ let list = o([
 function clicked() {
   onclick(false);
   console.log('removed click handler');
-
-  h.cleanUp();
-  console.log('removed observers');
 }
 
-const template = () => {
+const view = () => {
   return html`
     <div>
       <h1 style=${style}>
         Sinuous <sup>${count}</sup>
         <div>${() => count() + count()}</div>
-        <button onclick="${onclick}">Remove click handler + stop observing</button>
+        <button onclick="${onclick}">Remove click handler</button>
       </h1>
       <ul>
         ${map(list, (item) => html`<li id=${item.id}>${item.text}</li>`)}
@@ -38,7 +35,7 @@ const template = () => {
   `;
 };
 
-document.querySelector('.sinuous').append(template());
+document.querySelector('.sinuous').append(view());
 setInterval(() => {
   style({ color: randomColor() });
   count(count() + 1);

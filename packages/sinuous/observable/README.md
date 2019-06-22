@@ -1,4 +1,4 @@
-# 🐍 Sinuous Observable
+# Sinuous Observable
 
 ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous/observable.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)

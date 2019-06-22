@@ -15,9 +15,6 @@ const onclick = S.data(clicked);
 function clicked() {
   onclick(false);
   console.log('removed click handler');
-
-  h.cleanUp();
-  console.log('removed observers');
 }
 
 let list = S.data([
@@ -28,7 +25,7 @@ let list = S.data([
   'cookie'
 ]);
 
-const template = () => {
+const view = () => {
   return html`
     <div>
       <h1 style=${style}>
@@ -43,7 +40,7 @@ const template = () => {
   `;
 };
 
-S.root(() => document.querySelector('.sinuous').appendChild(template()));
+S.root(() => document.querySelector('.sinuous').appendChild(view()));
 setInterval(() => {
   style({ color: randomColor() });
   count(count() + 1);

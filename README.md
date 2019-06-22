@@ -1,7 +1,7 @@
 # <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="36" alt="Sinuous" /></a>
 
 [![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
-![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/dist/sinuous.js?compression=gzip&label=gzip&style=flat-square)
+![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/dist/sinuous.js?compression=gzip&label=gzip&style=flat-square&v=1)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
@@ -49,13 +49,13 @@ Sinuous supports modern browsers and IE11+:
 import { o, h } from 'sinuous';
 
 const counter = o(0);
-const template = () => {
+const view = () => {
   return html`
     <div>Counter ${counter}</div>
   `;
 };
 
-document.body.append(template());
+document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
 
@@ -74,15 +74,10 @@ const onclick = o(clicked);
 function clicked() {
   onclick(false);
   console.log('removed click handler');
-
-  setTimeout(() => {
-    h.cleanUp();
-    console.log('removed observers');
-  }, 500);
 }
 
-// Closures are only needed for computations.
-const template = () => {
+// Closures are only needed for multiple observables.
+const view = () => {
   return html`
     <h1 style=${style}>
       Sinuous <sup>${count}</sup>
@@ -92,7 +87,7 @@ const template = () => {
   `;
 };
 
-document.querySelector('.sinuous').append(template());
+document.querySelector('.sinuous').append(view());
 setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
 ```
 
@@ -111,13 +106,13 @@ const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 const count = S.data(0);
 const style = S.data('');
 
-const template = () => {
+const view = () => {
   return html`
     <h1 style=${() => style()}>Sinuous <sup>${() => count()}</sup></h1>
   `;
 };
 
-S.root(() => document.querySelector('.sinuous').append(template()));
+S.root(() => document.querySelector('.sinuous').append(view()));
 setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
 ```
 
@@ -139,13 +134,13 @@ const s = observe({
   style: ''
 });
 
-const template = () => {
+const view = () => {
   return html`
     <h1 style=${() => s.style}>Sinuous <sup>${() => s.count}</sup></h1>
   `;
 };
 
-document.querySelector('.sinuous').append(template());
+document.querySelector('.sinuous').append(view());
 setInterval(() => (s.style = { color: randomColor() }) && s.count++, 1000);
 ```
 

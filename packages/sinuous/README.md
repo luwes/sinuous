@@ -26,7 +26,7 @@ It was built with these ideas in mind.
 
 | Size                                                                                                                                                | Name                                                  | Description           |
 | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square)               | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/map/dist/map.js?compression=gzip&label=gzip&style=flat-square&v=1)               | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/template/dist/template.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 
@@ -36,6 +36,8 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
+
+### Browser Support
 
 Sinuous supports modern browsers and IE11+:
 
@@ -47,13 +49,13 @@ Sinuous supports modern browsers and IE11+:
 import { o, h } from 'sinuous';
 
 const counter = o(0);
-const template = () => {
+const view = () => {
   return html`
     <div>Counter ${counter}</div>
   `;
 };
 
-document.body.append(template());
+document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
 
@@ -72,15 +74,10 @@ const onclick = o(clicked);
 function clicked() {
   onclick(false);
   console.log('removed click handler');
-
-  setTimeout(() => {
-    h.cleanUp();
-    console.log('removed observers');
-  }, 500);
 }
 
-// Closures are only needed for computations.
-const template = () => {
+// Closures are only needed for multiple observables.
+const view = () => {
   return html`
     <h1 style=${style}>
       Sinuous <sup>${count}</sup>
@@ -90,7 +87,7 @@ const template = () => {
   `;
 };
 
-document.querySelector('.sinuous').append(template());
+document.querySelector('.sinuous').append(view());
 setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
 ```
 
@@ -109,13 +106,13 @@ const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
 const count = S.data(0);
 const style = S.data('');
 
-const template = () => {
+const view = () => {
   return html`
     <h1 style=${() => style()}>Sinuous <sup>${() => count()}</sup></h1>
   `;
 };
 
-S.root(() => document.querySelector('.sinuous').append(template()));
+S.root(() => document.querySelector('.sinuous').append(view()));
 setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
 ```
 
@@ -137,13 +134,13 @@ const s = observe({
   style: ''
 });
 
-const template = () => {
+const view = () => {
   return html`
     <h1 style=${() => s.style}>Sinuous <sup>${() => s.count}</sup></h1>
   `;
 };
 
-document.querySelector('.sinuous').append(template());
+document.querySelector('.sinuous').append(view());
 setInterval(() => (s.style = { color: randomColor() }) && s.count++, 1000);
 ```
 
