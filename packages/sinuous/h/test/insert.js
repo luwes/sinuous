@@ -1,77 +1,76 @@
 import test from 'tape';
-import sinuous from 'sinuous';
-const subscribe = fn => fn();
-const h = sinuous({ subscribe });
-h.insert = h.insert.bind(h, subscribe);
+import { subscribe } from 'sinuous/observable';
+import { h } from 'sinuous';
+import { insert } from '../src/insert.js';
 
-const insert = val => {
+const insertValue = val => {
   const parent = container.cloneNode(true);
-  h.insert(parent, val);
+  insert(subscribe, parent, val);
   return parent;
 };
 
-// h.insert
+// insert
 // <div>before<!-- insert -->after</div>
 const container = document.createElement('div');
 
 test('inserts nothing for null', t => {
-  const res = insert(null);
+  const res = insertValue(null);
   t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
 test('inserts nothing for undefined', t => {
-  const res = insert(undefined);
+  const res = insertValue(undefined);
   t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
 test('inserts nothing for false', t => {
-  const res = insert(false);
+  const res = insertValue(false);
   t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
 test('inserts nothing for true', t => {
-  const res = insert(true);
+  const res = insertValue(true);
   t.equal(res.innerHTML, '');
   t.equal(res.childNodes.length, 0);
   t.end();
 });
 
 test('inserts nothing for null in array', t => {
-  const res = insert(['a', null, 'b']);
+  const res = insertValue(['a', null, 'b']);
   t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
 test('inserts nothing for undefined in array', t => {
-  const res = insert(['a', undefined, 'b']);
+  const res = insertValue(['a', undefined, 'b']);
   t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
 test('inserts nothing for false in array', t => {
-  const res = insert(['a', false, 'b']);
+  const res = insertValue(['a', false, 'b']);
   t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
 test('inserts nothing for true in array', t => {
-  const res = insert(['a', true, 'b']);
+  const res = insertValue(['a', true, 'b']);
   t.equal(res.innerHTML, 'ab');
   t.equal(res.childNodes.length, 2);
   t.end();
 });
 
 test('can insert strings', t => {
-  const res = insert('foo');
+  const res = insertValue('foo');
   t.equal(res.innerHTML, 'foo');
   t.equal(res.childNodes.length, 1);
   t.end();
@@ -80,7 +79,7 @@ test('can insert strings', t => {
 test('can insert a node', t => {
   const node = document.createElement('span');
   node.textContent = 'foo';
-  t.equal(insert(node).innerHTML, '<span>foo</span>');
+  t.equal(insertValue(node).innerHTML, '<span>foo</span>');
   t.end();
 });
 
@@ -88,8 +87,8 @@ test('can re-insert a node, thereby moving it', t => {
   const node = document.createElement('span');
   node.textContent = 'foo';
 
-  const first = insert(node),
-    second = insert(node);
+  const first = insertValue(node),
+    second = insertValue(node);
 
   t.equal(first.innerHTML, '');
   t.equal(second.innerHTML, '<span>foo</span>');
@@ -107,7 +106,7 @@ test('can re-insert a node, thereby moving it', t => {
 // });
 
 test('can insert an array of strings', t => {
-  t.equal(insert(['foo', 'bar']).innerHTML, 'foobar', 'array of strings');
+  t.equal(insertValue(['foo', 'bar']).innerHTML, 'foobar', 'array of strings');
   t.end();
 });
 
@@ -115,7 +114,7 @@ test('can insert an array of nodes', t => {
   const nodes = [document.createElement('span'), document.createElement('div')];
   nodes[0].textContent = 'foo';
   nodes[1].textContent = 'bar';
-  t.equal(insert(nodes).innerHTML, '<span>foo</span><div>bar</div>');
+  t.equal(insertValue(nodes).innerHTML, '<span>foo</span><div>bar</div>');
   t.end();
 });
 
@@ -175,9 +174,9 @@ test('can insert a changing array of nodes', t => {
   test([n4, n3, n2, n1]);
 
   function test(array) {
-    current = h.insert(parent, array, undefined, current);
+    current = insert(subscribe, parent, array, undefined, current);
     t.equal(parent.innerHTML, expected(array));
-    current = h.insert(parent, orig, undefined, current);
+    current = insert(subscribe, parent, orig, undefined, current);
     t.equal(parent.innerHTML, origExpected);
   }
 
@@ -189,7 +188,7 @@ test('can insert a changing array of nodes', t => {
 });
 
 test('can insert nested arrays', t => {
-  let current = insert(['foo', ['bar', 'blech']]);
+  let current = insertValue(['foo', ['bar', 'blech']]);
   t.equal(current.innerHTML, 'foobarblech', 'array of array of strings');
   t.end();
 });
@@ -197,22 +196,22 @@ test('can insert nested arrays', t => {
 test('can update arrays of nodes with node', t => {
   const parent = container.cloneNode(true);
 
-  let current = h.insert(parent, []);
+  let current = insert(subscribe, parent, []);
   t.equal(parent.innerHTML, '', 'empty array');
 
-  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
 
-  current = h.insert(parent, [h('h1')]);
+  current = insert(subscribe, parent, [h('h1')]);
   t.equal(parent.innerHTML, '<h1></h1>', 'array of node');
 
-  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
 
-  current = h.insert(parent, [h('h1'), h('h1'), h('h1')]);
+  current = insert(subscribe, parent, [h('h1'), h('h1'), h('h1')]);
   t.equal(parent.innerHTML, '<h1></h1><h1></h1><h1></h1>', 'array of nodes');
 
-  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
   t.end();
 });
@@ -220,10 +219,10 @@ test('can update arrays of nodes with node', t => {
 test('can update text with node', t => {
   const parent = container.cloneNode(true);
 
-  let current = h.insert(parent, '🐍');
+  let current = insert(subscribe, parent, '🐍');
   t.equal(parent.innerHTML, '🐍', 'text snake');
 
-  h.insert(parent, h('h1', '⛄️'), undefined, current);
+  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
   t.end();
 });
@@ -232,16 +231,16 @@ test('can update array with text with marker', t => {
   const parent = container.cloneNode(true);
   const marker = parent.appendChild(document.createTextNode(''));
 
-  let current = h.insert(parent, h('h1', '⛄️'), marker);
+  let current = insert(subscribe, parent, h('h1', '⛄️'), marker);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
 
-  h.insert(parent, '⛄️', marker, current);
+  insert(subscribe, parent, '⛄️', marker, current);
   t.equal(parent.innerHTML, '⛄️');
   t.end();
 });
 
 test('throws on unsupported value', t => {
   const parent = container.cloneNode(true);
-  t.throws(() => h.insert(parent, {}));
+  t.throws(() => insert(subscribe, parent, {}));
   t.end();
 });

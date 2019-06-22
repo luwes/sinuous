@@ -1,7 +1,6 @@
 import '../h/test/hyperscript.js';
 import '../h/test/insert.js';
 import '../h/test/insert-markers.js';
-import '../h/test/observable.js';
 import '../h/test/utils.js';
 import '../observable/test/observable.js';
 import '../observable/test/S.js';

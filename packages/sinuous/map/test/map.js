@@ -1,8 +1,9 @@
 import test from 'tape';
-import sinuous from 'sinuous';
+import { root } from 'sinuous/observable';
+import { o, h } from 'sinuous';
 import map from 'sinuous/map';
-import o, * as api from 'sinuous/observable';
-const h = sinuous(api);
+
+let dispose;
 
 (function() {
   console.log('Testing an only child map control flow');
@@ -13,8 +14,10 @@ const h = sinuous(api);
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const Component = () =>
-    h('div', { ref: el => (div = el) }, map(list, item => item));
+  const Component = () => root((d) => {
+    dispose = d;
+    return h('div', { ref: el => (div = el) }, map(list, item => item));
+  });
 
   function apply(t, array) {
     list(array);
@@ -92,7 +95,7 @@ const h = sinuous(api);
   });
 
   test('dispose', t => {
-    h.cleanUp();
+    dispose();
     t.end();
   });
 })();
@@ -108,7 +111,10 @@ const h = sinuous(api);
   const list = o([n1, n2, n3, n4]);
   const parent = document.createDocumentFragment();
   const afterNode = parent.appendChild(document.createTextNode(''));
-  const Component = () => map(list, item => item)(h, parent, afterNode);
+  const Component = () => root((d) => {
+    dispose = d;
+    return map(list, item => item)(h, parent, afterNode);
+  });
 
   function apply(t, array) {
     list(array);
@@ -186,7 +192,7 @@ const h = sinuous(api);
   });
 
   test('dispose', t => {
-    h.cleanUp();
+    dispose();
     t.end();
   });
 })();
@@ -201,8 +207,10 @@ const h = sinuous(api);
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
 
-  const Component = () =>
-    h('div', { ref: el => (div = el) }, map(list, item => h([item, item])));
+  const Component = () => root((d) => {
+    dispose = d;
+    return h('div', { ref: el => (div = el) }, map(list, item => h([item, item])));
+  });
 
   function apply(t, array) {
     list(array);
@@ -280,7 +288,7 @@ const h = sinuous(api);
   });
 
   test('dispose', t => {
-    h.cleanUp();
+    dispose();
     t.end();
   });
 })();

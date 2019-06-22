@@ -7,21 +7,18 @@ import { assign } from './utils.js';
  * Create a sinuous `h` tag aka hyperscript.
  * @param  {object} api
  * @param {Function} [api.subscribe] - Function that listens to state changes.
+ * @param {Function} [api.cleanup] - Add the given function to the cleanup stack.
  * @return {Function} `h` tag.
  */
-export function context(api = {}) {
+export function context(api) {
   api = assign(
     {
       bindings: {},
-      cleanUp,
       context,
-      insert,
-      cleanup
+      insert
     },
     api
   );
-
-  let cleanups = [];
 
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
@@ -45,25 +42,19 @@ export function context(api = {}) {
       ) {
         el.appendChild(document.createTextNode('' + arg));
       } else {
-        // Subscribe w/ root or parent is preferred. They take care of the cleanup.
-        const subscribe = h.root
-          ? h.subscribe
-          : // Support observable libraries w/ simple subscribe/unsubscribe.
-            fn => h.cleanup((h.subscribe || arg)(fn));
-
         if (Array.isArray(arg)) {
           // Support Fragments
           if (!el) el = document.createDocumentFragment();
           if (multi) {
             arg.forEach(item);
           } else {
-            h.insert(subscribe, el, arg);
+            h.insert(h.subscribe, el, arg);
           }
         } else if (arg instanceof Node) {
           if (el) {
             if (multi) {
               const marker = el.appendChild(document.createTextNode(''));
-              h.insert(subscribe, el, arg, marker);
+              h.insert(h.subscribe, el, arg, marker);
             } else {
               el.appendChild(arg);
             }
@@ -75,16 +66,14 @@ export function context(api = {}) {
           parseNested(h, el, arg, parseKeyValue);
         } else if (type === 'function') {
           if (el) {
-            const marker = multi
-              ? el.appendChild(document.createTextNode(''))
-              : undefined;
+            const marker = multi && el.appendChild(document.createTextNode(''));
             if (arg._flow) {
               arg(h, el, marker);
             } else {
               if (arg.$) {
-                arg.$(el, h.insert.bind(h, subscribe));
+                arg.$(el, h.insert.bind(h, h.subscribe));
               } else {
-                h.insert(subscribe, el, arg, marker);
+                h.insert(h.subscribe, el, arg, marker);
               }
             }
           } else {
@@ -99,16 +88,6 @@ export function context(api = {}) {
       item(args.shift());
     }
     return el;
-  }
-
-  function cleanup(fn) {
-    fn && cleanups.push(fn);
-    return fn;
-  }
-
-  function cleanUp() {
-    cleanups.map(fn => fn());
-    cleanups = [];
   }
 
   return assign(h, api);
@@ -128,10 +107,7 @@ export function parseNested(h, el, obj, callback) {
           if (value.$) {
             value.$(element, propAction);
           } else {
-            const subscribe = h.root
-              ? h.subscribe
-              : fn => h.cleanup((h.subscribe || value)(fn));
-            subscribe(() => callback(name, value(), h, element));
+            h.subscribe(() => callback(name, value(), h, element));
           }
         }
       } else {

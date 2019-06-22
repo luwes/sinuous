@@ -1,8 +1,8 @@
 import test from 'tape';
 import { spy } from 'sinon';
+import * as api from 'sinuous/observable';
 import sinuous from 'sinuous';
-const subscribe = fn => fn();
-const h = sinuous({ subscribe });
+const h = sinuous(api);
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -159,41 +159,17 @@ test('unicode selectors', function(t) {
   t.end();
 });
 
-test('can add insert functions', function(t) {
-  h.insert = spy(h.insert);
-  const insertCat = () => 'cat';
-  let div = h('div', insertCat);
-  t.assert(h.insert.called);
-  t.equal(div.outerHTML, '<div>cat</div>');
-  t.end();
-});
-
-test('can add subscribe functions', function(t) {
-  h.subscribe = spy(fn => fn());
-  const insertCat = () => 'cat';
-  let div = h('div', { innerText: insertCat });
-  t.assert(h.subscribe.called);
-  t.equal(div.outerHTML, '<div>cat</div>');
-  t.end();
-});
-
 test('can use fragments', function(t) {
-  h.subscribe = spy(fn => fn());
-  h.insert = spy(h.insert);
   const insertCat = () => 'cat';
-
   let frag = h([h('div', 'First'), insertCat, h('div', 'Last')]);
 
   const div = document.createElement('div');
   div.appendChild(frag);
-  t.assert(h.insert.called);
   t.equal(div.innerHTML, '<div>First</div>cat<div>Last</div>');
   t.end();
 });
 
 test('can use components', function(t) {
-  h.subscribe = spy(fn => fn());
-  h.insert = spy(h.insert);
   const insertCat = ({ id, drink }) => h('div', { id, textContent: drink });
 
   let frag = h([
@@ -204,7 +180,6 @@ test('can use components', function(t) {
 
   const div = document.createElement('div');
   div.appendChild(frag);
-  t.assert(h.insert.called);
   t.equal(
     div.innerHTML,
     '<div>First</div><div id="cat">milk</div><div>Last</div>'
