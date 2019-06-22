@@ -1,4 +1,4 @@
-# 🐍 Sinuous h
+# Sinuous h
 
 ![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/h/dist/h.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous/h.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)

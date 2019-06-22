@@ -219,8 +219,8 @@ test('can update arrays of nodes with node', t => {
 test('can update text with node', t => {
   const parent = container.cloneNode(true);
 
-  let current = insert(subscribe, parent, '🐍');
-  t.equal(parent.innerHTML, '🐍', 'text snake');
+  let current = insert(subscribe, parent, '🧬');
+  t.equal(parent.innerHTML, '🧬', 'text dna');
 
   insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
