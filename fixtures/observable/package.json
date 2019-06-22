@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "htm": "^2.1.1",
-    "sinuous": "0.8.2"
+    "sinuous": "0.9.0"
   },
   "devDependencies": {
     "budo": "^11.6.2"
