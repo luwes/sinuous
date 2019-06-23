@@ -159,12 +159,15 @@ function handleEvent(h, el, name, value) {
   const kLower = name.toLowerCase();
   name = (kLower in el ? kLower : name).slice(2);
 
-  const cleanup = h.cleanup(() =>
+  const removeListener = h.cleanup(() =>
     el.removeEventListener(name, eventProxy, useCapture)
   );
 
-  if (value) el.addEventListener(name, eventProxy, useCapture);
-  else cleanup();
+  if (value) {
+    el.addEventListener(name, eventProxy, useCapture);
+  } else {
+    removeListener();
+  }
 
   (el._listeners || (el._listeners = {}))[name] = value;
 }

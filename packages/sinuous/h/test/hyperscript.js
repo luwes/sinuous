@@ -1,10 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import * as api from 'sinuous/observable';
-import sinuous from 'sinuous';
-import { eventProxy } from '../src/h.js';
-
-const h = sinuous(api);
+import { h } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -58,35 +54,31 @@ test('can set properties', function(t) {
 });
 
 test('(un)registers an event handler', function(t) {
-  h.subscribe = spy(fn => fn());
+  // don't try the focus event, valid tests fail in IE11
 
   let click = spy();
-  let focus = spy();
-  let btn = h('button', { onclick: () => click, onfocus: () => focus }, 'something');
+  let btn = h('button', { onclick: () => click }, 'something');
   document.body.appendChild(btn);
-  btn.focus();
-  t.assert(focus.calledOnce);
+
   btn.click();
-  t.assert(click.calledOnce);
+  t.assert(click.calledOnce, 'click called');
 
   h(btn, { onclick: false });
   btn.click();
-  t.assert(click.calledOnce);
+  t.assert(click.calledOnce, 'click still called only once');
+
   btn.parentNode.removeChild(btn);
   t.end();
 });
 
 test('registers event handlers', function(t) {
-  h.subscribe = spy(fn => fn());
-
   let click = spy();
-  let focus = spy();
-  let btn = h('button', { events: { click, focus } }, 'something');
+  let btn = h('button', { events: { click: () => click } }, 'something');
   document.body.appendChild(btn);
-  btn.focus();
-  t.assert(focus.called);
+
   btn.click();
-  t.assert(click.called);
+  t.assert(click.calledOnce, 'click called');
+
   btn.parentNode.removeChild(btn);
   t.end();
 });
