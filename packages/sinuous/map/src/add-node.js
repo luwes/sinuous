@@ -1,4 +1,4 @@
-import { GROUPING } from './map.js';
+import { GROUPING } from './constants.js';
 import { normalizeIncomingArray } from './utils.js';
 
 export default function addNode(parent, node, afterNode, counter) {

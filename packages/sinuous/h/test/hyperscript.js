@@ -2,6 +2,8 @@ import test from 'tape';
 import { spy } from 'sinon';
 import * as api from 'sinuous/observable';
 import sinuous from 'sinuous';
+import { eventProxy } from '../src/h.js';
+
 const h = sinuous(api);
 
 test('simple', function(t) {
@@ -55,28 +57,22 @@ test('can set properties', function(t) {
   t.end();
 });
 
-test('registers an event handler', function(t) {
+test('(un)registers an event handler', function(t) {
   h.subscribe = spy(fn => fn());
 
-  let onClick = spy();
-  let btn = h('button', { onclick: onClick }, 'something');
-  btn.click();
-  t.assert(onClick.called);
-  t.end();
-});
-
-test('unregisters an event handler', function(t) {
-  h.subscribe = spy(fn => fn());
-
-  let onClick = spy();
-  let btn = h('button', { onclick: onClick }, 'something');
+  let click = spy();
+  let focus = spy();
+  let btn = h('button', { onclick: () => click, onfocus: () => focus }, 'something');
   document.body.appendChild(btn);
+  btn.focus();
+  t.assert(focus.calledOnce);
   btn.click();
-  t.assert(onClick.calledOnce);
+  t.assert(click.calledOnce);
 
   h(btn, { onclick: false });
   btn.click();
-  t.assert(onClick.calledOnce);
+  t.assert(click.calledOnce);
+  btn.parentNode.removeChild(btn);
   t.end();
 });
 

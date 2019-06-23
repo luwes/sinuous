@@ -1,4 +1,4 @@
-import { GROUPING } from './map.js';
+import { GROUPING } from './constants.js';
 
 export function step(node, direction, inner) {
   const key = node[GROUPING];

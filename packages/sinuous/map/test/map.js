@@ -6,6 +6,51 @@ import map from 'sinuous/map';
 let dispose;
 
 (function() {
+  console.log('Basic map tests');
+
+  const list = o([
+    ['a', 1],
+    ['b', 2],
+    ['c', 3],
+    ['d', 4],
+  ]);
+  const div = document.createElement('div');
+  div.appendChild(document.createElement('i'));
+  const beforeNode = div.appendChild(document.createElement('b'));
+  const afterNode = div.appendChild(document.createTextNode(''));
+  root((d) => {
+    dispose = d;
+    return map(list, item => item)(h, div, afterNode);
+  });
+
+  test('create', t => {
+    t.equal(div.innerHTML, '<i></i><b></b>a1b2c3d4');
+    t.end();
+  });
+
+  test('update', t => {
+    list([
+      ['b', 2, 99],
+      ['a', 1],
+      ['c']
+    ]);
+    t.equal(div.innerHTML, '<i></i><b></b>b299a1c');
+    t.end();
+  });
+
+  test('clear', t => {
+    list([]);
+    t.equal(div.innerHTML, '<i></i><b></b>');
+    t.end();
+  });
+
+  test('dispose', t => {
+    dispose();
+    t.end();
+  });
+})();
+
+(function() {
   console.log('Testing an only child map control flow');
 
   let div;

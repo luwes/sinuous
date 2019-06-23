@@ -82,9 +82,12 @@ test('inserts nothing for true in array', t => {
 });
 
 test('can insert strings', t => {
-  const res = insertValue('foo');
+  let res = insertValue('foo');
   t.equal(res.innerHTML, 'beforefooafter');
   t.equal(res.childNodes.length, 4);
+
+  res = insertValue('');
+  t.equal(res.innerHTML, 'beforeafter');
   t.end();
 });
 

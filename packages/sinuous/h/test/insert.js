@@ -70,8 +70,12 @@ test('inserts nothing for true in array', t => {
 });
 
 test('can insert strings', t => {
-  const res = insertValue('foo');
+  let res = insertValue('foo');
   t.equal(res.innerHTML, 'foo');
+  t.equal(res.childNodes.length, 1);
+
+  res = insertValue('foobar');
+  t.equal(res.innerHTML, 'foobar');
   t.equal(res.childNodes.length, 1);
   t.end();
 });
@@ -94,16 +98,6 @@ test('can re-insert a node, thereby moving it', t => {
   t.equal(second.innerHTML, '<span>foo</span>');
   t.end();
 });
-
-// test('can spread over element', (t) => {
-//   const node = document.createElement("span");
-//   r.spread(node, () => ({href: '/', for: 'id', classList: {danger: true}, events: {custom: e => e}, style: {color: 'red'}, something: 'good'}))
-//   t.equal(node.getAttribute('href'), '/');
-//   t.equal(node.htmlFor, 'id');
-//   t.equal(node.className, 'danger');
-//   t.equal(node.style.color, 'red');
-//   t.equal(node.something, 'good');
-// });
 
 test('can insert an array of strings', t => {
   t.equal(insertValue(['foo', 'bar']).innerHTML, 'foobar', 'array of strings');

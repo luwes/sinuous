@@ -1,6 +1,7 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
 import addNode from './add-node.js';
+import { FORWARD, BACKWARD } from './constants.js';
 import {
   longestPositiveIncreasingSubsequence,
   insertNodes,
@@ -8,9 +9,6 @@ import {
   step
 } from './utils.js';
 
-export const GROUPING = '__g';
-const FORWARD = 'nextSibling';
-const BACKWARD = 'previousSibling';
 let groupCounter = 0;
 
 export default function map(items, expr) {
