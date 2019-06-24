@@ -1,0 +1,13 @@
+[build]
+  base    = ""
+  publish = "site/public"
+  command = "yarn build --all && (cd site && hugo --gc --minify)"
+
+[build.environment]
+  YARN_VERSION = "1.12.3"
+  HUGO_VERSION = "0.53"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -6,7 +6,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "fixtures/*"
+      "site/content/fixtures/**/*"
     ]
   },
   "scripts": {
@@ -18,6 +18,8 @@
     "postcoverage": "camo-purge",
     "build": "rollup -c scripts/rollup/config.js --silent",
     "watch": "rollup -wc scripts/rollup/config.js --silent",
+    "serve": "(cd site && hugo serve)",
+    "start": "run-p watch serve",
     "docs": "node scripts/docs.js && npm run format:docs",
     "format:docs": "prettier --write '**/*.md'"
   },

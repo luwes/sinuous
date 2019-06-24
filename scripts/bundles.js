@@ -47,25 +47,39 @@ export const bundles = [
 ];
 
 export const fixtures = [
+  // {
+  //   formats: [UMD],
+  //   global: 'sinuousS',
+  //   name: 'sinuous-s',
+  //   input: 'fixtures/S/src/index.js',
+  //   sourcemap: true
+  // },
+  // {
+  //   formats: [UMD],
+  //   global: 'sinuousHyperactiv',
+  //   name: 'sinuous-hyperactiv',
+  //   input: 'fixtures/hyperactiv/src/index.js',
+  //   sourcemap: true
+  // },
   {
     formats: [UMD],
-    global: 'sinuousS',
-    name: 'sinuous-s',
-    input: 'fixtures/S/src/index.js',
+    global: 'sinuousHello',
+    name: 'hello',
+    input: 'fixtures/examples/hello/src/hello.js',
     sourcemap: true
   },
   {
     formats: [UMD],
-    global: 'sinuousHyperactiv',
-    name: 'sinuous-hyperactiv',
-    input: 'fixtures/hyperactiv/src/index.js',
+    global: 'sinuousCounter',
+    name: 'counter',
+    input: 'fixtures/examples/counter/src/counter.js',
     sourcemap: true
   },
   {
     formats: [UMD],
-    global: 'sinuousObservable',
-    name: 'sinuous-observable',
-    input: 'fixtures/observable/src/index.js',
+    global: 'sinuousTodos',
+    name: 'todos',
+    input: 'fixtures/examples/todos/src/todos.js',
     sourcemap: true
   }
 ];
