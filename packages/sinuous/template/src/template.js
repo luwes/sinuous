@@ -52,9 +52,9 @@ export function template(fn) {
   const cloneActions = actions;
   actions = null;
 
-  return function clone(data) {
+  return function clone(props) {
     const el = fragment.cloneNode(true);
-    el.firstChild.data = data;
+    el.firstChild.props = props;
 
     for (let i = 0; i < cloneActions.length; i++) {
       const action = cloneActions[i];
@@ -75,13 +75,13 @@ export function template(fn) {
 
       const tag = action._tag;
       const key = tag();
-      const value = data[key];
+      const value = props[key];
       if (value != null) {
         action(target, value);
       }
 
       if (tag._observable) {
-        observeProperty(data, key, value, action, target);
+        observeProperty(props, key, value, action, target);
       }
     }
 
@@ -89,8 +89,8 @@ export function template(fn) {
   };
 }
 
-function observeProperty(data, key, value, action, target) {
-  Object.defineProperty(data, key, {
+function observeProperty(props, key, value, action, target) {
+  Object.defineProperty(props, key, {
     get() {
       return value;
     },
