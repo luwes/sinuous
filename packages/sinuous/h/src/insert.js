@@ -12,6 +12,8 @@ export function insert(subscribe, parent, value, marker, current) {
       const startNode = (marker && marker.previousSibling) || parent.lastChild;
       if (value === '') {
         clearAll(parent, current, marker);
+      } else if (current !== '' && typeof current === 'string') {
+        startNode.data = value;
       } else {
         const node = document.createTextNode(value);
         if (current !== '' && current != null) {
@@ -22,7 +24,11 @@ export function insert(subscribe, parent, value, marker, current) {
       }
       current = value;
     } else {
-      current = parent.textContent = value;
+      if (current !== '' && typeof current === 'string') {
+        current = parent.firstChild.data = value;
+      } else {
+        current = parent.textContent = value;
+      }
     }
   } else if (value == null || t === 'boolean') {
     current = clearAll(parent, current, marker);
