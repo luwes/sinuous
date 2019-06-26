@@ -71,7 +71,9 @@ export function context(api) {
               arg(h, el, marker);
             } else {
               if (arg.$) {
-                arg.$(el, h.insert.bind(h, h.subscribe));
+                const insertAction = createInsertAction(h);
+                insertAction(el, '');
+                arg.$(el, insertAction);
               } else {
                 h.insert(h.subscribe, el, arg, marker);
               }
@@ -94,6 +96,22 @@ export function context(api) {
 }
 
 export default context();
+
+/**
+ * Create an insert action for a `template` tag.
+ *
+ * Subsequent `insert`'s of strings can be optimized by setting
+ * `Text.data` instead of Element.textContent.
+ *
+ * @param  {Function} h
+ * @param  {*} current
+ * @return {Function}
+ */
+function createInsertAction(h, current = '') {
+  return (element, value) => {
+    current = h.insert(h.subscribe, element, value, null, current);
+  };
+}
 
 export function parseNested(h, el, obj, callback) {
   for (let name in obj) {
