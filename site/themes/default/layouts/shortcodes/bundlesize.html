@@ -1,0 +1,3 @@
+{{- $file := .Get 0 -}}
+{{- $sized := readFile (printf "%s.gz" $file) -}}
+{{- div (len $sized) 1000.0 | lang.NumFmt 2 -}}

@@ -1,0 +1,16 @@
+{
+  "name": "sinuous-map",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Sinuous map",
+  "module": "dist/map.mjs",
+  "main": "dist/map.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

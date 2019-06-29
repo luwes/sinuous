@@ -1,0 +1,13 @@
+{
+    "presets": [
+        ["@babel/preset-env",
+            {
+                "modules": false,
+                "loose": true
+            }
+        ]
+    ],
+    "plugins": [
+        ["babel-plugin-inferno", {"imports": true, "defineAllArguments": true}]
+    ]
+}

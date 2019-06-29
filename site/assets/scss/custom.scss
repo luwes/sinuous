@@ -1,0 +1,132 @@
+
+$body-line-height: 1.6;
+
+@import '../../themes/default/assets/sass/bulma.sass';
+
+.column {
+  min-width: 0;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-icon {
+  position: absolute;
+  bottom: -5rem;
+  right: 10rem;
+  svg {
+    width: 240px;
+    height: auto;
+    path:nth-last-child(2) {
+      fill: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.snippet-code pre {
+  max-height: 360px;
+  overflow: scroll;
+}
+
+.logo {
+  width: auto;
+  height: 28px;
+  margin-top: -4px;
+}
+
+.lead {
+  padding: 3rem;
+}
+
+.lead > .title {
+  margin: 2em 1em;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.snippet {
+  position: relative;
+  border: 2px solid #f5f5f5;
+  border-radius: 8px;
+}
+
+.snippet > div {
+  min-width: 0;
+}
+
+.snippet-preview {
+  padding: 1.5rem;
+
+  button {
+    @extend .button;
+  }
+
+  label {
+    @extend .label;
+  }
+
+  input {
+    @extend .field;
+    @extend .input;
+  }
+}
+
+.example:not(:last-child) {
+  margin-bottom: 4rem !important;
+}
+
+.snippet-code {
+}
+
+.source-code {
+  margin-top: 8rem;
+}
+
+pre.code-example {
+  padding: 1.5em;
+}
+
+code.code-example-body {
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+.snippet-tag {
+  background: #ffdd57;
+  border-radius: 2px 2px 0 0;
+  color: rgba(0,0,0,.7);
+  display: inline-block;
+  font-size: 7px;
+  font-weight: 700;
+  left: 6px;
+  bottom: calc(100% - 1px);
+  letter-spacing: 1px;
+  margin-left: -1px;
+  padding: 3px 5px;
+  position: absolute;
+  text-transform: uppercase;
+  vertical-align: top;
+  z-index: 10;
+}
+
+.content .tag, .content .number {
+  display: inline;
+  padding: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  vertical-align: inherit;
+  border-radius: inherit;
+  font-weight: inherit;
+  white-space: inherit;
+  background: inherit;
+  margin: inherit;
+}
+
+.title .tags {
+  vertical-align: 0.21em;
+  margin-left: 5px;
+}

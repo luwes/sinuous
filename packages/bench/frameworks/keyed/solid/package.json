@@ -1,0 +1,30 @@
+{
+  "name": "js-framework-benchmark-solid",
+  "version": "0.6.4",
+  "main": "dist/main.js",
+  "js-framework-benchmark": {
+    "frameworkVersionFromPackage": "solid-js"
+  },
+  "scripts": {
+    "build-dev": "rollup -c -w",
+    "build-prod": "rollup -c --environment production"
+  },
+  "author": "Ryan Carniato",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/krausest/js-framework-benchmark",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krausest/js-framework-benchmark.git"
+  },
+  "dependencies": {
+    "babel-plugin-jsx-dom-expressions": "0.10.0",
+    "solid-js": "0.8.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.5",
+    "rollup": "1.15.6",
+    "rollup-plugin-babel": "4.3.2",
+    "rollup-plugin-node-resolve": "5.0.2",
+    "rollup-plugin-terser": "5.0.0"
+  }
+}

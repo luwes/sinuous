@@ -1,0 +1,6 @@
+[submodule "site"]
+	path = site
+	url = https://github.com/luwes/sinuous-site.git
+[submodule "packages/bench"]
+	path = packages/bench
+	url = https://github.com/luwes/js-framework-benchmark.git

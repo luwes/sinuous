@@ -1,0 +1,67 @@
+{{ define "main" }}
+<section class="hero is-medium is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title is-size-1">
+        {{- .Params.herotitle -}}
+        <small class="is-size-6">
+          {{ $dataJ := getJSON "https://raw.githubusercontent.com/luwes/sinuous/master/packages/sinuous/package.json" }}
+          v{{ $dataJ.version }}
+        </small>
+      </h1>
+      <h1 class="subtitle">
+        {{- .Params.subtitle -}}
+      </h1>
+    </div>
+    <div class="hero-icon">
+      {{- $icon := .Params.icon -}}
+      {{- if $icon -}}
+        {{- readFile $icon | safeHTML -}}
+      {{- end -}}
+    </div>
+  </div>
+</section>
+
+{{- .Content -}}
+
+<section class="section">
+  <div class="container">
+    {{ range .Pages }}
+      <div class="example columns">
+        <div class="column is-one-third">
+          <div class="content">
+            <h2>{{ .Title }}</h2>
+            {{ .Content }}
+          </div>
+        </div>
+        <div class="column">
+          <div class="snippet columns is-gapless">
+            {{ if index (.Params.source) 0 }}
+              {{ $sized := readFile (printf "%s.gz" (replace (index (.Params.source) 0) "src" "dist")) }}
+              <div class="snippet-tag">
+                {{- div (len $sized) 1000.0 | lang.NumFmt 2 }} kB
+              </div>
+              <div class="snippet-code column is-two-thirds">
+                <pre class="code-example content"><code class="code-example-body language-js">
+                  {{- readFile (index (.Params.source) 0) -}}
+                </code></pre>
+              </div>
+            {{ end }}
+            <div class="column">
+              <div class="snippet-preview content column">
+                <div class="{{ .Params.class }}"></div>
+                <script src="{{ (replace (index (.Params.source) 0) "src" "dist") }}"></script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</section>
+
+{{ if .Params.bottom }}
+  {{ partial .Params.bottom . }}
+{{ end }}
+
+{{ end }}
