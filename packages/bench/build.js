@@ -8,6 +8,7 @@ let args = yargs(process.argv)
     .usage("npm run build [-- [--framework] [--check] [--skipIrrelevant] [--restartWith] [--benchmarks_only]]")
     .help('help')
     .boolean('check')
+    .boolean('fork')
     .boolean('benchmarks_only')
     .boolean('skipIrrelevant')
     .string('restartWith')
@@ -70,7 +71,7 @@ _.each(testable, function([dir,name]) {
         let fullname = dir + name;
 	if(fs.statSync(fullname).isDirectory() && fs.existsSync(path.join(fullname, "package.json"))) {
             console.log("*** Executing npm run selenium for "+fullname);
-            exec(`npm run selenium -- --count ${args.count} --headless --fork true --framework ${idMap[name]}`, {
+            exec(`npm run selenium -- --count ${args.count} --headless --fork ${args.fork} --framework ${idMap[name]}`, {
 				cwd: "webdriver-ts",
 				stdio: 'inherit'
 			});
