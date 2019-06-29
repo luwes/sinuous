@@ -5,13 +5,14 @@ var path = require('path');
 var yargs = require('yargs');
 
 let args = yargs(process.argv)
-    .usage("npm run build [-- [--check] [--skipIrrelevant] [--restartWith] [--benchmarks_only]]")
+    .usage("npm run build [-- [--framework] [--check] [--skipIrrelevant] [--restartWith] [--benchmarks_only]]")
     .help('help')
     .boolean('check')
     .boolean('benchmarks_only')
     .boolean('skipIrrelevant')
     .string('restartWith')
     .array('framework')
+    .default('count', 1)
     .argv;
 
 var referenceBranch = "origin/master";
@@ -69,7 +70,7 @@ _.each(testable, function([dir,name]) {
         let fullname = dir + name;
 	if(fs.statSync(fullname).isDirectory() && fs.existsSync(path.join(fullname, "package.json"))) {
             console.log("*** Executing npm run selenium for "+fullname);
-            exec('npm run selenium -- --count 3 --headless --fork true --framework ' + idMap[name], {
+            exec(`npm run selenium -- --count ${args.count} --headless --fork true --framework ${idMap[name]}`, {
 				cwd: "webdriver-ts",
 				stdio: 'inherit'
 			});
