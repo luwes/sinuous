@@ -29,9 +29,7 @@ jobs:
     - stage: tests
       name: "Unit tests"
       script: COVERAGE=true yarn test --single-run
-    - script:
-        - (cd packages/bench && npm install && (npm run start & npm run build -- --check))
-        - (cd packages/bench/webdriver-ts && npm run results)
+    - script: yarn bench
       name: "Benchmark"
       deploy:
         provider: pages
