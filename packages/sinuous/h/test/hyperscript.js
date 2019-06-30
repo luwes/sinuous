@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import { h } from 'sinuous';
+import { o, h } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -57,13 +57,32 @@ test('(un)registers an event handler', function(t) {
   // don't try the focus event, valid tests fail in IE11
 
   let click = spy();
-  let btn = h('button', { onclick: () => click }, 'something');
+  let btn = h('button', { onclick: click }, 'something');
   document.body.appendChild(btn);
 
   btn.click();
   t.assert(click.calledOnce, 'click called');
 
   h(btn, { onclick: false });
+  btn.click();
+  t.assert(click.calledOnce, 'click still called only once');
+
+  btn.parentNode.removeChild(btn);
+  t.end();
+});
+
+test('(un)registers an observable event handler', function(t) {
+  // don't try the focus event, valid tests fail in IE11
+
+  let click = spy();
+  let onclick = o(click);
+  let btn = h('button', { onclick }, 'something');
+  document.body.appendChild(btn);
+
+  btn.click();
+  t.assert(click.calledOnce, 'click called');
+
+  onclick(false);
   btn.click();
   t.assert(click.calledOnce, 'click still called only once');
 

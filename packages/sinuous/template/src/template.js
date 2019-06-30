@@ -9,7 +9,7 @@ let actions;
  */
 export function t(key) {
   const tag = () => key;
-  tag.$ = (el, action) => {
+  tag.$t = (el, action) => {
     action._tag = tag;
     action._el = el;
     actions.push(action);

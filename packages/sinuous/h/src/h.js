@@ -70,10 +70,10 @@ export function context(api) {
             if (arg._flow) {
               arg(h, el, marker);
             } else {
-              if (arg.$) {
+              if (arg.$t) {
                 const insertAction = createInsertAction(h);
                 insertAction(el, '');
-                arg.$(el, insertAction);
+                arg.$t(el, insertAction);
               } else {
                 h.insert(h.subscribe, el, arg, marker);
               }
@@ -122,10 +122,15 @@ export function parseNested(h, el, obj, callback) {
         if (name === 'ref') {
           value(el);
         } else {
-          if (value.$) {
-            value.$(element, propAction);
+          if (value.$t) {
+            value.$t(element, propAction);
           } else {
-            h.subscribe(() => callback(name, value(), h, element));
+            const isEvent = name[0] === 'o' && name[1] === 'n';
+            h.subscribe(() =>
+              // Functions added as event handlers are not executed on render
+              // unless they have an observable indicator.
+              callback(name, isEvent && !value.$o ? value : value(), h, element)
+            );
           }
         }
       } else {

@@ -55,10 +55,12 @@ export function sample(fn) {
  * @return {Function}
  */
 function observable(value) {
+  // Tiny indicator that this is an observable function.
+  data.$o = 1;
   data._listeners = [];
 
   function data(nextValue) {
-    if (typeof nextValue === 'undefined') {
+    if (nextValue === undefined) {
       if (currentUpdate) {
         data._listeners.push(currentUpdate);
         currentUpdate._observables.push(data);
@@ -68,7 +70,7 @@ function observable(value) {
 
     value = nextValue;
 
-    data._listeners.forEach(update => (update._fresh = false));
+    data._listeners.forEach(update => (update._fresh = 0));
     // Update can alter data._listeners, make a copy before running.
     data._listeners.slice().forEach(update => {
       if (!update._fresh) update();
@@ -100,7 +102,7 @@ export function S(listener, value) {
     }
 
     _unsubscribe(update);
-    update._fresh = true;
+    update._fresh = 1;
     currentUpdate = update;
     value = listener(value);
 
@@ -127,7 +129,9 @@ export function S(listener, value) {
  * @return {Function}
  */
 export function cleanup(fn) {
-  currentUpdate && currentUpdate._cleanups.push(fn);
+  if (currentUpdate) {
+    currentUpdate._cleanups.push(fn);
+  }
   return fn;
 }
 
