@@ -71,17 +71,17 @@ test('(un)registers an event handler', function(t) {
   t.end();
 });
 
-test('registers event handlers', function(t) {
-  let click = spy();
-  let btn = h('button', { events: { click: () => click } }, 'something');
-  document.body.appendChild(btn);
+// test('registers event handlers', function(t) {
+//   let click = spy();
+//   let btn = h('button', { events: { click: () => click } }, 'something');
+//   document.body.appendChild(btn);
 
-  btn.click();
-  t.assert(click.calledOnce, 'click called');
+//   btn.click();
+//   t.assert(click.calledOnce, 'click called');
 
-  btn.parentNode.removeChild(btn);
-  t.end();
-});
+//   btn.parentNode.removeChild(btn);
+//   t.end();
+// });
 
 test('can use bindings', function(t) {
   h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
@@ -102,6 +102,13 @@ test('sets styles as text', function(t) {
   t.equal(div.style.color, 'red');
   t.end();
 });
+
+// test('sets classes', function(t) {
+//   let div = h('div', { classList: { play: true, pause: true } });
+//   t.assert(div.classList.contains('play'));
+//   t.assert(div.classList.contains('pause'));
+//   t.end();
+// });
 
 test('sets attributes', function(t) {
   let div = h('div', { attrs: { checked: 'checked' } });

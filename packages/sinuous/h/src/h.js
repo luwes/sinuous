@@ -147,8 +147,6 @@ export function parseKeyValue(name, value, h, el) {
     el.setAttribute(name, value);
   } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(h, el, name, value);
-  } else if (name === 'events') {
-    parseNested(h, el, value, (n, v) => handleEvent(h, el, 'on' + n, v));
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
