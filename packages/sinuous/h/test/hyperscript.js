@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import { h } from 'sinuous';
+import { o, h } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -57,7 +57,7 @@ test('(un)registers an event handler', function(t) {
   // don't try the focus event, valid tests fail in IE11
 
   let click = spy();
-  let btn = h('button', { onclick: () => click }, 'something');
+  let btn = h('button', { onclick: click }, 'something');
   document.body.appendChild(btn);
 
   btn.click();
@@ -71,17 +71,36 @@ test('(un)registers an event handler', function(t) {
   t.end();
 });
 
-test('registers event handlers', function(t) {
+test('(un)registers an observable event handler', function(t) {
+  // don't try the focus event, valid tests fail in IE11
+
   let click = spy();
-  let btn = h('button', { events: { click: () => click } }, 'something');
+  let onclick = o(click);
+  let btn = h('button', { onclick }, 'something');
   document.body.appendChild(btn);
 
   btn.click();
   t.assert(click.calledOnce, 'click called');
 
+  onclick(false);
+  btn.click();
+  t.assert(click.calledOnce, 'click still called only once');
+
   btn.parentNode.removeChild(btn);
   t.end();
 });
+
+// test('registers event handlers', function(t) {
+//   let click = spy();
+//   let btn = h('button', { events: { click: () => click } }, 'something');
+//   document.body.appendChild(btn);
+
+//   btn.click();
+//   t.assert(click.calledOnce, 'click called');
+
+//   btn.parentNode.removeChild(btn);
+//   t.end();
+// });
 
 test('can use bindings', function(t) {
   h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
@@ -103,12 +122,12 @@ test('sets styles as text', function(t) {
   t.end();
 });
 
-test('sets classes', function(t) {
-  let div = h('div', { classList: { play: true, pause: true } });
-  t.assert(div.classList.contains('play'));
-  t.assert(div.classList.contains('pause'));
-  t.end();
-});
+// test('sets classes', function(t) {
+//   let div = h('div', { classList: { play: true, pause: true } });
+//   t.assert(div.classList.contains('play'));
+//   t.assert(div.classList.contains('pause'));
+//   t.end();
+// });
 
 test('sets attributes', function(t) {
   let div = h('div', { attrs: { checked: 'checked' } });
@@ -135,9 +154,9 @@ test('sets refs', function(t) {
   t.end();
 });
 
-test("boolean, number, date, regex get to-string'ed", function(t) {
-  let e = h('p', true, false, 4, new Date('Mon Jan 15 2001'), /hello/);
-  t.assert(e.outerHTML.match(/<p>truefalse4Mon Jan 15.+2001.*\/hello\/<\/p>/));
+test("boolean, number, get to-string'ed", function(t) {
+  let e = h('p', true, false, 4);
+  t.assert(e.outerHTML.match(/<p>truefalse4<\/p>/));
   t.end();
 });
 

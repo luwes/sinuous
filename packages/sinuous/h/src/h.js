@@ -28,60 +28,55 @@ export function context(api) {
     function item(arg) {
       const type = typeof arg;
       if (arg == null);
-      else if (type === 'string') {
+      else if (
+        type === 'string' ||
+        type === 'number' ||
+        type === 'boolean'
+      ) {
         if (el) {
-          el.appendChild(document.createTextNode(arg));
+          el.appendChild(document.createTextNode('' + arg));
         } else {
           el = parseClass(arg);
         }
-      } else if (
-        type === 'number' ||
-        type === 'boolean' ||
-        arg instanceof Date ||
-        arg instanceof RegExp
-      ) {
-        el.appendChild(document.createTextNode('' + arg));
-      } else {
-        if (Array.isArray(arg)) {
-          // Support Fragments
-          if (!el) el = document.createDocumentFragment();
+      } else if (Array.isArray(arg)) {
+        // Support Fragments
+        if (!el) el = document.createDocumentFragment();
+        if (multi) {
+          arg.forEach(item);
+        } else {
+          h.insert(h.subscribe, el, arg);
+        }
+      } else if (arg instanceof Node) {
+        if (el) {
           if (multi) {
-            arg.forEach(item);
+            const marker = el.appendChild(document.createTextNode(''));
+            h.insert(h.subscribe, el, arg, marker);
           } else {
-            h.insert(h.subscribe, el, arg);
+            el.appendChild(arg);
           }
-        } else if (arg instanceof Node) {
-          if (el) {
-            if (multi) {
-              const marker = el.appendChild(document.createTextNode(''));
+        } else {
+          // Support updates
+          el = arg;
+        }
+      } else if (type === 'object') {
+        parseNested(h, el, arg, parseKeyValue);
+      } else if (type === 'function') {
+        if (el) {
+          const marker = multi && el.appendChild(document.createTextNode(''));
+          if (arg._flow) {
+            arg(h, el, marker);
+          } else {
+            if (arg.$t) {
+              const insertAction = createInsertAction(h);
+              insertAction(el, '');
+              arg.$t(el, insertAction);
+            } else {
               h.insert(h.subscribe, el, arg, marker);
-            } else {
-              el.appendChild(arg);
             }
-          } else {
-            // Support updates
-            el = arg;
           }
-        } else if (type === 'object') {
-          parseNested(h, el, arg, parseKeyValue);
-        } else if (type === 'function') {
-          if (el) {
-            const marker = multi && el.appendChild(document.createTextNode(''));
-            if (arg._flow) {
-              arg(h, el, marker);
-            } else {
-              if (arg.$) {
-                const insertAction = createInsertAction(h);
-                insertAction(el, '');
-                arg.$(el, insertAction);
-              } else {
-                h.insert(h.subscribe, el, arg, marker);
-              }
-            }
-          } else {
-            // Support Components
-            el = arg.apply(null, args.splice(0));
-          }
+        } else {
+          // Support Components
+          el = arg.apply(null, args.splice(0));
         }
       }
     }
@@ -122,10 +117,15 @@ export function parseNested(h, el, obj, callback) {
         if (name === 'ref') {
           value(el);
         } else {
-          if (value.$) {
-            value.$(element, propAction);
+          if (value.$t) {
+            value.$t(element, propAction);
           } else {
-            h.subscribe(() => callback(name, value(), h, element));
+            const isEvent = name[0] === 'o' && name[1] === 'n';
+            h.subscribe(() =>
+              // Functions added as event handlers are not executed on render
+              // unless they have an observable indicator.
+              callback(name, isEvent && !value.$o ? value : value(), h, element)
+            );
           }
         }
       } else {
@@ -147,16 +147,12 @@ export function parseKeyValue(name, value, h, el) {
     el.setAttribute(name, value);
   } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(h, el, name, value);
-  } else if (name === 'events') {
-    parseNested(h, el, value, (n, v) => handleEvent(h, el, 'on' + n, v));
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
       parseNested(h, el, value, (n, v) => el.style.setProperty(n, v));
     }
-  } else if (name === 'classList') {
-    parseNested(h, el, value, (n, v) => el.classList.toggle(n, v));
   } else if (name === 'attrs') {
     parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
   } else if (name[0] === '$') {

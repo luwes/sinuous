@@ -13,6 +13,7 @@ let args = yargs(process.argv)
     .boolean('skipIrrelevant')
     .string('restartWith')
     .array('framework')
+    .default('framework', [])
     .default('count', 1)
     .argv;
 

@@ -9,13 +9,13 @@ const TodoApp = () => {
     <div>
       <h3>TODO</h3>
       <${TodoList} items=${items} />
-      <form onsubmit=${() => handleSubmit}>
+      <form onsubmit=${handleSubmit}>
         <label htmlFor="new-todo">
           What needs to be done?
         </label>
         <input
           id="new-todo"
-          onchange=${() => handleChange}
+          onchange=${handleChange}
           value=${text}
         />
         <button>

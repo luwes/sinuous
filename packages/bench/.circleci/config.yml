@@ -14,8 +14,8 @@ jobs:
 
       - run: |
           source $NVM_DIR/nvm.sh
-          nvm install v8.9.1
+          nvm install v10.16.0
 
           npm install
           npm start &
-          npm run build -- --check
+          npm run build -- --check --framework vanillajs-keyed

@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.10.0 - 2019-06-30 - BREAKING CHANGES
+
+### Changed
+
+- Removed `classList` property handler, this can be done with a function.
+- Removed specialized `events` property, HTM supports spread props.
+- Removed initial execution of non observable event handlers so there is now no need for the extra closure. Fixes [#3](https://github.com/luwes/sinuous/issues/3)
+- Removed Date, RegExp coercion This can be done in the view.
+
 ## 0.9.2 - 2019-06-29
 
 ### Changed
