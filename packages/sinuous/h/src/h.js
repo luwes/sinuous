@@ -28,60 +28,55 @@ export function context(api) {
     function item(arg) {
       const type = typeof arg;
       if (arg == null);
-      else if (type === 'string') {
+      else if (
+        type === 'string' ||
+        type === 'number' ||
+        type === 'boolean'
+      ) {
         if (el) {
-          el.appendChild(document.createTextNode(arg));
+          el.appendChild(document.createTextNode('' + arg));
         } else {
           el = parseClass(arg);
         }
-      } else if (
-        type === 'number' ||
-        type === 'boolean' ||
-        arg instanceof Date ||
-        arg instanceof RegExp
-      ) {
-        el.appendChild(document.createTextNode('' + arg));
-      } else {
-        if (Array.isArray(arg)) {
-          // Support Fragments
-          if (!el) el = document.createDocumentFragment();
+      } else if (Array.isArray(arg)) {
+        // Support Fragments
+        if (!el) el = document.createDocumentFragment();
+        if (multi) {
+          arg.forEach(item);
+        } else {
+          h.insert(h.subscribe, el, arg);
+        }
+      } else if (arg instanceof Node) {
+        if (el) {
           if (multi) {
-            arg.forEach(item);
+            const marker = el.appendChild(document.createTextNode(''));
+            h.insert(h.subscribe, el, arg, marker);
           } else {
-            h.insert(h.subscribe, el, arg);
+            el.appendChild(arg);
           }
-        } else if (arg instanceof Node) {
-          if (el) {
-            if (multi) {
-              const marker = el.appendChild(document.createTextNode(''));
+        } else {
+          // Support updates
+          el = arg;
+        }
+      } else if (type === 'object') {
+        parseNested(h, el, arg, parseKeyValue);
+      } else if (type === 'function') {
+        if (el) {
+          const marker = multi && el.appendChild(document.createTextNode(''));
+          if (arg._flow) {
+            arg(h, el, marker);
+          } else {
+            if (arg.$t) {
+              const insertAction = createInsertAction(h);
+              insertAction(el, '');
+              arg.$t(el, insertAction);
+            } else {
               h.insert(h.subscribe, el, arg, marker);
-            } else {
-              el.appendChild(arg);
             }
-          } else {
-            // Support updates
-            el = arg;
           }
-        } else if (type === 'object') {
-          parseNested(h, el, arg, parseKeyValue);
-        } else if (type === 'function') {
-          if (el) {
-            const marker = multi && el.appendChild(document.createTextNode(''));
-            if (arg._flow) {
-              arg(h, el, marker);
-            } else {
-              if (arg.$t) {
-                const insertAction = createInsertAction(h);
-                insertAction(el, '');
-                arg.$t(el, insertAction);
-              } else {
-                h.insert(h.subscribe, el, arg, marker);
-              }
-            }
-          } else {
-            // Support Components
-            el = arg.apply(null, args.splice(0));
-          }
+        } else {
+          // Support Components
+          el = arg.apply(null, args.splice(0));
         }
       }
     }

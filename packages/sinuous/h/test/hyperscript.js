@@ -154,9 +154,9 @@ test('sets refs', function(t) {
   t.end();
 });
 
-test("boolean, number, date, regex get to-string'ed", function(t) {
-  let e = h('p', true, false, 4, new Date('Mon Jan 15 2001'), /hello/);
-  t.assert(e.outerHTML.match(/<p>truefalse4Mon Jan 15.+2001.*\/hello\/<\/p>/));
+test("boolean, number, get to-string'ed", function(t) {
+  let e = h('p', true, false, 4);
+  t.assert(e.outerHTML.match(/<p>truefalse4<\/p>/));
   t.end();
 });
 
