@@ -5969,6 +5969,11 @@ sinon@^7.3.2:
     nise "^1.4.10"
     supports-color "^5.5.0"
 
+sinuous@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.9.0.tgz#11936071eba8f0d5e8b9ceb96d54b723e2d4518a"
+  integrity sha512-M4dMxD5SpIQnJzM8Q5C/q98iEIzupSXDhlE1/WP4aUaIbsxHXFRH3444nYgbv2IBxJ30PLfsmytcxLWaOWorfQ==
+
 slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"

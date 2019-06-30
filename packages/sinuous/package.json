@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.9.0",
+  "version": "0.9.2",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "dist/sinuous.esm.js",
   "main": "dist/sinuous.js",

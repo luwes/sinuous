@@ -73,7 +73,6 @@ function getConfig(options) {
             `dist/${name}${formatOptions[format].ext}`
           ),
       name: global,
-      exports: 'named',
       legacy: true,
       freeze: false,
       esModule: false

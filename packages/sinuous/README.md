@@ -13,10 +13,9 @@
 Sinuous provides the clarity of declarative views and the performance of direct DOM manipulation.  
 It was built with these ideas in mind.
 
-- Developer experience
+- Small: use in other mini libraries like custom elements.
+- Simple: plain Javascript feel; template literals, standard HTML.
 - [Performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)
-- Small bundle size, made for use in other mini libraries like custom elements.
-- Plain Javascript feel; template literals, standard HTML.
 - Choose your own reactive library:
   [`Sinuous Observable`](./packages/sinuous/observable)
   [`S.js`](https://github.com/adamhaile/S)
@@ -37,13 +36,7 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
 
-### Browser Support
-
-Sinuous supports modern browsers and IE11+:
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
-
-### Counter (_1.81kB gzip_)
+### Counter Example (_1.81kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
 ```js
 import { o, h } from 'sinuous';
@@ -59,90 +52,11 @@ document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
 
-### Example with [Sinuous Observable](./packages/sinuous/observable) ([Codesandbox](https://codesandbox.io/s/j4vm9yow89))
+### Browser Support
 
-```js
-// 1.98 kB gzip (with babel-plugin-htm)
-import { o, h } from 'sinuous';
+Sinuous supports modern browsers and IE11+:
 
-const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
-
-const count = o(0);
-const style = o({});
-const onclick = o(clicked);
-
-function clicked() {
-  onclick(false);
-  console.log('removed click handler');
-}
-
-// Closures are only needed for multiple observables.
-const view = () => {
-  return html`
-    <h1 style=${style}>
-      Sinuous <sup>${count}</sup>
-      <div>${() => count() + count()}</div>
-      <button onclick="${onclick}">Click</button>
-    </h1>
-  `;
-};
-
-document.querySelector('.sinuous').append(view());
-setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
-```
-
-### Example with [S.js](https://github.com/adamhaile/S)
-
-```js
-// 3.87 kB gzip
-import S from 's-js';
-import sinuous from 'sinuous';
-import htm from 'htm';
-
-const h = sinuous({ subscribe: S });
-const html = htm.bind(h);
-const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
-
-const count = S.data(0);
-const style = S.data('');
-
-const view = () => {
-  return html`
-    <h1 style=${() => style()}>Sinuous <sup>${() => count()}</sup></h1>
-  `;
-};
-
-S.root(() => document.querySelector('.sinuous').append(view()));
-setInterval(() => style({ color: randomColor() }) && count(count() + 1), 1000);
-```
-
-### Example with [hyperactiv](https://github.com/elbywan/hyperactiv)
-
-```js
-// 3.03 kB gzip
-import sinuous from 'sinuous';
-import htm from 'htm';
-import hyperactiv from 'hyperactiv';
-const { observe, computed } = hyperactiv;
-
-const h = sinuous({ subscribe: computed });
-const html = htm.bind(h);
-const randomColor = () => '#' + ((Math.random() * (1 << 24)) | 0).toString(16);
-
-const s = observe({
-  count: 0,
-  style: ''
-});
-
-const view = () => {
-  return html`
-    <h1 style=${() => s.style}>Sinuous <sup>${() => s.count}</sup></h1>
-  `;
-};
-
-document.querySelector('.sinuous').append(view());
-setInterval(() => (s.style = { color: randomColor() }) && s.count++, 1000);
-```
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
 ### Big Thanks
 
