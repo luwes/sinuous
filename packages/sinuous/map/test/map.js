@@ -8,17 +8,12 @@ let dispose;
 (function() {
   console.log('Basic map tests');
 
-  const list = o([
-    ['a', 1],
-    ['b', 2],
-    ['c', 3],
-    ['d', 4],
-  ]);
+  const list = o([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
   const div = document.createElement('div');
   div.appendChild(document.createElement('i'));
   const beforeNode = div.appendChild(document.createElement('b'));
   const afterNode = div.appendChild(document.createTextNode(''));
-  root((d) => {
+  root(d => {
     dispose = d;
     return map(list, item => item)(h, div, afterNode);
   });
@@ -29,11 +24,7 @@ let dispose;
   });
 
   test('update', t => {
-    list([
-      ['b', 2, 99],
-      ['a', 1],
-      ['c']
-    ]);
+    list([['b', 2, 99], ['a', 1], ['c']]);
     t.equal(div.innerHTML, '<i></i><b></b>b299a1c');
     t.end();
   });
@@ -59,10 +50,11 @@ let dispose;
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const Component = () => root((d) => {
-    dispose = d;
-    return h('div', { ref: el => (div = el) }, map(list, item => item));
-  });
+  const Component = () =>
+    root(d => {
+      dispose = d;
+      return h('div', { ref: el => (div = el) }, map(list, item => item));
+    });
 
   function apply(t, array) {
     list(array);
@@ -156,10 +148,11 @@ let dispose;
   const list = o([n1, n2, n3, n4]);
   const parent = document.createDocumentFragment();
   const afterNode = parent.appendChild(document.createTextNode(''));
-  const Component = () => root((d) => {
-    dispose = d;
-    return map(list, item => item)(h, parent, afterNode);
-  });
+  const Component = () =>
+    root(d => {
+      dispose = d;
+      return map(list, item => item)(h, parent, afterNode);
+    });
 
   function apply(t, array) {
     list(array);
@@ -252,10 +245,15 @@ let dispose;
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
 
-  const Component = () => root((d) => {
-    dispose = d;
-    return h('div', { ref: el => (div = el) }, map(list, item => h([item, item])));
-  });
+  const Component = () =>
+    root(d => {
+      dispose = d;
+      return h(
+        'div',
+        { ref: el => (div = el) },
+        map(list, item => h([item, item]))
+      );
+    });
 
   function apply(t, array) {
     list(array);

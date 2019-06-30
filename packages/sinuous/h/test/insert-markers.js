@@ -123,7 +123,10 @@ test('can insert an array of nodes', t => {
   const nodes = [document.createElement('span'), document.createElement('div')];
   nodes[0].textContent = 'foo';
   nodes[1].textContent = 'bar';
-  t.equal(insertValue(nodes).innerHTML, 'before<span>foo</span><div>bar</div>after');
+  t.equal(
+    insertValue(nodes).innerHTML,
+    'before<span>foo</span><div>bar</div>after'
+  );
   t.end();
 });
 
