@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous template",
-  "module": "dist/template.mjs",
+  "module": "dist/template.esm.js",
   "main": "dist/template.js",
   "files": [
     "dist",

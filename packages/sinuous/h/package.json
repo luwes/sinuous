@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous h",
-  "module": "dist/h.mjs",
+  "module": "dist/h.esm.js",
   "main": "dist/h.js",
   "files": [
     "dist",

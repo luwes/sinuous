@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous observable",
-  "module": "dist/observable.mjs",
+  "module": "dist/observable.esm.js",
   "main": "dist/observable.js",
   "files": [
     "dist",
