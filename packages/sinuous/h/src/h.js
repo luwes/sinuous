@@ -155,8 +155,6 @@ export function parseKeyValue(name, value, h, el) {
     } else {
       parseNested(h, el, value, (n, v) => el.style.setProperty(n, v));
     }
-  } else if (name === 'classList') {
-    parseNested(h, el, value, (n, v) => el.classList.toggle(n, v));
   } else if (name === 'attrs') {
     parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
   } else if (name[0] === '$') {

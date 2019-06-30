@@ -103,13 +103,6 @@ test('sets styles as text', function(t) {
   t.end();
 });
 
-test('sets classes', function(t) {
-  let div = h('div', { classList: { play: true, pause: true } });
-  t.assert(div.classList.contains('play'));
-  t.assert(div.classList.contains('pause'));
-  t.end();
-});
-
 test('sets attributes', function(t) {
   let div = h('div', { attrs: { checked: 'checked' } });
   t.assert(div.hasAttribute('checked'));
