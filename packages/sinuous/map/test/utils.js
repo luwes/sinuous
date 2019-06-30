@@ -23,9 +23,9 @@ test('step', function(t) {
   let newAfterNode;
   let prevEndNode;
   h('div', [
-    newAfterNode = h('div', { [GROUPING]: 37 }),
+    (newAfterNode = h('div', { [GROUPING]: 37 })),
     h('div'),
-    prevEndNode = h('div', { [GROUPING]: 37 })
+    (prevEndNode = h('div', { [GROUPING]: 37 }))
   ]);
   t.equal(step(prevEndNode, BACKWARD, true), newAfterNode);
   t.end();

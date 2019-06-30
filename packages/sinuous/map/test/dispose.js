@@ -11,7 +11,7 @@ test('explicit dispose works and disposes observables', function(t) {
   let four = o(4);
   const list = o([1, 2, 3, four]);
   let dispose;
-  const el = root((d) => {
+  const el = root(d => {
     dispose = d;
     return h('ul', map(list, item => h('li', item)));
   });
