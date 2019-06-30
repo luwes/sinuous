@@ -12,7 +12,7 @@ import { CJS, ESM, IIFE, UMD, bundles, fixtures } from '../bundles.js';
 
 const formatOptions = {
   [CJS]: { ext: '.js' },
-  [ESM]: { ext: '.mjs' },
+  [ESM]: { ext: '.esm.js' },
   [IIFE]: { ext: '.js' },
   [UMD]: { ext: '.js' }
 };

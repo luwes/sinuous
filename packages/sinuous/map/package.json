@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous map",
-  "module": "dist/map.mjs",
+  "module": "dist/map.esm.js",
   "main": "dist/map.js",
   "files": [
     "dist",
