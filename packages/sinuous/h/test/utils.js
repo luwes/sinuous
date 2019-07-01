@@ -1,5 +1,5 @@
 import test from 'tape';
-import { assign, normalizeIncomingArray, clearAll } from '../src/utils.js';
+import { assign, normalizeArray, clearAll } from '../src/utils.js';
 
 test('assign', function(t) {
   const target = {
@@ -21,7 +21,7 @@ test('assign', function(t) {
   t.end();
 });
 
-test('normalizeIncomingArray', function(t) {
+test('normalizeArray', function(t) {
   const frag = document.createDocumentFragment();
   const el = document.createElement('div');
   const comment = document.createComment('');
@@ -30,10 +30,10 @@ test('normalizeIncomingArray', function(t) {
   const arr = [comment, el];
   const expected = [el, comment, comment, el, el];
   t.deepEqual(
-    normalizeIncomingArray([], [frag, true, null, arr, false, el]),
+    normalizeArray([], [frag, true, null, arr, false, el]),
     expected
   );
-  t.assert(normalizeIncomingArray([], [99])[0].nodeType === 3);
+  t.assert(normalizeArray([], [99])[0].nodeType === 3);
   t.end();
 });
 

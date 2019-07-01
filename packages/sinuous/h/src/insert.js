@@ -1,4 +1,4 @@
-import { clearAll, normalizeIncomingArray } from './utils.js';
+import { clearAll, normalizeArray } from './utils.js';
 
 export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
@@ -56,7 +56,7 @@ export function insert(subscribe, parent, value, marker, current) {
     }
     current = value;
   } else if (Array.isArray(value)) {
-    const array = normalizeIncomingArray([], value);
+    const array = normalizeArray([], value);
     clearAll(parent, current, marker);
     array.forEach(node => {
       parent.insertBefore(node, marker);

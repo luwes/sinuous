@@ -1,9 +1,9 @@
+import { na as normalizeArray } from 'sinuous';
 import { GROUPING } from './constants.js';
-import { normalizeIncomingArray } from './utils.js';
 
 export default function addNode(parent, node, afterNode, counter) {
   if (Array.isArray(node)) {
-    node = normalizeIncomingArray([], node);
+    node = normalizeArray([], node);
 
     if (!node.length) return;
 

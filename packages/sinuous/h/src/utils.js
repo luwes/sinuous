@@ -9,13 +9,13 @@ export function assign(obj, props) {
   return obj;
 }
 
-export function normalizeIncomingArray(normalized, array) {
+export function normalizeArray(normalized, array) {
   for (let i = 0, len = array.length; i < len; i++) {
     let item = array[i];
     if (item instanceof Node) {
       // DocumentFragment
       if (item.nodeType === 11) {
-        normalizeIncomingArray(normalized, item.childNodes);
+        normalizeArray(normalized, item.childNodes);
       } else {
         normalized.push(item);
       }
@@ -23,7 +23,7 @@ export function normalizeIncomingArray(normalized, array) {
     } else if (item == null || item === true || item === false) {
       // skip
     } else if (Array.isArray(item)) {
-      normalizeIncomingArray(normalized, item);
+      normalizeArray(normalized, item);
     } else {
       normalized.push(document.createTextNode('' + item));
     }
