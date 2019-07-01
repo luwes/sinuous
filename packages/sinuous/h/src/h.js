@@ -165,16 +165,15 @@ export function isMultiExpression(item) {
 }
 
 function handleEvent(h, el, name, value) {
-  const useCapture = name !== (name = name.replace(/Capture$/, ''));
   const kLower = name.toLowerCase();
   name = (kLower in el ? kLower : name).slice(2);
 
   const removeListener = h.cleanup(() =>
-    el.removeEventListener(name, eventProxy, useCapture)
+    el.removeEventListener(name, eventProxy)
   );
 
   if (value) {
-    el.addEventListener(name, eventProxy, useCapture);
+    el.addEventListener(name, eventProxy);
   } else {
     removeListener();
   }
