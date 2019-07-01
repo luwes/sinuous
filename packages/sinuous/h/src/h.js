@@ -27,13 +27,9 @@ export function context(api) {
     function item(arg) {
       const type = typeof arg;
       if (arg == null);
-      else if (
-        type === 'string' ||
-        type === 'number' ||
-        type === 'boolean'
-      ) {
+      else if (type === 'string') {
         if (el) {
-          el.appendChild(document.createTextNode('' + arg));
+          el.appendChild(document.createTextNode(arg));
         } else {
           el = parseClass(arg);
         }
@@ -77,6 +73,8 @@ export function context(api) {
           // Support Components
           el = arg.apply(null, args.splice(0));
         }
+      } else {
+        el.appendChild(document.createTextNode('' + arg));
       }
     }
 
