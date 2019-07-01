@@ -14,8 +14,7 @@ export function context(api) {
   api = assign(
     {
       bindings: {},
-      context,
-      insert
+      context
     },
     api
   );
@@ -44,13 +43,13 @@ export function context(api) {
         if (multi) {
           arg.forEach(item);
         } else {
-          h.insert(h.subscribe, el, arg);
+          insert(h.subscribe, el, arg);
         }
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
             const marker = el.appendChild(document.createTextNode(''));
-            h.insert(h.subscribe, el, arg, marker);
+            insert(h.subscribe, el, arg, marker);
           } else {
             el.appendChild(arg);
           }
@@ -71,7 +70,7 @@ export function context(api) {
               insertAction(el, '');
               arg.$t(el, insertAction);
             } else {
-              h.insert(h.subscribe, el, arg, marker);
+              insert(h.subscribe, el, arg, marker);
             }
           }
         } else {
@@ -104,7 +103,7 @@ export default context();
  */
 function createInsertAction(h, current = '') {
   return (element, value) => {
-    current = h.insert(h.subscribe, element, value, null, current);
+    current = insert(h.subscribe, element, value, null, current);
   };
 }
 
