@@ -13,9 +13,7 @@ import { assign } from './utils.js';
 export function context(api) {
   api = assign(
     {
-      bindings: {},
-      context,
-      insert
+      bindings: {}
     },
     api
   );
@@ -28,13 +26,9 @@ export function context(api) {
     function item(arg) {
       const type = typeof arg;
       if (arg == null);
-      else if (
-        type === 'string' ||
-        type === 'number' ||
-        type === 'boolean'
-      ) {
+      else if (type === 'string') {
         if (el) {
-          el.appendChild(document.createTextNode('' + arg));
+          el.appendChild(document.createTextNode(arg));
         } else {
           el = parseClass(arg);
         }
@@ -44,13 +38,13 @@ export function context(api) {
         if (multi) {
           arg.forEach(item);
         } else {
-          h.insert(h.subscribe, el, arg);
+          insert(h.subscribe, el, arg);
         }
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
             const marker = el.appendChild(document.createTextNode(''));
-            h.insert(h.subscribe, el, arg, marker);
+            insert(h.subscribe, el, arg, marker);
           } else {
             el.appendChild(arg);
           }
@@ -71,13 +65,15 @@ export function context(api) {
               insertAction(el, '');
               arg.$t(el, insertAction);
             } else {
-              h.insert(h.subscribe, el, arg, marker);
+              insert(h.subscribe, el, arg, marker);
             }
           }
         } else {
           // Support Components
           el = arg.apply(null, args.splice(0));
         }
+      } else {
+        el.appendChild(document.createTextNode('' + arg));
       }
     }
 
@@ -104,7 +100,7 @@ export default context();
  */
 function createInsertAction(h, current = '') {
   return (element, value) => {
-    current = h.insert(h.subscribe, element, value, null, current);
+    current = insert(h.subscribe, element, value, null, current);
   };
 }
 
