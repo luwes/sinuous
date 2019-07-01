@@ -13,8 +13,7 @@ import { assign } from './utils.js';
 export function context(api) {
   api = assign(
     {
-      bindings: {},
-      context
+      bindings: {}
     },
     api
   );
