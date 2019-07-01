@@ -10,8 +10,8 @@
     ]
   },
   "scripts": {
-    "lint": "eslint 'packages/{*,*/*,}/src/**/*.js' --ignore-pattern '**/bench/'",
-    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/bench/**'",
+    "lint": "eslint 'packages/{*,*/*,}/src/**/*.js'",
+    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**'",
     "build-tape": "browserify scripts/tape/src.js --standalone tape -o scripts/tape/dist.js",
     "test": "cross-env COVERAGE=true karma start",
     "coverage": "codecov",
@@ -21,11 +21,7 @@
     "serve": "(cd site && hugo serve)",
     "start": "run-p watch serve",
     "docs": "node scripts/docs.js && yarn format:docs",
-    "format:docs": "prettier --write '**/*.md'",
-    "bench": "yarn bench:serve & (run-s bench:bench bench:results)",
-    "bench:serve": "(cd packages/bench && yarn start)",
-    "bench:bench": "(cd packages/bench && node build.js --check --count 3 --framework angular-v8.0.1-keyed react-v16.8.6-keyed sinuous svelte-v3.5.1-keyed vanillajs-keyed vue-v2.6.2-keyed)",
-    "bench:results": "(cd packages/bench/webdriver-ts && yarn results)"
+    "format:docs": "prettier --write '**/*.md'"
   },
   "repository": "luwes/sinuous",
   "keywords": [
