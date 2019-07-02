@@ -29,8 +29,6 @@ export function insertNodes(parent, node, end, target) {
   }
 }
 
-
-
 // Picked from
 // https://github.com/adamhaile/surplus/blob/master/src/runtime/content.ts#L368
 

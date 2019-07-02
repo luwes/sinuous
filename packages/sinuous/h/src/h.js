@@ -36,8 +36,12 @@ export function context(api) {
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
-            const marker = el.appendChild(document.createTextNode(''));
-            insert(h.subscribe, el, arg, marker);
+            insert(
+              h.subscribe,
+              el,
+              arg,
+              el.appendChild(document.createTextNode(''))
+            );
           } else {
             el.appendChild(arg);
           }
@@ -99,7 +103,6 @@ function createInsertAction(h, current = '') {
 
 export function parseNested(h, el, obj, callback) {
   for (let name in obj) {
-    const val = obj[name];
     // Create scope for every entry.
     const propAction = function(element, value) {
       if (typeof value === 'function') {
@@ -109,11 +112,17 @@ export function parseNested(h, el, obj, callback) {
           if (value.$t) {
             value.$t(element, propAction);
           } else {
-            const isEvent = name[0] === 'o' && name[1] === 'n';
             h.subscribe(() =>
               // Functions added as event handlers are not executed on render
               // unless they have an observable indicator.
-              callback(name, isEvent && !value.$o ? value : value(), h, element)
+              callback(
+                name,
+                name[0] === 'o' && name[1] === 'n' && !value.$o
+                  ? value
+                  : value(),
+                h,
+                element
+              )
             );
           }
         }
@@ -121,7 +130,7 @@ export function parseNested(h, el, obj, callback) {
         callback(name, value, h, element);
       }
     };
-    propAction(el, val);
+    propAction(el, obj[name]);
   }
 }
 
