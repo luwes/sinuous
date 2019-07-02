@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.10.1 - 2019-07-02
+
+### Changed
+
+- Removed specialized attribute `bindings`.
+- Removed specialized Capture syntax.
+- Used Sinuous's normalizeArray in `map`, save bytes.
+
 ## 0.10.0 - 2019-06-30 - BREAKING CHANGES
 
 ### Changed
