@@ -102,13 +102,13 @@ test('(un)registers an observable event handler', function(t) {
 //   t.end();
 // });
 
-test('can use bindings', function(t) {
-  h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
+// test('can use bindings', function(t) {
+//   h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
 
-  let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
-  t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
-  t.end();
-});
+//   let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
+//   t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
+//   t.end();
+// });
 
 test('sets styles', function(t) {
   let div = h('div', { style: { color: 'red' } });

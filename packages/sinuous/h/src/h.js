@@ -11,13 +11,6 @@ import { assign } from './utils.js';
  * @return {Function} `h` tag.
  */
 export function context(api) {
-  api = assign(
-    {
-      bindings: {}
-    },
-    api
-  );
-
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
     const multi = isMultiExpression(args);
@@ -151,8 +144,6 @@ export function parseKeyValue(name, value, h, el) {
     }
   } else if (name === 'attrs') {
     parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
-  } else if (name[0] === '$') {
-    h.bindings[name.slice(1)](el, value);
   } else {
     el[name] = value;
   }
