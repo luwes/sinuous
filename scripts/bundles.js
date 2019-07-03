@@ -80,20 +80,29 @@ export const fixtures = [
     global: 'sinuousHello',
     name: 'hello',
     input: 'fixtures/examples/hello/src/hello.js',
-    sourcemap: true
+    sourcemap: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   },
   {
     formats: [UMD],
     global: 'sinuousCounter',
     name: 'counter',
     input: 'fixtures/examples/counter/src/counter.js',
-    sourcemap: true
+    sourcemap: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   },
   {
     formats: [UMD],
     global: 'sinuousTodos',
     name: 'todos',
     input: 'fixtures/examples/todos/src/todos.js',
-    sourcemap: true
+    sourcemap: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   }
 ];

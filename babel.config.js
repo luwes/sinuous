@@ -13,7 +13,6 @@ module.exports = {
     ]
   ],
   plugins: [
-    ['sinuous/babel-plugin-htm'],
     ['@babel/plugin-transform-object-assign'],
     ['@babel/plugin-proposal-object-rest-spread', { 'loose': true }]
   ],

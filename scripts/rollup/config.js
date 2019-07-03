@@ -83,7 +83,7 @@ function getConfig(options) {
       }),
       nodeResolve(),
       commonjs(),
-      [UMD, IIFE].includes(format) && babel(),
+      [UMD, IIFE].includes(format) && babel(options.babel),
       [UMD, IIFE].includes(format) &&
         terser({
           warnings: true,
