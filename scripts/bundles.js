@@ -9,12 +9,13 @@ export const bundleFormats = {
 };
 
 export const bundles = [
+  // `htm` has to come before `babel-plugin-htm`
   {
     external: [],
-    formats: [ESM, CJS],
-    name: 'babel-plugin-htm',
-    input: 'packages/sinuous/babel-plugin-htm/index.mjs',
-    dest: 'packages/sinuous/babel-plugin-htm/dist'
+    formats: [ESM, UMD],
+    global: 'htm',
+    name: 'htm',
+    input: 'packages/sinuous/htm/src/index.js'
   },
   {
     external: ['sinuous'],
@@ -29,13 +30,6 @@ export const bundles = [
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js'
-  },
-  {
-    external: [],
-    formats: [ESM, UMD],
-    global: 'htm',
-    name: 'htm',
-    input: 'packages/sinuous/htm/src/index.mjs'
   },
   {
     external: ['sinuous'],
@@ -57,6 +51,12 @@ export const bundles = [
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'
+  },
+  {
+    external: [],
+    formats: [ESM, CJS],
+    name: 'babel-plugin-htm',
+    input: 'packages/sinuous/babel-plugin-htm/src/index.js'
   }
 ];
 
