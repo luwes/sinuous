@@ -78,7 +78,9 @@ function getConfig(options) {
       esModule: false
     },
     plugins: [
-      bundleSize(),
+      bundleSize({
+        columnWidth: 25
+      }),
       nodeResolve(),
       commonjs(),
       [UMD, IIFE].includes(format) && babel(),

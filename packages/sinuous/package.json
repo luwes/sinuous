@@ -10,6 +10,12 @@
     "h/dist",
     "h/src",
     "h/package.json",
+    "htm/dist",
+    "htm/src",
+    "htm/package.json",
+    "babel-plugin-htm/dist",
+    "babel-plugin-htm/src",
+    "babel-plugin-htm/package.json",
     "observable/dist",
     "observable/src",
     "observable/package.json",
@@ -20,9 +26,6 @@
     "template/src",
     "template/package.json"
   ],
-  "peerDependencies": {
-    "sinuous": ">=0.6.0"
-  },
   "keywords": [
     "functional",
     "reactive",

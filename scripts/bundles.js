@@ -10,6 +10,13 @@ export const bundleFormats = {
 
 export const bundles = [
   {
+    external: [],
+    formats: [ESM, CJS],
+    name: 'babel-plugin-htm',
+    input: 'packages/sinuous/babel-plugin-htm/index.mjs',
+    'dest': 'packages/sinuous/babel-plugin-htm/dist'
+  },
+  {
     external: ['sinuous'],
     formats: [ESM, UMD],
     global: 'observable',
@@ -22,6 +29,13 @@ export const bundles = [
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js'
+  },
+  {
+    external: [],
+    formats: [ESM, UMD],
+    global: 'htm',
+    name: 'htm',
+    input: 'packages/sinuous/htm/src/index.mjs'
   },
   {
     external: ['sinuous'],
@@ -38,7 +52,7 @@ export const bundles = [
     input: 'packages/sinuous/map/src/index.js'
   },
   {
-    external: ['sinuous/observable'],
+    external: ['sinuous/observable', 'sinuous/htm'],
     formats: [ESM, UMD],
     global: 'sinuous',
     name: 'sinuous',
