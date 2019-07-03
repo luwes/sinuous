@@ -1,0 +1,20 @@
+{
+  "name": "htm",
+  "version": "2.1.1",
+  "description": "The Tagged Template syntax for Virtual DOM. Only browser-compatible syntax.",
+  "main": "dist/htm.js",
+  "module": "dist/htm.esm.js",
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  },
+  "files": [
+    "dist",
+    "mini",
+    "src"
+  ],
+  "repository": "luwes/htm",
+  "author": "Jason Miller <jason@developit.ca>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/developit/htm"
+}
