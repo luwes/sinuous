@@ -1,3 +1,4 @@
+import './sinuous.js';
 import '../h/test/hyperscript.js';
 import '../h/test/insert.js';
 import '../h/test/insert-markers.js';
