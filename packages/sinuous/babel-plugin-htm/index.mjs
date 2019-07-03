@@ -136,6 +136,9 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
 	}
 
 	function h(tag, props, ...children) {
+    if (Array.isArray(tag)) {
+      return tag;
+    }
 		return { tag, props, children };
 	}
 
@@ -168,7 +171,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
 					const tree = treeify(statics, expr);
 					const node = !Array.isArray(tree)
 						? transform(tree, state)
-						: t.arrayExpression(tree.map(root => transform(root, state)));
+						: t.callExpression(pragma, [t.arrayExpression(tree.map(root => transform(root, state)))]);
 					path.replaceWith(node);
 				}
 			}

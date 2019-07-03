@@ -212,7 +212,7 @@ const getCache = USE_MAP ? getCacheMap : getCacheKeyed;
 
 const cached = function(statics) {
 	const res = evaluate(this, getCache(statics), arguments, []);
-	return res.length > 1 ? res : res[0];
+	return res.length > 1 ? this(res) : res[0];
 };
 
 export default MINI ? build : cached;
