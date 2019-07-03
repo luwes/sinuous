@@ -29,10 +29,7 @@ test('normalizeArray', function(t) {
   frag.appendChild(comment);
   const arr = [comment, el];
   const expected = [el, comment, comment, el, el];
-  t.deepEqual(
-    normalizeArray([], [frag, true, null, arr, false, el]),
-    expected
-  );
+  t.deepEqual(normalizeArray([], [frag, true, null, arr, false, el]), expected);
   t.assert(normalizeArray([], [99])[0].nodeType === 3);
   t.end();
 });
