@@ -14,7 +14,7 @@ export const bundles = [
     formats: [ESM, CJS],
     name: 'babel-plugin-htm',
     input: 'packages/sinuous/babel-plugin-htm/index.mjs',
-    'dest': 'packages/sinuous/babel-plugin-htm/dist'
+    dest: 'packages/sinuous/babel-plugin-htm/dist'
   },
   {
     external: ['sinuous'],
