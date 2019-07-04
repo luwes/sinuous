@@ -73,6 +73,7 @@ function getConfig(options) {
             `dist/${name}${formatOptions[format].ext}`
           ),
       name: global,
+      strict: false,
       legacy: true,
       freeze: false,
       esModule: false
@@ -86,7 +87,11 @@ function getConfig(options) {
       [UMD, IIFE].includes(format) && babel(options.babel),
       [UMD, IIFE].includes(format) &&
         terser({
+          sourcemap: true,
           warnings: true,
+          compress: {
+            passes: 10,
+          },
           mangle: {
             properties: {
               regex: /^_/
@@ -96,7 +101,7 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                $_flow: '__f'
+                // $_flow: '__f'
                 // $_observable: '__o',
                 // $_observables: '__o',
                 // $_children: '__c',
