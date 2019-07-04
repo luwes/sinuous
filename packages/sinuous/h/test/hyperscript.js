@@ -29,21 +29,21 @@ test('can use namespace in name', function(t) {
   t.end();
 });
 
-test('can use id selector', function(t) {
-  t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
-  t.end();
-});
+// test('can use id selector', function(t) {
+//   t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
+//   t.end();
+// });
 
-test('can use class selector', function(t) {
-  t.equal(h('div.panel').outerHTML, '<div class="panel"></div>');
-  t.end();
-});
+// test('can use class selector', function(t) {
+//   t.equal(h('div.panel').outerHTML, '<div class="panel"></div>');
+//   t.end();
+// });
 
-test('can default element types', function(t) {
-  t.equal(h('.panel').outerHTML, '<div class="panel"></div>');
-  t.equal(h('#frame').outerHTML, '<div id="frame"></div>');
-  t.end();
-});
+// test('can default element types', function(t) {
+//   t.equal(h('.panel').outerHTML, '<div class="panel"></div>');
+//   t.equal(h('#frame').outerHTML, '<div id="frame"></div>');
+//   t.end();
+// });
 
 test('can set properties', function(t) {
   let a = h('a', { href: 'http://google.com' });
@@ -160,11 +160,11 @@ test("boolean, number, get to-string'ed", function(t) {
   t.end();
 });
 
-test('unicode selectors', function(t) {
-  t.equal(h('.⛄').outerHTML, '<div class="⛄"></div>');
-  t.equal(h('span#⛄').outerHTML, '<span id="⛄"></span>');
-  t.end();
-});
+// test('unicode selectors', function(t) {
+//   t.equal(h('.⛄').outerHTML, '<div class="⛄"></div>');
+//   t.equal(h('span#⛄').outerHTML, '<span id="⛄"></span>');
+//   t.end();
+// });
 
 test('can use fragments', function(t) {
   const insertCat = () => 'cat';

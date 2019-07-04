@@ -23,7 +23,7 @@ export function context(api) {
         if (el) {
           el.appendChild(document.createTextNode(arg));
         } else {
-          el = parseClass(arg);
+          el = document.createElement(arg);
         }
       } else if (Array.isArray(arg)) {
         // Support Fragments
@@ -189,26 +189,4 @@ function handleEvent(h, el, name, value) {
 function eventProxy(e) {
   // eslint-disable-next-line
   return this._listeners[e.type](e);
-}
-
-export function parseClass(string) {
-  let el;
-  // Our minimal parser doesn’t understand escaping CSS special
-  // characters like `#`. Don’t use them. More reading:
-  // https://mathiasbynens.be/notes/css-escapes .
-  const m = string.split(/([.#]?[^\s#.]+)/);
-  if (m[1][0] === '.' || m[1][0] === '#') {
-    el = document.createElement('div');
-  }
-
-  for (let i = 0; i < m.length; i++) {
-    const v = m[i];
-    const s = v.slice(1);
-    if (!v) continue;
-    if (!el) el = document.createElement(v);
-    else if (v[0] === '.') el.classList.add(s);
-    else if (v[0] === '#') el.setAttribute('id', s);
-  }
-
-  return el;
 }
