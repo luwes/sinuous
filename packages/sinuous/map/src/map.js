@@ -63,7 +63,7 @@ export default function map(items, expr) {
     return parent;
   }
 
-  init._flow = true;
+  init.$f = true;
   return init;
 }
 
