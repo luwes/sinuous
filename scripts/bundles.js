@@ -79,7 +79,7 @@ export const fixtures = [
     formats: [UMD],
     global: 'sinuousHello',
     name: 'hello',
-    input: 'fixtures/examples/hello/src/hello.js',
+    input: 'site/content/examples/hello/src/hello.js',
     sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
@@ -89,7 +89,7 @@ export const fixtures = [
     formats: [UMD],
     global: 'sinuousCounter',
     name: 'counter',
-    input: 'fixtures/examples/counter/src/counter.js',
+    input: 'site/content/examples/counter/src/counter.js',
     sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
@@ -99,7 +99,7 @@ export const fixtures = [
     formats: [UMD],
     global: 'sinuousTodos',
     name: 'todos',
-    input: 'fixtures/examples/todos/src/todos.js',
+    input: 'site/content/examples/todos/src/todos.js',
     sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
