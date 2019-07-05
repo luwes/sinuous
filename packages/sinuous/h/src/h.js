@@ -67,16 +67,14 @@ export function context(api) {
           }
         } else {
           // Support Components
-          el = arg.apply(null, args.splice(0));
+          el = arg.apply(null, args.slice(1));
         }
       } else {
         el.appendChild(document.createTextNode('' + arg));
       }
     }
 
-    while (args.length) {
-      item(args.shift());
-    }
+    args.forEach(item);
     return el;
   }
 
@@ -95,9 +93,10 @@ export default context();
  * @param  {*} current
  * @return {Function}
  */
-function createInsertAction(h, current = '') {
+function createInsertAction(h, current) {
+  current = current || '';
   return (element, value) => {
-    current = insert(h.subscribe, element, value, null, current);
+    current = insert(h.subscribe, element, value, 0, current);
   };
 }
 

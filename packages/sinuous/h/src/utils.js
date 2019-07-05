@@ -31,24 +31,33 @@ export function normalizeArray(normalized, array) {
   return normalized;
 }
 
+/**
+ * Clear all nodes in the parent.
+ * @param  {Node} parent
+ * @param  {*} current
+ * @param  {Node} marker - This is the end node.
+ * @param  {Node} startNode - This is the start node.
+ */
 export function clearAll(parent, current, marker, startNode) {
-  if (!marker) return (parent.textContent = '');
-  if (Array.isArray(current)) {
-    current.forEach(node => {
-      parent.removeChild(node);
-    });
-  } else if (current != null && current != '') {
-    if (startNode) {
-      let node = marker.previousSibling;
-      let tmp;
-      while (node !== startNode) {
-        tmp = node.previousSibling;
+  if (marker) {
+    if (Array.isArray(current)) {
+      current.forEach(node => {
         parent.removeChild(node);
-        node = tmp;
+      });
+    } else if (current != null && current != '') {
+      if (startNode) {
+        let node = marker.previousSibling;
+        let tmp;
+        while (node !== startNode) {
+          tmp = node.previousSibling;
+          parent.removeChild(node);
+          node = tmp;
+        }
+      } else {
+        parent.removeChild(marker.previousSibling);
       }
-    } else {
-      parent.removeChild(marker.previousSibling);
     }
+  } else {
+    parent.textContent = '';
   }
-  return '';
 }

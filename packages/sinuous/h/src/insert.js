@@ -4,22 +4,23 @@ export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
 
   const t = typeof value;
-  if (t === 'string' || t === 'number') {
+  if (value == null || value === '' || t === 'boolean') {
+    current = clearAll(parent, current, marker);
+  } else if (t === 'string' || t === 'number') {
     if (t === 'number') {
       value = '' + value;
     }
     if (marker) {
-      const startNode = (marker && marker.previousSibling) || parent.lastChild;
-      if (value === '') {
-        clearAll(parent, current, marker);
-      } else if (current !== '' && typeof current === 'string') {
-        startNode.data = value;
+      if (current !== '' && typeof current === 'string') {
+        (marker.previousSibling || parent.lastChild).data = value;
       } else {
-        const node = document.createTextNode(value);
         if (current !== '' && current != null) {
-          parent.replaceChild(node, startNode);
+          parent.replaceChild(
+            document.createTextNode(value),
+            marker.previousSibling || parent.lastChild
+          );
         } else {
-          parent.insertBefore(node, marker);
+          parent.insertBefore(document.createTextNode(value), marker);
         }
       }
       current = value;
@@ -30,15 +31,13 @@ export function insert(subscribe, parent, value, marker, current) {
         current = parent.textContent = value;
       }
     }
-  } else if (value == null || t === 'boolean') {
-    current = clearAll(parent, current, marker);
   } else if (t === 'function') {
     subscribe(function() {
       current = insert(subscribe, parent, value(), marker, current);
     });
   } else if (value instanceof Node) {
     if (Array.isArray(current)) {
-      if (current.length === 0) {
+      if (!current.length) {
         parent.insertBefore(value, marker);
       } else if (current.length === 1) {
         parent.replaceChild(value, current[0]);
