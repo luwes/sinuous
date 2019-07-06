@@ -2,6 +2,30 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.11.1 - 2019-07-04
+
+### Added
+
+- Added minified browser version `.min.js`.
+
+### Removed
+
+- Removed shorthand tag parser from hyperscript.
+- Removed specialized attribute `ref`.
+No need w/ Sinuous since it returns plain elements.
+- Removed unneeded api on `h` tag.
+
+### Changed
+
+- Optimized rollup/terser config for smaller bundle.
+
+## 0.11.0 - 2019-07-03
+
+### Added
+
+- Added `sinuous/htm` and `sinuous/babel-plugin-htm` supporting fragments.
+- Added easy import `import { html } from 'sinuous';`
+
 ## 0.10.1 - 2019-07-02
 
 ### Changed
