@@ -12,42 +12,42 @@ export const bundles = [
   // `htm` has to come before `babel-plugin-htm`
   {
     external: [],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'htm',
     name: 'htm',
     input: 'packages/sinuous/htm/src/index.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'observable',
     name: 'observable',
     input: 'packages/sinuous/observable/src/observable.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'template',
     name: 'template',
     input: 'packages/sinuous/template/src/template.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'map',
     name: 'map',
     input: 'packages/sinuous/map/src/index.js'
   },
   {
     external: ['sinuous/observable', 'sinuous/htm'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'
