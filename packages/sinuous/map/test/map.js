@@ -53,7 +53,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return h('div', { ref: el => (div = el) }, map(list, item => item));
+      return (div = h('div', map(list, item => item)));
     });
 
   function apply(t, array) {
@@ -248,11 +248,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return h(
-        'div',
-        { ref: el => (div = el) },
-        map(list, item => h([item, item]))
-      );
+      return (div = h('div', map(list, item => h([item, item]))));
     });
 
   function apply(t, array) {

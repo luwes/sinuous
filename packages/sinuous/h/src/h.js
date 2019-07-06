@@ -105,25 +105,19 @@ export function parseNested(h, el, obj, callback) {
     // Create scope for every entry.
     const propAction = function(element, value) {
       if (typeof value === 'function') {
-        if (name === 'ref') {
-          value(el);
+        if (value.$t) {
+          value.$t(element, propAction);
         } else {
-          if (value.$t) {
-            value.$t(element, propAction);
-          } else {
-            h.subscribe(() =>
-              // Functions added as event handlers are not executed on render
-              // unless they have an observable indicator.
-              callback(
-                name,
-                name[0] === 'o' && name[1] === 'n' && !value.$o
-                  ? value
-                  : value(),
-                h,
-                element
-              )
-            );
-          }
+          h.subscribe(() =>
+            // Functions added as event handlers are not executed on render
+            // unless they have an observable indicator.
+            callback(
+              name,
+              name[0] === 'o' && name[1] === 'n' && !value.$o ? value : value(),
+              h,
+              element
+            )
+          );
         }
       } else {
         callback(name, value, h, element);

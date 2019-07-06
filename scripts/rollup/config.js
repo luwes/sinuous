@@ -90,7 +90,7 @@ function getConfig(options) {
           sourcemap: true,
           warnings: true,
           compress: {
-            passes: 10,
+            passes: 10
           },
           mangle: {
             properties: {

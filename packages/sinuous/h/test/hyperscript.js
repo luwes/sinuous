@@ -147,12 +147,12 @@ test('sets aria attributes', function(t) {
   t.end();
 });
 
-test('sets refs', function(t) {
-  let ref;
-  let div = h('div', { ref: el => (ref = el) });
-  t.equal(div, ref);
-  t.end();
-});
+// test('sets refs', function(t) {
+//   let ref;
+//   let div = h('div', { ref: el => (ref = el) });
+//   t.equal(div, ref);
+//   t.end();
+// });
 
 test("boolean, number, get to-string'ed", function(t) {
   let e = h('p', true, false, 4);
