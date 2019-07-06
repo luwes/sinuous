@@ -54,6 +54,7 @@ export function context(api) {
           } else if (arg.$t) {
             const insertAction = createInsertAction(api, '');
             insertAction(el, '');
+            // Record insert action in template.
             arg.$t(el, insertAction);
           } else {
             insert(api.subscribe, el, arg, marker);
@@ -100,6 +101,7 @@ export function parseNested(api, el, obj, callback) {
     const propAction = function(element, value) {
       if (typeof value === 'function') {
         if (value.$t) {
+          // Record property action in template.
           value.$t(element, propAction);
         } else {
           api.subscribe(() =>

@@ -5,15 +5,20 @@ export function insert(subscribe, parent, value, marker, current) {
 
   const t = typeof value;
   if (value == null || value === '' || t === 'boolean') {
-    current = clearAll(parent, current, marker);
+    clearAll(parent, current, marker);
+    current = '';
   } else if (t === 'string' || t === 'number') {
     if (t === 'number') {
       value = '' + value;
     }
-    if (marker) {
-      if (current !== '' && typeof current === 'string') {
+    if (current !== '' && typeof current === 'string') {
+      if (marker) {
         (marker.previousSibling || parent.lastChild).data = value;
       } else {
+        parent.firstChild.data = value;
+      }
+    } else {
+      if (marker) {
         if (current !== '' && current != null) {
           parent.replaceChild(
             document.createTextNode(value),
@@ -22,15 +27,11 @@ export function insert(subscribe, parent, value, marker, current) {
         } else {
           parent.insertBefore(document.createTextNode(value), marker);
         }
-      }
-      current = value;
-    } else {
-      if (current !== '' && typeof current === 'string') {
-        current = parent.firstChild.data = value;
       } else {
-        current = parent.textContent = value;
+        parent.textContent = value;
       }
     }
+    current = value;
   } else if (t === 'function') {
     subscribe(function() {
       current = insert(subscribe, parent, value(), marker, current);
@@ -55,15 +56,16 @@ export function insert(subscribe, parent, value, marker, current) {
     }
     current = value;
   } else if (Array.isArray(value)) {
-    const array = normalizeArray([], value);
+    value = normalizeArray([], value);
     clearAll(parent, current, marker);
-    array.forEach(node => {
+    value.forEach(node => {
       parent.insertBefore(node, marker);
     });
-    current = array;
+    current = value;
   } else {
+    // EC1: Expected node, string or array of same
     // eslint-disable-next-line
-    throw new Error('Expected node, string or array of same.');
+    throw Error('EC1');
   }
 
   return current;
