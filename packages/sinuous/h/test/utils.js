@@ -1,25 +1,5 @@
 import test from 'tape';
-import { assign, normalizeArray, clearAll } from '../src/utils.js';
-
-test('assign', function(t) {
-  const target = {
-    a: 1,
-    b: 2
-  };
-  const source = {
-    c: 3
-  };
-  const expected = {
-    a: 1,
-    b: 2,
-    c: 3
-  };
-
-  const result = assign(target, source);
-  t.equal(result, target);
-  t.deepEqual(result, expected);
-  t.end();
-});
+import { normalizeArray, clearAll } from '../src/utils.js';
 
 test('normalizeArray', function(t) {
   const frag = document.createDocumentFragment();

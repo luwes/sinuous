@@ -1,8 +1,9 @@
 import test from 'tape';
-import { root } from 'sinuous/observable';
+import * as api from 'sinuous/observable';
 import { o, h } from 'sinuous';
 import map from 'sinuous/map';
 
+const root = api.root;
 let dispose;
 
 (function() {
@@ -11,11 +12,11 @@ let dispose;
   const list = o([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
   const div = document.createElement('div');
   div.appendChild(document.createElement('i'));
-  const beforeNode = div.appendChild(document.createElement('b'));
+  div.appendChild(document.createElement('b'));
   const afterNode = div.appendChild(document.createTextNode(''));
   root(d => {
     dispose = d;
-    return map(list, item => item)(h, div, afterNode);
+    return map(list, item => item)(api, div, afterNode);
   });
 
   test('create', t => {
@@ -151,7 +152,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return map(list, item => item)(h, parent, afterNode);
+      return map(list, item => item)(api, parent, afterNode);
     });
 
   function apply(t, array) {

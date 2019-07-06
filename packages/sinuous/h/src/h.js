@@ -1,7 +1,6 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
 import { EMPTY_ARR } from './constants.js';
 import { insert } from './insert.js';
-import { assign } from './utils.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
@@ -28,16 +27,12 @@ export function context(api) {
       } else if (Array.isArray(arg)) {
         // Support Fragments
         if (!el) el = document.createDocumentFragment();
-        if (multi) {
-          arg.forEach(item);
-        } else {
-          insert(h.subscribe, el, arg);
-        }
+        arg.forEach(item);
       } else if (arg instanceof Node) {
         if (el) {
           if (multi) {
             insert(
-              h.subscribe,
+              api.subscribe,
               el,
               arg,
               el.appendChild(document.createTextNode(''))
@@ -50,20 +45,18 @@ export function context(api) {
           el = arg;
         }
       } else if (type === 'object') {
-        parseNested(h, el, arg, parseKeyValue);
+        parseNested(api, el, arg, parseKeyValue);
       } else if (type === 'function') {
         if (el) {
           const marker = multi && el.appendChild(document.createTextNode(''));
           if (arg.$f) {
-            arg(h, el, marker);
+            arg(api, el, marker);
+          } else if (arg.$t) {
+            const insertAction = createInsertAction(api, '');
+            insertAction(el, '');
+            arg.$t(el, insertAction);
           } else {
-            if (arg.$t) {
-              const insertAction = createInsertAction(h);
-              insertAction(el, '');
-              arg.$t(el, insertAction);
-            } else {
-              insert(h.subscribe, el, arg, marker);
-            }
+            insert(api.subscribe, el, arg, marker);
           }
         } else {
           // Support Components
@@ -80,7 +73,7 @@ export function context(api) {
     return el;
   }
 
-  return assign(h, api);
+  return h;
 }
 
 export default context();
@@ -91,18 +84,17 @@ export default context();
  * Subsequent `insert`'s of strings can be optimized by setting
  * `Text.data` instead of Element.textContent.
  *
- * @param  {Function} h
+ * @param  {Function} api
  * @param  {*} current
  * @return {Function}
  */
-function createInsertAction(h, current) {
-  current = current || '';
+function createInsertAction(api, current) {
   return (element, value) => {
-    current = insert(h.subscribe, element, value, 0, current);
+    current = insert(api.subscribe, element, value, 0, current);
   };
 }
 
-export function parseNested(h, el, obj, callback) {
+export function parseNested(api, el, obj, callback) {
   for (let name in obj) {
     // Create scope for every entry.
     const propAction = function(element, value) {
@@ -110,26 +102,26 @@ export function parseNested(h, el, obj, callback) {
         if (value.$t) {
           value.$t(element, propAction);
         } else {
-          h.subscribe(() =>
+          api.subscribe(() =>
             // Functions added as event handlers are not executed on render
             // unless they have an observable indicator.
             callback(
               name,
               name[0] === 'o' && name[1] === 'n' && !value.$o ? value : value(),
-              h,
+              api,
               element
             )
           );
         }
       } else {
-        callback(name, value, h, element);
+        callback(name, value, api, element);
       }
     };
     propAction(el, obj[name]);
   }
 }
 
-export function parseKeyValue(name, value, h, el) {
+export function parseKeyValue(name, value, api, el) {
   let prefix;
   if (name === 'class' || name === 'className') {
     el.className = value;
@@ -139,15 +131,15 @@ export function parseKeyValue(name, value, h, el) {
   ) {
     el.setAttribute(name, value);
   } else if (name[0] === 'o' && name[1] === 'n') {
-    handleEvent(h, el, name, value);
+    handleEvent(api, el, name, value);
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      parseNested(h, el, value, (n, v) => el.style.setProperty(n, v));
+      parseNested(api, el, value, (n, v) => el.style.setProperty(n, v));
     }
   } else if (name === 'attrs') {
-    parseNested(h, el, value, (n, v) => el.setAttribute(n, v));
+    parseNested(api, el, value, (n, v) => el.setAttribute(n, v));
   } else {
     el[name] = value;
   }
@@ -159,11 +151,11 @@ export function isMultiExpression(item) {
     : typeof item === 'function';
 }
 
-function handleEvent(h, el, name, value) {
+function handleEvent(api, el, name, value) {
   const kLower = name.toLowerCase();
   name = (kLower in el ? kLower : name).slice(2);
 
-  const removeListener = h.cleanup(() =>
+  const removeListener = api.cleanup(() =>
     el.removeEventListener(name, eventProxy)
   );
 
