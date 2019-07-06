@@ -1,6 +1,6 @@
 # Sinuous Observable
 
-![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.js?compression=gzip&label=gzip&style=flat-square)
+![Badge size](http://img.badgesize.io/https://unpkg.com/sinuous@latest/observable/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous/observable.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
