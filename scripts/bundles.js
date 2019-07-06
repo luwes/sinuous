@@ -76,31 +76,28 @@ export const fixtures = [
   //   sourcemap: true
   // },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousHello',
     name: 'hello',
     input: 'site/content/examples/hello/src/hello.js',
-    sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
   },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousCounter',
     name: 'counter',
     input: 'site/content/examples/counter/src/counter.js',
-    sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
   },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousTodos',
     name: 'todos',
     input: 'site/content/examples/todos/src/todos.js',
-    sourcemap: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
