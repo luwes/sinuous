@@ -67,14 +67,16 @@ export function context(api) {
           }
         } else {
           // Support Components
-          el = arg.apply(null, args.slice(1));
+          el = arg.apply(null, args.splice(0));
         }
       } else {
         el.appendChild(document.createTextNode('' + arg));
       }
     }
 
-    args.forEach(item);
+    while (args.length) {
+      item(args.shift());
+    }
     return el;
   }
 
