@@ -110,7 +110,7 @@ function getConfig(options) {
             }
           }
         }),
-      sourcemap && gzip()
+      options.gzip && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined

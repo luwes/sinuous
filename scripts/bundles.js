@@ -80,6 +80,7 @@ export const fixtures = [
     global: 'sinuousHello',
     name: 'hello',
     input: 'site/content/examples/hello/src/hello.js',
+    gzip: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
@@ -89,6 +90,7 @@ export const fixtures = [
     global: 'sinuousCounter',
     name: 'counter',
     input: 'site/content/examples/counter/src/counter.js',
+    gzip: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
@@ -98,6 +100,7 @@ export const fixtures = [
     global: 'sinuousTodos',
     name: 'todos',
     input: 'site/content/examples/todos/src/todos.js',
+    gzip: true,
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
