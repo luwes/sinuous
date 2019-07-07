@@ -81,6 +81,11 @@ function observable(value) {
   return data;
 }
 
+export {
+  observable,
+  observable as o
+};
+
 /**
  * Creates a new computation which runs when defined and automatically re-runs
  * when any of the used observable's values are set.
@@ -168,5 +173,3 @@ function resetUpdate(update) {
   update._children = [];
   update._cleanups = [];
 }
-
-export default observable;

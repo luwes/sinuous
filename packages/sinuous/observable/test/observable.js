@@ -1,6 +1,7 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import o, {
+import {
+  o,
   subscribe,
   unsubscribe,
   cleanup,

@@ -77,8 +77,6 @@ export function context(api) {
   return h;
 }
 
-export default context();
-
 /**
  * Create an insert action for a `template` tag.
  *

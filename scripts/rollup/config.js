@@ -2,7 +2,6 @@ import path from 'path';
 import * as R from 'ramda';
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
@@ -55,7 +54,7 @@ function shouldSkipBundle(bundleName, bundleType) {
 }
 
 function getConfig(options) {
-  const { name, global, input, dest, format, external, sourcemap } = options;
+  const { name, input, dest, format, external, sourcemap } = options;
   return {
     input,
     external,
@@ -72,7 +71,8 @@ function getConfig(options) {
             '..',
             `dist/${name}${formatOptions[format].ext}`
           ),
-      name: global,
+      name: options.global,
+      exports: options.exports,
       strict: false,
       legacy: true,
       freeze: false,
@@ -83,7 +83,6 @@ function getConfig(options) {
         columnWidth: 25
       }),
       nodeResolve(),
-      commonjs(),
       [UMD, IIFE].includes(format) && babel(options.babel),
       [UMD, IIFE].includes(format) &&
         terser({
@@ -115,9 +114,11 @@ function getConfig(options) {
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
       if (
-        ['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION', 'MISSING_GLOBAL_NAME'].includes(
-          warning.code
-        )
+        [
+          'THIS_IS_UNDEFINED',
+          'UNKNOWN_OPTION',
+          'MISSING_GLOBAL_NAME'
+        ].includes(warning.code)
       )
         return;
 
