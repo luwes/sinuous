@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.11.2 - 2019-07-07
+
+### Changed
+
+- Fixed mixed exports
+It's not recommended to have a default AND named exports
+
+### Removed
+
+- Removed multi expressions
+
 ## 0.11.1 - 2019-07-04
 
 ### Added
