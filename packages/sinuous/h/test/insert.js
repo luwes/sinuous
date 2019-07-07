@@ -187,29 +187,6 @@ test('can insert nested arrays', t => {
   t.end();
 });
 
-test('can update arrays of nodes with node', t => {
-  const parent = container.cloneNode(true);
-
-  let current = insert(subscribe, parent, []);
-  t.equal(parent.innerHTML, '', 'empty array');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-
-  current = insert(subscribe, parent, [h('h1')]);
-  t.equal(parent.innerHTML, '<h1></h1>', 'array of node');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-
-  current = insert(subscribe, parent, [h('h1'), h('h1'), h('h1')]);
-  t.equal(parent.innerHTML, '<h1></h1><h1></h1><h1></h1>', 'array of nodes');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-  t.end();
-});
-
 test('can update text with node', t => {
   const parent = container.cloneNode(true);
 
@@ -233,9 +210,10 @@ test('can update array with text with marker', t => {
   t.end();
 });
 
-test('throws on unsupported value', t => {
+test('coerces other values to string nodes', t => {
   const parent = container.cloneNode(true);
-  t.throws(() => insert(subscribe, parent, {}));
+  insert(subscribe, parent, {});
+  t.equal(parent.innerHTML, '[object Object]');
   t.end();
 });
 
