@@ -2,12 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.11.3 - 2019-07-07
+
+### Removed
+
+- Removed array to node support in `insert`. Save some bytes.
+
 ## 0.11.2 - 2019-07-07
 
 ### Changed
 
 - Fixed mixed exports
-It's not recommended to have a default AND named exports
+  It's not recommended to have a default AND named exports
 
 ### Removed
 
@@ -23,7 +29,7 @@ It's not recommended to have a default AND named exports
 
 - Removed shorthand tag parser from hyperscript.
 - Removed specialized attribute `ref`.
-No need w/ Sinuous since it returns plain elements.
+  No need w/ Sinuous since it returns plain elements.
 - Removed unneeded api on `h` tag.
 
 ### Changed

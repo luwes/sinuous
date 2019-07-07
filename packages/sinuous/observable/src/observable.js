@@ -81,10 +81,7 @@ function observable(value) {
   return data;
 }
 
-export {
-  observable,
-  observable as o
-};
+export { observable, observable as o };
 
 /**
  * Creates a new computation which runs when defined and automatically re-runs

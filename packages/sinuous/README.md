@@ -1,7 +1,7 @@
 # <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="36" alt="Sinuous" /></a>
 
 [![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
-![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous@latest/dist/sinuous.min.js?compression=gzip&label=gzip&style=flat-square)
+![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous.min.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
@@ -19,8 +19,8 @@ It was built with these ideas in mind.
 
 ### Add-ons
 
-| Size                                                                                                                                          | Name                                                  | Description           |
-| --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| Size                                                                                                                                              | Name                                                  | Description           |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/map/dist/map.min.js?compression=gzip&label=gzip&style=flat-square&v=1)           | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/template/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/observable/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
@@ -32,7 +32,7 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
 
-### Counter Example (_1.6kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+### Counter Example (_1.52kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
 ```js
 import { o, h } from 'sinuous';

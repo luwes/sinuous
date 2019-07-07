@@ -1779,7 +1779,7 @@ command-line-usage@^4.1.0:
     table-layout "^0.4.2"
     typical "^2.6.1"
 
-commander@^2.19.0, commander@~2.20.0:
+commander@^2.20.0, commander@~2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
@@ -2523,10 +2523,10 @@ eslint-plugin-import@^2.18.0:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jsdoc@^11.2.1:
-  version "11.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-11.2.1.tgz#ac757d292bc33d58488e7fbd6ff1b8612cf70a5e"
-  integrity sha512-Cvt9+E1A8Xjy0BM1v3LF9mi5jb1Ax6nKkWdJ5sicfdMO/utu5hXOSS6p/cuOinaVFzz1/n560z4BGGb99eVC2g==
+eslint-plugin-jsdoc@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-12.0.0.tgz#a0b089d4652f353c5f8654883ccd715b01f85012"
+  integrity sha512-mhWp7AFA9rgyr0RGfjHEl/nIBMlm/IqZ2DiWsRHZEjaS22XtYElxGp3G/7vhDENmUCckX35rQGAph/fUlXHS7w==
   dependencies:
     comment-parser "^0.5.5"
     debug "^4.1.1"
@@ -5555,16 +5555,16 @@ rollup-plugin-size@^0.0.1:
     minimatch "^3.0.4"
     pretty-bytes "^5.1.0"
 
-rollup-plugin-terser@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-5.1.0.tgz#82e637613d5af6c85ac4319b508b1c065d64075c"
-  integrity sha512-tvJweguo+f9T1SBcSmEMaArCUM07mIg61ArqPj3Fty9OdwTLCxBUBdxS3e1cU68Z1lXf52JBhbt3yRuQoHLtQg==
+rollup-plugin-terser@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-5.1.1.tgz#e9d2545ec8d467f96ba99b9216d2285aad8d5b66"
+  integrity sha512-McIMCDEY8EU6Y839C09UopeRR56wXHGdvKKjlfiZG/GrP6wvZQ62u2ko/Xh1MNH2M9WDL+obAAHySljIZYCuPQ==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     jest-worker "^24.6.0"
     rollup-pluginutils "^2.8.1"
     serialize-javascript "^1.7.0"
-    terser "^4.0.0"
+    terser "^4.1.0"
 
 rollup-pluginutils@^2.0.1:
   version "2.7.1"
@@ -5869,7 +5869,7 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@~0.5.10:
+source-map-support@~0.5.12:
   version "0.5.12"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.12.tgz#b4f3b10d51857a5af0138d3ce8003b201613d599"
   integrity sha512-4h2Pbvyy15EE02G+JOZpUCmqWJuqrs+sEkzewTm++BPi7Hvn/HwcqLAcNxYAyI0x13CpPPn+kMjl+hplXMHITQ==
@@ -6339,14 +6339,14 @@ temp-path@^1.0.0:
   resolved "https://registry.yarnpkg.com/temp-path/-/temp-path-1.0.0.tgz#24b1543973ab442896d9ad367dd9cbdbfafe918b"
   integrity sha1-JLFUOXOrRCiW2a02fdnL2/r+kYs=
 
-terser@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-4.0.0.tgz#ef356f6f359a963e2cc675517f21c1c382877374"
-  integrity sha512-dOapGTU0hETFl1tCo4t56FN+2jffoKyER9qBGoUFyZ6y7WLoKT0bF+lAYi6B6YsILcGF3q1C2FBh8QcKSCgkgA==
+terser@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-4.1.0.tgz#fe949a2189345b2f1789f2bafc6c3b056dab16ed"
+  integrity sha512-O2MzVShUr/B+bxTh83ycpDR+Ocesg5qLR8kphWApRbWCkSnfKq1YPmydnVNfsJuJKHvzSgDNqFq4cr1O36oQ2A==
   dependencies:
-    commander "^2.19.0"
+    commander "^2.20.0"
     source-map "~0.6.1"
-    source-map-support "~0.5.10"
+    source-map-support "~0.5.12"
 
 test-value@^1.0.1:
   version "1.1.0"
