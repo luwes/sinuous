@@ -1,6 +1,6 @@
 import test from 'tape';
 import { subscribe } from 'sinuous/observable';
-import { h } from 'sinuous';
+import { o, h } from 'sinuous';
 import { insert } from '../src/insert.js';
 
 const insertValue = val => {
@@ -236,5 +236,32 @@ test('can update array with text with marker', t => {
 test('throws on unsupported value', t => {
   const parent = container.cloneNode(true);
   t.throws(() => insert(subscribe, parent, {}));
+  t.end();
+});
+
+test('can update array with text and observable with marker', t => {
+  const parent = container.cloneNode(true);
+  const marker = parent.appendChild(document.createTextNode(''));
+
+  const reactive = o('reactive');
+  const dynamic = o(99);
+
+  let current = insert(subscribe, parent, h('h1', reactive, '⛄️', dynamic), marker);
+  t.equal(parent.innerHTML, '<h1>reactive⛄️99</h1>');
+
+  dynamic(77);
+  t.equal(parent.innerHTML, '<h1>reactive⛄️77</h1>');
+
+  reactive(1);
+  t.equal(parent.innerHTML, '<h1>1⛄️77</h1>');
+
+  dynamic('');
+  t.equal(parent.innerHTML, '<h1>1⛄️</h1>');
+
+  reactive('');
+  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
+
+  insert(subscribe, parent, '⛄️', marker, current);
+  t.equal(parent.innerHTML, '⛄️');
   t.end();
 });

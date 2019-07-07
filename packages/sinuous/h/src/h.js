@@ -12,7 +12,6 @@ import { insert } from './insert.js';
 export function context(api) {
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
-    const multi = isMultiExpression(args);
     let el;
 
     function item(arg) {
@@ -30,16 +29,7 @@ export function context(api) {
         arg.forEach(item);
       } else if (arg instanceof Node) {
         if (el) {
-          if (multi) {
-            insert(
-              api.subscribe,
-              el,
-              arg,
-              el.appendChild(document.createTextNode(''))
-            );
-          } else {
-            el.appendChild(arg);
-          }
+          el.appendChild(arg);
         } else {
           // Support updates
           el = arg;
@@ -48,8 +38,9 @@ export function context(api) {
         parseNested(api, el, arg, parseKeyValue);
       } else if (type === 'function') {
         if (el) {
-          const marker = multi && el.appendChild(document.createTextNode(''));
+          const marker = el.appendChild(document.createTextNode(''));
           if (arg.$f) {
+            // Support flow control
             arg(api, el, marker);
           } else if (arg.$t) {
             const insertAction = createInsertAction(api, '');
@@ -89,7 +80,7 @@ export function context(api) {
  */
 function createInsertAction(api, current) {
   return (element, value) => {
-    current = insert(api.subscribe, element, value, 0, current);
+    current = insert(api.subscribe, element, value, null, current);
   };
 }
 
@@ -143,12 +134,6 @@ export function parseKeyValue(name, value, api, el) {
   } else {
     el[name] = value;
   }
-}
-
-export function isMultiExpression(item) {
-  return Array.isArray(item)
-    ? item.some(isMultiExpression)
-    : typeof item === 'function';
 }
 
 function handleEvent(api, el, name, value) {
