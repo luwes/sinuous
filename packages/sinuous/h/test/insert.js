@@ -210,13 +210,6 @@ test('can update array with text with marker', t => {
   t.end();
 });
 
-test('coerces other values to string nodes', t => {
-  const parent = container.cloneNode(true);
-  insert(subscribe, parent, {});
-  t.equal(parent.innerHTML, '[object Object]');
-  t.end();
-});
-
 test('can update array with text and observable with marker', t => {
   const parent = container.cloneNode(true);
   const marker = parent.appendChild(document.createTextNode(''));

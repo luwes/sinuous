@@ -4,31 +4,10 @@ export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
 
   const t = typeof value;
-  if (value == null || value === '' || value === true || value === false) {
+  if (value == null || value === '' || value === false || value === true) {
     clearAll(parent, current, marker);
     current = '';
-  } else if (t === 'function') {
-    subscribe(function() {
-      current = insert(subscribe, parent, value(), marker, current);
-    });
-  } else if (value instanceof Node) {
-    if (current == null || current === '') {
-      parent.insertBefore(value, marker);
-    } else {
-      parent.replaceChild(
-        value,
-        (marker && marker.previousSibling) || parent.firstChild
-      );
-    }
-    current = value;
-  } else if (Array.isArray(value)) {
-    value = normalizeArray([], value);
-    clearAll(parent, current, marker);
-    value.forEach(node => {
-      parent.insertBefore(node, marker);
-    });
-    current = value;
-  } else {
+  } else if (t === 'string' || t === 'number') {
     if (t !== 'string') {
       value = '' + value;
     }
@@ -52,6 +31,27 @@ export function insert(subscribe, parent, value, marker, current) {
         parent.textContent = value;
       }
     }
+    current = value;
+  } else if (t === 'function') {
+    subscribe(function() {
+      current = insert(subscribe, parent, value(), marker, current);
+    });
+  } else if (value instanceof Node) {
+    if (current == null || current === '') {
+      parent.insertBefore(value, marker);
+    } else {
+      parent.replaceChild(
+        value,
+        (marker && marker.previousSibling) || parent.firstChild
+      );
+    }
+    current = value;
+  } else if (Array.isArray(value)) {
+    value = normalizeArray([], value);
+    clearAll(parent, current, marker);
+    value.forEach(node => {
+      parent.insertBefore(node, marker);
+    });
     current = value;
   }
 

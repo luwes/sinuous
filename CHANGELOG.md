@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.11.4 - 2019-07-07
+
+### Changed
+
+- Prioritized string and numeric values for `insert`.
+
 ## 0.11.3 - 2019-07-07
 
 ### Removed

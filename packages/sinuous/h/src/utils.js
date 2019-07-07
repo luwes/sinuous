@@ -9,7 +9,7 @@ export function normalizeArray(normalized, array) {
         normalized.push(item);
       }
       // matches null, undefined, true or false
-    } else if (item == null || item === true || item === false) {
+    } else if (item == null || item === false || item === true) {
       // skip
     } else if (Array.isArray(item)) {
       normalizeArray(normalized, item);
