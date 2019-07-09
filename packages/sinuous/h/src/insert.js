@@ -1,4 +1,7 @@
-import { clearAll, normalizeArray } from './utils.js';
+import { GROUPING } from './constants.js';
+import { clearAll } from './utils.js';
+
+let groupCounter = 0;
 
 export function insert(subscribe, parent, value, marker, current) {
   if (value === current) return current;
@@ -7,28 +10,21 @@ export function insert(subscribe, parent, value, marker, current) {
   if (value == null || value === '' || value === false || value === true) {
     clearAll(parent, current, marker);
     current = '';
-  } else if (t === 'string' || t === 'number') {
+  } else if (typeof current === 'string' && (t === 'string' || t === 'number')) {
     if (t !== 'string') {
-      value = '' + value;
+      value += '';
     }
-    if (current !== '' && typeof current === 'string') {
+    if (current === '') {
+      if (marker) {
+        parent.insertBefore(document.createTextNode(value), marker);
+      } else {
+        parent.textContent = value;
+      }
+    } else {
       if (marker) {
         (marker.previousSibling || parent.lastChild).data = value;
       } else {
         parent.firstChild.data = value;
-      }
-    } else {
-      if (marker) {
-        if (current !== '' && current != null) {
-          parent.replaceChild(
-            document.createTextNode(value),
-            marker.previousSibling || parent.lastChild
-          );
-        } else {
-          parent.insertBefore(document.createTextNode(value), marker);
-        }
-      } else {
-        parent.textContent = value;
       }
     }
     current = value;
@@ -36,22 +32,26 @@ export function insert(subscribe, parent, value, marker, current) {
     subscribe(function() {
       current = insert(subscribe, parent, value(), marker, current);
     });
-  } else if (value instanceof Node) {
-    if (current == null || current === '') {
+  } else {
+    clearAll(parent, current, marker);
+
+    let mark;
+    if (!(value instanceof Node)) {
+      value = document.createTextNode('' + value);
+    } else if (
+      value.nodeType === 11 &&
+      (mark = value.firstChild) &&
+      mark !== value.lastChild
+    ) {
+      mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
+    }
+
+    if (marker) {
       parent.insertBefore(value, marker);
     } else {
-      parent.replaceChild(
-        value,
-        (marker && marker.previousSibling) || parent.firstChild
-      );
+      parent.appendChild(value);
     }
-    current = value;
-  } else if (Array.isArray(value)) {
-    value = normalizeArray([], value);
-    clearAll(parent, current, marker);
-    value.forEach(node => {
-      parent.insertBefore(node, marker);
-    });
+
     current = value;
   }
 

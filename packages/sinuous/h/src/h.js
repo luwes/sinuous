@@ -137,8 +137,7 @@ export function parseKeyValue(name, value, api, el) {
 }
 
 function handleEvent(api, el, name, value) {
-  const kLower = name.toLowerCase();
-  name = (kLower in el ? kLower : name).slice(2);
+  name = name.slice(2);
 
   const removeListener = api.cleanup(() =>
     el.removeEventListener(name, eventProxy)

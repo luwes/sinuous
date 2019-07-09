@@ -53,34 +53,6 @@ test('inserts nothing for true', t => {
   t.end();
 });
 
-test('inserts nothing for null in array', t => {
-  const res = insertValue(['a', null, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
-test('inserts nothing for undefined in array', t => {
-  const res = insertValue(['a', undefined, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
-test('inserts nothing for false in array', t => {
-  const res = insertValue(['a', false, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
-test('inserts nothing for true in array', t => {
-  const res = insertValue(['a', true, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
 test('can insert strings', t => {
   let res = insertValue('foo');
   t.equal(res.innerHTML, 'beforefooafter');
@@ -107,71 +79,5 @@ test('can re-insert a node, thereby moving it', t => {
 
   t.equal(first.innerHTML, 'beforeafter');
   t.equal(second.innerHTML, 'before<span>foo</span>after');
-  t.end();
-});
-
-test('can insert an array of strings', t => {
-  t.equal(
-    insertValue(['foo', 'bar']).innerHTML,
-    'beforefoobarafter',
-    'array of strings'
-  );
-  t.end();
-});
-
-test('can insert an array of nodes', t => {
-  const nodes = [document.createElement('span'), document.createElement('div')];
-  nodes[0].textContent = 'foo';
-  nodes[1].textContent = 'bar';
-  t.equal(
-    insertValue(nodes).innerHTML,
-    'before<span>foo</span><div>bar</div>after'
-  );
-  t.end();
-});
-
-test('can insert a changing array of nodes', t => {
-  let container = document.createElement('div'),
-    marker = container.appendChild(document.createTextNode('')),
-    span1 = document.createElement('span'),
-    div2 = document.createElement('div'),
-    span3 = document.createElement('span'),
-    current;
-  span1.textContent = '1';
-  div2.textContent = '2';
-  span3.textContent = '3';
-
-  current = insert(subscribe, container, [], marker, current);
-  t.equal(container.innerHTML, '');
-
-  current = insert(subscribe, container, [span1, div2, span3], marker, current);
-  t.equal(container.innerHTML, '<span>1</span><div>2</div><span>3</span>');
-
-  current = insert(subscribe, container, [div2, span3], marker, current);
-  t.equal(container.innerHTML, '<div>2</div><span>3</span>');
-
-  current = insert(subscribe, container, [div2, span3], marker, current);
-  t.equal(container.innerHTML, '<div>2</div><span>3</span>');
-
-  current = insert(subscribe, container, [span3, div2], marker, current);
-  t.equal(container.innerHTML, '<span>3</span><div>2</div>');
-
-  current = insert(subscribe, container, [], marker, current);
-  t.equal(container.innerHTML, '');
-
-  current = insert(subscribe, container, [span3], marker, current);
-  t.equal(container.innerHTML, '<span>3</span>');
-
-  current = insert(subscribe, container, [div2], marker, current);
-  t.equal(container.innerHTML, '<div>2</div>');
-  t.end();
-});
-
-test('can insert nested arrays', t => {
-  t.equal(
-    insertValue(['foo', ['bar', 'blech']]).innerHTML,
-    'beforefoobarblechafter',
-    'array of array of strings'
-  );
   t.end();
 });

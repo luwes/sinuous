@@ -1,8 +1,8 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
-import addNode from './add-node.js';
 import { FORWARD, BACKWARD } from './constants.js';
 import {
+  addNode,
   longestPositiveIncreasingSubsequence,
   insertNodes,
   removeNodes,
@@ -23,12 +23,14 @@ export default function map(items, expr) {
     }
 
     function dispose(node) {
-      let disposable;
-      (disposable = disposables.get(node)) && disposable();
+      let disposable = disposables.get(node);
+      disposable && disposable();
       disposables.delete(node);
     }
 
     function createFn(parent, item, i, data, afterNode) {
+      // The root call makes it possible the child's computations outlive
+      // their parents' update cycle.
       return root(disposeFn => {
         const node = addNode(
           parent,
@@ -92,8 +94,11 @@ export function reconcile(
   // Fast path for clear
   if (length === 0) {
     if (beforeNode || afterNode !== parent.lastChild) {
-      let node = beforeNode ? beforeNode.nextSibling : parent.firstChild;
-      removeNodes(parent, node, afterNode);
+      removeNodes(
+        parent,
+        beforeNode ? beforeNode.nextSibling : parent.firstChild,
+        afterNode
+      );
     } else {
       parent.textContent = '';
       parent.appendChild(afterNode);
@@ -128,7 +133,8 @@ export function reconcile(
     let _node;
 
     // Skip prefix
-    (a = renderedValues[prevStart]), (b = data[newStart]);
+    a = renderedValues[prevStart];
+    b = data[newStart];
     while (a === b) {
       prevStart++;
       newStart++;
@@ -139,7 +145,8 @@ export function reconcile(
     }
 
     // Skip suffix
-    (a = renderedValues[prevEnd]), (b = data[newEnd]);
+    a = renderedValues[prevEnd];
+    b = data[newEnd];
     while (a === b) {
       prevEnd--;
       newEnd--;
@@ -151,7 +158,8 @@ export function reconcile(
     }
 
     // Fast path to swap backward
-    (a = renderedValues[prevEnd]), (b = data[newStart]);
+    a = renderedValues[prevEnd];
+    b = data[newStart];
     while (a === b) {
       loop = true;
       let mark = step(prevEndNode, BACKWARD, true);
@@ -168,7 +176,8 @@ export function reconcile(
     }
 
     // Fast path to swap forward
-    (a = renderedValues[prevStart]), (b = data[newEnd]);
+    a = renderedValues[prevStart];
+    b = data[newEnd];
     while (a === b) {
       loop = true;
       _node = step(prevStartNode, FORWARD);
@@ -189,7 +198,8 @@ export function reconcile(
   // Fast path for shrink
   if (newEnd < newStart) {
     if (prevStart <= prevEnd) {
-      let next, node;
+      let next;
+      let node;
       while (prevStart <= prevEnd) {
         node = step(prevEndNode, BACKWARD, true);
         next = node.previousSibling;
@@ -246,7 +256,9 @@ export function reconcile(
       node = mark;
       prevStart++;
     }
-    !doRemove && (parent.textContent = '');
+    if (!doRemove) {
+      parent.textContent = '';
+    }
 
     for (let i = newStart; i <= newEnd; i++) {
       createFn(parent, data[i], i, data, newAfterNode);
