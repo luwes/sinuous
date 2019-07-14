@@ -7,9 +7,10 @@ import { insert } from './insert.js';
  * @param  {object} api
  * @param {Function} [api.subscribe] - Function that listens to state changes.
  * @param {Function} [api.cleanup] - Add the given function to the cleanup stack.
+ * @param  {boolean} isSvg
  * @return {Function} `h` tag.
  */
-export function context(api) {
+export function context(api, isSvg) {
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
     let el;
@@ -21,7 +22,11 @@ export function context(api) {
         if (el) {
           el.appendChild(document.createTextNode(arg));
         } else {
-          el = document.createElement(arg);
+          if (isSvg) {
+            el = document.createElementNS('http://www.w3.org/2000/svg', arg);
+          } else {
+            el = document.createElement(arg);
+          }
         }
       } else if (Array.isArray(arg)) {
         // Support Fragments
@@ -35,7 +40,7 @@ export function context(api) {
           el = arg;
         }
       } else if (type === 'object') {
-        parseNested(api, el, arg, parseKeyValue);
+        parseNested(api, el, arg, isSvg, parseKeyValue);
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));
@@ -84,7 +89,7 @@ function createInsertAction(api, current) {
   };
 }
 
-export function parseNested(api, el, obj, callback) {
+export function parseNested(api, el, obj, isSvg, callback) {
   for (let name in obj) {
     // Create scope for every entry.
     const propAction = function(element, value) {
@@ -100,26 +105,27 @@ export function parseNested(api, el, obj, callback) {
               name,
               name[0] === 'o' && name[1] === 'n' && !value.$o ? value : value(),
               api,
-              element
+              element,
+              isSvg
             )
           );
         }
       } else {
-        callback(name, value, api, element);
+        callback(name, value, api, element, isSvg);
       }
     };
     propAction(el, obj[name]);
   }
 }
 
-export function parseKeyValue(name, value, api, el) {
+export function parseKeyValue(name, value, api, el, isSvg) {
   let prefix;
   if (name === 'class' || name === 'className') {
     el.className = value;
-  } else if (
+  } else if (isSvg || (
     (prefix = name.slice(0, 5)) &&
     (prefix === 'data-' || prefix === 'aria-')
-  ) {
+  )) {
     el.setAttribute(name, value);
   } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(api, el, name, value);
@@ -127,10 +133,10 @@ export function parseKeyValue(name, value, api, el) {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      parseNested(api, el, value, (n, v) => el.style.setProperty(n, v));
+      parseNested(api, el, value, isSvg, (n, v) => el.style.setProperty(n, v));
     }
   } else if (name === 'attrs') {
-    parseNested(api, el, value, (n, v) => el.setAttribute(n, v));
+    parseNested(api, el, value, isSvg, (n, v) => el.setAttribute(n, v));
   } else {
     el[name] = value;
   }
