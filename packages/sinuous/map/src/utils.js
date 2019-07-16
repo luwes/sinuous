@@ -20,7 +20,6 @@ export function addNode(parent, node, afterNode, counter) {
   return mark || node;
 }
 
-
 export function step(node, direction, inner) {
   const key = node[GROUPING];
   if (key) {

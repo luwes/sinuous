@@ -40,7 +40,10 @@ export function context(api, isSvg) {
           el = arg;
         }
       } else if (type === 'object') {
-        parseNested(api, el, arg, isSvg, parseKeyValue);
+        for (let name in arg) {
+          // Create scope for every entry.
+          property(name, arg[name], api, el, isSvg);
+        }
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));
@@ -53,7 +56,7 @@ export function context(api, isSvg) {
             // Record insert action in template.
             arg.$t(el, insertAction);
           } else {
-            insert(api.subscribe, el, arg, marker);
+            insert(api, el, arg, marker);
           }
         } else {
           // Support Components
@@ -85,57 +88,55 @@ export function context(api, isSvg) {
  */
 function createInsertAction(api, current) {
   return (element, value) => {
-    current = insert(api.subscribe, element, value, null, current);
+    current = insert(api, element, value, null, current);
   };
 }
 
-export function parseNested(api, el, obj, isSvg, callback) {
-  for (let name in obj) {
-    // Create scope for every entry.
-    const propAction = function(element, value) {
-      if (typeof value === 'function') {
-        if (value.$t) {
-          // Record property action in template.
-          value.$t(element, propAction);
-        } else {
-          api.subscribe(() =>
-            // Functions added as event handlers are not executed on render
-            // unless they have an observable indicator.
-            callback(
-              name,
-              name[0] === 'o' && name[1] === 'n' && !value.$o ? value : value(),
-              api,
-              element,
-              isSvg
-            )
-          );
-        }
-      } else {
-        callback(name, value, api, element, isSvg);
-      }
-    };
-    propAction(el, obj[name]);
-  }
-}
-
-export function parseKeyValue(name, value, api, el, isSvg) {
-  if (isSvg || name.slice(0, 5) === 'data-' || name.slice(0, 5) === 'aria-') {
+export function property(name, value, api, el, isSvg, isCss) {
+  if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
+    // Functions added as event handlers are not executed on render
+    // unless they have an observable indicator.
+    handleEvent(api, el, name, value);
+  } else if (typeof value === 'function') {
+    if (value.$t) {
+      // Record property action in template.
+      value.$t(el, createPropertyAction(api, name));
+    } else {
+      api.subscribe(() => {
+        property(name, value(), api, el, isSvg, isCss);
+      });
+    }
+  } else if (isCss) {
+    el.style.setProperty(name, value);
+  } else if (
+    isSvg ||
+    name.slice(0, 5) === 'data-' ||
+    name.slice(0, 5) === 'aria-'
+  ) {
     el.setAttribute(name, value);
   } else if (name === 'class' || name === 'className') {
     el.className = value;
-  } else if (name[0] === 'o' && name[1] === 'n') {
-    handleEvent(api, el, name, value);
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      parseNested(api, el, value, isSvg, (n, v) => el.style.setProperty(n, v));
+      for (name in value) {
+        property(name, value[name], api, el, isSvg, true);
+      }
     }
   } else if (name === 'attrs') {
-    parseNested(api, el, value, isSvg, (n, v) => el.setAttribute(n, v));
+    for (name in value) {
+      property(name, value[name], api, el, true);
+    }
   } else {
     el[name] = value;
   }
+}
+
+function createPropertyAction(api, name) {
+  return (element, value) => {
+    property(name, value, api, element);
+  };
 }
 
 function handleEvent(api, el, name, value) {

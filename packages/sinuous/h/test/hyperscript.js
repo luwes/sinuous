@@ -33,10 +33,10 @@ test('supports SVG', function(t) {
   t.equal(
     hs(
       'svg',
-      { viewBox: '0 0 100 100' },
+      { viewBox: '0 0 100 100', class: 'redbox' },
       hs('path', { d: 'M8.74211278,7.70898691' })
     ).outerHTML,
-    '<svg viewBox="0 0 100 100"><path d="M8.74211278,7.70898691"></path></svg>'
+    '<svg viewBox="0 0 100 100" class="redbox"><path d="M8.74211278,7.70898691"></path></svg>'
   );
   t.end();
 });

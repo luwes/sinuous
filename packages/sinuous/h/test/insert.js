@@ -18,11 +18,18 @@ test('inserts fragments', t => {
     <h1>Hello world</h1>
     <p>Bye bye</p>
   `);
-  const res = html`<div>${frag}</div>`;
+  const res = html`
+    <div>${frag}</div>
+  `;
   t.equal(res.innerHTML, '<h1>Hello world</h1><p>Bye bye</p>');
   t.equal(res.children.length, 2);
 
-  frag(html`<h1>Cool</h1><p>Beans</p>`);
+  frag(
+    html`
+      <h1>Cool</h1>
+      <p>Beans</p>
+    `
+  );
   t.equal(res.innerHTML, '<h1>Cool</h1><p>Beans</p>');
   t.equal(res.children.length, 2);
 
@@ -30,7 +37,12 @@ test('inserts fragments', t => {
   t.equal(res.innerHTML, 'make it a string');
   t.equal(res.childNodes.length, 2);
 
-  frag(html`<h1>Cool</h1><p>Beans</p>`);
+  frag(
+    html`
+      <h1>Cool</h1>
+      <p>Beans</p>
+    `
+  );
   t.equal(res.innerHTML, '<h1>Cool</h1><p>Beans</p>');
   t.equal(res.children.length, 2);
 
@@ -43,8 +55,13 @@ test('inserts long fragments', t => {
     <p>Bye bye</p>
     <p>Hello again</p>
   `);
-  const res = html`<div>${frag}</div>`;
-  t.equal(res.innerHTML, '<h1>Hello world</h1><p>Bye bye</p><p>Hello again</p>');
+  const res = html`
+    <div>${frag}</div>
+  `;
+  t.equal(
+    res.innerHTML,
+    '<h1>Hello world</h1><p>Bye bye</p><p>Hello again</p>'
+  );
   t.equal(res.children.length, 3);
 
   frag(html`
@@ -52,7 +69,10 @@ test('inserts long fragments', t => {
     <p>Bye bye</p>
     <h1>Hello world</h1>
   `);
-  t.equal(res.innerHTML, '<p>Hello again</p><p>Bye bye</p><h1>Hello world</h1>');
+  t.equal(
+    res.innerHTML,
+    '<p>Hello again</p><p>Bye bye</p><h1>Hello world</h1>'
+  );
   t.equal(res.children.length, 3);
 
   t.end();

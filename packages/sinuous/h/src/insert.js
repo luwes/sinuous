@@ -3,7 +3,7 @@ import { clearAll } from './utils.js';
 
 let groupCounter = 0;
 
-export function insert(subscribe, parent, value, marker, current) {
+export function insert(api, parent, value, marker, current) {
   if (value === current) return current;
 
   const t = typeof value;
@@ -30,8 +30,8 @@ export function insert(subscribe, parent, value, marker, current) {
     }
     current = value;
   } else if (t === 'function') {
-    subscribe(function() {
-      current = insert(subscribe, parent, value(), marker, current);
+    api.subscribe(function() {
+      current = insert(api, parent, value(), marker, current);
     });
   } else {
     // Block for nodes, fragments, non-stringables.
