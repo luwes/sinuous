@@ -37,6 +37,27 @@ test('inserts fragments', t => {
   t.end();
 });
 
+test('inserts long fragments', t => {
+  const frag = o(html`
+    <h1>Hello world</h1>
+    <p>Bye bye</p>
+    <p>Hello again</p>
+  `);
+  const res = html`<div>${frag}</div>`;
+  t.equal(res.innerHTML, '<h1>Hello world</h1><p>Bye bye</p><p>Hello again</p>');
+  t.equal(res.children.length, 3);
+
+  frag(html`
+    <p>Hello again</p>
+    <p>Bye bye</p>
+    <h1>Hello world</h1>
+  `);
+  t.equal(res.innerHTML, '<p>Hello again</p><p>Bye bye</p><h1>Hello world</h1>');
+  t.equal(res.children.length, 3);
+
+  t.end();
+});
+
 test('inserts nothing for null', t => {
   const res = insertValue(null);
   t.equal(res.innerHTML, '');
@@ -65,13 +86,13 @@ test('inserts nothing for true', t => {
   t.end();
 });
 
-test('can insert strings', t => {
+test('can insert stringable', t => {
   let res = insertValue('foo');
   t.equal(res.innerHTML, 'foo');
   t.equal(res.childNodes.length, 1);
 
-  res = insertValue('foobar');
-  t.equal(res.innerHTML, 'foobar');
+  res = insertValue(11206);
+  t.equal(res.innerHTML, '11206');
   t.equal(res.childNodes.length, 1);
   t.end();
 });

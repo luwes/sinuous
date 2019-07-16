@@ -77,7 +77,7 @@ test('(un)registers an event handler', function(t) {
 
   h(btn, { onclick: false });
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();
@@ -96,7 +96,7 @@ test('(un)registers an observable event handler', function(t) {
 
   onclick(false);
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();

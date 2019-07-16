@@ -119,14 +119,10 @@ export function parseNested(api, el, obj, isSvg, callback) {
 }
 
 export function parseKeyValue(name, value, api, el, isSvg) {
-  let prefix;
-  if (name === 'class' || name === 'className') {
-    el.className = value;
-  } else if (isSvg || (
-    (prefix = name.slice(0, 5)) &&
-    (prefix === 'data-' || prefix === 'aria-')
-  )) {
+  if (isSvg || name.slice(0, 5) === 'data-' || name.slice(0, 5) === 'aria-') {
     el.setAttribute(name, value);
+  } else if (name === 'class' || name === 'className') {
+    el.className = value;
   } else if (name[0] === 'o' && name[1] === 'n') {
     handleEvent(api, el, name, value);
   } else if (name === 'style') {

@@ -10,11 +10,12 @@ export function insert(subscribe, parent, value, marker, current) {
   if (value == null || value === '' || value === false || value === true) {
     clearAll(parent, current, marker);
     current = '';
-  } else if (typeof current === 'string' && (t === 'string' || t === 'number')) {
-    if (t !== 'string') {
-      value += '';
-    }
-    if (current === '') {
+  } else if (
+    (!current || typeof current === 'string') &&
+    (t === 'string' || (t === 'number' && (value += '')))
+  ) {
+    // Block optimized for string insertion.
+    if (current == null) {
       if (marker) {
         parent.insertBefore(document.createTextNode(value), marker);
       } else {
@@ -33,6 +34,7 @@ export function insert(subscribe, parent, value, marker, current) {
       current = insert(subscribe, parent, value(), marker, current);
     });
   } else {
+    // Block for nodes, fragments, non-stringables.
     clearAll(parent, current, marker);
 
     let mark;
