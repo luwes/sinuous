@@ -51,10 +51,8 @@ export function context(api, isSvg) {
             // Support flow control
             arg(api, el, marker);
           } else if (arg.$t) {
-            const insertAction = createInsertAction(api, '');
-            insertAction(el, '');
-            // Record insert action in template.
-            arg.$t(el, insertAction);
+            // Record insert action in template, marker is used as pre-fill.
+            arg.$t(1, api, insert, el, '');
           } else {
             insert(api, el, arg, marker);
           }
@@ -76,31 +74,15 @@ export function context(api, isSvg) {
   return h;
 }
 
-/**
- * Create an insert action for a `template` tag.
- *
- * Subsequent `insert`'s of strings can be optimized by setting
- * `Text.data` instead of Element.textContent.
- *
- * @param  {Function} api
- * @param  {*} current
- * @return {Function}
- */
-function createInsertAction(api, current) {
-  return (element, value) => {
-    current = insert(api, element, value, null, current);
-  };
-}
-
 export function property(name, value, api, el, isSvg, isCss) {
   if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
-    // Functions added as event handlers are not executed on render
-    // unless they have an observable indicator.
+    // Functions added as event handlers are not executed
+    // on render unless they have an observable indicator.
     handleEvent(api, el, name, value);
   } else if (typeof value === 'function') {
     if (value.$t) {
       // Record property action in template.
-      value.$t(el, createPropertyAction(api, name));
+      value.$t(2, api, property, el, name);
     } else {
       api.subscribe(() => {
         property(name, value(), api, el, isSvg, isCss);
@@ -114,8 +96,6 @@ export function property(name, value, api, el, isSvg, isCss) {
     name.slice(0, 5) === 'aria-'
   ) {
     el.setAttribute(name, value);
-  } else if (name === 'class' || name === 'className') {
-    el.className = value;
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
@@ -129,14 +109,9 @@ export function property(name, value, api, el, isSvg, isCss) {
       property(name, value[name], api, el, true);
     }
   } else {
+    if (name === 'class') name += 'Name';
     el[name] = value;
   }
-}
-
-function createPropertyAction(api, name) {
-  return (element, value) => {
-    property(name, value, api, element);
-  };
 }
 
 function handleEvent(api, el, name, value) {

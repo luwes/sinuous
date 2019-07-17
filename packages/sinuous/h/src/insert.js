@@ -4,12 +4,11 @@ import { clearAll } from './utils.js';
 let groupCounter = 0;
 
 export function insert(api, parent, value, marker, current) {
-  if (value === current) return current;
-
   const t = typeof value;
-  if (value == null || value === '' || value === false || value === true) {
+  if (value === current);
+  else if (value == null || value === '' || value === false || value === true) {
     clearAll(parent, current, marker);
-    current = '';
+    current = null;
   } else if (
     (!current || typeof current === 'string') &&
     (t === 'string' || (t === 'number' && (value += '')))
@@ -48,12 +47,8 @@ export function insert(api, parent, value, marker, current) {
       mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
     }
 
-    if (marker) {
-      parent.insertBefore(value, marker);
-    } else {
-      parent.appendChild(value);
-    }
-
+    // If marker is `null`, value will be added to the end of the list.
+    parent.insertBefore(value, marker);
     current = value;
   }
 
