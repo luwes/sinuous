@@ -104,5 +104,15 @@ export const fixtures = [
     babel: {
       plugins: ['sinuous/babel-plugin-htm']
     }
+  },
+  {
+    formats: [IIFE],
+    global: 'sinuousClock',
+    name: 'clock',
+    input: 'site/content/examples/clock/src/clock.js',
+    gzip: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   }
 ];
