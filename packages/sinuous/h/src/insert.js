@@ -14,7 +14,7 @@ export function insert(api, parent, value, marker, current) {
     (t === 'string' || (t === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
-    if (current == null) {
+    if (current == null || !parent.firstChild) {
       if (marker) {
         parent.insertBefore(document.createTextNode(value), marker);
       } else {
