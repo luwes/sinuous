@@ -2,6 +2,23 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.0 - 2019-07-17
+
+### Added
+
+- Added SVG support.
+
+### Removed
+
+- Removed plain array inserts. Fragments can be used for this aka
+
+```js
+  html` 
+    <h1>Title</h1>
+    <p>Some text</p>
+  `
+```
+
 ## 0.11.4 - 2019-07-07
 
 ### Changed
