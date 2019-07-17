@@ -73,10 +73,10 @@ function getConfig(options) {
           ),
       name: options.global,
       exports: options.exports,
-      strict: false,
-      legacy: true,
-      freeze: false,
-      esModule: false
+      strict: false, // Remove `use strict;`
+      interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
+      freeze: false, // Remove `Object.freeze()`
+      esModule: false // Remove `esModele` property
     },
     plugins: [
       bundleSize({

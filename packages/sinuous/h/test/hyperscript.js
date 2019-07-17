@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import { o, h } from 'sinuous';
+import { o, h, hs } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -26,6 +26,18 @@ test('arrays for nesting is ok', function(t) {
 
 test('can use namespace in name', function(t) {
   t.equal(h('myns:mytag').outerHTML, '<myns:mytag></myns:mytag>');
+  t.end();
+});
+
+test('supports SVG', function(t) {
+  t.equal(
+    hs(
+      'svg',
+      { viewBox: '0 0 100 100', class: 'redbox' },
+      hs('path', { d: 'M8.74211278,7.70898691' })
+    ).outerHTML,
+    '<svg viewBox="0 0 100 100" class="redbox"><path d="M8.74211278,7.70898691"></path></svg>'
+  );
   t.end();
 });
 
@@ -65,7 +77,7 @@ test('(un)registers an event handler', function(t) {
 
   h(btn, { onclick: false });
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();
@@ -84,7 +96,7 @@ test('(un)registers an observable event handler', function(t) {
 
   onclick(false);
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();

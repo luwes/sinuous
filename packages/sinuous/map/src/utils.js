@@ -1,5 +1,25 @@
 import { GROUPING } from './constants.js';
 
+export function addNode(parent, node, afterNode, counter) {
+  let mark;
+  const t = typeof node;
+  if (t === 'string' || t === 'number') {
+    node = document.createTextNode(node);
+  } else if (
+    node.nodeType === 11 &&
+    (mark = node.firstChild) &&
+    mark !== node.lastChild
+  ) {
+    mark[GROUPING] = node.lastChild[GROUPING] = counter;
+  }
+  if (afterNode) {
+    parent.insertBefore(node, afterNode);
+  } else {
+    parent.appendChild(node);
+  }
+  return mark || node;
+}
+
 export function step(node, direction, inner) {
   const key = node[GROUPING];
   if (key) {

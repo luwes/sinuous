@@ -7,9 +7,10 @@ import { insert } from './insert.js';
  * @param  {object} api
  * @param {Function} [api.subscribe] - Function that listens to state changes.
  * @param {Function} [api.cleanup] - Add the given function to the cleanup stack.
+ * @param  {boolean} isSvg
  * @return {Function} `h` tag.
  */
-export function context(api) {
+export function context(api, isSvg) {
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
     let el;
@@ -21,7 +22,11 @@ export function context(api) {
         if (el) {
           el.appendChild(document.createTextNode(arg));
         } else {
-          el = document.createElement(arg);
+          if (isSvg) {
+            el = document.createElementNS('http://www.w3.org/2000/svg', arg);
+          } else {
+            el = document.createElement(arg);
+          }
         }
       } else if (Array.isArray(arg)) {
         // Support Fragments
@@ -35,7 +40,10 @@ export function context(api) {
           el = arg;
         }
       } else if (type === 'object') {
-        parseNested(api, el, arg, parseKeyValue);
+        for (let name in arg) {
+          // Create scope for every entry.
+          property(name, arg[name], api, el, isSvg);
+        }
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));
@@ -43,12 +51,10 @@ export function context(api) {
             // Support flow control
             arg(api, el, marker);
           } else if (arg.$t) {
-            const insertAction = createInsertAction(api, '');
-            insertAction(el, '');
-            // Record insert action in template.
-            arg.$t(el, insertAction);
+            // Record insert action in template, marker is used as pre-fill.
+            arg.$t(1, api, insert, el, '');
           } else {
-            insert(api.subscribe, el, arg, marker);
+            insert(api, el, arg, marker);
           }
         } else {
           // Support Components
@@ -68,77 +74,48 @@ export function context(api) {
   return h;
 }
 
-/**
- * Create an insert action for a `template` tag.
- *
- * Subsequent `insert`'s of strings can be optimized by setting
- * `Text.data` instead of Element.textContent.
- *
- * @param  {Function} api
- * @param  {*} current
- * @return {Function}
- */
-function createInsertAction(api, current) {
-  return (element, value) => {
-    current = insert(api.subscribe, element, value, null, current);
-  };
-}
-
-export function parseNested(api, el, obj, callback) {
-  for (let name in obj) {
-    // Create scope for every entry.
-    const propAction = function(element, value) {
-      if (typeof value === 'function') {
-        if (value.$t) {
-          // Record property action in template.
-          value.$t(element, propAction);
-        } else {
-          api.subscribe(() =>
-            // Functions added as event handlers are not executed on render
-            // unless they have an observable indicator.
-            callback(
-              name,
-              name[0] === 'o' && name[1] === 'n' && !value.$o ? value : value(),
-              api,
-              element
-            )
-          );
-        }
-      } else {
-        callback(name, value, api, element);
-      }
-    };
-    propAction(el, obj[name]);
-  }
-}
-
-export function parseKeyValue(name, value, api, el) {
-  let prefix;
-  if (name === 'class' || name === 'className') {
-    el.className = value;
+export function property(name, value, api, el, isSvg, isCss) {
+  if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
+    // Functions added as event handlers are not executed
+    // on render unless they have an observable indicator.
+    handleEvent(api, el, name, value);
+  } else if (typeof value === 'function') {
+    if (value.$t) {
+      // Record property action in template.
+      value.$t(2, api, property, el, name);
+    } else {
+      api.subscribe(() => {
+        property(name, value(), api, el, isSvg, isCss);
+      });
+    }
+  } else if (isCss) {
+    el.style.setProperty(name, value);
   } else if (
-    (prefix = name.slice(0, 5)) &&
-    (prefix === 'data-' || prefix === 'aria-')
+    isSvg ||
+    name.slice(0, 5) === 'data-' ||
+    name.slice(0, 5) === 'aria-'
   ) {
     el.setAttribute(name, value);
-  } else if (name[0] === 'o' && name[1] === 'n') {
-    handleEvent(api, el, name, value);
   } else if (name === 'style') {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      parseNested(api, el, value, (n, v) => el.style.setProperty(n, v));
+      for (name in value) {
+        property(name, value[name], api, el, isSvg, true);
+      }
     }
   } else if (name === 'attrs') {
-    parseNested(api, el, value, (n, v) => el.setAttribute(n, v));
+    for (name in value) {
+      property(name, value[name], api, el, true);
+    }
   } else {
+    if (name === 'class') name += 'Name';
     el[name] = value;
   }
 }
 
 function handleEvent(api, el, name, value) {
-  const kLower = name.toLowerCase();
-  name = (kLower in el ? kLower : name).slice(2);
+  name = name.slice(2);
 
   const removeListener = api.cleanup(() =>
     el.removeEventListener(name, eventProxy)

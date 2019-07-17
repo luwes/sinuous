@@ -9,7 +9,7 @@ let dispose;
 (function() {
   console.log('Basic map tests');
 
-  const list = o([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
+  const list = o([h(['a', 1]), h(['b', 2]), h(['c', 3]), h(['d', 4])]);
   const div = document.createElement('div');
   div.appendChild(document.createElement('i'));
   div.appendChild(document.createElement('b'));
@@ -25,7 +25,7 @@ let dispose;
   });
 
   test('update', t => {
-    list([['b', 2, 99], ['a', 1], ['c']]);
+    list([h(['b', 2, 99]), h(['a', 1]), h(['c'])]);
     t.equal(div.innerHTML, '<i></i><b></b>b299a1c');
     t.end();
   });
