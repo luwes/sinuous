@@ -32,7 +32,7 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
 
-### Counter Example (_1.5kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
 ```js
 import { o, h } from 'sinuous';
