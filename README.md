@@ -15,7 +15,7 @@ It was built with these ideas in mind.
 
 - Small: use in other mini libraries like custom elements.
 - Simple: plain Javascript feel; template literals, standard HTML.
-- [Performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html): around 7th place of 80+ UI libs
+- [Performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html): top ranked of 80+ UI libs
 
 ### Add-ons
 
