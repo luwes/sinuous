@@ -6,7 +6,7 @@ let groupCounter = 0;
 export function insert(api, parent, value, marker, current) {
   const t = typeof value;
   if (value === current);
-  else if (value == null || value === '' || value === false || value === true) {
+  else if ((!value && value !== 0) || value === true) {
     clearAll(parent, current, marker);
     current = null;
   } else if (
@@ -36,15 +36,13 @@ export function insert(api, parent, value, marker, current) {
     // Block for nodes, fragments, non-stringables.
     clearAll(parent, current, marker);
 
-    let mark;
     if (!(value instanceof Node)) {
       value = document.createTextNode('' + value);
     } else if (
       value.nodeType === 11 &&
-      (mark = value.firstChild) &&
-      mark !== value.lastChild
+      value.firstChild !== value.lastChild
     ) {
-      mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
+      value.firstChild[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
     }
 
     // If marker is `null`, value will be added to the end of the list.

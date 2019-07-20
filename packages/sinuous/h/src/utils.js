@@ -1,4 +1,4 @@
-import { BACKWARD, GROUPING } from './constants.js';
+import { GROUPING } from './constants.js';
 
 /**
  * Clear all nodes in the parent.
@@ -9,15 +9,16 @@ import { BACKWARD, GROUPING } from './constants.js';
  */
 export function clearAll(parent, current, marker, startNode) {
   if (marker) {
-    if (current !== '' && current != null) {
+    // `current` can't be `0`, it's coerced to a string in insert.
+    if (current) {
       if (!startNode) {
         startNode = marker.previousSibling || parent.lastChild;
         // Support fragments
         const key = startNode[GROUPING];
         if (key) {
-          startNode = startNode[BACKWARD];
+          startNode = startNode.previousSibling;
           while (startNode && startNode[GROUPING] !== key) {
-            startNode = startNode[BACKWARD];
+            startNode = startNode.previousSibling;
           }
         }
       }
