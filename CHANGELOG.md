@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.1 - 2019-07-19
+
+### Changed
+
+- Make `map` return a DocumentFragment.
+- Optimized and re-used code for full replace in `map`.
+
 ## 0.12.0 - 2019-07-17
 
 ### Added
