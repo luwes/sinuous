@@ -12,11 +12,8 @@ export function addNode(parent, node, afterNode, counter) {
   ) {
     mark[GROUPING] = node.lastChild[GROUPING] = counter;
   }
-  if (afterNode) {
-    parent.insertBefore(node, afterNode);
-  } else {
-    parent.appendChild(node);
-  }
+
+  parent.insertBefore(node, afterNode);
   return mark || node;
 }
 

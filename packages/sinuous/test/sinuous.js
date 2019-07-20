@@ -16,3 +16,8 @@ test('simple', function(t) {
   );
   t.end();
 });
+
+test('returns a simple string', t => {
+  t.equal(html`a`, 'a');
+  t.end();
+});

@@ -1,5 +1,6 @@
 /* Adapted from Stage0 - The MIT License - Pavel Martynov */
 /* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
+import { api } from 'sinuous';
 import { FORWARD, BACKWARD } from './constants.js';
 import {
   addNode,
@@ -11,62 +12,63 @@ import {
 
 let groupCounter = 0;
 
-export default function map(items, expr) {
-  function init(h, parent, afterNode) {
-    const { subscribe, root, sample, cleanup } = h;
-    const beforeNode = afterNode.previousSibling;
-    let disposables = new Map();
+export default function map(items, expr, options) {
+  options = options || api;
+  const { subscribe, root, sample, cleanup } = options;
 
-    function disposeAll() {
-      disposables.forEach(d => d());
-      disposables.clear();
-    }
+  let disposables = new Map();
+  let parent = document.createDocumentFragment();
+  let beforeNode = parent.appendChild(document.createTextNode(''));
+  let afterNode = parent.appendChild(document.createTextNode(''));
 
-    function dispose(node) {
-      let disposable = disposables.get(node);
-      disposable && disposable();
-      disposables.delete(node);
-    }
-
-    function createFn(parent, item, i, data, afterNode) {
-      // The root call makes it possible the child's computations outlive
-      // their parents' update cycle.
-      return root(disposeFn => {
-        const node = addNode(
-          parent,
-          expr(item, i, data),
-          afterNode,
-          ++groupCounter
-        );
-        disposables.set(node, disposeFn);
-        return node;
-      });
-    }
-
-    const unsubscribe = subscribe((renderedValues = []) => {
-      const data = items() || [];
-      return sample(() =>
-        reconcile(
-          parent,
-          renderedValues,
-          data,
-          beforeNode,
-          afterNode,
-          createFn,
-          disposeAll,
-          dispose
-        )
-      );
-    });
-
-    cleanup(unsubscribe);
-    cleanup(disposeAll);
-
-    return parent;
+  function disposeAll() {
+    disposables.forEach(d => d());
+    disposables.clear();
   }
 
-  init.$f = true;
-  return init;
+  function dispose(node) {
+    let disposable = disposables.get(node);
+    disposable && disposable();
+    disposables.delete(node);
+  }
+
+  function createFn(parent, item, i, data, afterNode) {
+    // The root call makes it possible the child's computations outlive
+    // their parents' update cycle.
+    return root(disposeFn => {
+      const node = addNode(
+        parent,
+        expr(item, i, data),
+        afterNode,
+        ++groupCounter
+      );
+      disposables.set(node, disposeFn);
+      return node;
+    });
+  }
+
+  const unsubscribe = subscribe((renderedValues) => {
+    renderedValues = renderedValues || [];
+
+    const data = items() || [];
+    return sample(() =>
+      reconcile(
+        parent,
+        renderedValues,
+        data,
+        beforeNode,
+        afterNode,
+        createFn,
+        disposeAll,
+        dispose
+      )
+    );
+  });
+
+  cleanup(unsubscribe);
+  cleanup(disposeAll);
+
+  return parent;
 }
 
 // This is almost straightforward implementation of reconcillation algorithm
@@ -93,15 +95,16 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode || afterNode !== parent.lastChild) {
+    if (!beforeNode.previousSibling && !afterNode.nextSibling) {
+      parent.textContent = '';
+      parent.appendChild(beforeNode);
+      parent.appendChild(afterNode);
+    } else {
       removeNodes(
         parent,
-        beforeNode ? beforeNode.nextSibling : parent.firstChild,
+        beforeNode.nextSibling,
         afterNode
       );
-    } else {
-      parent.textContent = '';
-      parent.appendChild(afterNode);
     }
 
     onClear && onClear();
@@ -123,7 +126,7 @@ export function reconcile(
   let newEnd = length - 1;
   let a;
   let b;
-  let prevStartNode = beforeNode ? beforeNode.nextSibling : parent.firstChild;
+  let prevStartNode = beforeNode.nextSibling;
   let newStartNode = prevStartNode;
   let prevEndNode = afterNode.previousSibling;
   let newAfterNode = afterNode;

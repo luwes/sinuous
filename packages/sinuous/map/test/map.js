@@ -13,10 +13,9 @@ let dispose;
   const div = document.createElement('div');
   div.appendChild(document.createElement('i'));
   div.appendChild(document.createElement('b'));
-  const afterNode = div.appendChild(document.createTextNode(''));
   root(d => {
     dispose = d;
-    return map(list, item => item)(api, div, afterNode);
+    div.appendChild(map(list, item => item));
   });
 
   test('create', t => {
@@ -54,7 +53,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return (div = h('div', map(list, item => item)));
+      div = h('div', map(list, item => item));
     });
 
   function apply(t, array) {
@@ -147,12 +146,10 @@ let dispose;
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const parent = document.createDocumentFragment();
-  const afterNode = parent.appendChild(document.createTextNode(''));
   const Component = () =>
     root(d => {
       dispose = d;
-      return map(list, item => item)(api, parent, afterNode);
+      return map(list, item => item);
     });
 
   function apply(t, array) {

@@ -1,10 +1,10 @@
-/* Adapted from DOM Expressions - The MIT License - Ryan Carniato */
 import { context } from 'sinuous/h';
 import * as api from 'sinuous/observable';
 import htm from 'sinuous/htm';
 
 export const o = api.o;
-export { context, o as observable };
+export { o as observable };
+export { api, context };
 
 export const h = context(api);
 export const hs = context(api, true);

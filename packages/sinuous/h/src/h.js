@@ -47,10 +47,7 @@ export function context(api, isSvg) {
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));
-          if (arg.$f) {
-            // Support flow control
-            arg(api, el, marker);
-          } else if (arg.$t) {
+          if (arg.$t) {
             // Record insert action in template, marker is used as pre-fill.
             arg.$t(1, api, insert, el, '');
           } else {
