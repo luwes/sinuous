@@ -47,7 +47,7 @@ export default function map(items, expr, options) {
     });
   }
 
-  const unsubscribe = subscribe((renderedValues) => {
+  const unsubscribe = subscribe(renderedValues => {
     renderedValues = renderedValues || [];
 
     const data = items() || [];
@@ -100,11 +100,7 @@ export function reconcile(
       parent.appendChild(beforeNode);
       parent.appendChild(afterNode);
     } else {
-      removeNodes(
-        parent,
-        beforeNode.nextSibling,
-        afterNode
-      );
+      removeNodes(parent, beforeNode.nextSibling, afterNode);
     }
 
     onClear && onClear();
@@ -247,26 +243,22 @@ export function reconcile(
 
   // Fast path for full replace
   if (reusingNodes === 0) {
-    const doRemove =
-      prevStartNode !== parent.firstChild || prevEndNode !== parent.lastChild;
-    let node = prevStartNode;
-    let mark;
-    newAfterNode = prevEndNode.nextSibling;
-    while (node !== newAfterNode) {
-      mark = step(node, FORWARD);
-      doRemove && removeNodes(parent, node, mark);
-      onRemove && onRemove(node);
-      node = mark;
-      prevStart++;
-    }
-    if (!doRemove) {
-      parent.textContent = '';
-    }
-
-    for (let i = newStart; i <= newEnd; i++) {
-      createFn(parent, data[i], i, data, newAfterNode);
-    }
-    return data.slice();
+    return reconcile(
+      parent,
+      reconcile(
+        parent,
+        renderedValues,
+        [],
+        beforeNode,
+        afterNode,
+        createFn,
+        onClear
+      ),
+      data,
+      beforeNode,
+      afterNode,
+      createFn
+    );
   }
 
   // What else?
