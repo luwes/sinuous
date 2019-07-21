@@ -12,9 +12,8 @@ import {
 
 let groupCounter = 0;
 
-export default function map(items, expr, options) {
-  options = options || api;
-  const { subscribe, root, sample, cleanup } = options;
+export default function map(items, expr) {
+  const { subscribe, root, sample, cleanup } = api;
 
   let disposables = new Map();
   let parent = document.createDocumentFragment();

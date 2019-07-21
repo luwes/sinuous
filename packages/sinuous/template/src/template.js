@@ -9,9 +9,9 @@ let actions;
  */
 export function t(key) {
   const tag = () => key;
-  tag.$t = (type, api, fn, el, str) => {
+  tag.$t = (type, fn, el, str) => {
     const create = type === 1 ? createInsert : createProperty;
-    const action = create(api, fn, str);
+    const action = create(fn, str);
     action._tag = tag;
     action._el = el;
     actions.push(action);
@@ -30,15 +30,15 @@ export function o(key) {
   return observedTag;
 }
 
-function createInsert(api, insert, current) {
+function createInsert(insert, current) {
   return (element, value) => {
-    current = insert(api, element, value, null, current);
+    current = insert(element, value, null, current);
   };
 }
 
-function createProperty(api, property, name) {
+function createProperty(property, name) {
   return (element, value) => {
-    property(name, value, api, element);
+    property(name, value, element);
   };
 }
 

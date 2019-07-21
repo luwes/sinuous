@@ -29,31 +29,6 @@ test('can use namespace in name', function(t) {
   t.end();
 });
 
-test('supports SVG', function(t) {
-  const svg = hs(
-    'svg',
-    { class: 'redbox', viewBox: '0 0 100 100' },
-    hs('path', { d: 'M 8.74211 7.70899' })
-  );
-
-  if (
-    svg.outerHTML ==
-    '<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>'
-  ) {
-    t.pass();
-  }
-
-  // IE11 adds xmlns and has a self closing path tag.
-  if (
-    svg.outerHTML ==
-    '<svg xmlns="http://www.w3.org/2000/svg" class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899" /></svg>'
-  ) {
-    t.pass();
-  }
-
-  t.end();
-});
-
 // test('can use id selector', function(t) {
 //   t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
 //   t.end();

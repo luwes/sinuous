@@ -1,16 +1,17 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
+import { api } from './api.js';
 import { EMPTY_ARR } from './constants.js';
 import { insert } from './insert.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
- * @param  {object} api
- * @param {Function} [api.subscribe] - Function that listens to state changes.
- * @param {Function} [api.cleanup] - Add the given function to the cleanup stack.
+ * @param {object} options
  * @param  {boolean} isSvg
  * @return {Function} `h` tag.
  */
-export function context(api, isSvg) {
+export function context(options, isSvg) {
+  for (let i in options) api[i] = options[i];
+
   function h() {
     const args = EMPTY_ARR.slice.call(arguments);
     let el;
@@ -42,16 +43,16 @@ export function context(api, isSvg) {
       } else if (type === 'object') {
         for (let name in arg) {
           // Create scope for every entry.
-          property(name, arg[name], api, el, isSvg);
+          property(name, arg[name], el, isSvg);
         }
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));
           if (arg.$t) {
             // Record insert action in template, marker is used as pre-fill.
-            arg.$t(1, api, insert, el, '');
+            arg.$t(1, insert, el, '');
           } else {
-            insert(api, el, arg, marker);
+            insert(el, arg, marker);
           }
         } else {
           // Support Components
@@ -68,21 +69,22 @@ export function context(api, isSvg) {
     return el;
   }
 
+  api.h = h;
   return h;
 }
 
-export function property(name, value, api, el, isSvg, isCss) {
+export function property(name, value, el, isSvg, isCss) {
   if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
     // Functions added as event handlers are not executed
     // on render unless they have an observable indicator.
-    handleEvent(api, el, name, value);
+    handleEvent(el, name, value);
   } else if (typeof value === 'function') {
     if (value.$t) {
       // Record property action in template.
-      value.$t(2, api, property, el, name);
+      value.$t(2, property, el, name);
     } else {
       api.subscribe(() => {
-        property(name, value(), api, el, isSvg, isCss);
+        property(name, value(), el, isSvg, isCss);
       });
     }
   } else if (isCss) {
@@ -98,12 +100,12 @@ export function property(name, value, api, el, isSvg, isCss) {
       el.style.cssText = value;
     } else {
       for (name in value) {
-        property(name, value[name], api, el, isSvg, true);
+        property(name, value[name], el, isSvg, true);
       }
     }
   } else if (name === 'attrs') {
     for (name in value) {
-      property(name, value[name], api, el, true);
+      property(name, value[name], el, true);
     }
   } else {
     if (name === 'class') name += 'Name';
@@ -111,7 +113,7 @@ export function property(name, value, api, el, isSvg, isCss) {
   }
 }
 
-function handleEvent(api, el, name, value) {
+function handleEvent(el, name, value) {
   name = name.slice(2);
 
   const removeListener = api.cleanup(() =>

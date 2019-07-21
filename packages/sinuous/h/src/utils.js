@@ -26,6 +26,7 @@ export function clearAll(parent, current, marker, startNode) {
       while (startNode && startNode !== marker) {
         tmp = startNode.nextSibling;
         parent.removeChild(startNode);
+        startNode[GROUPING] = 0;
         startNode = tmp;
       }
     }
