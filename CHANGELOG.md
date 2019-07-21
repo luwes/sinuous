@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.2 - 2019-07-21
+
+### Added
+
+- Added support for plain array inserts again w/ no size increase.
+
 ## 0.12.1 - 2019-07-19
 
 ### Changed
