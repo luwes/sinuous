@@ -1,4 +1,4 @@
-import htm from 'sinuous/htm';
+import { build, treeify } from '../../htm/src/build.js';
 
 /**
  * @param {Babel} babel
@@ -7,187 +7,169 @@ import htm from 'sinuous/htm';
  * @param {string} [options.tag=html]  The tagged template "tag" function name to process.
  * @param {boolean} [options.monomorphic=false]  Output monomorphic inline objects instead of using String literals.
  * @param {boolean} [options.useBuiltIns=false]  Use the native Object.assign instead of trying to polyfill it.
+ * @param {boolean} [options.useNativeSpread=false]  Use the native { ...a, ...b } syntax for prop spreads.
  * @param {boolean} [options.variableArity=true] If `false`, always passes exactly 3 arguments to the pragma function.
  */
 export default function htmBabelPlugin({ types: t }, options = {}) {
-	const pragma = options.pragma===false ? false : (options.pragma || 'h|hs');
-	const useBuiltIns = options.useBuiltIns;
-	const inlineVNodes = options.monomorphic || pragma===false;
-	const symbol = Symbol();
-  let currentPragma;
+  const pragma = options.pragma===false ? false : dottedIdentifier(options.pragma || 'h');
+  const useBuiltIns = options.useBuiltIns;
+  const useNativeSpread = options.useNativeSpread;
+  const inlineVNodes = options.monomorphic || pragma===false;
 
-	function dottedIdentifier(keypath) {
-		const path = keypath.split('.');
-		let out;
-		for (let i=0; i<path.length; i++) {
-			const ident = propertyName(path[i]);
-			out = i===0 ? ident : t.memberExpression(out, ident);
-		}
-		return out;
-	}
-
-	function patternStringToRegExp(str) {
-		const parts = str.split('/').slice(1);
-		const end = parts.pop() || '';
-		return new RegExp(parts.join('/'), end);
-	}
-
-	function propertyName(key) {
-		if (key.match(/(^\d|[^a-z0-9_$])/i)) return t.stringLiteral(key);
-		return t.identifier(key);
-	}
-
-	function stringValue(str) {
-		if (options.monomorphic) {
-			return t.objectExpression([
-				t.objectProperty(propertyName('type'), t.numericLiteral(3)),
-				t.objectProperty(propertyName('tag'), t.nullLiteral()),
-				t.objectProperty(propertyName('props'), t.nullLiteral()),
-				t.objectProperty(propertyName('children'), t.nullLiteral()),
-				t.objectProperty(propertyName('text'), t.stringLiteral(str))
-			]);
-		}
-		return t.stringLiteral(str);
-	}
-
-	function createVNode(tag, props, children) {
-		// Never pass children=[[]].
-		if (children.elements.length === 1 && t.isArrayExpression(children.elements[0]) && children.elements[0].elements.length === 0) {
-			children = children.elements[0];
-		}
-
-		if (inlineVNodes) {
-			return t.objectExpression([
-				options.monomorphic && t.objectProperty(propertyName('type'), t.numericLiteral(1)),
-				t.objectProperty(propertyName('tag'), tag),
-				t.objectProperty(propertyName('props'), props),
-				t.objectProperty(propertyName('children'), children),
-				options.monomorphic && t.objectProperty(propertyName('text'), t.nullLiteral())
-			].filter(Boolean));
-		}
-
-		// Passing `{variableArity:false}` always produces `h(tag, props, children)` - where `children` is always an Array.
-		// Otherwise, the default is `h(tag, props, ...children)`.
-		if (options.variableArity !== false) {
-			children = children.elements;
-		}
-
-		return t.callExpression(currentPragma, [tag, props].concat(children));
-	}
-
-	function flatten(props, result = []) {
-		const { [symbol]: head, ...tail } = props;
-		if (head) head.forEach(obj => {
-			flatten(obj, result);
-		});
-		if (Object.keys(tail).length > 0) {
-			result.push(tail);
-		}
-		return result;
-	}
-
-	function spreadNode(args, state) {
-		if (args.length > 0 && t.isNode(args[0])) {
-			args.unshift({});
-		}
-
-		// 'Object.assign(x)', can be collapsed to 'x'.
-		if (args.length === 1) {
-			return propsNode(args[0]);
-		}
-		// 'Object.assign({}, x)', can be collapsed to 'x'.
-		if (args.length === 2 && !t.isNode(args[0]) && Object.keys(args[0]).length === 0) {
-			return propsNode(args[1]);
-		}
-		const helper = useBuiltIns ? dottedIdentifier('Object.assign') : state.addHelper('extends');
-		return t.callExpression(helper, args.map(propsNode));
-	}
-
-	function propsNode(props) {
-		return t.isNode(props) ? props : t.objectExpression(
-			Object.keys(props).map(key => {
-				let value = props[key];
-				if (typeof value==='string') {
-					value = t.stringLiteral(value);
-				}
-				else if (typeof value==='boolean') {
-					value = t.booleanLiteral(value);
-				}
-				return t.objectProperty(propertyName(key), value);
-			})
-		);
-	}
-
-	function transform(node, state) {
-		if (node === undefined) return t.identifier('undefined');
-		if (node == null) return t.nullLiteral();
-    if (t.isNode(node)) return node;
-
-		const { tag, props, children } = node;
-		function childMapper(child) {
-			if (typeof child==='string') {
-				return stringValue(child);
-			}
-			return t.isNode(child) ? child : transform(child, state);
-		}
-
-		const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
-		const newProps = props ? spreadNode(flatten(props), state) : t.nullLiteral();
-		const newChildren = t.arrayExpression((children || []).map(childMapper));
-		return createVNode(newTag, newProps, newChildren);
-	}
-
-	function h(tag, props, ...children) {
-    if (Array.isArray(tag)) {
-      return tag;
+  function dottedIdentifier(keypath) {
+    const path = keypath.split('.');
+    let out;
+    for (let i=0; i<path.length; i++) {
+      const ident = propertyName(path[i]);
+      out = i===0 ? ident : t.memberExpression(out, ident);
     }
-		return { tag, props, children };
-	}
+    return out;
+  }
 
-	const html = htm.bind(h);
+  function patternStringToRegExp(str) {
+    const parts = str.split('/').slice(1);
+    const end = parts.pop() || '';
+    return new RegExp(parts.join('/'), end);
+  }
 
-	function treeify(statics, expr) {
-		const assign = Object.assign;
-		try {
-			Object.assign = function(...objs) {	return { [symbol]: objs }; };
-			return html(statics, ...expr);
-		}
-		finally {
-			Object.assign = assign;
-		}
-	}
+  function propertyName(key) {
+    if (t.isValidIdentifier(key)) {
+      return t.identifier(key);
+    }
+    return t.stringLiteral(key);
+  }
 
-	// The tagged template tag function name we're looking for.
-	// This is static because it's generally assigned via htm.bind(h),
-	// which could be imported from elsewhere, making tracking impossible.
-	const htmlName = options.tag || '/html|svg/';
-	return {
-		name: 'htm',
-		visitor: {
-			TaggedTemplateExpression(path, state) {
-				const tag = path.node.tag.name;
+  function objectProperties(obj) {
+    return Object.keys(obj).map(key => {
+      const values = obj[key].map(valueOrNode =>
+        t.isNode(valueOrNode) ? valueOrNode : t.valueToNode(valueOrNode)
+      );
 
-        let match = tag === htmlName;
-        let matchName = htmlName;
-        if (htmlName[0]==='/') {
-          match = tag.match(patternStringToRegExp(htmlName));
-          matchName = match[0];
+      let node = values[0];
+      if (values.length > 1 && !t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
+        node = t.binaryExpression('+', t.stringLiteral(''), node);
+      }
+      values.slice(1).forEach(value => {
+        node = t.binaryExpression('+', node, value);
+      });
+
+      return t.objectProperty(propertyName(key), node);
+    });
+  }
+
+  function stringValue(str) {
+    if (options.monomorphic) {
+      return t.objectExpression([
+        t.objectProperty(propertyName('type'), t.numericLiteral(3)),
+        t.objectProperty(propertyName('tag'), t.nullLiteral()),
+        t.objectProperty(propertyName('props'), t.nullLiteral()),
+        t.objectProperty(propertyName('children'), t.nullLiteral()),
+        t.objectProperty(propertyName('text'), t.stringLiteral(str))
+      ]);
+    }
+    return t.stringLiteral(str);
+  }
+
+  function createVNode(tag, props, children) {
+    // Never pass children=[[]].
+    if (children.elements.length === 1 && t.isArrayExpression(children.elements[0]) && children.elements[0].elements.length === 0) {
+      children = children.elements[0];
+    }
+
+    if (inlineVNodes) {
+      return t.objectExpression([
+        options.monomorphic && t.objectProperty(propertyName('type'), t.numericLiteral(1)),
+        t.objectProperty(propertyName('tag'), tag),
+        t.objectProperty(propertyName('props'), props),
+        t.objectProperty(propertyName('children'), children),
+        options.monomorphic && t.objectProperty(propertyName('text'), t.nullLiteral())
+      ].filter(Boolean));
+    }
+
+    // Passing `{variableArity:false}` always produces `h(tag, props, children)` - where `children` is always an Array.
+    // Otherwise, the default is `h(tag, props, ...children)`.
+    if (options.variableArity !== false) {
+      children = children.elements;
+    }
+
+    return t.callExpression(pragma, [tag, props].concat(children));
+  }
+
+  function spreadNode(args, state) {
+    if (args.length === 0) {
+      return t.nullLiteral();
+    }
+    if (args.length > 0 && t.isNode(args[0])) {
+      args.unshift({});
+    }
+
+    // 'Object.assign(x)', can be collapsed to 'x'.
+    if (args.length === 1) {
+      return propsNode(args[0]);
+    }
+    // 'Object.assign({}, x)', can be collapsed to 'x'.
+    if (args.length === 2 && !t.isNode(args[0]) && Object.keys(args[0]).length === 0) {
+      return propsNode(args[1]);
+    }
+
+    if (useNativeSpread) {
+      const properties = [];
+      args.forEach(arg => {
+        if (t.isNode(arg)) {
+          properties.push(t.spreadElement(arg));
         }
+        else {
+          properties.push(...objectProperties(arg));
+        }
+      });
+      return t.objectExpression(properties);
+    }
 
-				if (match) {
-          const matchIndex = htmlName.replace(/\//g, '').split('|').indexOf(matchName);
-          currentPragma = dottedIdentifier(pragma.split('|')[matchIndex]);
+    const helper = useBuiltIns ? dottedIdentifier('Object.assign') : state.addHelper('extends');
+    return t.callExpression(helper, args.map(propsNode));
+  }
 
-					const statics = path.node.quasi.quasis.map(e => e.value.raw);
-					const expr = path.node.quasi.expressions;
+  function propsNode(props) {
+    return t.isNode(props) ? props : t.objectExpression(objectProperties(props));
+  }
 
-					const tree = treeify(statics, expr);
-					const node = !Array.isArray(tree)
-						? transform(tree, state)
-						: t.callExpression(currentPragma, [t.arrayExpression(tree.map(root => transform(root, state)))]);
-					path.replaceWith(node);
-				}
-			}
-		}
-	};
+  function transform(node, state) {
+    if (node === undefined) return t.identifier('undefined');
+    if (node === null) return t.nullLiteral();
+
+    const { tag, props, children } = node;
+    function childMapper(child) {
+      if (typeof child==='string') {
+        return stringValue(child);
+      }
+      return t.isNode(child) ? child : transform(child, state);
+    }
+    const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
+    const newProps = spreadNode(props, state);
+    const newChildren = t.arrayExpression(children.map(childMapper));
+    return createVNode(newTag, newProps, newChildren);
+  }
+
+  // The tagged template tag function name we're looking for.
+  // This is static because it's generally assigned via htm.bind(h),
+  // which could be imported from elsewhere, making tracking impossible.
+  const htmlName = options.tag || 'html';
+  return {
+    name: 'htm',
+    visitor: {
+      TaggedTemplateExpression(path, state) {
+        const tag = path.node.tag.name;
+        if (htmlName[0]==='/' ? patternStringToRegExp(htmlName).test(tag) : tag === htmlName) {
+          const statics = path.node.quasi.quasis.map(e => e.value.raw);
+          const expr = path.node.quasi.expressions;
+
+          const tree = treeify(build(statics), expr);
+          const node = !Array.isArray(tree)
+            ? transform(tree, state)
+            : t.arrayExpression(tree.map(root => transform(root, state)));
+          path.replaceWith(node);
+        }
+      }
+    }
+  };
 }
