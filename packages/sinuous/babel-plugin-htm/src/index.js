@@ -11,10 +11,11 @@ import { build, treeify } from '../../htm/src/build.js';
  * @param {boolean} [options.variableArity=true] If `false`, always passes exactly 3 arguments to the pragma function.
  */
 export default function htmBabelPlugin({ types: t }, options = {}) {
-  const pragma = options.pragma===false ? false : dottedIdentifier(options.pragma || 'h');
+  const pragma = options.pragma===false ? false : (options.pragma || 'h|hs');
   const useBuiltIns = options.useBuiltIns;
   const useNativeSpread = options.useNativeSpread;
   const inlineVNodes = options.monomorphic || pragma===false;
+  let currentPragma;
 
   function dottedIdentifier(keypath) {
     const path = keypath.split('.');
@@ -92,7 +93,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       children = children.elements;
     }
 
-    return t.callExpression(pragma, [tag, props].concat(children));
+    return t.callExpression(currentPragma, [tag, props].concat(children));
   }
 
   function spreadNode(args, state) {
@@ -146,27 +147,37 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     }
     const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
     const newProps = spreadNode(props, state);
-    const newChildren = t.arrayExpression(children.map(childMapper));
+    const newChildren = t.arrayExpression((children || []).map(childMapper));
     return createVNode(newTag, newProps, newChildren);
   }
 
   // The tagged template tag function name we're looking for.
   // This is static because it's generally assigned via htm.bind(h),
   // which could be imported from elsewhere, making tracking impossible.
-  const htmlName = options.tag || 'html';
+  const htmlName = options.tag || '/html|svg/';
   return {
     name: 'htm',
     visitor: {
       TaggedTemplateExpression(path, state) {
         const tag = path.node.tag.name;
-        if (htmlName[0]==='/' ? patternStringToRegExp(htmlName).test(tag) : tag === htmlName) {
+        let match = tag === htmlName;
+        let matchName = htmlName;
+        if (htmlName[0]==='/') {
+          match = tag.match(patternStringToRegExp(htmlName));
+          matchName = match[0];
+        }
+
+        if (match) {
+          const matchIndex = htmlName.replace(/\//g, '').split('|').indexOf(matchName);
+          currentPragma = dottedIdentifier(pragma.split('|')[matchIndex]);
+
           const statics = path.node.quasi.quasis.map(e => e.value.raw);
           const expr = path.node.quasi.expressions;
 
           const tree = treeify(build(statics), expr);
           const node = !Array.isArray(tree)
             ? transform(tree, state)
-            : t.arrayExpression(tree.map(root => transform(root, state)));
+            : t.callExpression(currentPragma, [t.arrayExpression(tree.map(root => transform(root, state)))]);
           path.replaceWith(node);
         }
       }
