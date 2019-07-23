@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.3 - 2019-07-22
+
+### Fixed
+
+- Fixed [Incorrect updating of observable #18](https://github.com/luwes/sinuous/issues/18)
+
+### Changed
+
+- Upgraded `sinuous/htm` and `sinuous/babel-plugin-htm` to latest version.
+
 ## 0.12.2 - 2019-07-21
 
 ### Added

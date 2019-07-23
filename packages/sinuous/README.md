@@ -35,7 +35,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 ### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
 ```js
-import { o, h } from 'sinuous';
+import { o, html } from 'sinuous';
 
 const counter = o(0);
 const view = () => {
