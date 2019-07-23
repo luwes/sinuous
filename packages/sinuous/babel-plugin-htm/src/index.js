@@ -97,7 +97,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   }
 
   function spreadNode(args, state) {
-    if (args.length === 0) {
+    if (!args || args.length === 0) {
       return t.nullLiteral();
     }
     if (args.length > 0 && t.isNode(args[0])) {
@@ -145,6 +145,10 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       }
       return t.isNode(child) ? child : transform(child, state);
     }
+    if (!tag) {
+      return childMapper(node);
+    }
+
     const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
     const newProps = spreadNode(props, state);
     const newChildren = t.arrayExpression((children || []).map(childMapper));
