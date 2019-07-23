@@ -5,6 +5,7 @@ import { clearAll } from './utils.js';
 let groupCounter = 0;
 
 export function insert(parent, value, marker, current) {
+  // This is needed if the parent is a DocumentFragment initially.
   parent = (marker && marker.parentNode) || parent;
 
   const t = typeof value;

@@ -32,7 +32,7 @@ export function o(key) {
 
 function createInsert(insert, current) {
   return (element, value) => {
-    current = insert(element, value, null, current);
+    insert(element, value, null, current);
   };
 }
 
