@@ -17,7 +17,7 @@ test('inserts observable into simple text', t => {
   h(document.body, scratch);
 
   const counter = o(0);
-  scratch.append(html`
+  scratch.appendChild(html`
     Here's a list of items: Count: ${counter}
   `);
   t.equal(scratch.innerHTML, `Here's a list of items: Count: 0`);
