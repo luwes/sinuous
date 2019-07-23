@@ -5,6 +5,8 @@ import { clearAll } from './utils.js';
 let groupCounter = 0;
 
 export function insert(parent, value, marker, current) {
+  parent = (marker && marker.parentNode) || parent;
+
   const t = typeof value;
   if (value === current);
   else if ((!value && value !== 0) || value === true) {

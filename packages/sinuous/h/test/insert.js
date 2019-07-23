@@ -12,6 +12,22 @@ const insertValue = val => {
 // <div>before<!-- insert -->after</div>
 const container = document.createElement('div');
 
+test('inserts observable into simple text', t => {
+  let scratch = h('div');
+  h(document.body, scratch);
+
+  const counter = o(0);
+  scratch.append(html`
+    Here's a list of items: Count: ${counter}
+  `);
+  t.equal(scratch.innerHTML, `Here's a list of items: Count: 0`);
+
+  counter(counter() + 1);
+  t.equal(scratch.innerHTML, `Here's a list of items: Count: 1`);
+
+  t.end();
+});
+
 test('inserts fragments', t => {
   const frag = o(html`
     <h1>Hello world</h1>
