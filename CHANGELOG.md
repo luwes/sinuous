@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.4 - 2019-07-23
+
+### Fixed
+
+- Fixed [template` inserts with duplicate value are empty #14](https://github.com/luwes/sinuous/issues/14)
+
 ## 0.12.3 - 2019-07-22
 
 ### Fixed
