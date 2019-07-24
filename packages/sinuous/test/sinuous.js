@@ -39,7 +39,7 @@ test('returns a document fragment', t => {
     ]}
   `;
   t.assert(frag instanceof DocumentFragment);
-  t.equal(frag.children[0].outerHTML, '<div>Banana</div>');
-  t.equal(frag.children[1].outerHTML, '<div>Apple</div>');
+  t.equal(frag.childNodes[0].outerHTML, '<div>Banana</div>');
+  t.equal(frag.childNodes[1].outerHTML, '<div>Apple</div>');
   t.end();
 });
