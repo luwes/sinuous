@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.5 - 2019-07-23
+
+### Fixed
+
+- Fixed [Plain array in root doesn't return `DocumentFragment` #19](https://github.com/luwes/sinuous/issues/19)
+
 ## 0.12.4 - 2019-07-23
 
 ### Fixed
