@@ -283,11 +283,7 @@ test('can update content with text and observable with marker', t => {
   const reactive = o('reactive');
   const dynamic = o(99);
 
-  let current = insert(
-    parent,
-    h('h1', reactive, '⛄️', dynamic),
-    marker
-  );
+  let current = insert(parent, h('h1', reactive, '⛄️', dynamic), marker);
   t.equal(parent.innerHTML, '<h1>reactive⛄️99</h1>');
 
   dynamic(77);

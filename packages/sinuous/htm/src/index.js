@@ -35,8 +35,9 @@ const CACHE = USE_MAP ? new Map() : {};
 const getCache = USE_MAP ? getCacheMap : getCacheKeyed;
 
 const cached = function(statics) {
-  const res = evaluate(this, getCache(statics), arguments, []);
-  return res.length > 1 ? this(res) : res[0];
+  const children = evaluate(this, getCache(statics), arguments, []);
+  const result = children.length > 1 ? children : children[0];
+  return Array.isArray(result) ? this(result) : result;
 };
 
 export default MINI ? build : cached;

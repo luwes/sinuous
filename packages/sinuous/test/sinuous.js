@@ -18,6 +18,28 @@ test('simple', function(t) {
 });
 
 test('returns a simple string', t => {
-  t.equal(html`a`, 'a');
+  t.equal(
+    html`
+      a
+    `,
+    'a'
+  );
+  t.end();
+});
+
+test('returns a document fragment', t => {
+  const frag = html`
+    ${[
+      html`
+        <div>Banana</div>
+      `,
+      html`
+        <div>Apple</div>
+      `
+    ]}
+  `;
+  t.assert(frag instanceof DocumentFragment);
+  t.equal(frag.children[0].outerHTML, '<div>Banana</div>');
+  t.equal(frag.children[1].outerHTML, '<div>Apple</div>');
   t.end();
 });

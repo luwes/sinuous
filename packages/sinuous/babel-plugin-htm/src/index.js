@@ -135,23 +135,15 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   }
 
   function transform(node, state) {
+    if (t.isNode(node)) return node;
+    if (typeof node === 'string') return stringValue(node);
     if (node === undefined) return t.identifier('undefined');
     if (node === null) return t.nullLiteral();
 
     const { tag, props, children } = node;
-    function childMapper(child) {
-      if (typeof child==='string') {
-        return stringValue(child);
-      }
-      return t.isNode(child) ? child : transform(child, state);
-    }
-    if (!tag) {
-      return childMapper(node);
-    }
-
     const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
     const newProps = spreadNode(props, state);
-    const newChildren = t.arrayExpression((children || []).map(childMapper));
+    const newChildren = t.arrayExpression((children || []).map(child => transform(child, state)));
     return createVNode(newTag, newProps, newChildren);
   }
 
@@ -178,7 +170,14 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
           const statics = path.node.quasi.quasis.map(e => e.value.raw);
           const expr = path.node.quasi.expressions;
 
-          const tree = treeify(build(statics), expr);
+          let tree = treeify(build(statics), expr);
+
+          // Turn array expression in Array so it can be converted below
+          // to a pragma call expression for fragments.
+          if (t.isArrayExpression(tree)) {
+            tree = tree.elements;
+          }
+
           const node = !Array.isArray(tree)
             ? transform(tree, state)
             : t.callExpression(currentPragma, [t.arrayExpression(tree.map(root => transform(root, state)))]);
