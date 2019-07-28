@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.6 - 2019-07-28
+
+### Fixed
+
+- Fixed naming issue for umd and iife bundles
+- Add observable duplicate edges check
+- Replace Map w/ array for `map` disposers
+
 ## 0.12.5 - 2019-07-23
 
 ### Fixed
