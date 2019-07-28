@@ -61,7 +61,10 @@ function observable(value) {
 
   function data(nextValue) {
     if (nextValue === undefined) {
-      if (currentUpdate) {
+      if (
+        currentUpdate &&
+        data._listeners[data._listeners.length - 1] !== currentUpdate
+      ) {
         data._listeners.push(currentUpdate);
         currentUpdate._observables.push(data);
       }
