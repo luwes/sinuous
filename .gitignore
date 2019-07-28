@@ -8,3 +8,6 @@ coverage
 
 /site/public/
 dist
+
+/bench/results.json
+/bench/yarn.lock

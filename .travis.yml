@@ -30,7 +30,9 @@ jobs:
     - stage: tests
       name: "Unit tests"
       script: COVERAGE=true yarn test --single-run
-    - script: (cd bench && yarn && yarn build-prod && (yarn start & yarn bench))
+    - script:
+      - (cd bench && yarn && yarn build-prod)
+      - (cd bench && (yarn start --silent & yarn bench --count 10))
       name: "Benchmark"
       deploy:
         provider: pages
