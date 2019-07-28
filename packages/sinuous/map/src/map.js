@@ -15,34 +15,36 @@ let groupCounter = 0;
 export default function map(items, expr) {
   const { subscribe, root, sample, cleanup } = api;
 
-  let disposables = new Map();
+  let disposers = [];
   let parent = document.createDocumentFragment();
   let beforeNode = parent.appendChild(document.createTextNode(''));
   let afterNode = parent.appendChild(document.createTextNode(''));
 
   function disposeAll() {
-    disposables.forEach(d => d());
-    disposables.clear();
+    disposers.forEach(d => d());
+    disposers = [];
   }
 
-  function dispose(node) {
-    let disposable = disposables.get(node);
-    disposable && disposable();
-    disposables.delete(node);
+  function dispose(i) {
+    if (disposers[i]) {
+      // It's possible there are holes in the array.
+      disposers[i]();
+      // Don't splice, indexes have to stay 1:1 with items.
+      disposers[i] = undefined;
+    }
   }
 
   function createFn(parent, item, i, data, afterNode) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
     return root(disposeFn => {
-      const node = addNode(
+      disposers[i] = disposeFn;
+      return addNode(
         parent,
         expr(item, i, data),
         afterNode,
         ++groupCounter
       );
-      disposables.set(node, disposeFn);
-      return node;
     });
   }
 
@@ -202,7 +204,7 @@ export function reconcile(
         node = step(prevEndNode, BACKWARD, true);
         next = node.previousSibling;
         removeNodes(parent, node, prevEndNode.nextSibling);
-        onRemove && onRemove(node);
+        onRemove && onRemove(prevEnd);
         prevEndNode = next;
         prevEnd--;
       }
@@ -264,8 +266,6 @@ export function reconcile(
   const longestSeq = longestPositiveIncreasingSubsequence(P, newStart);
   const nodes = [];
   let tmpC = prevStartNode;
-  let lisIdx = longestSeq.length - 1;
-  let tmpD;
 
   // Collect nodes to work with them
   for (let i = prevStart; i <= prevEnd; i++) {
@@ -277,9 +277,11 @@ export function reconcile(
     let index = toRemove[i];
     let node = nodes[index];
     removeNodes(parent, node, step(node, FORWARD));
-    onRemove && onRemove(node);
+    onRemove && onRemove(index);
   }
 
+  let lisIdx = longestSeq.length - 1;
+  let tmpD;
   for (let i = newEnd; i >= newStart; i--) {
     if (longestSeq[lisIdx] === i) {
       newAfterNode = nodes[P[longestSeq[lisIdx]]];
