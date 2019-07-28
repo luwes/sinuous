@@ -49,6 +49,10 @@ export const bundles = [
     external: ['sinuous/observable', 'sinuous/htm'],
     formats: [UMD, ESM, IIFE],
     global: 'sinuous',
+    globals: {
+      // be explicit or it would use the `import * as name` as namespace.
+      'sinuous/observable': 'observable'
+    },
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'
   },

@@ -72,6 +72,7 @@ function getConfig(options) {
             `dist/${name}${formatOptions[format].ext}`
           ),
       name: options.global,
+      globals: options.globals,
       exports: options.exports,
       strict: false, // Remove `use strict;`
       interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
