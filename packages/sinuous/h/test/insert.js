@@ -1,17 +1,97 @@
 import test from 'tape';
-import { subscribe } from 'sinuous/observable';
-import { h } from 'sinuous';
+import { o, h, html } from 'sinuous';
 import { insert } from '../src/insert.js';
 
 const insertValue = val => {
   const parent = container.cloneNode(true);
-  insert(subscribe, parent, val);
+  insert(parent, val);
   return parent;
 };
 
 // insert
 // <div>before<!-- insert -->after</div>
 const container = document.createElement('div');
+
+test('inserts observable into simple text', t => {
+  let scratch = h('div');
+  h(document.body, scratch);
+
+  const counter = o(0);
+  scratch.appendChild(html`
+    Here's a list of items: Count: ${counter}
+  `);
+  t.equal(scratch.innerHTML, `Here's a list of items: Count: 0`);
+
+  counter(counter() + 1);
+  t.equal(scratch.innerHTML, `Here's a list of items: Count: 1`);
+
+  t.end();
+});
+
+test('inserts fragments', t => {
+  const frag = o(html`
+    <h1>Hello world</h1>
+    <p>Bye bye</p>
+  `);
+  const res = html`
+    <div>${frag}</div>
+  `;
+  t.equal(res.innerHTML, '<h1>Hello world</h1><p>Bye bye</p>');
+  t.equal(res.children.length, 2);
+
+  frag(
+    html`
+      <h1>Cool</h1>
+      <p>Beans</p>
+    `
+  );
+  t.equal(res.innerHTML, '<h1>Cool</h1><p>Beans</p>');
+  t.equal(res.children.length, 2);
+
+  frag('make it a string');
+  t.equal(res.innerHTML, 'make it a string');
+  t.equal(res.childNodes.length, 2);
+
+  frag(
+    html`
+      <h1>Cool</h1>
+      <p>Beans</p>
+    `
+  );
+  t.equal(res.innerHTML, '<h1>Cool</h1><p>Beans</p>');
+  t.equal(res.children.length, 2);
+
+  t.end();
+});
+
+test('inserts long fragments', t => {
+  const frag = o(html`
+    <h1>Hello world</h1>
+    <p>Bye bye</p>
+    <p>Hello again</p>
+  `);
+  const res = html`
+    <div>${frag}</div>
+  `;
+  t.equal(
+    res.innerHTML,
+    '<h1>Hello world</h1><p>Bye bye</p><p>Hello again</p>'
+  );
+  t.equal(res.children.length, 3);
+
+  frag(html`
+    <p>Hello again</p>
+    <p>Bye bye</p>
+    <h1>Hello world</h1>
+  `);
+  t.equal(
+    res.innerHTML,
+    '<p>Hello again</p><p>Bye bye</p><h1>Hello world</h1>'
+  );
+  t.equal(res.children.length, 3);
+
+  t.end();
+});
 
 test('inserts nothing for null', t => {
   const res = insertValue(null);
@@ -55,27 +135,13 @@ test('inserts nothing for undefined in array', t => {
   t.end();
 });
 
-test('inserts nothing for false in array', t => {
-  const res = insertValue(['a', false, 'b']);
-  t.equal(res.innerHTML, 'ab');
-  t.equal(res.childNodes.length, 2);
-  t.end();
-});
-
-test('inserts nothing for true in array', t => {
-  const res = insertValue(['a', true, 'b']);
-  t.equal(res.innerHTML, 'ab');
-  t.equal(res.childNodes.length, 2);
-  t.end();
-});
-
-test('can insert strings', t => {
+test('can insert stringable', t => {
   let res = insertValue('foo');
   t.equal(res.innerHTML, 'foo');
   t.equal(res.childNodes.length, 1);
 
-  res = insertValue('foobar');
-  t.equal(res.innerHTML, 'foobar');
+  res = insertValue(11206);
+  t.equal(res.innerHTML, '11206');
   t.equal(res.childNodes.length, 1);
   t.end();
 });
@@ -168,9 +234,9 @@ test('can insert a changing array of nodes', t => {
   test([n4, n3, n2, n1]);
 
   function test(array) {
-    current = insert(subscribe, parent, array, undefined, current);
+    current = insert(parent, array, undefined, current);
     t.equal(parent.innerHTML, expected(array));
-    current = insert(subscribe, parent, orig, undefined, current);
+    current = insert(parent, orig, undefined, current);
     t.equal(parent.innerHTML, origExpected);
   }
 
@@ -187,54 +253,52 @@ test('can insert nested arrays', t => {
   t.end();
 });
 
-test('can update arrays of nodes with node', t => {
-  const parent = container.cloneNode(true);
-
-  let current = insert(subscribe, parent, []);
-  t.equal(parent.innerHTML, '', 'empty array');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-
-  current = insert(subscribe, parent, [h('h1')]);
-  t.equal(parent.innerHTML, '<h1></h1>', 'array of node');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-
-  current = insert(subscribe, parent, [h('h1'), h('h1'), h('h1')]);
-  t.equal(parent.innerHTML, '<h1></h1><h1></h1><h1></h1>', 'array of nodes');
-
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
-  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
-  t.end();
-});
-
 test('can update text with node', t => {
   const parent = container.cloneNode(true);
 
-  let current = insert(subscribe, parent, '🧬');
+  let current = insert(parent, '🧬');
   t.equal(parent.innerHTML, '🧬', 'text dna');
 
-  insert(subscribe, parent, h('h1', '⛄️'), undefined, current);
+  insert(parent, h('h1', '⛄️'), undefined, current);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
   t.end();
 });
 
-test('can update array with text with marker', t => {
+test('can update content with text with marker', t => {
   const parent = container.cloneNode(true);
   const marker = parent.appendChild(document.createTextNode(''));
 
-  let current = insert(subscribe, parent, h('h1', '⛄️'), marker);
+  let current = insert(parent, h('h1', '⛄️'), marker);
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
 
-  insert(subscribe, parent, '⛄️', marker, current);
+  insert(parent, '⛄️', marker, current);
   t.equal(parent.innerHTML, '⛄️');
   t.end();
 });
 
-test('throws on unsupported value', t => {
+test('can update content with text and observable with marker', t => {
   const parent = container.cloneNode(true);
-  t.throws(() => insert(subscribe, parent, {}));
+  const marker = parent.appendChild(document.createTextNode(''));
+
+  const reactive = o('reactive');
+  const dynamic = o(99);
+
+  let current = insert(parent, h('h1', reactive, '⛄️', dynamic), marker);
+  t.equal(parent.innerHTML, '<h1>reactive⛄️99</h1>');
+
+  dynamic(77);
+  t.equal(parent.innerHTML, '<h1>reactive⛄️77</h1>');
+
+  reactive(1);
+  t.equal(parent.innerHTML, '<h1>1⛄️77</h1>');
+
+  dynamic('');
+  t.equal(parent.innerHTML, '<h1>1⛄️</h1>');
+
+  reactive('');
+  t.equal(parent.innerHTML, '<h1>⛄️</h1>');
+
+  insert(parent, '⛄️', marker, current);
+  t.equal(parent.innerHTML, '⛄️');
   t.end();
 });

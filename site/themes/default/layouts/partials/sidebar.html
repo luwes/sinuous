@@ -1,0 +1,18 @@
+<aside class="menu">
+  {{ $currentPage := . }}
+  {{ range .Site.Menus.docs }}
+    {{ if .HasChildren }}
+      <p class="menu-label{{ if $currentPage.HasMenuCurrent "docs" . }} is-active{{ end }}">
+        {{ .Pre }}
+        <span>{{ .Name }}</span>
+      </p>
+      <ul class="menu-list">
+        {{ range .Children }}
+          <li>
+            <a class="{{ if $currentPage.IsMenuCurrent "docs" . }}is-active{{ end }}" href="{{ .URL }}">{{ .Name }}</a>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  {{ end }}
+</aside>

@@ -1,7 +1,7 @@
 [build]
   base    = ""
   publish = "site/public"
-  command = "yarn build --all && (cd site && hugo --gc --minify)"
+  command = "yarn build --all && (cd site && hugo --gc --minify --ignoreCache)"
 
 [build.environment]
   YARN_VERSION = "1.12.3"

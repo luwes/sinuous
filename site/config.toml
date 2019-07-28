@@ -1,9 +1,0 @@
-baseURL = "https://sinuous.netlify.com/"
-languageCode = "en-us"
-title = "Sinuous - Small, blazing fast, reactive UI library."
-theme = "default"
-ignoreFiles = [ "node_modules" ]
-
-[params]
-github = "https://github.com/luwes/sinuous"
-githubSite = "https://github.com/luwes/sinuous-site"

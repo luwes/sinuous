@@ -1,0 +1,22 @@
+baseURL: https://sinuous.netlify.com/
+languageCode: en-us
+title: "Sinuous - Small, blazing fast, reactive UI library."
+theme: default
+ignoreFiles:
+  - node_modules
+
+params:
+  github: https://github.com/luwes/sinuous
+  githubSite: https://github.com/luwes/sinuous-site
+
+menu:
+  docs:
+    - identifier: introduction
+      name: introduction
+      weight: 10
+    - identifier: main concepts
+      name: Main Concepts
+      weight: 20
+    - identifier: advanced
+      name: Advanced
+      weight: 30

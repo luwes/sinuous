@@ -1,0 +1,16 @@
+{{ define "main" }}
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-one-quarter">
+        {{- partial "sidebar.html" . -}}
+      </div>
+      <div class="column">
+        {{- .Content -}}
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}

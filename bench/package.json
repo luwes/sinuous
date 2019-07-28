@@ -1,0 +1,30 @@
+{
+  "name": "sinuous-bench",
+  "private": true,
+  "scripts": {
+    "start": "http-server -c-1 -p 8000 . ",
+    "bench": "node bench.js",
+    "build-prod": "lerna run --parallel build-prod",
+    "build-dev": "lerna run --parallel build-dev"
+  },
+  "workspaces": {
+    "packages": [
+      "libs/*"
+    ]
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "gzip-size": "^5.1.1",
+    "http-server": "^0.11.1",
+    "lodash": "^4.17.15",
+    "lowdb": "^1.0.0",
+    "minimist": "^1.2.0",
+    "plotly.js-dist": "^1.49.0",
+    "pretty-bytes": "^5.3.0",
+    "puppeteer": "^1.19.0",
+    "semver": "^6.3.0"
+  },
+  "devDependencies": {
+    "lerna": "^3.16.4"
+  }
+}

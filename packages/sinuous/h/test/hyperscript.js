@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import { o, h } from 'sinuous';
+import { o, h, hs } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(h('h1').outerHTML, '<h1></h1>');
@@ -29,21 +29,21 @@ test('can use namespace in name', function(t) {
   t.end();
 });
 
-test('can use id selector', function(t) {
-  t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
-  t.end();
-});
+// test('can use id selector', function(t) {
+//   t.equal(h('div#frame').outerHTML, '<div id="frame"></div>');
+//   t.end();
+// });
 
-test('can use class selector', function(t) {
-  t.equal(h('div.panel').outerHTML, '<div class="panel"></div>');
-  t.end();
-});
+// test('can use class selector', function(t) {
+//   t.equal(h('div.panel').outerHTML, '<div class="panel"></div>');
+//   t.end();
+// });
 
-test('can default element types', function(t) {
-  t.equal(h('.panel').outerHTML, '<div class="panel"></div>');
-  t.equal(h('#frame').outerHTML, '<div id="frame"></div>');
-  t.end();
-});
+// test('can default element types', function(t) {
+//   t.equal(h('.panel').outerHTML, '<div class="panel"></div>');
+//   t.equal(h('#frame').outerHTML, '<div id="frame"></div>');
+//   t.end();
+// });
 
 test('can set properties', function(t) {
   let a = h('a', { href: 'http://google.com' });
@@ -65,7 +65,7 @@ test('(un)registers an event handler', function(t) {
 
   h(btn, { onclick: false });
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();
@@ -84,7 +84,7 @@ test('(un)registers an observable event handler', function(t) {
 
   onclick(false);
   btn.click();
-  t.assert(click.calledOnce, 'click still called only once');
+  t.equal(click.callCount, 1, 'click still called only once');
 
   btn.parentNode.removeChild(btn);
   t.end();
@@ -102,13 +102,13 @@ test('(un)registers an observable event handler', function(t) {
 //   t.end();
 // });
 
-test('can use bindings', function(t) {
-  h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
+// test('can use bindings', function(t) {
+//   h.bindings.innerHTML = (el, value) => (el.innerHTML = value);
 
-  let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
-  t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
-  t.end();
-});
+//   let el = h('div', { $innerHTML: '<b>look ma, no node value</b>' });
+//   t.equal(el.outerHTML, '<div><b>look ma, no node value</b></div>');
+//   t.end();
+// });
 
 test('sets styles', function(t) {
   let div = h('div', { style: { color: 'red' } });
@@ -147,12 +147,12 @@ test('sets aria attributes', function(t) {
   t.end();
 });
 
-test('sets refs', function(t) {
-  let ref;
-  let div = h('div', { ref: el => (ref = el) });
-  t.equal(div, ref);
-  t.end();
-});
+// test('sets refs', function(t) {
+//   let ref;
+//   let div = h('div', { ref: el => (ref = el) });
+//   t.equal(div, ref);
+//   t.end();
+// });
 
 test("boolean, number, get to-string'ed", function(t) {
   let e = h('p', true, false, 4);
@@ -160,11 +160,11 @@ test("boolean, number, get to-string'ed", function(t) {
   t.end();
 });
 
-test('unicode selectors', function(t) {
-  t.equal(h('.⛄').outerHTML, '<div class="⛄"></div>');
-  t.equal(h('span#⛄').outerHTML, '<span id="⛄"></span>');
-  t.end();
-});
+// test('unicode selectors', function(t) {
+//   t.equal(h('.⛄').outerHTML, '<div class="⛄"></div>');
+//   t.equal(h('span#⛄').outerHTML, '<span id="⛄"></span>');
+//   t.end();
+// });
 
 test('can use fragments', function(t) {
   const insertCat = () => 'cat';

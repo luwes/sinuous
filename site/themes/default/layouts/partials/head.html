@@ -8,16 +8,10 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<!--   <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'> -->
-
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-
-  {{ $custom := resources.Get "/scss/custom.scss" | toCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $custom.Permalink }}">
-
+  {{ $css := resources.Get "/scss/custom.scss" | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.Permalink }}">
   <link rel="stylesheet" href="/css/prism.css">
 
   <!-- Favicon
@@ -29,14 +23,14 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js" integrity="sha384-qD/MNBVMm3hVYCbRTSOW130+CWeRIKbpot9/gR1BHkd7sIct4QKhT1hOPd+2hO8K" crossorigin="anonymous"></script>
 
-  <script src="/js/prism.js"></script>
-  <script src="/js/site.js"></script>
-
+  {{ $prism := resources.Get "js/prism.js" }}
+  {{ $prismTemplates := resources.Get "js/prism-js-templates.js" }}
+  {{ $site := resources.Get "js/site.js" }}
+  {{ $js := slice $prism $prismTemplates $site | resources.Concat "js/bundle.js" | minify | fingerprint }}
+  <script src="{{ $js.Permalink }}"></script>
   <script src="//cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-
   <!-- only required polyfill for Swiss -->
   <script src="//unpkg.com/@webcomponents/custom-elements"></script>
-
   <!-- custom event in this example for IE11 -->
   <script src="//unpkg.com/custom-event-polyfill"></script>
 </head>

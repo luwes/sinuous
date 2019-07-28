@@ -1,28 +1,8 @@
 import test from 'tape';
 import { h } from 'sinuous';
-import addNode from '../src/add-node.js';
+import { addNode } from '../src/utils.js';
 
 let counter = 0;
-
-test('addNode does nothing for empty normalized array', function(t) {
-  const parent = document.createElement('div');
-  parent.appendChild(document.createTextNode('test'));
-
-  addNode(parent, [null, true]);
-
-  t.equal(parent.innerHTML, 'test');
-  t.end();
-});
-
-test('addNode inserts normalized array of node', function(t) {
-  const parent = document.createElement('div');
-  parent.appendChild(document.createTextNode('test'));
-
-  addNode(parent, [h('h1'), null, false]);
-
-  t.equal(parent.innerHTML, 'test<h1></h1>');
-  t.end();
-});
 
 test('addNode inserts fragment', function(t) {
   const parent = document.createElement('div');
@@ -33,17 +13,6 @@ test('addNode inserts fragment', function(t) {
   addNode(parent, fragment);
 
   t.equal(parent.innerHTML, 'test<h1></h1>');
-  t.end();
-});
-
-test('addNode inserts array of nodes w/ marker', function(t) {
-  const parent = document.createElement('div');
-  parent.appendChild(document.createTextNode('test'));
-
-  const marker = parent.appendChild(document.createElement('span'));
-  addNode(parent, [h('h1'), h('h2')], marker, ++counter);
-
-  t.equal(parent.innerHTML, 'test<h1></h1><h2></h2><span></span>');
   t.end();
 });
 

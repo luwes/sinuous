@@ -49,3 +49,10 @@ test('template result fills observable tags', function(tt) {
   tt.equal(tmpl.firstChild.children[1].outerHTML, '<span>⛄️</span>');
   tt.end();
 });
+
+test('template result fills tags w/ same value', function(tt) {
+  const title = template(() => h('h1', t('title')));
+  tt.equal(title({ title: 'Test' }).firstChild.outerHTML, '<h1>Test</h1>');
+  tt.equal(title({ title: 'Test' }).firstChild.outerHTML, '<h1>Test</h1>');
+  tt.end();
+});

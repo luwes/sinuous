@@ -1,5 +1,5 @@
 import test from 'tape';
-import o, { S, root } from '../src/observable.js';
+import { o, S, root } from '../src/observable.js';
 
 test("disables updates and sets computation's value to undefined", function(t) {
   root(function(dispose) {

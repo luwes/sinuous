@@ -1,5 +1,4 @@
 import test from 'tape';
-import { subscribe } from 'sinuous/observable';
 import { h } from 'sinuous';
 import { insert } from '../src/insert.js';
 
@@ -8,7 +7,7 @@ import { insert } from '../src/insert.js';
 
 function insertValue(val) {
   const parent = clone(container);
-  insert(subscribe, parent, val, parent.childNodes[1]);
+  insert(parent, val, parent.childNodes[1]);
   return parent;
 }
 
@@ -62,20 +61,6 @@ test('inserts nothing for null in array', t => {
 
 test('inserts nothing for undefined in array', t => {
   const res = insertValue(['a', undefined, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
-test('inserts nothing for false in array', t => {
-  const res = insertValue(['a', false, 'b']);
-  t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
-  t.end();
-});
-
-test('inserts nothing for true in array', t => {
-  const res = insertValue(['a', true, 'b']);
   t.equal(res.innerHTML, 'beforeabafter');
   t.equal(res.childNodes.length, 5);
   t.end();
@@ -141,28 +126,28 @@ test('can insert a changing array of nodes', t => {
   div2.textContent = '2';
   span3.textContent = '3';
 
-  current = insert(subscribe, container, [], marker, current);
+  current = insert(container, [], marker, current);
   t.equal(container.innerHTML, '');
 
-  current = insert(subscribe, container, [span1, div2, span3], marker, current);
+  current = insert(container, [span1, div2, span3], marker, current);
   t.equal(container.innerHTML, '<span>1</span><div>2</div><span>3</span>');
 
-  current = insert(subscribe, container, [div2, span3], marker, current);
+  current = insert(container, [div2, span3], marker, current);
   t.equal(container.innerHTML, '<div>2</div><span>3</span>');
 
-  current = insert(subscribe, container, [div2, span3], marker, current);
+  current = insert(container, [div2, span3], marker, current);
   t.equal(container.innerHTML, '<div>2</div><span>3</span>');
 
-  current = insert(subscribe, container, [span3, div2], marker, current);
+  current = insert(container, [span3, div2], marker, current);
   t.equal(container.innerHTML, '<span>3</span><div>2</div>');
 
-  current = insert(subscribe, container, [], marker, current);
+  current = insert(container, [], marker, current);
   t.equal(container.innerHTML, '');
 
-  current = insert(subscribe, container, [span3], marker, current);
+  current = insert(container, [span3], marker, current);
   t.equal(container.innerHTML, '<span>3</span>');
 
-  current = insert(subscribe, container, [div2], marker, current);
+  current = insert(container, [div2], marker, current);
   t.equal(container.innerHTML, '<div>2</div>');
   t.end();
 });

@@ -1,5 +1,5 @@
 import test from 'tape';
-import o, { S, root } from '../src/observable.js';
+import { o, S, root } from '../src/observable.js';
 
 test('allows subcomputations to escape their parents', function(t) {
   root(function() {

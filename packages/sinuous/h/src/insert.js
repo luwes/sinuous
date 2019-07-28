@@ -1,70 +1,55 @@
-import { clearAll, normalizeIncomingArray } from './utils.js';
+import { api } from './api.js';
+import { EMPTY_ARR, GROUPING } from './constants.js';
+import { clearAll } from './utils.js';
 
-export function insert(subscribe, parent, value, marker, current) {
-  if (value === current) return current;
+let groupCounter = 0;
+
+export function insert(parent, value, marker, current) {
+  // This is needed if the parent is a DocumentFragment initially.
+  parent = (marker && marker.parentNode) || parent;
 
   const t = typeof value;
-  if (t === 'string' || t === 'number') {
-    if (t === 'number') {
-      value = '' + value;
-    }
-    if (marker) {
-      const startNode = (marker && marker.previousSibling) || parent.lastChild;
-      if (value === '') {
-        clearAll(parent, current, marker);
-      } else if (current !== '' && typeof current === 'string') {
-        startNode.data = value;
+  if (value === current);
+  else if ((!value && value !== 0) || value === true) {
+    clearAll(parent, current, marker);
+    current = null;
+  } else if (
+    (!current || typeof current === 'string') &&
+    (t === 'string' || (t === 'number' && (value += '')))
+  ) {
+    // Block optimized for string insertion.
+    if (current == null || !parent.firstChild) {
+      if (marker) {
+        parent.insertBefore(document.createTextNode(value), marker);
       } else {
-        const node = document.createTextNode(value);
-        if (current !== '' && current != null) {
-          parent.replaceChild(node, startNode);
-        } else {
-          parent.insertBefore(node, marker);
-        }
+        parent.textContent = value;
       }
-      current = value;
     } else {
-      if (current !== '' && typeof current === 'string') {
-        current = parent.firstChild.data = value;
+      if (marker) {
+        (marker.previousSibling || parent.lastChild).data = value;
       } else {
-        current = parent.textContent = value;
+        parent.firstChild.data = value;
       }
-    }
-  } else if (value == null || t === 'boolean') {
-    current = clearAll(parent, current, marker);
-  } else if (t === 'function') {
-    subscribe(function() {
-      current = insert(subscribe, parent, value(), marker, current);
-    });
-  } else if (value instanceof Node) {
-    if (Array.isArray(current)) {
-      if (current.length === 0) {
-        parent.insertBefore(value, marker);
-      } else if (current.length === 1) {
-        parent.replaceChild(value, current[0]);
-      } else {
-        clearAll(parent, current, marker);
-        parent.appendChild(value);
-      }
-    } else if (current == null || current === '') {
-      parent.insertBefore(value, marker);
-    } else {
-      parent.replaceChild(
-        value,
-        (marker && marker.previousSibling) || parent.firstChild
-      );
     }
     current = value;
-  } else if (Array.isArray(value)) {
-    const array = normalizeIncomingArray([], value);
-    clearAll(parent, current, marker);
-    array.forEach(node => {
-      parent.insertBefore(node, marker);
+  } else if (t === 'function') {
+    api.subscribe(function() {
+      current = insert(parent, value(), marker, current);
     });
-    current = array;
   } else {
-    // eslint-disable-next-line
-    throw new Error('Expected node, string or array of same.');
+    // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
+    clearAll(parent, current, marker);
+
+    if (!(value instanceof Node)) {
+      // Passing an empty array creates a DocumentFragment.
+      value = api.h(EMPTY_ARR, value);
+    }
+    if (value.nodeType === 11 && value.firstChild !== value.lastChild) {
+      value.firstChild[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
+    }
+    // If marker is `null`, value will be added to the end of the list.
+    parent.insertBefore(value, marker);
+    current = value;
   }
 
   return current;

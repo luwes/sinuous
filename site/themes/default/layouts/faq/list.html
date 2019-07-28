@@ -1,0 +1,18 @@
+{{ define "main" }}
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-one-quarter">
+        {{- partial "sidebar.html" . -}}
+      </div>
+      <div class="column">
+        {{ range .Pages }}
+          {{ .Render "single"}}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}

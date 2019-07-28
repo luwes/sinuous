@@ -30,16 +30,18 @@
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons">
-            <span class="navbar-item">
-              <a class="button is-dark" href="{{.Site.Params.Github}}">
-                <span class="icon">
-                  <i class="fab fa-github"></i>
-                </span>
-                <span>Github</span>
-              </a>
+          <a class="button is-white" href="{{.Site.Params.Github}}/blob/master/CHANGELOG.md">
+          {{ $dataJ := getJSON "https://raw.githubusercontent.com/luwes/sinuous/master/packages/sinuous/package.json" }}
+          v{{ $dataJ.version }}
+          </a>
+        </div>
+        <div class="navbar-item">
+          <a class="button is-dark" href="{{.Site.Params.Github}}">
+            <span class="icon">
+              <i class="fab fa-github"></i>
             </span>
-          </div>
+            <span>Github</span>
+          </a>
         </div>
       </div>
     </div>

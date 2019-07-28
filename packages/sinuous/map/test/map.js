@@ -1,21 +1,21 @@
 import test from 'tape';
-import { root } from 'sinuous/observable';
+import * as api from 'sinuous/observable';
 import { o, h } from 'sinuous';
 import map from 'sinuous/map';
 
+const root = api.root;
 let dispose;
 
 (function() {
   console.log('Basic map tests');
 
-  const list = o([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
+  const list = o([h(['a', 1]), h(['b', 2]), h(['c', 3]), h(['d', 4])]);
   const div = document.createElement('div');
   div.appendChild(document.createElement('i'));
-  const beforeNode = div.appendChild(document.createElement('b'));
-  const afterNode = div.appendChild(document.createTextNode(''));
+  div.appendChild(document.createElement('b'));
   root(d => {
     dispose = d;
-    return map(list, item => item)(h, div, afterNode);
+    div.appendChild(map(list, item => item));
   });
 
   test('create', t => {
@@ -24,7 +24,7 @@ let dispose;
   });
 
   test('update', t => {
-    list([['b', 2, 99], ['a', 1], ['c']]);
+    list([h(['b', 2, 99]), h(['a', 1]), h(['c'])]);
     t.equal(div.innerHTML, '<i></i><b></b>b299a1c');
     t.end();
   });
@@ -53,7 +53,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return h('div', { ref: el => (div = el) }, map(list, item => item));
+      div = h('div', map(list, item => item));
     });
 
   function apply(t, array) {
@@ -146,12 +146,10 @@ let dispose;
     n3 = 'c',
     n4 = 'd';
   const list = o([n1, n2, n3, n4]);
-  const parent = document.createDocumentFragment();
-  const afterNode = parent.appendChild(document.createTextNode(''));
   const Component = () =>
     root(d => {
       dispose = d;
-      return map(list, item => item)(h, parent, afterNode);
+      return map(list, item => item);
     });
 
   function apply(t, array) {
@@ -248,11 +246,7 @@ let dispose;
   const Component = () =>
     root(d => {
       dispose = d;
-      return h(
-        'div',
-        { ref: el => (div = el) },
-        map(list, item => h([item, item]))
-      );
+      return (div = h('div', map(list, item => h([item, item]))));
     });
 
   function apply(t, array) {

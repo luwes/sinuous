@@ -1,0 +1,21 @@
+{
+  "name": "sinuous-lib",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "build-dev": "rollup -c -w",
+    "build-prod": "rollup -c --environment production"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.4",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "rollup": "1.11.3",
+    "rollup-plugin-babel": "4.3.2",
+    "rollup-plugin-node-resolve": "4.2.3",
+    "rollup-plugin-terser": "4.0.4"
+  },
+  "dependencies": {
+    "sinuous": "0.12.5"
+  }
+}

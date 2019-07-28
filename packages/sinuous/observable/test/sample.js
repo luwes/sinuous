@@ -1,5 +1,5 @@
 import test from 'tape';
-import o, { S, sample } from '../src/observable.js';
+import { o, S, sample } from '../src/observable.js';
 
 test('avoids a depdendency', function(t) {
   var a = o(1),

@@ -1,0 +1,9 @@
+---
+title: "An Application"
+source:
+  - "examples/todos/src/todos.js"
+class: todos-example
+---
+
+<p>The <code>o</code> function creates an observable which can hold any value you would like to make reactive in the view. Just keep in mind that the observable returns a function. By calling this function without an argument it acts as a getter, if an argument is passed it will set the value of the observable.</p>
+<p>The first time the view is rendered Sinuous will detect any used observables causing the accompanying DOM operations to be stored. At a later point when a new value is set to an observable it will simply execute the previously stored DOM operation with the new value.</p>

@@ -1,6 +1,6 @@
 import test from 'tape';
 import { spy } from 'sinon';
-import o, { S } from '../src/observable.js';
+import { o, S } from '../src/observable.js';
 
 // Tests from S.js
 

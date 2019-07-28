@@ -61,7 +61,10 @@ function observable(value) {
 
   function data(nextValue) {
     if (nextValue === undefined) {
-      if (currentUpdate) {
+      if (
+        currentUpdate &&
+        data._listeners[data._listeners.length - 1] !== currentUpdate
+      ) {
         data._listeners.push(currentUpdate);
         currentUpdate._observables.push(data);
       }
@@ -80,6 +83,8 @@ function observable(value) {
 
   return data;
 }
+
+export { observable, observable as o };
 
 /**
  * Creates a new computation which runs when defined and automatically re-runs
@@ -168,5 +173,3 @@ function resetUpdate(update) {
   update._children = [];
   update._cleanups = [];
 }
-
-export default observable;

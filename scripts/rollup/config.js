@@ -2,7 +2,6 @@ import path from 'path';
 import * as R from 'ramda';
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
@@ -13,7 +12,7 @@ import { CJS, ESM, IIFE, UMD, bundles, fixtures } from '../bundles.js';
 const formatOptions = {
   [CJS]: { ext: '.js' },
   [ESM]: { ext: '.esm.js' },
-  [IIFE]: { ext: '.js' },
+  [IIFE]: { ext: '.min.js' },
   [UMD]: { ext: '.js' }
 };
 
@@ -55,7 +54,7 @@ function shouldSkipBundle(bundleName, bundleType) {
 }
 
 function getConfig(options) {
-  const { name, global, input, dest, format, external, sourcemap } = options;
+  const { name, input, dest, format, external, sourcemap } = options;
   return {
     input,
     external,
@@ -72,19 +71,27 @@ function getConfig(options) {
             '..',
             `dist/${name}${formatOptions[format].ext}`
           ),
-      name: global,
-      legacy: true,
-      freeze: false,
-      esModule: false
+      name: options.global,
+      globals: options.globals,
+      exports: options.exports,
+      strict: false, // Remove `use strict;`
+      interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
+      freeze: false, // Remove `Object.freeze()`
+      esModule: false // Remove `esModele` property
     },
     plugins: [
-      bundleSize(),
+      bundleSize({
+        columnWidth: 25
+      }),
       nodeResolve(),
-      commonjs(),
-      [UMD, IIFE].includes(format) && babel(),
+      [UMD, IIFE].includes(format) && babel(options.babel),
       [UMD, IIFE].includes(format) &&
         terser({
+          sourcemap: true,
           warnings: true,
+          compress: {
+            passes: 10
+          },
           mangle: {
             properties: {
               regex: /^_/
@@ -94,7 +101,7 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                $_flow: '__f'
+                // $_flow: '__f'
                 // $_observable: '__o',
                 // $_observables: '__o',
                 // $_children: '__c',
@@ -103,7 +110,7 @@ function getConfig(options) {
             }
           }
         }),
-      sourcemap && gzip()
+      options.gzip && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined

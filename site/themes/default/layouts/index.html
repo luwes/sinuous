@@ -1,17 +1,16 @@
 {{ define "main" }}
-<section class="hero is-medium is-light">
+<section class="hero is-fullheight-with-navbar">
   <div class="hero-body">
     <div class="container">
       <h1 class="title is-size-1">
         {{- .Params.herotitle -}}
-        <small class="is-size-6">
-          {{ $dataJ := getJSON "https://raw.githubusercontent.com/luwes/sinuous/master/packages/sinuous/package.json" }}
-          v{{ $dataJ.version }}
-        </small>
       </h1>
       <h1 class="subtitle">
         {{- .Params.subtitle -}}
       </h1>
+      <div class="buttons">
+        <a class="button" href="{{ relref . "/introduction/getting-started.md" }}">Get Started</a>
+      </div>
     </div>
     <div class="hero-icon">
       {{- $icon := .Params.icon -}}
@@ -26,7 +25,7 @@
 
 <section class="section">
   <div class="container">
-    {{ range .Pages }}
+    {{ range first 3 (where $.Site.RegularPages "Section" "examples") }}
       <div class="example columns">
         <div class="column is-one-third">
           <div class="content">
@@ -37,7 +36,7 @@
         <div class="column">
           <div class="snippet columns is-gapless">
             {{ if index (.Params.source) 0 }}
-              {{ $sized := readFile (printf "%s.gz" (replace (index (.Params.source) 0) "src" "dist")) }}
+              {{ $sized := readFile (printf "%s.gz" (replaceRE "src/(.*).js" "dist/$1.min.js" (index (.Params.source) 0))) }}
               <div class="snippet-tag">
                 {{- div (len $sized) 1000.0 | lang.NumFmt 2 }} kB
               </div>
@@ -50,7 +49,7 @@
             <div class="column">
               <div class="snippet-preview content column">
                 <div class="{{ .Params.class }}"></div>
-                <script src="{{ (replace (index (.Params.source) 0) "src" "dist") }}"></script>
+                <script src="{{ (replaceRE "src/(.*).js" "dist/$1.min.js" (index (.Params.source) 0)) }}"></script>
               </div>
             </div>
           </div>

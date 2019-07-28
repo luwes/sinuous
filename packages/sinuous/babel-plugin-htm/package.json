@@ -1,0 +1,16 @@
+{
+	"name": "babel-plugin-htm",
+	"version": "2.1.0",
+	"description": "Babel plugin to compile htm's Tagged Template syntax to hyperscript or inline VNodes.",
+	"main": "dist/babel-plugin-htm.js",
+	"module": "dist/babel-plugin-htm.esm.js",
+	"files": [
+		"dist"
+	],
+	"author": "Jason Miller <jason@developit.ca>",
+	"license": "Apache-2.0",
+	"homepage": "https://github.com/developit/htm/tree/master/packages/babel-plugin-htm",
+	"dependencies": {
+		"sinuous": "^0.11.0"
+	}
+}

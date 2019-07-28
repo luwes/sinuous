@@ -9,40 +9,58 @@ export const bundleFormats = {
 };
 
 export const bundles = [
+  // `htm` has to come before `babel-plugin-htm`
+  {
+    external: [],
+    formats: [UMD, ESM, IIFE],
+    global: 'htm',
+    name: 'htm',
+    input: 'packages/sinuous/htm/src/index.js'
+  },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'observable',
     name: 'observable',
     input: 'packages/sinuous/observable/src/observable.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'template',
     name: 'template',
     input: 'packages/sinuous/template/src/template.js'
   },
   {
     external: ['sinuous'],
-    formats: [ESM, UMD],
+    formats: [UMD, ESM, IIFE],
     global: 'map',
     name: 'map',
     input: 'packages/sinuous/map/src/index.js'
   },
   {
-    external: ['sinuous/observable'],
-    formats: [ESM, UMD],
+    external: ['sinuous/observable', 'sinuous/htm'],
+    formats: [UMD, ESM, IIFE],
     global: 'sinuous',
+    globals: {
+      // be explicit or it would use the `import * as name` as namespace.
+      'sinuous/observable': 'observable'
+    },
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js'
+  },
+  {
+    external: [],
+    formats: [ESM, CJS],
+    name: 'babel-plugin-htm',
+    input: 'packages/sinuous/babel-plugin-htm/src/index.js'
   }
 ];
 
@@ -62,24 +80,43 @@ export const fixtures = [
   //   sourcemap: true
   // },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousHello',
     name: 'hello',
-    input: 'fixtures/examples/hello/src/hello.js',
-    sourcemap: true
+    input: 'site/content/examples/hello/src/hello.js',
+    gzip: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousCounter',
     name: 'counter',
-    input: 'fixtures/examples/counter/src/counter.js',
-    sourcemap: true
+    input: 'site/content/examples/counter/src/counter.js',
+    gzip: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   },
   {
-    formats: [UMD],
+    formats: [IIFE],
     global: 'sinuousTodos',
     name: 'todos',
-    input: 'fixtures/examples/todos/src/todos.js',
-    sourcemap: true
+    input: 'site/content/examples/todos/src/todos.js',
+    gzip: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
+  },
+  {
+    formats: [IIFE],
+    global: 'sinuousClock',
+    name: 'clock',
+    input: 'site/content/examples/clock/src/clock.js',
+    gzip: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
   }
 ];
