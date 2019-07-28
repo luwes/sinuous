@@ -2,7 +2,7 @@
   "name": "sinuous-bench",
   "private": true,
   "scripts": {
-    "start": "http-server -c-1 -p 81 . ",
+    "start": "http-server -c-1 -p 8000 . ",
     "bench": "node bench.js",
     "build-prod": "lerna run --parallel build-prod",
     "build-dev": "lerna run --parallel build-dev"

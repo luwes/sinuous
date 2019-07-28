@@ -27,7 +27,7 @@ async function run() {
   // eslint-disable-next-line
   for (let i of new Array(argv.count * libs.length * benchmarks.length)) {
     const [lib, createBench] = getRandomBench();
-    await page.goto(`http://localhost:81/libs/${lib}`);
+    await page.goto(`http://localhost:8000/libs/${lib}`);
     await page.waitFor(100);
 
     const bench = await createBench(page, lib);
