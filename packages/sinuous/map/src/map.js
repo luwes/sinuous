@@ -39,12 +39,7 @@ export default function map(items, expr) {
     // their parents' update cycle.
     return root(disposeFn => {
       disposers[i] = disposeFn;
-      return addNode(
-        parent,
-        expr(item, i, data),
-        afterNode,
-        ++groupCounter
-      );
+      return addNode(parent, expr(item, i, data), afterNode, ++groupCounter);
     });
   }
 

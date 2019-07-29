@@ -37,7 +37,8 @@ const getCache = USE_MAP ? getCacheMap : getCacheKeyed;
 const cached = function(statics) {
   const children = evaluate(this, getCache(statics), arguments, []);
   const result = children.length > 1 ? children : children[0];
-  return Array.isArray(result) ? this(result) : result;
+  return Array.isArray(result) ? this(result)
+    : result instanceof Node ? result : this([result]);
 };
 
 export default MINI ? build : cached;

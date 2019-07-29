@@ -16,6 +16,6 @@
     "rollup-plugin-terser": "4.0.4"
   },
   "dependencies": {
-    "sinuous": "0.12.6"
+    "sinuous": "0.12.5"
   }
 }

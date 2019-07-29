@@ -3056,9 +3056,9 @@ ecstatic@^3.0.0:
     url-join "^2.0.5"
 
 electron-to-chromium@^1.3.191:
-  version "1.3.202"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.202.tgz#5412680d56347601ec7dc291d51bddd14b8fbd45"
-  integrity sha512-oJHvNNYM3Y9mJfiujbFQxRa0v7mzrc6Pv76fq6A4Dd6MxbfiVGhmgXtIeMBloTF8crmlJ1rXQW95VS4Zp/9ZSg==
+  version "1.3.203"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.203.tgz#76de1b76eaaf7208e587a26b8e45407535a00abd"
+  integrity sha512-Z1FjJKEBhYrCNmnususVk8khiBabVI/bSJB/295V4ghVt4MFmtbP+mXgRZLQZinEBI469U6FtiGgpXnlLs6qiQ==
 
 elliptic@^6.0.0:
   version "6.5.0"
@@ -6526,10 +6526,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
-sinuous@0.12.6:
-  version "0.12.6"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.12.6.tgz#d8eb5fd3bc45e099a5f109a67940357ffdd3b11c"
-  integrity sha512-vXNlYiN/dBC3TNLrUxkvrvxP/kqxXWDnsU/Hqua+a6aM2eLv8IlQ9KyCrvmOqdo2XWpQFgiKraOnWowvA4Hl0g==
+sinuous@0.12.5:
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.12.5.tgz#18c9e4f1350f92961c949ce1fbc4e2e681afef37"
+  integrity sha512-Q8EEHczreTxj1mgJoMiiTsnbHYvQWpjOeWBsCVwVAa7wB79z2UzCjtQCr1zcpXRhQTKpB8Xr97sleuh3R9VC+g==
 
 slash@^1.0.0:
   version "1.0.0"

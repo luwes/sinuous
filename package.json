@@ -11,7 +11,7 @@
   },
   "scripts": {
     "lint": "eslint 'packages/{*,*/*,}/src/**/*.js'",
-    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**'",
+    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
     "build-tape": "browserify scripts/tape/src.js --standalone tape -o scripts/tape/dist.js",
     "test": "cross-env COVERAGE=true karma start",
     "coverage": "codecov",
