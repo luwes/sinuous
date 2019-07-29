@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.7 - 2019-07-28
+
+### Fixed
+
+- Fixed [Plain computed in root doesn't return result #22](https://github.com/luwes/sinuous/issues/22)
+
 ## 0.12.6 - 2019-07-28
 
 ### Fixed
