@@ -73,7 +73,11 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
 
   function createVNode(tag, props, children) {
     // Never pass children=[[]].
-    if (children.elements.length === 1 && t.isArrayExpression(children.elements[0]) && children.elements[0].elements.length === 0) {
+    if (
+      children.elements.length === 1 &&
+      t.isArrayExpression(children.elements[0]) &&
+      children.elements[0].elements.length === 0
+    ) {
       children = children.elements[0];
     }
 
@@ -138,7 +142,6 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     if (t.isNode(node)) return node;
     if (typeof node === 'string') return stringValue(node);
     if (node === undefined) return t.identifier('undefined');
-    if (node === null) return t.nullLiteral();
 
     const { tag, props, children } = node;
     const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
@@ -178,9 +181,16 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
             tree = tree.elements;
           }
 
-          const node = !Array.isArray(tree)
-            ? transform(tree, state)
-            : t.callExpression(currentPragma, [t.arrayExpression(tree.map(root => transform(root, state)))]);
+          const node = Array.isArray(tree)
+            ? t.callExpression(currentPragma, [
+                t.arrayExpression(tree.map(root => transform(root, state)))
+              ])
+            : t.isNode(tree)
+            ? t.callExpression(currentPragma, [
+                t.arrayExpression([transform(tree, state)])
+              ])
+            : transform(tree, state);
+
           path.replaceWith(node);
         }
       }

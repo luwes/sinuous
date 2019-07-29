@@ -1,5 +1,5 @@
 import test from 'tape';
-import { html } from 'sinuous';
+import { o, html } from 'sinuous';
 
 test('simple', function(t) {
   t.equal(
@@ -18,12 +18,18 @@ test('simple', function(t) {
 });
 
 test('returns a simple string', t => {
-  t.equal(
-    html`
-      a
-    `,
-    'a'
-  );
+  const frag = html`a`;
+  t.assert(frag instanceof DocumentFragment);
+  t.assert(frag.childNodes[0] instanceof Text);
+  t.equal(frag.childNodes[0].textContent, 'a');
+  t.end();
+});
+
+test('returns a simple number', t => {
+  const frag = html`${9}`;
+  t.assert(frag instanceof DocumentFragment);
+  t.assert(frag.childNodes[0] instanceof Text);
+  t.equal(frag.childNodes[0].textContent, '9');
   t.end();
 });
 
@@ -41,5 +47,14 @@ test('returns a document fragment', t => {
   t.assert(frag instanceof DocumentFragment);
   t.equal(frag.childNodes[0].outerHTML, '<div>Banana</div>');
   t.equal(frag.childNodes[1].outerHTML, '<div>Apple</div>');
+  t.end();
+});
+
+test('returns a simple observable string', t => {
+  const title = o('Banana');
+  const frag = html`${title}`;
+  t.assert(frag instanceof DocumentFragment);
+  t.assert(frag.childNodes[0] instanceof Text);
+  t.equal(frag.childNodes[0].textContent, 'Banana');
   t.end();
 });
