@@ -21,7 +21,7 @@ export default function map(items, expr) {
   let afterNode = parent.appendChild(document.createTextNode(''));
 
   function disposeAll() {
-    disposers.forEach(d => d());
+    disposers.forEach(d => d && d());
     disposers = [];
   }
 
@@ -39,7 +39,12 @@ export default function map(items, expr) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
     return root(disposeFn => {
-      const node = addNode(parent, expr(item, i, data), afterNode, ++groupCounter);
+      const node = addNode(
+        parent,
+        expr(item, i, data),
+        afterNode,
+        ++groupCounter
+      );
       node._disposerIndex = i;
       disposers[i] = disposeFn;
       return node;
@@ -223,17 +228,34 @@ export function reconcile(
 
   // Positions for reusing nodes from current DOM state
   const P = new Array(newEnd + 1 - newStart);
-  for (let i = newStart; i <= newEnd; i++) P[i] = -1;
+  for (let i = newStart; i <= newEnd; i++) {
+    P[i] = -1;
+  }
 
   // Index to resolve position from current to new
-  const I = new Map();
-  for (let i = newStart; i <= newEnd; i++) I.set(data[i], i);
+  const I = {};
+  for (let i = newStart; i <= newEnd; i++) {
+    if (data[i] === Object(data[i])) {
+      data[i]._dataIndex = i;
+    } else {
+      // For primitives save lookup.
+      I[data[i]] = i;
+    }
+  }
 
   let reusingNodes = 0;
   let toRemove = [];
   for (let i = prevStart; i <= prevEnd; i++) {
-    if (I.has(renderedValues[i])) {
-      P[I.get(renderedValues[i])] = i;
+    let j;
+    if (
+      // Check primitive index map first.
+      (j = I[renderedValues[i]]) ||
+      // Then check index on objects.
+      ((j = renderedValues[i]._dataIndex) &&
+        // Clean up index right after.
+        delete renderedValues[i]._dataIndex)
+    ) {
+      P[j] = i;
       reusingNodes++;
     } else {
       toRemove.push(i);
