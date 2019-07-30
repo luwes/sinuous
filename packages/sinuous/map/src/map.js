@@ -25,7 +25,8 @@ export default function map(items, expr) {
     disposers = [];
   }
 
-  function dispose(i) {
+  function dispose(node) {
+    const i = node._disposerIndex;
     if (disposers[i]) {
       // It's possible there are holes in the array.
       disposers[i]();
@@ -38,8 +39,10 @@ export default function map(items, expr) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
     return root(disposeFn => {
+      const node = addNode(parent, expr(item, i, data), afterNode, ++groupCounter);
+      node._disposerIndex = i;
       disposers[i] = disposeFn;
-      return addNode(parent, expr(item, i, data), afterNode, ++groupCounter);
+      return node;
     });
   }
 
@@ -199,7 +202,7 @@ export function reconcile(
         node = step(prevEndNode, BACKWARD, true);
         next = node.previousSibling;
         removeNodes(parent, node, prevEndNode.nextSibling);
-        onRemove && onRemove(prevEnd);
+        onRemove && onRemove(node);
         prevEndNode = next;
         prevEnd--;
       }
@@ -259,10 +262,10 @@ export function reconcile(
 
   // What else?
   const longestSeq = longestPositiveIncreasingSubsequence(P, newStart);
-  const nodes = [];
-  let tmpC = prevStartNode;
 
   // Collect nodes to work with them
+  const nodes = [];
+  let tmpC = prevStartNode;
   for (let i = prevStart; i <= prevEnd; i++) {
     nodes[i] = tmpC;
     tmpC = step(tmpC, FORWARD);
@@ -272,7 +275,7 @@ export function reconcile(
     let index = toRemove[i];
     let node = nodes[index];
     removeNodes(parent, node, step(node, FORWARD));
-    onRemove && onRemove(index);
+    onRemove && onRemove(node);
   }
 
   let lisIdx = longestSeq.length - 1;

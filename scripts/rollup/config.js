@@ -101,7 +101,7 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                // $_flow: '__f'
+                $_disposerIndex: '__D'
                 // $_observable: '__o',
                 // $_observables: '__o',
                 // $_children: '__c',
