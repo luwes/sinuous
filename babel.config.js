@@ -7,7 +7,7 @@ module.exports = {
         modules: false,
         loose: true,
         targets: {
-          browsers: ['ie >= 11']
+          browsers: ['ie >= 9']
         }
       }
     ]
