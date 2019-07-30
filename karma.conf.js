@@ -4,6 +4,8 @@ const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const alias = require('rollup-plugin-alias');
 const babel = require('rollup-plugin-babel');
+const minimist = require('minimist');
+const argv = minimist(process.argv.slice(2));
 
 var coverage = String(process.env.COVERAGE) === 'true',
   ci = String(process.env.CI).match(/^(1|true)$/gi),
@@ -32,10 +34,10 @@ var sauceLabsLaunchers = {
     browserName: 'MicrosoftEdge',
     platform: 'Windows 10'
   },
-  sl_ie_11: {
+  sl_ie_9: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '11.0',
+    version: '9.0',
     platform: 'Windows 7'
   }
 };
@@ -89,7 +91,7 @@ module.exports = function(config) {
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_DISABLE,
 
-    client: { captureConsole: false },
+    client: { captureConsole: !!argv.console },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'

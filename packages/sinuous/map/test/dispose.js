@@ -7,6 +7,87 @@ function lis(str) {
   return '<li>' + str.split(',').join('</li><li>') + '</li>';
 }
 
+test('last algorithm insertNodes -> disposes correct index', function(t) {
+  let one = o(1);
+  let two = o(2);
+  let three = o(3);
+  let four = o(4);
+  let five = o(5);
+  const list = o([one, two, three, four, five]);
+  const el = h('ul', map(list, item => h('li', item)));
+  t.equal(el.innerHTML, lis('1,2,3,4,5'));
+
+  list([one, four, five, three, two]);
+  t.equal(el.innerHTML, lis('1,4,5,3,2'));
+
+  list([one, two, three, four]);
+  t.equal(el.innerHTML, lis('1,2,3,4'));
+
+  one(11);
+  two(22);
+  three(33);
+  four(44);
+  five(55);
+
+  t.equal(el.innerHTML, lis('11,22,33,44'));
+
+  t.end();
+});
+
+test('swap backward -> disposes correct index', function(t) {
+  let one = o(1);
+  let two = o(2);
+  let three = o(3);
+  let four = o(4);
+  let five = o(5);
+  const list = o([one, two, three, four, five]);
+  const el = h('ul', map(list, item => h('li', item)));
+  t.equal(el.innerHTML, lis('1,2,3,4,5'));
+
+  list([one, two, five, three, four]);
+  t.equal(el.innerHTML, lis('1,2,5,3,4'));
+
+  list([one, two, three, four]);
+  t.equal(el.innerHTML, lis('1,2,3,4'));
+
+  one(11);
+  two(22);
+  three(33);
+  four(44);
+  five(55);
+
+  t.equal(el.innerHTML, lis('11,22,33,44'));
+
+  t.end();
+});
+
+test('swap forward -> disposes correct index', function(t) {
+  let one = o(1);
+  let two = o(2);
+  let three = o(3);
+  let four = o(4);
+  let five = o(5);
+  const list = o([one, two, three, four, five]);
+  const el = h('ul', map(list, item => h('li', item)));
+  t.equal(el.innerHTML, lis('1,2,3,4,5'));
+
+  list([two, three, one, four, five]);
+  t.equal(el.innerHTML, lis('2,3,1,4,5'));
+
+  list([two, three, four, five]);
+  t.equal(el.innerHTML, lis('2,3,4,5'));
+
+  one(11);
+  two(22);
+  three(33);
+  four(44);
+  five(55);
+
+  t.equal(el.innerHTML, lis('22,33,44,55'));
+
+  t.end();
+});
+
 test('removing one observable diposes correct index', function(t) {
   let two = o(2);
   let four = o(4);
