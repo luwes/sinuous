@@ -1,6 +1,7 @@
 import { h } from 'sinuous';
 
 const HelloMessage = ({ name }) => html`
+  <!-- Prints Hello World -->
   <div>Hello ${name}</div>
 `;
 
