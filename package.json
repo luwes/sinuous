@@ -40,6 +40,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-env": "^7.5.5",
+    "@ungap/map": "^0.1.4",
     "ansi-colors": "^4.1.1",
     "babel-eslint": "^10.0.2",
     "browserify": "^16.3.0",

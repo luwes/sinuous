@@ -15,24 +15,20 @@ let groupCounter = 0;
 export default function map(items, expr) {
   const { subscribe, root, sample, cleanup } = api;
 
-  let disposers = [];
+  const disposers = new Map();
   let parent = document.createDocumentFragment();
-  let beforeNode = parent.appendChild(document.createTextNode(''));
-  let afterNode = parent.appendChild(document.createTextNode(''));
+  const beforeNode = parent.appendChild(document.createTextNode(''));
+  const afterNode = parent.appendChild(document.createTextNode(''));
 
   function disposeAll() {
-    disposers.forEach(d => d && d());
-    disposers = [];
+    disposers.forEach(d => d());
+    disposers.clear();
   }
 
   function dispose(node) {
-    const i = node._disposerIndex;
-    if (disposers[i]) {
-      // It's possible there are holes in the array.
-      disposers[i]();
-      // Don't splice, indexes have to stay 1:1 with items.
-      disposers[i] = undefined;
-    }
+    let disposer = disposers.get(node);
+    disposer && disposer();
+    disposers.delete(node);
   }
 
   function createFn(parent, item, i, data, afterNode) {
@@ -45,8 +41,7 @@ export default function map(items, expr) {
         afterNode,
         ++groupCounter
       );
-      node._disposerIndex = i;
-      disposers[i] = disposeFn;
+      disposers.set(node, disposeFn);
       return node;
     });
   }
@@ -233,29 +228,14 @@ export function reconcile(
   }
 
   // Index to resolve position from current to new
-  const I = {};
-  for (let i = newStart; i <= newEnd; i++) {
-    if (data[i] === Object(data[i])) {
-      data[i]._dataIndex = i;
-    } else {
-      // For primitives save lookup.
-      I[data[i]] = i;
-    }
-  }
+  const I = new Map();
+  for (let i = newStart; i <= newEnd; i++) I.set(data[i], i);
 
   let reusingNodes = 0;
   let toRemove = [];
   for (let i = prevStart; i <= prevEnd; i++) {
-    let j;
-    if (
-      // Check primitive index map first.
-      (j = I[renderedValues[i]]) ||
-      // Then check index on objects.
-      ((j = renderedValues[i]._dataIndex) &&
-        // Clean up index right after.
-        delete renderedValues[i]._dataIndex)
-    ) {
-      P[j] = i;
+    if (I.has(renderedValues[i])) {
+      P[I.get(renderedValues[i])] = i;
       reusingNodes++;
     } else {
       toRemove.push(i);

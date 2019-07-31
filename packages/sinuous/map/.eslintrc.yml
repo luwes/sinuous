@@ -1,4 +1,3 @@
 ---
 rules:
   no-negated-condition: off
-  fp/no-delete: off
