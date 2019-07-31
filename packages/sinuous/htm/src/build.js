@@ -4,8 +4,9 @@ const MODE_SLASH = 0;
 const MODE_TEXT = 1;
 const MODE_WHITESPACE = 2;
 const MODE_TAGNAME = 3;
-const MODE_PROP_SET = 4;
-const MODE_PROP_APPEND = 5;
+const MODE_COMMENT = 4;
+const MODE_PROP_SET = 5;
+const MODE_PROP_APPEND = 6;
 
 const TAG_SET = 1;
 const CHILD_APPEND = 0;
@@ -72,22 +73,23 @@ export const treeify = (built, fields) => {
 
 export const evaluate = (h, built, fields, args) => {
   for (let i = 1; i < built.length; i++) {
-    const field = built[i++];
+    const field = built[i];
     const value = typeof field === 'number' ? fields[field] : field;
+    const type = built[++i];
 
-    if (built[i] === TAG_SET) {
+    if (type === TAG_SET) {
       args[0] = value;
     }
-    else if (built[i] === PROPS_ASSIGN) {
+    else if (type === PROPS_ASSIGN) {
       args[1] = Object.assign(args[1] || {}, value);
     }
-    else if (built[i] === PROP_SET) {
+    else if (type === PROP_SET) {
       (args[1] = args[1] || {})[built[++i]] = value;
     }
-    else if (built[i] === PROP_APPEND) {
+    else if (type === PROP_APPEND) {
       args[1][built[++i]] += (value + '');
     }
-    else if (built[i]) {
+    else if (type) {
       // code === CHILD_RECURSE
       args.push(h.apply(null, evaluate(h, value, fields, ['', null])));
     }
@@ -144,25 +146,28 @@ export const build = function(statics) {
         current.push(true, PROP_SET, buffer);
       }
     }
-    else if (MINI && mode === MODE_PROP_SET) {
-      (current[2] = current[2] || {})[propName] = field ? buffer ? (buffer + fields[field]) : fields[field] : buffer;
-      mode = MODE_PROP_APPEND;
-    }
-    else if (MINI && mode === MODE_PROP_APPEND) {
-      if (buffer || field) {
-        current[2][propName] += field ? buffer + fields[field] : buffer;
+    else if (mode >= MODE_PROP_SET) {
+      if (MINI) {
+        if (mode === MODE_PROP_SET) {
+          (current[2] = current[2] || {})[propName] = field ? buffer ? (buffer + fields[field]) : fields[field] : buffer;
+          mode = MODE_PROP_APPEND;
+        }
+        else if (field || buffer) {
+          current[2][propName] += field ? buffer + fields[field] : buffer;
+        }
+      }
+      else {
+        if (buffer || (!field && mode === MODE_PROP_SET)) {
+          current.push(buffer, mode, propName);
+          mode = MODE_PROP_APPEND;
+        }
+        if (field) {
+          current.push(field, mode, propName);
+          mode = MODE_PROP_APPEND;
+        }
       }
     }
-    else if (!MINI && mode >= MODE_PROP_SET) {
-      if (buffer || (!field && mode === MODE_PROP_SET)) {
-        current.push(buffer, mode, propName);
-        mode = MODE_PROP_APPEND;
-      }
-      if (field) {
-        current.push(field, mode, propName);
-        mode = MODE_PROP_APPEND;
-      }
-    }
+
     buffer = '';
   };
 
@@ -174,7 +179,7 @@ export const build = function(statics) {
       commit(i);
     }
 
-    for (let j=0; j<statics[i].length; j++) {
+    for (let j=0; j<statics[i].length;j++) {
       char = statics[i][j];
 
       if (mode === MODE_TEXT) {
@@ -191,6 +196,16 @@ export const build = function(statics) {
         }
         else {
           buffer += char;
+        }
+      }
+      else if (mode === MODE_COMMENT) {
+        // Ignore everything until the last three characters are '-', '-' and '>'
+        if (buffer === '--' && char === '>') {
+          mode = MODE_TEXT;
+          buffer = '';
+        }
+        else {
+          buffer = char + buffer[0];
         }
       }
       else if (quote) {
@@ -216,7 +231,7 @@ export const build = function(statics) {
         propName = buffer;
         buffer = '';
       }
-      else if (char === '/') {
+      else if (char === '/' && (mode < MODE_PROP_SET || statics[i][j+1] === '>')) {
         commit();
         if (mode === MODE_TAGNAME) {
           current = current[0];
@@ -237,6 +252,11 @@ export const build = function(statics) {
       }
       else {
         buffer += char;
+      }
+
+      if (mode === MODE_TAGNAME && buffer === '!--') {
+        mode = MODE_COMMENT;
+        current = current[0];
       }
     }
   }
