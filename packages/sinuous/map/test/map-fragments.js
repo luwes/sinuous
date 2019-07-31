@@ -15,20 +15,20 @@ let dispose;
 const Component = () =>
   root(d => {
     dispose = d;
-    div = h('div', map(list, item => item));
+    div = h('div', map(list, item => h([item, item])));
   });
 
 function apply(t, array) {
   list(array);
-  t.equal(div.innerHTML, array.join(''));
+  t.equal(div.innerHTML, array.map(p => `${p}${p}`).join(''));
   list([n1, n2, n3, n4]);
-  t.equal(div.innerHTML, 'abcd');
+  t.equal(div.innerHTML, 'aabbccdd');
 }
 
 test('Create map control flow', t => {
   Component();
 
-  t.equal(div.innerHTML, 'abcd');
+  t.equal(div.innerHTML, 'aabbccdd');
   t.end();
 });
 
