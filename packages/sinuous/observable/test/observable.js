@@ -1,5 +1,5 @@
 import test from 'tape';
-import { spy } from 'sinon';
+import spy from 'ispy';
 import {
   o,
   subscribe,
@@ -75,36 +75,38 @@ test('nested subscribe', function(t) {
   let tempOnion;
 
   let veggieSpy;
-  const fruitSpy = spy(() => {
+  const fruitSpy = spy();
+  fruitSpy.delegate = () => {
     tempApple = apple();
 
-    veggieSpy = spy(() => {
+    veggieSpy = spy();
+    veggieSpy.delegate = () => {
       tempOnion = onion();
-    });
+    };
 
     subscribe(veggieSpy);
 
     tempLemon = lemon();
-  });
+  };
 
   subscribe(fruitSpy);
 
   t.equal(tempApple, 'apple');
   t.equal(tempLemon, 'lemon');
   t.equal(tempOnion, 'onion');
-  t.assert(fruitSpy.calledOnce);
-  t.assert(veggieSpy.calledOnce);
+  t.equal(fruitSpy.callCount, 1);
+  t.equal(veggieSpy.callCount, 1);
 
   onion('peel');
   t.equal(tempOnion, 'peel');
-  t.assert(fruitSpy.calledOnce);
-  t.assert(veggieSpy.calledTwice);
+  t.equal(fruitSpy.callCount, 1);
+  t.equal(veggieSpy.callCount, 2);
 
   lemon('juice');
   t.equal(tempLemon, 'juice');
-  t.assert(fruitSpy.calledTwice);
+  t.equal(fruitSpy.callCount, 2);
   // this will be a new spy that was executed once
-  t.assert(veggieSpy.calledOnce);
+  t.equal(veggieSpy.callCount, 1);
 
   t.end();
 });
@@ -209,16 +211,17 @@ test('three level nested subscribe cleans up inner subscriptions', function(t) {
 
 test('standalone unsubscribe works', function(t) {
   let carrot = o();
-  const computed = spy(() => {
+  const computed = spy();
+  computed.delegate = () => {
     carrot();
-  });
+  };
   subscribe(computed);
   carrot('juice');
 
   unsubscribe(computed);
   carrot('juice');
 
-  t.assert(computed.calledTwice);
+  t.equal(computed.callCount, 2);
   t.end();
 });
 
@@ -229,11 +232,12 @@ test('cleanup cleans up on update', function(t) {
   document.body.appendChild(button);
   let count = 0;
 
-  const computed = spy(() => {
+  const computed = spy();
+  computed.delegate = () => {
     carrot();
     const onClick = () => (count += 1);
     button.addEventListener('click', onClick);
-  });
+  };
 
   const unsubscribe = subscribe(computed);
   carrot(9);
@@ -246,12 +250,13 @@ test('cleanup cleans up on update', function(t) {
   button = document.createElement('button');
   document.body.appendChild(button);
 
-  const computedWithCleanup = spy(() => {
+  const computedWithCleanup = spy();
+  computedWithCleanup.delegate = () => {
     carrot();
     const onClick = () => (count += 1);
     button.addEventListener('click', onClick);
     cleanup(() => button.removeEventListener('click', onClick));
-  });
+  };
 
   subscribe(computedWithCleanup);
   carrot(9);

@@ -13,7 +13,8 @@ export function addNode(parent, node, afterNode, counter) {
     mark[GROUPING] = node.lastChild[GROUPING] = counter;
   }
 
-  parent.insertBefore(node, afterNode);
+  // IE9 requires an explicit `null` as second argument.
+  parent.insertBefore(node, afterNode || null);
   return mark || node;
 }
 
