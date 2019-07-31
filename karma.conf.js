@@ -4,6 +4,7 @@ const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const alias = require('rollup-plugin-alias');
 const babel = require('rollup-plugin-babel');
+const cleanup = require('rollup-plugin-cleanup');
 const minimist = require('minimist');
 const argv = minimist(process.argv.slice(2));
 
@@ -156,7 +157,8 @@ module.exports = function(config) {
             'packages/sinuous/**',
             'node_modules/sinon/**'
           ]
-        })
+        }),
+        cleanup()
       ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
     }
