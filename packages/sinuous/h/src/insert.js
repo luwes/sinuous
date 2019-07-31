@@ -48,7 +48,8 @@ export function insert(parent, value, marker, current) {
       value.firstChild[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
     }
     // If marker is `null`, value will be added to the end of the list.
-    parent.insertBefore(value, marker);
+    // IE9 requires an explicit `null` as second argument.
+    parent.insertBefore(value, marker || null);
     current = value;
   }
 
