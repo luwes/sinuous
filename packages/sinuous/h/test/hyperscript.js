@@ -1,5 +1,5 @@
 import test from 'tape';
-import { spy } from 'sinon';
+import spy from 'ispy';
 import { o, h, hs } from 'sinuous';
 
 test('simple', function(t) {
@@ -61,7 +61,7 @@ test('(un)registers an event handler', function(t) {
   document.body.appendChild(btn);
 
   btn.click();
-  t.assert(click.calledOnce, 'click called');
+  t.equal(click.callCount, 1, 'click called');
 
   h(btn, { onclick: false });
   btn.click();
@@ -80,7 +80,7 @@ test('(un)registers an observable event handler', function(t) {
   document.body.appendChild(btn);
 
   btn.click();
-  t.assert(click.calledOnce, 'click called');
+  t.equal(click.callCount, 1, 'click called');
 
   onclick(false);
   btn.click();
@@ -96,7 +96,7 @@ test('(un)registers an observable event handler', function(t) {
 //   document.body.appendChild(btn);
 
 //   btn.click();
-//   t.assert(click.calledOnce, 'click called');
+//   t.equal(click.callCount, 1, 'click called');
 
 //   btn.parentNode.removeChild(btn);
 //   t.end();

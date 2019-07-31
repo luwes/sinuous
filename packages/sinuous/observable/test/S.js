@@ -1,5 +1,5 @@
 import test from 'tape';
-import { spy } from 'sinon';
+import spy from 'ispy';
 import { o, S } from '../src/observable.js';
 
 // Tests from S.js

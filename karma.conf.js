@@ -114,7 +114,7 @@ module.exports = function(config) {
       ]
     },
 
-    frameworks: ['tap', 'sinon'],
+    frameworks: ['tap'],
 
     files: [
       {
@@ -153,8 +153,7 @@ module.exports = function(config) {
         }),
         sauceLabs && babel({
           include: [
-            'packages/sinuous/**',
-            'node_modules/sinon/**'
+            'packages/sinuous/**'
           ]
         })
       ].filter(Boolean),
