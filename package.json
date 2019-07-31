@@ -48,7 +48,7 @@
     "eslint": "^6.1.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsdoc": "^15.5.5",
+    "eslint-plugin-jsdoc": "^15.8.0",
     "faucet": "^0.0.1",
     "fs-extra": "^8.1.0",
     "ispy": "^0.1.2",
