@@ -5615,6 +5615,11 @@ simple-get@^2.7.0:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
+sinuous@0.12.7:
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.12.7.tgz#414f7c11521fbd0b786657328ed6cf63ce843367"
+  integrity sha512-MHiMOBEE10U6y7Npbb9fbgkn0h84uzeui/VriUo7TLMBY4oEOPiEIZGDGJRpiLP4DXOtcP37apiqdJMpoJmAOg==
+
 slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"

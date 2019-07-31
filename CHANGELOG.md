@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.8 - 2019-07-31
+
+### Added
+
+- Added HTM's support for HTML comments
+- Added out of the box support down to IE9
+
+### Fixed
+
+- Fixed [Verify `map` disposers index #23](https://github.com/luwes/sinuous/issues/23)
+
 ## 0.12.7 - 2019-07-28
 
 ### Fixed
