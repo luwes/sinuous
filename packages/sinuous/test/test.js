@@ -1,3 +1,4 @@
+import './_polyfills.js';
 import './sinuous.js';
 import '../h/test/hyperscript.js';
 import '../h/test/svg.js';
