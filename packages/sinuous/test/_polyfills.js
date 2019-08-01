@@ -1,5 +1,8 @@
 /* eslint-disable */
 
+import Map from '@ungap/map'
+window.Map = window.Map || Map;
+
 /**
  * Protect window.console method calls, e.g. console is not defined on IE
  * unless dev tools are open, and IE doesn't define console.debug
