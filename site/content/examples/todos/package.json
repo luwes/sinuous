@@ -3,6 +3,6 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "sinuous": "0.12.8"
+    "sinuous": "0.12.9"
   }
 }

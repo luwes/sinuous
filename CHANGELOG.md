@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.12.9 - 2019-07-31
+
+### Fixed
+
+- Fixed bundling issue
+- Fixed [Verify `map` disposers index #23](https://github.com/luwes/sinuous/issues/23) by using `Map` again
+
 ## 0.12.8 - 2019-07-31
 
 ### Added
