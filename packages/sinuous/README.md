@@ -60,7 +60,7 @@ setInterval(() => counter(counter() + 1), 1000);
 
 ### Browser Support
 
-Sinuous supports modern browsers and IE9+:
+Sinuous supports modern browsers and IE9+ but keep in mind that IE9 and IE10 do require a polyfill for the `Map` collection type.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
