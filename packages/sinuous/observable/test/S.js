@@ -79,6 +79,35 @@ test('updates return value', function(t) {
   t.end();
 });
 
+test('set works from other computed', function(t) {
+  var banana = o();
+  var count = 0;
+  S(() => {
+    count++;
+    return banana() + ' shake';
+  });
+  t.equal(count, 1);
+
+  var carrot = o();
+  S(() => {
+    console.log('banana false');
+    banana(false);
+
+    carrot() + ' soup';
+
+    console.log('banana true');
+    banana(true);
+  });
+
+  carrot('carrot');
+  t.equal(count, 5);
+
+  banana(false);
+  t.equal(count, 6);
+
+  t.end();
+});
+
 (function() {
   var i, j, e, fevals, f;
 
