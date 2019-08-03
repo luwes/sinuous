@@ -73,11 +73,18 @@ function observable(value) {
 
     value = nextValue;
 
+    // Clear `currentUpdate` otherwise a computed triggered by a set
+    // in another computed is seen as a child of that other computed.
+    const update = currentUpdate;
+    currentUpdate = undefined;
+
     data._listeners.forEach(update => (update._fresh = 0));
     // Update can alter data._listeners, make a copy before running.
     data._listeners.slice().forEach(update => {
       if (!update._fresh) update();
     });
+
+    currentUpdate = update;
     return value;
   }
 
