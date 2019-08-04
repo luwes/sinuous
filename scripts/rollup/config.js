@@ -5,13 +5,14 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
+import replace from 'rollup-plugin-replace';
 import minimist from 'minimist';
 
 import { CJS, ESM, IIFE, UMD, bundles, fixtures } from '../bundles.js';
 
 const formatOptions = {
   [CJS]: { ext: '.js' },
-  [ESM]: { ext: '.esm.js' },
+  [ESM]: { ext: '.js' },
   [IIFE]: { ext: '.min.js' },
   [UMD]: { ext: '.js' }
 };
@@ -55,6 +56,12 @@ function shouldSkipBundle(bundleName, bundleType) {
 
 function getConfig(options) {
   const { name, input, dest, format, external, sourcemap } = options;
+  const output = dest
+    ? `${dest(format)}/${name}${formatOptions[format].ext}`
+    : path.join(
+        path.dirname(input),
+        `../dist/${name}${formatOptions[format].ext}`
+      );
   return {
     input,
     external,
@@ -64,19 +71,13 @@ function getConfig(options) {
     output: {
       format,
       sourcemap,
-      file: dest
-        ? `${dest}/${name}${formatOptions[format].ext}`
-        : path.join(
-            path.dirname(input),
-            '..',
-            `dist/${name}${formatOptions[format].ext}`
-          ),
+      file: output,
       name: options.global,
       exports: options.exports,
       strict: false, // Remove `use strict;`
       interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
       freeze: false, // Remove `Object.freeze()`
-      esModule: false // Remove `esModele` property
+      esModule: false // Remove `esModule` property
     },
     plugins: [
       bundleSize({
@@ -84,7 +85,7 @@ function getConfig(options) {
       }),
       nodeResolve(),
       [UMD, IIFE].includes(format) && babel(options.babel),
-      [UMD, IIFE].includes(format) &&
+      [ESM, UMD, IIFE].includes(format) &&
         terser({
           sourcemap: true,
           warnings: true,
@@ -100,8 +101,6 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                $_disposerIndex: '__D',
-                $_dataIndex: '__D',
                 // $_observable: '__o',
                 // $_observables: '__o',
                 // $_children: '__c',
@@ -110,6 +109,14 @@ function getConfig(options) {
             }
           }
         }),
+      ESM === format && replace({
+        delimiters: ['', ''],
+        values: {
+          "from 'sinuous'": "from './sinuous.js'",
+          "from 'sinuous/observable'": "from './observable.js'",
+          "from 'sinuous/htm'": "from './htm.js'",
+        }
+      }),
       options.gzip && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {

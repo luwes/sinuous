@@ -8,55 +8,66 @@ export const bundleFormats = {
   UMD
 };
 
+const dest = (format) => {
+  return `packages/sinuous/${format === ESM ? 'module' : 'dist'}`;
+};
+
 export const bundles = [
   // `htm` has to come before `babel-plugin-htm`
   {
     external: [],
-    formats: [UMD, ESM, IIFE],
+    formats: [ESM, UMD, IIFE],
     global: 'htm',
     name: 'htm',
-    input: 'packages/sinuous/htm/src/index.js'
+    input: 'packages/sinuous/htm/src/index.js',
+    dest
   },
   {
-    external: ['sinuous'],
-    formats: [UMD, ESM, IIFE],
+    external: [],
+    formats: [ESM, UMD, IIFE],
     global: 'observable',
     name: 'observable',
-    input: 'packages/sinuous/observable/src/observable.js'
+    input: 'packages/sinuous/observable/src/observable.js',
+    dest
   },
   {
-    external: ['sinuous'],
-    formats: [UMD, ESM, IIFE],
+    external: [],
+    formats: [ESM, UMD, IIFE],
     global: 'h',
     name: 'h',
-    input: 'packages/sinuous/h/src/index.js'
+    input: 'packages/sinuous/h/src/index.js',
+    dest
   },
   {
-    external: ['sinuous'],
-    formats: [UMD, ESM, IIFE],
+    external: [],
+    formats: [ESM, UMD, IIFE],
     global: 'template',
     name: 'template',
-    input: 'packages/sinuous/template/src/template.js'
+    input: 'packages/sinuous/template/src/template.js',
+    dest
   },
   {
-    external: ['sinuous'],
-    formats: [UMD, ESM, IIFE],
+    external: ['sinuous', './sinuous.js'],
+    formats: [ESM, UMD, IIFE],
     global: 'map',
     name: 'map',
-    input: 'packages/sinuous/map/src/index.js'
+    input: 'packages/sinuous/map/src/index.js',
+    dest
   },
   {
-    external: ['sinuous/observable', 'sinuous/htm'],
-    formats: [UMD, ESM, IIFE],
+    external: ['sinuous/observable', 'sinuous/htm', './observable.js', './htm.js'],
+    formats: [ESM, UMD, IIFE],
     global: 'sinuous',
     name: 'sinuous',
-    input: 'packages/sinuous/src/index.js'
+    input: 'packages/sinuous/src/index.js',
+    dest
   },
   {
     external: [],
     formats: [ESM, CJS],
     name: 'babel-plugin-htm',
-    input: 'packages/sinuous/babel-plugin-htm/src/index.js'
+    input: 'packages/sinuous/babel-plugin-htm/src/index.js',
+    dest
   }
 ];
 
