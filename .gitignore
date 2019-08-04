@@ -11,3 +11,5 @@ dist
 
 /bench/results.json
 /bench/yarn.lock
+
+packages/sinuous/module/
