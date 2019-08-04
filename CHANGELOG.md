@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.13.0 - 2019-08-03
+
+### Added
+
+- Added web ES modules support [#27](https://github.com/luwes/sinuous/issues/27)
+
+### Fixed
+
+- Fixed [Observable set works from other computed #28](https://github.com/luwes/sinuous/issues/28)
+
 ## 0.12.9 - 2019-07-31
 
 ### Fixed
