@@ -11,25 +11,10 @@
 <body>
   <nav class="navbar is-warning" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="/results.html">
-        JS Framework Benchmark
-      </a>
+      <a class="navbar-item" href="./">JS Framework Benchmark</a>
     </div>
     <div class="navbar-start">
-      <div class="navbar-item">
-        <form class="load-form">
-          <div class="field has-addons">
-            <div class="control">
-              <input class="load-input input is-small" type="text" placeholder="Enter data JSON url">
-            </div>
-            <div class="control">
-              <button class="button is-small is-black" type="submit">
-                Load
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+      <div class="select-bench navbar-item"></div>
     </div>
   </nav>
 
@@ -54,9 +39,6 @@
 
   <script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://unpkg.com/sinuous@0.12.7/observable/dist/observable.min.js"></script>
-  <script src="https://unpkg.com/sinuous@0.12.7/htm/dist/htm.min.js"></script>
-  <script src="https://unpkg.com/sinuous@0.12.7/dist/sinuous.min.js"></script>
-  <script src="results.js"></script>
+  <script src="results.js" type="module"></script>
 </body>
 </html>

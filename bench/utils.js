@@ -75,40 +75,32 @@ function pairwise(a, b) {
 }
 
 async function testTextContains(page, path, value) {
+  const elHandle = await page.waitForXPath(path);
   return page.waitFor(
-    (path, value) => {
-      function getElementByXpath(path) {
-        return document.evaluate(
-          path,
-          document,
-          null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE,
-          null
-        ).singleNodeValue;
-      }
-      const element = getElementByXpath(path);
-      return element && element.textContent === value;
-    },
+    (el, value) => el && el.textContent.includes(value),
     {},
-    path,
+    elHandle,
     value
   );
 }
 
 async function getTextByXPath(page, path) {
-  return page.evaluate((path) => {
-    function getElementByXpath(path) {
-      return document.evaluate(
-        path,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue;
-    }
-    const element = getElementByXpath(path);
-    return element && element.textContent;
-  }, path);
+  const elHandle = await page.waitForXPath(path);
+  return page.evaluate(el => el && el.textContent, elHandle);
+}
+
+async function clickElementByXPath(page, path) {
+  const elHandle = await page.waitForXPath(path);
+  return page.evaluate(el => el && el.click(), elHandle);
+}
+
+async function testClassContains(page, path, value) {
+  const elHandle = await page.waitForXPath(path);
+  return page.evaluate(
+    (el, value) => el && el.className.includes(value),
+    elHandle,
+    value
+  );
 }
 
 module.exports = {
@@ -117,5 +109,7 @@ module.exports = {
   randomNoRepeats,
   pairwise,
   testTextContains,
-  getTextByXPath
+  getTextByXPath,
+  clickElementByXPath,
+  testClassContains
 };

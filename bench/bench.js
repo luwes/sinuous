@@ -31,7 +31,20 @@ async function run() {
     await page.waitFor(100);
 
     const bench = await createBench(page, lib);
+
+    if (bench.throttleCPU) {
+      await page._client.send('Emulation.setCPUThrottlingRate', {
+        rate: bench.throttleCPU
+      });
+    }
+
     const value = await bench.run();
+
+    if (bench.throttleCPU) {
+      await page._client.send('Emulation.setCPUThrottlingRate', {
+        rate: 1
+      });
+    }
 
     const pkg = require(`./libs/${lib}/package.json`);
     const version = lodash.get(pkg, `dependencies.${lib}`);

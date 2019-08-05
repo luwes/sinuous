@@ -1,20 +1,27 @@
-/* global Plotly, sinuous, observable */
-const { o, html } = sinuous;
-const { S } = observable;
+/* global Plotly */
+import { o, html } from 'https://unpkg.com/sinuous@0.13.0/module/sinuous.js';
+import { S } from 'https://unpkg.com/sinuous@0.13.0/module/observable.js';
 
 const url = o('./results.json');
 const results = o([]);
 const benchmarks = S(() => {
   return [...new Set(results().map((result) => result.benchmark))].sort();
 });
+const isLoading = o(false);
 
 function init() {
-  S(loadResults);
+  // Would be great this snippet could be hydrated.
+  // Paritial attributes would be awesome too.
+  document.querySelector('.select-bench').append(html`
+    <div class="${() => 'select is-small' + (isLoading() ? ' is-loading' : '')}">
+      <select class="load-input" onchange="${(e) => url(e.target.value)}">
+        <option value="./results.json">Sinuous Benchmark</option>
+        <option value="https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts/results.json">JS Framework Benchmark</option>
+      </select>
+    </div>
+  `);
 
-  document.querySelector('.load-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    url(document.querySelector('.load-input').value);
-  });
+  S(loadResults);
 
   document.querySelector('.benchmarks-list').append(html`
     ${() => benchmarks().map((benchmark) => html`
@@ -34,17 +41,20 @@ function init() {
 }
 
 async function loadResults() {
-  document.querySelector('.load-input').value = url();
+  isLoading(true);
 
   const response = await fetch(url());
   const json = await response.json();
   // krausest/js-framework-benchmark has a top level array.
   results(Array.isArray(json) ? json : json.results);
+
+  isLoading(false);
 }
 
 function plotResults() {
   benchmarks().forEach(benchmark => {
     const libs = results()
+      .filter(result => !getId(result).includes('non-keyed'))
       .filter(result => result.benchmark === benchmark)
       .sort((a, b) => {
         return median(a.values) > median(b.values) ? 1 : -1;

@@ -6,7 +6,8 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install sinuous --save`  
-**cdn**: https://unpkg.com/sinuous/dist/sinuous.js
+**cdn**: https://unpkg.com/sinuous  
+**module**: https://unpkg.com/sinuous?module
 
 ### Intro
 
@@ -21,9 +22,9 @@ It was built with these ideas in mind.
 
 | Size                                                                                                                                              | Name                                                  | Description           |
 | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/map/dist/map.min.js?compression=gzip&label=gzip&style=flat-square&v=1)           | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/template/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/observable/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square&v=1)           | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 
 ### Motivation
 
