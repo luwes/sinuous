@@ -32,7 +32,7 @@ jobs:
       script: COVERAGE=true yarn test --single-run
     - script:
       - (cd bench && yarn && yarn build-prod)
-      - (cd bench && (yarn start --silent & yarn bench --count 10))
+      - (cd bench && (yarn start --silent & yarn bench --count 3))
       name: "Benchmark"
       deploy:
         provider: pages
