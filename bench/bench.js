@@ -11,11 +11,16 @@ const u = require('./utils.js');
 const argv = minimist(process.argv.slice(2), {
   default: {
     count: 3,
-    lib: null
+    lib: null,
+    overwrite: null
   }
 });
 
 async function run() {
+  if (argv.overwrite) {
+    await db.deleteMetrics(argv.overwrite);
+  }
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const libs = (await fs.readdir('./libs'))
