@@ -29,14 +29,14 @@ async function metrics(page, testFunction) {
   try {
     await page._client.send('Performance.enable');
 
-    // await client.send('HeapProfiler.collectGarbage');
+    await page._client.send('HeapProfiler.collectGarbage');
     const start = await page._client.send('Performance.getMetrics');
 
     // console.time('metric');
     await testFunction.apply(null, arguments);
     //console.timeEnd('metric');
 
-    // await client.send('HeapProfiler.collectGarbage');
+    await page._client.send('HeapProfiler.collectGarbage');
     const end = await page._client.send('Performance.getMetrics');
     const time = getMetric(end, 'Timestamp') - getMetric(start, 'Timestamp');
 
