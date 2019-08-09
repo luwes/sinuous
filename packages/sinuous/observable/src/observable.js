@@ -94,8 +94,10 @@ function observable(value) {
     }
 
     if (queue) {
+      if (data._pending === undefined) {
+        queue.push(data);
+      }
       data._pending = nextValue;
-      queue.push(data);
       return nextValue;
     }
 
