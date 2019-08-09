@@ -1,4 +1,5 @@
 let currentUpdate;
+let queue;
 
 /**
  * Returns true if there is an active listener.
@@ -47,6 +48,27 @@ export function sample(fn) {
 }
 
 /**
+ * Creates a transation where in an observable can be set multiple times but
+ * only trigger a computation once.
+ * @param  {Function} fn
+ * @return {*}
+ */
+export function transaction(fn) {
+  queue = [];
+  const result = fn();
+  let q = queue;
+  queue = undefined;
+  q.forEach((data) => {
+    if (data._pending) {
+      const pending = data._pending;
+      data._pending = undefined;
+      data(pending);
+    }
+  });
+  return result;
+}
+
+/**
  * Creates a new observable, returns a function which can be used to get
  * the observable's value by calling the function without any arguments
  * and set the value by passing one argument of any type.
@@ -71,11 +93,19 @@ function observable(value) {
       return value;
     }
 
+    if (queue) {
+      if (data._pending === undefined) {
+        queue.push(data);
+      }
+      data._pending = nextValue;
+      return nextValue;
+    }
+
     value = nextValue;
 
     // Clear `currentUpdate` otherwise a computed triggered by a set
     // in another computed is seen as a child of that other computed.
-    const update = currentUpdate;
+    const clearedUpdate = currentUpdate;
     currentUpdate = undefined;
 
     data._listeners.forEach(update => (update._fresh = 0));
@@ -84,7 +114,7 @@ function observable(value) {
       if (!update._fresh) update();
     });
 
-    currentUpdate = update;
+    currentUpdate = clearedUpdate;
     return value;
   }
 
