@@ -56,3 +56,22 @@ test('template result fills tags w/ same value', function(tt) {
   tt.equal(title({ title: 'Test' }).firstChild.outerHTML, '<h1>Test</h1>');
   tt.end();
 });
+
+test('template result fills multiple observable tags w/ same key', function(tt) {
+  const title = template(
+    () => h('h1', { class: o('title') }, h('b', o('title')), h('i', o('title')))
+  );
+  const obj = {
+    title: ''
+  };
+
+  const rendered = title(obj);
+  obj.title = 'banana';
+
+  tt.equal(
+    rendered.firstChild.outerHTML,
+    '<h1 class="banana"><b>banana</b><i>banana</i></h1>'
+  );
+
+  tt.end();
+});
