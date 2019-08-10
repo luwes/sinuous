@@ -59,7 +59,7 @@ test('template result fills tags w/ same value', function(tt) {
 
 test('template result fills multiple observable tags w/ same key', function(tt) {
   const title = template(
-    () => h('h1', { class: o('title') }, o('title'), ' ', h('i', o('title')))
+    () => h('h1', { class: o('title') }, h('b', o('title')), h('i', o('title')))
   );
   const obj = {
     title: ''
@@ -70,7 +70,7 @@ test('template result fills multiple observable tags w/ same key', function(tt) 
 
   tt.equal(
     rendered.firstChild.outerHTML,
-    '<h1 class="banana">banana <i>banana</i></h1>'
+    '<h1 class="banana"><b>banana</b><i>banana</i></h1>'
   );
 
   tt.end();
