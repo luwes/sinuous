@@ -1,6 +1,6 @@
 import { EMPTY_ARR } from './constants.js';
 
-let actions;
+let recordedActions;
 
 /**
  * Template tag.
@@ -14,7 +14,7 @@ export function t(key) {
     const action = create(fn, str);
     action._tag = tag;
     action._el = el;
-    actions.push(action);
+    recordedActions.push(action);
   };
   return tag;
 }
@@ -48,12 +48,12 @@ function createProperty(property, name) {
  * @return {Function}
  */
 export function template(fn) {
-  actions = [];
+  recordedActions = [];
 
   const fragment = document.createDocumentFragment();
   fragment.appendChild(fn());
 
-  actions.forEach(action => {
+  recordedActions.forEach(action => {
     action._paths = [];
     let el = action._el;
     let parent;
@@ -63,15 +63,16 @@ export function template(fn) {
     }
   });
 
-  const cloneActions = actions;
-  actions = null;
+  const keyedActions = {};
+  const cloneActions = recordedActions;
+  recordedActions = null;
 
   return function clone(props) {
     const el = fragment.cloneNode(true);
     el.firstChild.props = props;
 
     for (let i = 0; i < cloneActions.length; i++) {
-      const action = cloneActions[i];
+      let action = cloneActions[i];
       const paths = action._paths;
 
       let target = el;
@@ -95,7 +96,10 @@ export function template(fn) {
       }
 
       if (tag._observable) {
-        observeProperty(props, key, value, action, target);
+        if (!keyedActions[key]) {
+          observeProperty(props, key, value, (keyedActions[key] = []));
+        }
+        keyedActions[key].push(action.bind(null, target));
       }
     }
 
@@ -103,14 +107,14 @@ export function template(fn) {
   };
 }
 
-function observeProperty(props, key, value, action, target) {
+function observeProperty(props, key, value, actions) {
   Object.defineProperty(props, key, {
     get() {
       return value;
     },
     set(newValue) {
       value = newValue;
-      action(target, newValue);
+      actions.forEach(action => action(newValue));
     }
   });
 }

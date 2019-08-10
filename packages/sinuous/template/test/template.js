@@ -1,5 +1,5 @@
 import test from 'tape';
-import { h } from 'sinuous';
+import { h, html } from 'sinuous';
 import { template, o, t } from 'sinuous/template';
 
 test('tags return functions', function(tt) {
@@ -54,5 +54,25 @@ test('template result fills tags w/ same value', function(tt) {
   const title = template(() => h('h1', t('title')));
   tt.equal(title({ title: 'Test' }).firstChild.outerHTML, '<h1>Test</h1>');
   tt.equal(title({ title: 'Test' }).firstChild.outerHTML, '<h1>Test</h1>');
+  tt.end();
+});
+
+test('template result fills multiple observable tags w/ same key', function(tt) {
+  const title = template(() => html`
+    <h1 class="${o('title')}">
+      ${o('title')} <i>${o('title')}</i>
+    </h1>
+  `);
+  const obj = {
+    dummy: 3,
+    title: ''
+  };
+
+  const rendered = title(obj);
+  obj.title = 'banana';
+
+  tt.equal(rendered.firstChild.outerHTML, '<h1 class="banana">banana <i>banana</i></h1>');
+
+  tt.deepEqual(Object.keys(obj), ['dummy', 'title']);
   tt.end();
 });
