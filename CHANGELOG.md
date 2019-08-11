@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.13.1 - 2019-08-11
+
+### Fixed
+
+- Fixed same key observe tags in template fix [#5](https://github.com/luwes/sinuous/issues/5)
+
+### Added
+
+- Added transaction method [#21](https://github.com/luwes/sinuous/issues/21)
+
 ## 0.13.0 - 2019-08-03
 
 ### Added
