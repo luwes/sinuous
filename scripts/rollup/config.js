@@ -117,6 +117,12 @@ function getConfig(options) {
           "from 'sinuous/htm'": "from './htm.js'",
         }
       }),
+      name === 'mini' && ESM === format && replace({
+        delimiters: ['', ''],
+        values: {
+          "from './sinuous.js'": "from '../sinuous.js'"
+        }
+      }),
       options.gzip && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {
