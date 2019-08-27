@@ -1,7 +1,7 @@
 import test from 'tape';
 import { root } from 'sinuous/observable';
 import { o, h } from 'sinuous';
-import map from 'sinuous/map';
+import { map } from 'sinuous/map';
 
 function lis(str) {
   return '<li>' + str.split(',').join('</li><li>') + '</li>';

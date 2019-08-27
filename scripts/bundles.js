@@ -47,14 +47,7 @@ export const bundles = [
     dest: dest()
   },
   {
-    external: ['sinuous', './sinuous.js'],
-    formats: [ESM, UMD, IIFE],
-    global: 'map',
-    name: 'map',
-    input: 'packages/sinuous/map/src/index.js',
-    dest: dest()
-  },
-  {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', '../sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'mini',
@@ -63,7 +56,17 @@ export const bundles = [
     dest: dest('/map')
   },
   {
-    external: ['sinuous/observable', 'sinuous/htm', './observable.js', './htm.js'],
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous', './sinuous.js', 'sinuous/map/mini', './map/mini.js'],
+    formats: [ESM, UMD, IIFE],
+    global: 'map',
+    name: 'map',
+    input: 'packages/sinuous/map/src/index.js',
+    dest: dest()
+  },
+  {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous/observable', './observable.js', 'sinuous/htm', './htm.js'],
     formats: [ESM, UMD, IIFE],
     global: 'sinuous',
     name: 'sinuous',

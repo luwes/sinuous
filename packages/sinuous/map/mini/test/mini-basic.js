@@ -1,7 +1,7 @@
 import test from 'tape';
 import * as api from 'sinuous/observable';
 import { o, h } from 'sinuous';
-import map from 'sinuous/map/mini';
+import { map } from 'sinuous/map/mini';
 
 const root = api.root;
 

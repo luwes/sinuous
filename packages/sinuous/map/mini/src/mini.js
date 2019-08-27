@@ -3,7 +3,7 @@ import { api } from 'sinuous';
 
 const EMPTY_ARR = [];
 
-export default function map(items, expr) {
+export function map(items, expr) {
   const { subscribe, root, cleanup } = api;
 
   let parent = document.createDocumentFragment();
