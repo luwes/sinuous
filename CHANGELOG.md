@@ -2,6 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.14.0 - 2019-08-27 - BREAKING CHANGES
+
+### Added
+
+- Added `import { mini } from 'sinuous/map'`. It's only 570 bytes heiiii! [#32](https://github.com/luwes/sinuous/issues/32)  
+
+![Gob](https://media.giphy.com/media/n0WvhHFTpihk4/giphy.gif)
+
+### Changed
+
+- Breaking changes `import map from 'sinuous/map'` to `import { map } from 'sinuous/map'`
+
 ## 0.13.1 - 2019-08-11
 
 ### Fixed
