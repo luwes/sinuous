@@ -136,6 +136,7 @@ module.exports = function(config) {
       preserveSymlinks: true,
       plugins: [
         alias({
+          'sinuous/map/mini': __dirname + '/packages/sinuous/map/mini/src/mini.js',
           'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
           'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
           'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
@@ -149,7 +150,7 @@ module.exports = function(config) {
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
-            'packages/*/!(htm)/src/**/*.js'
+            'packages/*/!(htm)/**/src/**/*.js'
         }),
         sauceLabs && babel({
           include: [

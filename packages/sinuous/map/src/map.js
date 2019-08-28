@@ -12,7 +12,7 @@ import {
 
 let groupCounter = 0;
 
-export default function map(items, expr) {
+export function map(items, expr) {
   const { subscribe, root, sample, cleanup } = api;
 
   const disposers = new Map();

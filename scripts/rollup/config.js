@@ -62,6 +62,14 @@ function getConfig(options) {
         path.dirname(input),
         `../dist/${name}${formatOptions[format].ext}`
       );
+
+  const replacePeersForESM = external.map((name, i) => {
+    return ESM === format && i % 2 == 0 && replace({
+      delimiters: ['', ''],
+      [`from '${name}'`]: `from '${external[i+1]}'`
+    });
+  });
+
   return {
     input,
     external,
@@ -109,14 +117,7 @@ function getConfig(options) {
             }
           }
         }),
-      ESM === format && replace({
-        delimiters: ['', ''],
-        values: {
-          "from 'sinuous'": "from './sinuous.js'",
-          "from 'sinuous/observable'": "from './observable.js'",
-          "from 'sinuous/htm'": "from './htm.js'",
-        }
-      }),
+      ...replacePeersForESM,
       options.gzip && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {
