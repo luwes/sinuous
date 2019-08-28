@@ -26,6 +26,29 @@ It was built with these ideas in mind.
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)     | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 
+### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+
+```js
+import { o, html } from 'sinuous';
+
+const counter = o(0);
+const view = () => {
+  return html`
+    <div>Counter ${counter}</div>
+  `;
+};
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+### Examples
+
+- [Counter](https://codesandbox.io/s/sinuous-counter-z6k71) Simple Counter
+- [SVG Clock](https://sinuous.netlify.com/examples/clock/) Analog SVG Clock
+- [TodoMVC](https://github.com/luwes/sinuous-todomvc) Classic TodoMVC example
+- [JS Framework Benchmark](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) Most Popular UI library bench
+
 ### Motivation
 
 The motivation for Sinuous was to create a very lightweight UI library to use in our video player at Vimeo. The view layer in the player is rendered by innerHTML and native DOM operations which is probably the best in terms of performance and bundle size. However the need for a more declarative way of doing things is starting to creep up. Even if it's just for ergonomics.
@@ -42,22 +65,6 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 [HTM](https://github.com/developit/htm) compiles to an `h` tag. Adapted code from [Ryan Solid](https://github.com/ryansolid/babel-plugin-jsx-dom-expressions)'s dom expressions + a Reactive library provides the reactivity.
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
-
-### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
-
-```js
-import { o, html } from 'sinuous';
-
-const counter = o(0);
-const view = () => {
-  return html`
-    <div>Counter ${counter}</div>
-  `;
-};
-
-document.body.append(view());
-setInterval(() => counter(counter() + 1), 1000);
-```
 
 ### Browser Support
 

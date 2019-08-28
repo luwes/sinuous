@@ -1,5 +1,5 @@
 import { o, h } from 'sinuous';
-import map from 'sinuous/map';
+import { map } from 'sinuous/map';
 
 const TodoApp = () => {
   let items = o([]);

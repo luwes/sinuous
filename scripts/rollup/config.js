@@ -55,7 +55,7 @@ function shouldSkipBundle(bundleName, bundleType) {
 }
 
 function getConfig(options) {
-  const { name, input, dest, format, external, sourcemap } = options;
+  const { name, input, dest, format, external = [], sourcemap } = options;
   const output = dest
     ? `${dest(format)}/${name}${formatOptions[format].ext}`
     : path.join(

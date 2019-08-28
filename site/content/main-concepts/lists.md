@@ -58,7 +58,7 @@ This module will make a diff of the new state with the old state and make the le
 
 ```js
 import { o, html } from "sinuous";
-import map from "sinuous/map";
+import { map } from "sinuous/map";
 
 const list = o([
   { id: 1, text: o("bread") },
