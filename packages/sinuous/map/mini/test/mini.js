@@ -1,7 +1,7 @@
 import test from 'tape';
 import * as api from 'sinuous/observable';
 import { o, h } from 'sinuous';
-import { map } from 'sinuous/map';
+import { map } from 'sinuous/map/mini';
 
 const root = api.root;
 
@@ -15,20 +15,20 @@ let dispose;
 const Component = () =>
   root(d => {
     dispose = d;
-    div = h('div', map(list, item => item));
+    div = h('div', h('b'), h('i'), map(list, item => item), h('b'), h('i'));
   });
 
 function apply(t, array) {
   list(array);
-  t.equal(div.innerHTML, array.join(''));
+  t.equal(div.innerHTML, '<b></b><i></i>' + array.join('') + '<b></b><i></i>');
   list([n1, n2, n3, n4]);
-  t.equal(div.innerHTML, 'abcd');
+  t.equal(div.innerHTML, '<b></b><i></i>abcd<b></b><i></i>');
 }
 
 test('Create map control flow', t => {
   Component();
 
-  t.equal(div.innerHTML, 'abcd');
+  t.equal(div.innerHTML, '<b></b><i></i>abcd<b></b><i></i>');
   t.end();
 });
 
@@ -51,9 +51,9 @@ test('2 missing', t => {
 });
 
 test('3 missing', t => {
-  apply(t, [n1]);
-  apply(t, [n2]);
   apply(t, [n3]);
+  apply(t, [n2]);
+  apply(t, [n1]);
   apply(t, [n4]);
   t.end();
 });

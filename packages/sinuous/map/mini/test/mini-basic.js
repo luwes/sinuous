@@ -1,11 +1,11 @@
 import test from 'tape';
 import * as api from 'sinuous/observable';
 import { o, h } from 'sinuous';
-import { map } from 'sinuous/map';
+import { map } from 'sinuous/map/mini';
 
 const root = api.root;
 
-const list = o([h(['a', 1]), h(['b', 2]), h(['c', 3]), h(['d', 4])]);
+const list = o(['a1', 'b2', 'c3', 'd4']);
 const div = document.createElement('div');
 div.appendChild(document.createElement('i'));
 div.appendChild(document.createElement('b'));
@@ -22,7 +22,7 @@ test('Basic map - create', t => {
 });
 
 test('Basic map - update', t => {
-  list([h(['b', 2, 99]), h(['a', 1]), h(['c'])]);
+  list(['b299', 'a1', 'c']);
   t.equal(div.innerHTML, '<i></i><b></b>b299a1c');
   t.end();
 });

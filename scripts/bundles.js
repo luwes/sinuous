@@ -8,8 +8,8 @@ export const bundleFormats = {
   UMD
 };
 
-const dest = (format) => {
-  return `packages/sinuous/${format === ESM ? 'module' : 'dist'}`;
+const dest = (path = '') => (format) => {
+  return `packages/sinuous/${format === ESM ? 'module' : 'dist'}${path}`;
 };
 
 export const bundles = [
@@ -20,7 +20,7 @@ export const bundles = [
     global: 'htm',
     name: 'htm',
     input: 'packages/sinuous/htm/src/index.js',
-    dest
+    dest: dest()
   },
   {
     external: [],
@@ -28,7 +28,7 @@ export const bundles = [
     global: 'observable',
     name: 'observable',
     input: 'packages/sinuous/observable/src/observable.js',
-    dest
+    dest: dest()
   },
   {
     external: [],
@@ -36,7 +36,7 @@ export const bundles = [
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js',
-    dest
+    dest: dest()
   },
   {
     external: [],
@@ -44,30 +44,41 @@ export const bundles = [
     global: 'template',
     name: 'template',
     input: 'packages/sinuous/template/src/template.js',
-    dest
+    dest: dest()
   },
   {
-    external: ['sinuous', './sinuous.js'],
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous', '../sinuous.js'],
+    formats: [ESM, UMD, IIFE],
+    global: 'mini',
+    name: 'mini',
+    input: 'packages/sinuous/map/mini/src/mini.js',
+    dest: dest('/map')
+  },
+  {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous', './sinuous.js', 'sinuous/map/mini', './map/mini.js'],
     formats: [ESM, UMD, IIFE],
     global: 'map',
     name: 'map',
     input: 'packages/sinuous/map/src/index.js',
-    dest
+    dest: dest()
   },
   {
-    external: ['sinuous/observable', 'sinuous/htm', './observable.js', './htm.js'],
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous/observable', './observable.js', 'sinuous/htm', './htm.js'],
     formats: [ESM, UMD, IIFE],
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js',
-    dest
+    dest: dest()
   },
   {
     external: [],
     formats: [ESM, CJS],
     name: 'babel-plugin-htm',
     input: 'packages/sinuous/babel-plugin-htm/src/index.js',
-    dest
+    dest: dest()
   }
 ];
 
