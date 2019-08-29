@@ -1,6 +1,6 @@
 /* global Plotly */
-import { o, html } from 'https://unpkg.com/sinuous@0.13.0/module/sinuous.js';
-import { S } from 'https://unpkg.com/sinuous@0.13.0/module/observable.js';
+import { o, html } from 'https://unpkg.com/sinuous@0.14.0/module/sinuous.js';
+import { S } from 'https://unpkg.com/sinuous@0.14.0/module/observable.js';
 
 const url = o('./results.json');
 const results = o([]);

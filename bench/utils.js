@@ -25,20 +25,35 @@ const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
   return extractedData;
 };
 
-async function metrics(page, testFunction) {
+async function metrics(page, bench, testFunction) {
   try {
     await page._client.send('Performance.enable');
-
     await page._client.send('HeapProfiler.collectGarbage');
-    const start = await page._client.send('Performance.getMetrics');
 
-    // console.time('metric');
+    await page.tracing.start({ path: 'trace.json' });
+
+    if (bench.throttleCPU) {
+      await page._client.send('Emulation.setCPUThrottlingRate', {
+        rate: bench.throttleCPU
+      });
+    }
+    await page.evaluate(() => console.timeStamp('runBenchmark'));
+
     await testFunction.apply(null, arguments);
-    //console.timeEnd('metric');
 
-    await page._client.send('HeapProfiler.collectGarbage');
-    const end = await page._client.send('Performance.getMetrics');
-    const time = getMetric(end, 'Timestamp') - getMetric(start, 'Timestamp');
+    if (bench.throttleCPU) {
+      await page._client.send('Emulation.setCPUThrottlingRate', {
+        rate: 1
+      });
+    }
+    await page.evaluate(() => console.timeStamp('finishBenchmark'));
+
+    await page.waitFor(100);
+    await page.evaluate(() => console.timeStamp('afterBenchmark'));
+
+    await page.waitFor(100);
+    const trace = JSON.parse((await page.tracing.stop()).toString());
+    const time = getLastPaint(trace) - getClickBeforePaint(trace);
 
     return {
       time
@@ -48,8 +63,30 @@ async function metrics(page, testFunction) {
   }
 }
 
-const getMetric = (metrics, name) =>
-  metrics.metrics.find(x => x.name === name).value * 1000;
+// const getTimestamp = (trace, msg) =>
+//   trace.traceEvents.find(x => {
+//     return x.name === 'TimeStamp' && x.args.data.message === msg;
+//   }).ts / 1000;
+
+const getClickBeforePaint = (trace) => {
+  const evts = trace.traceEvents.filter(x => {
+    return x.name === 'EventDispatch' && x.args.data.type === 'click';
+  });
+
+  const paint = getLastPaint(trace);
+  let ts;
+  do {
+    ts = evts.pop().ts / 1000;
+  } while (ts > paint && evts.length);
+
+  return ts;
+};
+
+const getLastPaint = (trace) => {
+  const evts = trace.traceEvents.filter(x => x.name === 'Paint');
+  const evt = evts[evts.length - 1];
+  return (evt.ts + evt.dur) / 1000;
+};
 
 function randomNoRepeats(array) {
   var copy = array.slice(0);

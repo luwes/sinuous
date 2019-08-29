@@ -21,6 +21,7 @@
     "minimist": "^1.2.0",
     "plotly.js-dist": "^1.49.0",
     "puppeteer": "^1.19.0",
+    "ramda": "^0.26.1",
     "semver": "^6.3.0"
   },
   "devDependencies": {

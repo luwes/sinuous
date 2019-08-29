@@ -1,4 +1,4 @@
-const lodash = require('lodash');
+const _ = require('lodash');
 const low = require('lowdb');
 const FileAsync = require('lowdb/adapters/FileAsync');
 var jStat = require('jstat').jStat;
@@ -39,7 +39,7 @@ async function saveMetrics(id, benchmark, value) {
   result = results.find({ id, benchmark });
   result
     .get('values')
-    .push(lodash.round(value, 3))
+    .push(_.round(value, 3))
     .value();
 
   const values = result

@@ -13,3 +13,5 @@ dist
 /bench/yarn.lock
 
 packages/sinuous/module/
+
+/bench/trace.json

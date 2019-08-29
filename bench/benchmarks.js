@@ -21,10 +21,7 @@ async function benchBundleSize(page, lib) {
     return gzipSize.file(path.resolve(`./libs/${lib}/dist/main.js`));
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchRun(page) {
@@ -34,17 +31,14 @@ async function benchRun(page) {
   };
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#add');
       await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchReplaceAll(page) {
@@ -63,17 +57,14 @@ async function benchReplaceAll(page) {
   }
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#run');
       await testTextContains(page, '//tbody/tr[1]/td[1]', `${WARMUP_COUNT}001`);
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchUpdate(page) {
@@ -95,7 +86,7 @@ async function benchUpdate(page) {
   }
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#update');
       await testTextContains(
         page,
@@ -106,10 +97,7 @@ async function benchUpdate(page) {
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchSelect(page) {
@@ -127,7 +115,7 @@ async function benchSelect(page) {
   }
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#update');
       await clickElementByXPath(page, `//tbody/tr[2]/td[2]/a`);
       await testClassContains(page, "//tbody/tr[2]", "danger");
@@ -135,10 +123,7 @@ async function benchSelect(page) {
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchSwapRows(page) {
@@ -157,7 +142,7 @@ async function benchSwapRows(page) {
   }
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       let text = await getTextByXPath(page, '//tbody/tr[2]/td[2]/a');
       await page.click('#swaprows');
       await testTextContains(page, '//tbody/tr[999]/td[2]/a', text);
@@ -165,10 +150,7 @@ async function benchSwapRows(page) {
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchRemove(page) {
@@ -188,17 +170,14 @@ async function benchRemove(page) {
   await testTextContains(page, '//tbody/tr[4]/td[1]', '4');
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await clickElementByXPath(page, "//tbody/tr[4]/td[3]/a/span[1]");
       await testTextContains(page, '//tbody/tr[4]/td[1]', '10');
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchRunBig(page) {
@@ -208,17 +187,14 @@ async function benchRunBig(page) {
   };
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#runlots');
       await page.waitForXPath('//tbody/tr[10000]/td[2]/a');
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchAppendToManyRows(page) {
@@ -232,17 +208,14 @@ async function benchAppendToManyRows(page) {
   await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#add');
       await page.waitForXPath('//tbody/tr[1100]/td[2]/a');
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 async function benchClear(page) {
@@ -256,17 +229,14 @@ async function benchClear(page) {
   await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
 
   async function run() {
-    const result = await metrics(page, async () => {
+    const result = await metrics(page, options, async () => {
       await page.click('#clear');
       await page.waitForXPath('//tbody/tr[1]', { hidden: true });
     });
     return result.time;
   }
 
-  return {
-    ...options,
-    run
-  };
+  return Object.assign(options, { run });
 }
 
 module.exports = {
