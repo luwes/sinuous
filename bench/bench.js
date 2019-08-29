@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const puppeteer = require('puppeteer');
 const semver = require('semver');
 const minimist = require('minimist');
-const lodash = require('lodash');
+const _ = require('lodash');
 
 const db = require('./db.js');
 const { benchmarks } = require('./benchmarks.js');
@@ -36,23 +36,10 @@ async function run() {
     await page.waitFor(100);
 
     const bench = await createBench(page, lib);
-
-    if (bench.throttleCPU) {
-      await page._client.send('Emulation.setCPUThrottlingRate', {
-        rate: bench.throttleCPU
-      });
-    }
-
     const value = await bench.run();
 
-    if (bench.throttleCPU) {
-      await page._client.send('Emulation.setCPUThrottlingRate', {
-        rate: 1
-      });
-    }
-
     const pkg = require(`./libs/${lib}/package.json`);
-    const version = lodash.get(pkg, `dependencies.${lib}`);
+    const version = _.get(pkg, `dependencies.${lib}`);
     const id = lib + (version ? '-' + semver.coerce(version).version : '');
 
     await db.saveMetrics(id, bench.id, value);
