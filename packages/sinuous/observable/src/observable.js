@@ -82,7 +82,7 @@ function observable(value) {
   data._listeners = [];
 
   function data(nextValue) {
-    if (nextValue === undefined) {
+    if (arguments.length === 0) {
       if (
         currentUpdate &&
         data._listeners[data._listeners.length - 1] !== currentUpdate
