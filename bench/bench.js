@@ -21,7 +21,40 @@ async function run() {
     await db.deleteMetrics(argv.overwrite);
   }
 
-  const browser = await puppeteer.launch();
+  const headless = true;
+  const args = [
+      "--js-flags=--expose-gc",
+      "--enable-precise-memory-info",
+      "--no-first-run",
+      "--enable-automation",
+      "--disable-infobars",
+      "--disable-background-networking",
+      "--disable-background-timer-throttling",
+      "--disable-cache",
+      "--disable-translate",
+      "--disable-sync",
+      "--disable-extensions",
+      "--disable-default-apps",
+      // "--remote-debugging-port=" + (benchmarkOptions.remoteDebuggingPort).toFixed(),
+      "--window-size=1200,800"
+  ];
+
+  if (headless) {
+    args.push("--headless");
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=737678
+    args.push("--disable-gpu");
+    args.push("--no-sandbox");
+  }
+
+  const browser = await puppeteer.launch({
+    headless,
+    args,
+    defaultViewport: {
+      width: 1200,
+      height: 800
+    }
+  });
+
   const page = await browser.newPage();
   const libs = (await fs.readdir('./libs'))
     .filter(name => name !== '.DS_Store')
@@ -32,8 +65,9 @@ async function run() {
   // eslint-disable-next-line
   for (let i of new Array(argv.count * libs.length * benchmarks.length)) {
     const [lib, createBench] = getRandomBench();
-    await page.goto(`http://localhost:8000/libs/${lib}`);
-    await page.waitFor(100);
+    await page.goto(`http://localhost:8000/libs/${lib}`, {
+      waitUntil: 'load'
+    });
 
     const bench = await createBench(page, lib);
     const value = await bench.run();

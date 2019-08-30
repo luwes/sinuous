@@ -48,10 +48,8 @@ async function metrics(page, bench, testFunction) {
     }
     await page.evaluate(() => console.timeStamp('finishBenchmark'));
 
-    await page.waitFor(100);
     await page.evaluate(() => console.timeStamp('afterBenchmark'));
 
-    await page.waitFor(100);
     const trace = JSON.parse((await page.tracing.stop()).toString());
     const time = getLastPaint(trace) - getClickBeforePaint(trace);
 
