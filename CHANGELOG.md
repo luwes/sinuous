@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.14.1 - 2019-08-29
+
+### Fixed
+
+- Fixed template scope key actions bug. Impacted performance and incorrect rendering. Visible in JS Framework Benchmark.
+
+### Changed
+
 ## 0.14.0 - 2019-08-27 - BREAKING CHANGES
 
 ### Added
