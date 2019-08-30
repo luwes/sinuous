@@ -63,11 +63,11 @@ export function template(fn) {
     }
   });
 
-  const keyedActions = {};
   const cloneActions = recordedActions;
   recordedActions = null;
 
   return function clone(props) {
+    const keyedActions = {};
     const el = fragment.cloneNode(true);
     el.firstChild.props = props;
 
