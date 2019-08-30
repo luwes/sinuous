@@ -4533,9 +4533,9 @@ jsprim@^1.2.2:
     verror "1.10.0"
 
 jstat@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.9.0.tgz#96a625f5697566f6ba3b15832fb371f9451b8614"
-  integrity sha512-xSsSJ3qY4rS+u8+dAwRcJ0LQGxNdibdW6rSalNPZDbLYkW1C7b0/j79IxXtQjrweqMNI3asN7FCIPceNSIJr2g==
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.9.1.tgz#819961f0be25e010db8bc5050435ef1db80c9551"
+  integrity sha512-DqSRbQFbVAOE7kMuXfWrv+mmOvRrPbILwv/WakmrSnxmfocCTrpDnmpLbs8/5/R3d0tHih1h/T+pGlCGgX8uAw==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
