@@ -5,6 +5,7 @@ import '../h/test/svg.js';
 import '../h/test/insert.js';
 import '../h/test/insert-markers.js';
 import '../h/test/utils.js';
+import '../observable/test/child.js';
 import '../observable/test/observable.js';
 import '../observable/test/S.js';
 import '../observable/test/sample.js';

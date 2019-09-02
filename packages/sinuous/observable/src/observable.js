@@ -48,8 +48,8 @@ export function sample(fn) {
 }
 
 /**
- * Creates a transation where in an observable can be set multiple times but
- * only trigger a computation once.
+ * Creates a transaction in which an observable can be set multiple times
+ * but only trigger a computation once.
  * @param  {Function} fn
  * @return {*}
  */
@@ -80,13 +80,11 @@ function observable(value) {
   // Tiny indicator that this is an observable function.
   data.$o = 1;
   data._listeners = [];
+  data._runListeners = [];
 
   function data(nextValue) {
     if (arguments.length === 0) {
-      if (
-        currentUpdate &&
-        data._listeners[data._listeners.length - 1] !== currentUpdate
-      ) {
+      if (currentUpdate && data._listeners[data._listeners.length - 1] !== currentUpdate) {
         data._listeners.push(currentUpdate);
         currentUpdate._observables.push(data);
       }
@@ -108,9 +106,10 @@ function observable(value) {
     const clearedUpdate = currentUpdate;
     currentUpdate = undefined;
 
-    data._listeners.forEach(update => (update._fresh = 0));
+    data._runListeners = data._listeners.slice();
+    data._runListeners.forEach(update => (update._fresh = 0));
     // Update can alter data._listeners, make a copy before running.
-    data._listeners.slice().forEach(update => {
+    data._runListeners.forEach(update => {
       if (!update._fresh) update();
     });
 
@@ -148,6 +147,16 @@ export function S(listener, value) {
     currentUpdate = update;
     value = listener(value);
 
+    // If any children were marked as fresh remove them from the run lists.
+    const allChildren = allDescendants(update._children, []);
+    allChildren.forEach(u => {
+      if (u._fresh) {
+        u._observables.forEach(o => {
+          o._runListeners.splice(o._runListeners.indexOf(u), 1);
+        });
+      }
+    });
+
     currentUpdate = prevUpdate;
     return value;
   }
@@ -162,6 +171,14 @@ export function S(listener, value) {
   }
 
   return data;
+}
+
+function allDescendants(children, all) {
+  all = all.concat(children);
+  for (let i = 0; i < children.length; i++) {
+    allDescendants(children[i]._children, all);
+  }
+  return all;
 }
 
 /**
