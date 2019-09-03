@@ -158,40 +158,6 @@ test('set works from other computed', function(t) {
   });
 })();
 
-test('insures that new dependencies are updated before dependee', function(t) {
-  var order = '',
-    a = o(0),
-    b = S(function x() {
-      order += 'b';
-      return a() + 1;
-    }),
-    c = S(function y() {
-      order += 'c';
-      return b() || d();
-    }),
-    d = S(function z() {
-      order += 'd';
-      return a() + 10;
-    });
-
-  t.equal(order, 'bcd', '1st bcd test');
-
-  order = '';
-  a(-1);
-
-  t.equal(b(), 0, 'b equals 0');
-  t.equal(order, 'bcd', '2nd bcd test');
-  t.equal(d(), 9, 'd equals 9');
-  t.equal(c(), 9, 'c equals d(9)');
-
-  order = '';
-  a(0);
-
-  t.equal(order, 'bcd', '3rd bcd test');
-  t.equal(c(), 1);
-  t.end();
-});
-
 test('does not register a dependency', function(t) {
   var fevals = 0,
     d;

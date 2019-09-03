@@ -142,13 +142,22 @@ export function S(listener, value) {
       currentUpdate._children.push(update);
     }
 
+    const prevChildren = update._children;
+
     _unsubscribe(update);
     update._fresh = 1;
     currentUpdate = update;
     value = listener(value);
 
+    // If any children computations were removed mark them as fresh.
+    prevChildren.forEach(u => {
+      if (update._children.indexOf(u) === -1) {
+        u._fresh = 1;
+      }
+    });
+
     // If any children were marked as fresh remove them from the run lists.
-    const allChildren = allDescendants(update._children, []);
+    const allChildren = getChildrenDeep(update._children, []);
     allChildren.forEach(u => {
       if (u._fresh) {
         u._observables.forEach(o => {
@@ -173,10 +182,10 @@ export function S(listener, value) {
   return data;
 }
 
-function allDescendants(children, all) {
+function getChildrenDeep(children, all) {
   all = all.concat(children);
   for (let i = 0; i < children.length; i++) {
-    allDescendants(children[i]._children, all);
+    getChildrenDeep(children[i]._children, all);
   }
   return all;
 }
