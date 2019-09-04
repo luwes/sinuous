@@ -2,7 +2,10 @@ import test from 'tape';
 import spy from 'ispy';
 import {
   o,
-  S
+  S,
+  transaction,
+  observable,
+  sample
 } from '../src/observable.js';
 
 test('parent cleans up inner subscriptions', function(t) {
@@ -89,22 +92,31 @@ test('parent cleans up inner conditional subscriptions', function(t) {
     return d;
   });
 
-  S(function memo() {
+  const memo = S(() => {
     const c = cache();
     return c ? child(data) : undefined;
   });
+
+  let view;
+  S(() => (view =  memo()));
+
+  t.equal(view, undefined);
 
   // Run 1st time
   data("name");
   t.equal(childValue, 'name');
 
-  // data is null -> cache is false -> child is not run here
-  data(null);
-  t.equal(childValue, 'name');
+  t.equal(view, 'Hi');
 
   // 2nd
   data("name2");
   t.equal(childValue, 'name2');
+
+  // data is null -> cache is false -> child is not run here
+  data(null);
+  t.equal(childValue, 'name2');
+
+  t.equal(view, undefined);
 
   t.equal(i, 2);
   t.end();
@@ -144,21 +156,30 @@ test('parent cleans up inner conditional subscriptions w/ other child', function
   });
 
   // Run 1st time
-  S(function memo() {
+  const memo = S(() => {
     const c = cache();
     child2(data);
     return c ? child(data) : undefined;
   });
+
+  let view;
+  S(() => (view =  memo()));
+
+  t.equal(view, undefined);
 
   // 2nd
   data("name");
   t.equal(childValue, 'name');
   t.equal(childValue2, 'name');
 
+  t.equal(view, 'Hi');
+
   // 3rd
   data(null);
   t.equal(childValue, 'name');
   t.equal(childValue2, null);
+
+  t.equal(view, undefined);
 
   // 4th
   data("name2");
@@ -251,5 +272,47 @@ test('insures that new dependencies are updated before dependee', function(t) {
 
   t.equal(order, 'bc', '3rd bcd test');
   t.equal(c(), 1);
+  t.end();
+});
+
+test('unrelated state via transaction updates view correctly', function(t) {
+  const data = observable(null),
+    trigger = observable(false),
+    cache = observable(sample(() => !!trigger())),
+    child = data => {
+      S(() => console.log("nested", data().length));
+      return "Hi";
+    };
+
+  S(prev => {
+    const d = !!data();
+    if (d === prev) return prev;
+    cache(d);
+    return d;
+  });
+
+  const memo = S(() => (cache() ? child(data) : undefined));
+
+  let view;
+  S(() => (view =  memo()));
+  t.equal(view, undefined);
+
+  transaction(() => {
+    trigger(true);
+    data("name");
+  });
+  t.equal(view, 'Hi');
+
+  transaction(() => {
+    trigger(true);
+    data("name2");
+  });
+
+  transaction(() => {
+    data(undefined);
+    trigger(false);
+  });
+  t.equal(view, undefined);
+
   t.end();
 });

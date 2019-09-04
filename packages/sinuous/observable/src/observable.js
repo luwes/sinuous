@@ -1,3 +1,4 @@
+const EMPTY_ARR = [];
 let currentUpdate;
 let queue;
 
@@ -59,9 +60,9 @@ export function transaction(fn) {
   let q = queue;
   queue = undefined;
   q.forEach(data => {
-    if (data._pending) {
+    if (data._pending !== EMPTY_ARR) {
       const pending = data._pending;
-      data._pending = undefined;
+      data._pending = EMPTY_ARR;
       data(pending);
     }
   });
@@ -80,7 +81,7 @@ function observable(value) {
   // Tiny indicator that this is an observable function.
   data.$o = 1;
   data._listeners = [];
-  data._runListeners = [];
+  data._pending = EMPTY_ARR;
 
   function data(nextValue) {
     if (arguments.length === 0) {
@@ -95,7 +96,7 @@ function observable(value) {
     }
 
     if (queue) {
-      if (data._pending === undefined) {
+      if (data._pending === EMPTY_ARR) {
         queue.push(data);
       }
       data._pending = nextValue;
@@ -165,7 +166,9 @@ function computed(listener, value) {
     allChildren.forEach(u => {
       if (u._fresh) {
         u._observables.forEach(o => {
-          o._runListeners.splice(o._runListeners.indexOf(u), 1);
+          if (o._runListeners) {
+            o._runListeners.splice(o._runListeners.indexOf(u), 1);
+          }
         });
       }
     });
