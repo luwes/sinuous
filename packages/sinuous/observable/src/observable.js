@@ -58,7 +58,7 @@ export function transaction(fn) {
   const result = fn();
   let q = queue;
   queue = undefined;
-  q.forEach((data) => {
+  q.forEach(data => {
     if (data._pending) {
       const pending = data._pending;
       data._pending = undefined;
@@ -84,7 +84,10 @@ function observable(value) {
 
   function data(nextValue) {
     if (arguments.length === 0) {
-      if (currentUpdate && data._listeners[data._listeners.length - 1] !== currentUpdate) {
+      if (
+        currentUpdate &&
+        data._listeners[data._listeners.length - 1] !== currentUpdate
+      ) {
         data._listeners.push(currentUpdate);
         currentUpdate._observables.push(data);
       }
@@ -106,9 +109,9 @@ function observable(value) {
     const clearedUpdate = currentUpdate;
     currentUpdate = undefined;
 
-    data._runListeners = data._listeners.slice();
-    data._runListeners.forEach(update => (update._fresh = 0));
     // Update can alter data._listeners, make a copy before running.
+    data._runListeners = data._listeners.slice();
+    data._runListeners.forEach(update => (update._fresh = false));
     data._runListeners.forEach(update => {
       if (!update._fresh) update();
     });
@@ -130,7 +133,7 @@ export { observable, observable as o };
  * @param {*} value - Seed value.
  * @return {Function} Computation which can be used in other computations.
  */
-export function S(listener, value) {
+function computed(listener, value) {
   listener._update = update;
 
   resetUpdate(update);
@@ -145,14 +148,15 @@ export function S(listener, value) {
     const prevChildren = update._children;
 
     _unsubscribe(update);
-    update._fresh = 1;
+    update._fresh = true;
     currentUpdate = update;
     value = listener(value);
 
     // If any children computations were removed mark them as fresh.
+    // Check the diff of the children list between pre and post update.
     prevChildren.forEach(u => {
       if (update._children.indexOf(u) === -1) {
-        u._fresh = 1;
+        u._fresh = true;
       }
     });
 
@@ -182,13 +186,7 @@ export function S(listener, value) {
   return data;
 }
 
-function getChildrenDeep(children, all) {
-  all = all.concat(children);
-  for (let i = 0; i < children.length; i++) {
-    getChildrenDeep(children[i]._children, all);
-  }
-  return all;
-}
+export { computed, computed as S };
 
 /**
  * Run the given function just before the enclosing computation updates
@@ -209,7 +207,7 @@ export function cleanup(fn) {
  * @return {Function}
  */
 export function subscribe(listener) {
-  S(listener);
+  computed(listener);
   return () => _unsubscribe(listener._update);
 }
 
@@ -235,4 +233,12 @@ function resetUpdate(update) {
   update._observables = [];
   update._children = [];
   update._cleanups = [];
+}
+
+function getChildrenDeep(children, all) {
+  all = all.concat(children);
+  for (let i = 0; i < children.length; i++) {
+    getChildrenDeep(children[i]._children, all);
+  }
+  return all;
 }
