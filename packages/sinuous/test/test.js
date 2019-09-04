@@ -12,6 +12,7 @@ import '../observable/test/sample.js';
 import '../observable/test/root.js';
 import '../observable/test/dispose.js';
 import '../observable/test/transaction.js';
+import '../observable/test/utils.js';
 import '../map/test/add-node.js';
 import '../map/test/map.js';
 import '../map/test/map-basic.js';

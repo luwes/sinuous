@@ -1,3 +1,5 @@
+import { getChildrenDeep } from './utils.js';
+
 const EMPTY_ARR = [];
 let currentUpdate;
 let queue;
@@ -81,6 +83,7 @@ function observable(value) {
   // Tiny indicator that this is an observable function.
   data.$o = 1;
   data._listeners = new Set();
+  // The 'not set' value must be unique, so `nullish` can be set in a transaction.
   data._pending = EMPTY_ARR;
 
   function data(nextValue) {
@@ -159,7 +162,7 @@ function computed(listener, value) {
     });
 
     // If any children were marked as fresh remove them from the run lists.
-    const allChildren = getChildrenDeep(update._children, []);
+    const allChildren = getChildrenDeep(update._children);
     allChildren.forEach(u => {
       if (u._fresh) {
         u._observables.forEach(o => {
@@ -233,10 +236,4 @@ function resetUpdate(update) {
   update._observables = [];
   update._children = [];
   update._cleanups = [];
-}
-
-function getChildrenDeep(children, all) {
-  all = all.concat(children);
-  children.forEach(child => getChildrenDeep(child._children, all));
-  return all;
 }
