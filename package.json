@@ -14,6 +14,7 @@
     "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
     "build-tape": "browserify scripts/tape/src.js --standalone tape -o scripts/tape/dist.js",
     "test": "cross-env COVERAGE=true karma start",
+    "test:performance": "PERSIST=true time node --expose-gc packages/sinuous/observable/test/perf/index.js",
     "coverage": "codecov",
     "postcoverage": "camo-purge",
     "build": "rollup -c scripts/rollup/config.js --silent",
