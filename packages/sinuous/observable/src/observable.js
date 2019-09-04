@@ -80,16 +80,13 @@ export function transaction(fn) {
 function observable(value) {
   // Tiny indicator that this is an observable function.
   data.$o = 1;
-  data._listeners = [];
+  data._listeners = new Set();
   data._pending = EMPTY_ARR;
 
   function data(nextValue) {
     if (arguments.length === 0) {
-      if (
-        currentUpdate &&
-        data._listeners[data._listeners.length - 1] !== currentUpdate
-      ) {
-        data._listeners.push(currentUpdate);
+      if (currentUpdate && !data._listeners.has(currentUpdate)) {
+        data._listeners.add(currentUpdate);
         currentUpdate._observables.push(data);
       }
       return value;
@@ -111,7 +108,7 @@ function observable(value) {
     currentUpdate = undefined;
 
     // Update can alter data._listeners, make a copy before running.
-    data._runListeners = data._listeners.slice();
+    data._runListeners = new Set(data._listeners);
     data._runListeners.forEach(update => (update._fresh = false));
     data._runListeners.forEach(update => {
       if (!update._fresh) update();
@@ -167,7 +164,7 @@ function computed(listener, value) {
       if (u._fresh) {
         u._observables.forEach(o => {
           if (o._runListeners) {
-            o._runListeners.splice(o._runListeners.indexOf(u), 1);
+            o._runListeners.delete(u);
           }
         });
       }
@@ -225,7 +222,7 @@ export function unsubscribe(listener) {
 function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
   update._observables.forEach(o => {
-    o._listeners.splice(o._listeners.indexOf(update), 1);
+    o._listeners.delete(update);
   });
   update._cleanups.forEach(c => c());
   resetUpdate(update);
@@ -240,8 +237,6 @@ function resetUpdate(update) {
 
 function getChildrenDeep(children, all) {
   all = all.concat(children);
-  for (let i = 0; i < children.length; i++) {
-    getChildrenDeep(children[i]._children, all);
-  }
+  children.forEach(child => getChildrenDeep(child._children, all));
   return all;
 }
