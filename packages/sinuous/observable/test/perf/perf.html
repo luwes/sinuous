@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+
+	<link rel="stylesheet" type="text/css" href="lib/ceres.css">
+	<style>
+body {
+	padding: 50px;
+}
+
+#bSelectLibrary {
+	line-height: 2.2rem;
+}
+
+#tfOutput {
+	display: block;
+	padding: 10px 20px;
+	border: 1px dashed #999;
+	color: #000;
+	font-size: 1.1em;
+}
+	</style>
+
+</head>
+<body>
+
+<p>
+	<label>
+		Number of layers
+		<input class="-textfield" id="tfLayerCount" type="text" value="10">
+
+		<div id="bSetLayerCount">
+			<button class="-btn -btn-primary">10</button>
+			<button class="-btn -btn-primary">20</button>
+			<button class="-btn -btn-primary">30</button>
+			<button class="-btn -btn-danger">50</button>
+			<button class="-btn -btn-danger">100</button>
+			<button class="-btn -btn-danger">1000</button>
+			<button class="-btn -btn-danger">5000</button>
+		</div>
+	</label>
+</p>
+
+<hr>
+
+<p id="bSelectLibrary">
+	Library
+	<br>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="cellx" checked><span></span>cellx</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="vanilla"><span></span>VanillaJS (naive)</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="knockout"><span></span>Knockout</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="jin-atom"><span></span>$jin.atom</label>
+	<br>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="mol_atom"><span></span>$mol_atom</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="warp9"><span></span>Warp9</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="reactor"><span></span>Reactor.js</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="reactive"><span></span>Reactive.js</label>
+	<br>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="kefir"><span></span>Kefir.js</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="mobx"><span></span>MobX</label>
+	<label class="-radiobox"><input type="radio" name="rdbLibrary" value="matreshka"><span></span>Matreshka.js</label>
+  <label class="-radiobox"><input type="radio" name="rdbLibrary" value="sinuous"><span></span>Sinuous</label>
+</p>
+
+<hr>
+
+<p>
+	<button id="btnRunTest" class="-btn -btn-high -btn-success">Run</button>
+</p>
+
+<hr>
+
+<p>
+	Output
+	<pre><output id="tfOutput">&nbsp;</output></pre>
+</p>
+
+<script src="lib/jquery.js"></script>
+<script src="lib/knockout-3.4.0.js"></script>
+<script src="lib/prop1.js"></script>
+<script src="lib/mol_atom.web.js"></script>
+<script src="lib/reactor.js"></script>
+<script src="lib/reactive.js"></script>
+<script src="lib/kefir.js"></script>
+<script src="lib/mobx.umd.js"></script>
+<script src="lib/cellx.umd.js"></script>
+<script src="../../../dist/observable.min.js"></script>
+<script>
+
+$('#bSetLayerCount button').click(function() {
+	$('#tfLayerCount').val(this.innerHTML);
+});
+
+$('#btnRunTest').click(function() {
+	runTest($('#bSelectLibrary input:checked').val(), parseInt($('#tfLayerCount').val(), 10));
+});
+
+function runTest(lib, layerCount) {
+	$('#btnRunTest')[0].disabled = true;
+
+	setTimeout(function() {
+		var report = {};
+
+		function onDone() {
+			$('#tfOutput').html(
+				'beforeChange: [' + report.beforeChange +
+					'],<br>afterChange: [' + report.afterChange +
+					'],<br>recalculationTime: ' + report.recalculationTime
+			);
+
+			$('#btnRunTest')[0].disabled = false;
+		}
+
+		switch (lib) {
+			case 'cellx': {
+				testCellx(report, layerCount, onDone);
+				break;
+			}
+			case 'vanilla': {
+				testVanilla(report, layerCount, onDone);
+				break;
+			}
+			case 'knockout': {
+				testKnockout(report, layerCount, onDone);
+				break;
+			}
+			case 'jin-atom': {
+				testJinAtom(report, layerCount, onDone);
+				break;
+			}
+			case 'mol_atom': {
+				testMolAtom(report, layerCount, onDone);
+				break;
+			}
+			case 'warp9': {
+				testWarp9(report, layerCount, onDone);
+				break;
+			}
+			case 'reactor': {
+				testReactor(report, layerCount, onDone);
+				break;
+			}
+			case 'reactive': {
+				testReactive(report, layerCount, onDone);
+				break;
+			}
+			case 'kefir': {
+				testKefir(report, layerCount, onDone);
+				break;
+			}
+			case 'mobx': {
+				testMobX(report, layerCount, onDone);
+				break;
+			}
+			case 'matreshka': {
+				testMatreshka(report, layerCount, onDone);
+				break;
+      }
+      case 'sinuous': {
+        testSinuous(report, layerCount, onDone);
+        break;
+			}
+		}
+	}, 500);
+}
+
+function testCellx(report, layerCount, done) {
+	var Cell = cellx.Cell;
+
+	var start = {
+		prop1: new Cell(1),
+		prop2: new Cell(2),
+		prop3: new Cell(3),
+		prop4: new Cell(4)
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: new Cell(function() { return m.prop2.get(); }),
+				prop2: new Cell(function() { return m.prop1.get() - m.prop3.get(); }),
+				prop3: new Cell(function() { return m.prop2.get() + m.prop4.get(); }),
+				prop4: new Cell(function() { return m.prop3.get(); })
+			};
+
+			s.prop1.on('change', function() {});
+			s.prop2.on('change', function() {});
+			s.prop3.on('change', function() {});
+			s.prop4.on('change', function() {});
+
+			s.prop1.get();
+			s.prop2.get();
+			s.prop3.get();
+			s.prop4.get();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	var st = performance.now();
+
+	start.prop1.set(4);
+	start.prop2.set(3);
+	start.prop3.set(2);
+	start.prop4.set(1);
+
+	report.afterChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testVanilla(report, layerCount, done) {
+	var start = {
+		prop1: 1,
+		prop2: 2,
+		prop3: 3,
+		prop4: 4
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				get prop1() { return m.prop2; },
+				get prop2() { return m.prop1 - m.prop3; },
+				get prop3() { return m.prop2 + m.prop4; },
+				get prop4() { return m.prop3; }
+			};
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1,
+		end.prop2,
+		end.prop3,
+		end.prop4
+	];
+
+	var st = performance.now();
+
+	start.prop1 = 4;
+	start.prop2 = 3;
+	start.prop3 = 2;
+	start.prop4 = 1;
+
+	report.afterChange = [
+		end.prop1,
+		end.prop2,
+		end.prop3,
+		end.prop4
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testKnockout(report, layerCount, done) {
+	var Start = function() {
+		this.prop1 = ko.observable(1);
+		this.prop2 = ko.observable(2);
+		this.prop3 = ko.observable(3);
+		this.prop4 = ko.observable(4);
+	};
+
+	var start = new Start();
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var Mid = function() {
+				this.prop1 = ko.computed(function() { return m.prop2(); });
+				this.prop2 = ko.computed(function() { return m.prop1() - m.prop3(); });
+				this.prop3 = ko.computed(function() { return m.prop2() + m.prop4(); });
+				this.prop4 = ko.computed(function() { return m.prop3(); });
+
+				this.prop1.subscribe(function() {});
+				this.prop2.subscribe(function() {});
+				this.prop3.subscribe(function() {});
+				this.prop4.subscribe(function() {});
+			};
+
+			var s = new Mid();
+
+			s.prop1();
+			s.prop2();
+			s.prop3();
+			s.prop4();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	var st = performance.now();
+
+	start.prop1(4);
+	start.prop2(3);
+	start.prop3(2);
+	start.prop4(1);
+
+	report.afterChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testJinAtom(report, layerCount, done) {
+	var start = {
+		prop1: new $jin.atom.prop({ value: 1 }),
+		prop2: new $jin.atom.prop({ value: 2 }),
+		prop3: new $jin.atom.prop({ value: 3 }),
+		prop4: new $jin.atom.prop({ value: 4 })
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: new $jin.atom.prop({
+					pull: function() { return m.prop2.get(); },
+					reap: function() {}
+				}),
+				prop2: new $jin.atom.prop({
+					pull: function() { return m.prop1.get() - m.prop3.get(); },
+					reap: function() {}
+				}),
+				prop3: new $jin.atom.prop({
+					pull: function() { return m.prop2.get() + m.prop4.get(); },
+					reap: function() {}
+				}),
+				prop4: new $jin.atom.prop({
+					pull: function() { return m.prop3.get(); },
+					reap: function() {}
+				})
+			};
+
+			s.prop1.get();
+			s.prop2.get();
+			s.prop3.get();
+			s.prop4.get();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	var st = performance.now();
+
+	start.prop1.push(4);
+	start.prop2.push(3);
+	start.prop3.push(2);
+	start.prop4.push(1);
+
+	new $jin.defer(function() {
+		report.afterChange = [
+			end.prop1.get(),
+			end.prop2.get(),
+			end.prop3.get(),
+			end.prop4.get()
+		];
+
+		report.recalculationTime = performance.now() - st;
+
+		done();
+	});
+}
+
+function testMolAtom(report, layerCount, done) {
+	var $mol_atom = $.$mol_atom;
+
+	var start = {
+		prop1: new $mol_atom(function() { return 1 }),
+		prop2: new $mol_atom(function() { return 2 }),
+		prop3: new $mol_atom(function() { return 3 }),
+		prop4: new $mol_atom(function() { return 4 })
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: new $mol_atom(function() { return m.prop2.get(); }),
+				prop2: new $mol_atom(function() { return m.prop1.get() - m.prop3.get(); }),
+				prop3: new $mol_atom(function() { return m.prop2.get() + m.prop4.get(); }),
+				prop4: new $mol_atom(function() { return m.prop3.get(); })
+			};
+
+			s.prop1.get();
+			s.prop2.get();
+			s.prop3.get();
+			s.prop4.get();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	var st = performance.now();
+
+	start.prop1.push(4);
+	start.prop2.push(3);
+	start.prop3.push(2);
+	start.prop4.push(1);
+
+	report.afterChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testWarp9(report, layerCount, done) {
+	var start = {
+		prop1: new warp9.Cell(1),
+		prop2: new warp9.Cell(2),
+		prop3: new warp9.Cell(3),
+		prop4: new warp9.Cell(4)
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: m.prop2.lift(function(v) { return v; }),
+				prop2: m.prop1.lift(function(v) { return v - m.prop3.get(); }),
+				prop3: m.prop2.lift(function(v) { return v + m.prop4.get(); }),
+				prop4: m.prop3.lift(function(v) { return v; })
+			};
+
+			s.prop1.onChange(function() {});
+			s.prop2.onChange(function() {});
+			s.prop3.onChange(function() {});
+			s.prop4.onChange(function() {});
+
+			s.prop1.get();
+			s.prop2.get();
+			s.prop3.get();
+			s.prop4.get();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	var st = performance.now();
+
+	start.prop1.set(4);
+	start.prop2.set(3);
+	start.prop3.set(2);
+	start.prop4.set(1);
+
+	report.afterChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testReactor(report, layerCount, done) {
+	var start = {
+		prop1: Signal(1),
+		prop2: Signal(2),
+		prop3: Signal(3),
+		prop4: Signal(4)
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: Signal(function() { return m.prop2(); }),
+				prop2: Signal(function() { return m.prop1() - m.prop3(); }),
+				prop3: Signal(function() { return m.prop2() + m.prop4(); }),
+				prop4: Signal(function() { return m.prop3(); })
+			};
+
+			s.prop1();
+			s.prop2();
+			s.prop3();
+			s.prop4();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	var st = performance.now();
+
+	start.prop1(4);
+	start.prop2(3);
+	start.prop3(2);
+	start.prop4(1);
+
+	report.afterChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testReactive(report, layerCount, done) {
+	var start = {
+		prop1: $R.state(1),
+		prop2: $R.state(2),
+		prop3: $R.state(3),
+		prop4: $R.state(4)
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: $R(function(prop2) { return prop2; }),
+				prop2: $R(function(prop1, prop3) { return prop1 - prop3; }),
+				prop3: $R(function(prop2, prop4) { return prop2 + prop4; }),
+				prop4: $R(function(prop3) { return prop3; })
+			};
+
+			s.prop1.bindTo(m.prop2);
+			s.prop2.bindTo(m.prop1, m.prop3);
+			s.prop3.bindTo(m.prop2, m.prop4);
+			s.prop4.bindTo(m.prop3);
+
+			s.prop1();
+			s.prop2();
+			s.prop3();
+			s.prop4();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	var st = performance.now();
+
+	start.prop1.set(4);
+	start.prop2.set(3);
+	start.prop3.set(2);
+	start.prop4.set(1);
+
+	report.afterChange = [
+		end.prop1(),
+		end.prop2(),
+		end.prop3(),
+		end.prop4()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testKefir(report, layerCount, done) {
+	var em1;
+	var em2;
+	var em3;
+	var em4;
+
+	var start = {
+		prop1: Kefir.stream(function(em) { em1 = em; }),
+		prop2: Kefir.stream(function(em) { em2 = em; }),
+		prop3: Kefir.stream(function(em) { em3 = em; }),
+		prop4: Kefir.stream(function(em) { em4 = em; })
+	};
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: m.prop2.map(function(a) { return a; }),
+				prop2: Kefir.combine([m.prop1, m.prop3], function(a, b) { return a - b; }),
+				prop3: Kefir.combine([m.prop2, m.prop4], function(a, b) { return a + b; }),
+				prop4: m.prop3.map(function(a) { return a; })
+			};
+
+			s.prop1.onValue(function() {});
+			s.prop2.onValue(function() {});
+			s.prop3.onValue(function() {});
+			s.prop4.onValue(function() {});
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	var st;
+
+	Kefir.combine([end.prop1, end.prop2, end.prop3, end.prop4], function(a, b, c, d) {
+		return [a, b, c, d];
+	}).onValue(function(v) {
+		if (!st) {
+			st = performance.now();
+
+			report.beforeChange = v;
+
+			setTimeout(function() {
+				em1.emit(4);
+				em2.emit(3);
+				em3.emit(2);
+				em4.emit(1);
+			}, 1);
+		} else {
+			report.afterChange = v;
+			report.recalculationTime = performance.now() - st;
+
+			done();
+		}
+	});
+
+	em1.emit(1);
+	em2.emit(2);
+	em3.emit(3);
+	em4.emit(4);
+}
+
+function testMobX(report, layerCount, done) {
+	var start = {
+        prop1: mobx.observable(1),
+        prop2: mobx.observable(2),
+        prop3: mobx.observable(3),
+        prop4: mobx.observable(4)
+    };
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = {
+				prop1: mobx.computed(function() { return m.prop2.get(); }),
+				prop2: mobx.computed(function() { return m.prop1.get() - m.prop3.get(); }),
+				prop3: mobx.computed(function() { return m.prop2.get() + m.prop4.get(); }),
+				prop4: mobx.computed(function() { return m.prop3.get(); })
+			};
+
+			s.prop1.observe(function() {});
+			s.prop2.observe(function() {});
+			s.prop3.observe(function() {});
+			s.prop4.observe(function() {});
+
+			s.prop1.get();
+			s.prop2.get();
+			s.prop3.get();
+			s.prop4.get();
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	var st = performance.now();
+
+	start.prop1.set(4);
+	start.prop2.set(3);
+	start.prop3.set(2);
+	start.prop4.set(1);
+
+	report.afterChange = [
+		end.prop1.get(),
+		end.prop2.get(),
+		end.prop3.get(),
+		end.prop4.get()
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testMatreshka(report, layerCount, done) {
+	var MatreshkaObject = Class({ 'extends': Matreshka });
+
+	var start = new MatreshkaObject();
+	start.prop1 = 1;
+	start.prop2 = 2;
+	start.prop3 = 3;
+	start.prop4 = 4;
+
+	var layer = start;
+
+	for (var i = layerCount; i--;) {
+		layer = (function(m) {
+			var s = new MatreshkaObject();
+			s.props = m;
+
+			MK.linkProps(s, 'prop1', 'props.prop2', function(prop2Value) {
+				return prop2Value;
+			});
+			MK.linkProps(s, 'prop2', 'props.prop1 props.prop3', function(prop1Value, prop3Value) {
+				return prop1Value - prop3Value;
+			});
+			MK.linkProps(s, 'prop3', 'props.prop2 props.prop4', function(prop2Value, prop4Value) {
+				return prop2Value + prop4Value;
+			});
+			MK.linkProps(s, 'prop4', 'props.prop3', function(prop3Value) {
+				return prop3Value;
+			});
+
+			s.on('change:prop1', function() {});
+			s.on('change:prop2', function() {});
+			s.on('change:prop3', function() {});
+			s.on('change:prop4', function() {});
+
+			s.prop1;
+			s.prop2;
+			s.prop3;
+			s.prop4;
+
+			return s;
+		})(layer);
+	}
+
+	var end = layer;
+
+	report.beforeChange = [
+		end.prop1,
+		end.prop2,
+		end.prop3,
+		end.prop4
+	];
+
+	var st = performance.now();
+
+	start.prop1 = 4;
+	start.prop2 = 3;
+	start.prop3 = 2;
+	start.prop4 = 1;
+
+	report.afterChange = [
+		end.prop1,
+		end.prop2,
+		end.prop3,
+		end.prop4
+	];
+
+	report.recalculationTime = performance.now() - st;
+
+	done();
+}
+
+function testSinuous(report, layerCount, done) {
+  var start = {
+        prop1: observable.observable(1),
+        prop2: observable.observable(2),
+        prop3: observable.observable(3),
+        prop4: observable.observable(4)
+    };
+  var layer = start;
+
+  for (var i = layerCount; i--;) {
+    layer = (function(m) {
+      var s = {
+        prop1: observable.computed(function() { return m.prop2(); }),
+        prop2: observable.computed(function() { return m.prop1() - m.prop3(); }),
+        prop3: observable.computed(function() { return m.prop2() + m.prop4(); }),
+        prop4: observable.computed(function() { return m.prop3(); })
+      };
+
+      observable.subscribe(() => s.prop1());
+      observable.subscribe(() => s.prop2());
+      observable.subscribe(() => s.prop3());
+      observable.subscribe(() => s.prop4());
+
+      s.prop1();
+      s.prop2();
+      s.prop3();
+      s.prop4();
+
+      return s;
+    })(layer);
+  }
+
+  var end = layer;
+
+  report.beforeChange = [
+    end.prop1(),
+    end.prop2(),
+    end.prop3(),
+    end.prop4()
+  ];
+
+  var st = performance.now();
+
+  start.prop1(4);
+  start.prop2(3);
+  start.prop3(2);
+  start.prop4(1);
+
+  report.afterChange = [
+    end.prop1(),
+    end.prop2(),
+    end.prop3(),
+    end.prop4()
+  ];
+
+  report.recalculationTime = performance.now() - st;
+
+  done();
+}
+
+</script>
+
+</body>
+</html>
