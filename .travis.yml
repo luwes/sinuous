@@ -10,6 +10,10 @@ cache:
   directories:
     - node_modules
 
+# As --depth implies --single-branch, removing this flag means that all branches will be checked out
+git:
+  depth: false
+
 # Make chrome browser available for testing
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -31,8 +35,9 @@ jobs:
       name: "Unit tests"
       script: COVERAGE=true yarn test --single-run
     - script:
+      - git fetch && git checkout origin/gh-pages -- bench/results.json
       - (cd bench && yarn && yarn build-prod)
-      - (cd bench && (yarn start --silent & yarn bench --count 3))
+      - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.8.6))
       name: "Benchmark"
       deploy:
         provider: pages

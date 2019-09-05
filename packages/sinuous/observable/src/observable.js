@@ -1,3 +1,6 @@
+import { getChildrenDeep } from './utils.js';
+
+const EMPTY_ARR = [];
 let currentUpdate;
 let queue;
 
@@ -48,8 +51,8 @@ export function sample(fn) {
 }
 
 /**
- * Creates a transation where in an observable can be set multiple times but
- * only trigger a computation once.
+ * Creates a transaction in which an observable can be set multiple times
+ * but only trigger a computation once.
  * @param  {Function} fn
  * @return {*}
  */
@@ -58,10 +61,10 @@ export function transaction(fn) {
   const result = fn();
   let q = queue;
   queue = undefined;
-  q.forEach((data) => {
-    if (data._pending) {
+  q.forEach(data => {
+    if (data._pending !== EMPTY_ARR) {
       const pending = data._pending;
-      data._pending = undefined;
+      data._pending = EMPTY_ARR;
       data(pending);
     }
   });
@@ -79,22 +82,21 @@ export function transaction(fn) {
 function observable(value) {
   // Tiny indicator that this is an observable function.
   data.$o = 1;
-  data._listeners = [];
+  data._listeners = new Set();
+  // The 'not set' value must be unique, so `nullish` can be set in a transaction.
+  data._pending = EMPTY_ARR;
 
   function data(nextValue) {
-    if (nextValue === undefined) {
-      if (
-        currentUpdate &&
-        data._listeners[data._listeners.length - 1] !== currentUpdate
-      ) {
-        data._listeners.push(currentUpdate);
+    if (arguments.length === 0) {
+      if (currentUpdate && !data._listeners.has(currentUpdate)) {
+        data._listeners.add(currentUpdate);
         currentUpdate._observables.push(data);
       }
       return value;
     }
 
     if (queue) {
-      if (data._pending === undefined) {
+      if (data._pending === EMPTY_ARR) {
         queue.push(data);
       }
       data._pending = nextValue;
@@ -108,9 +110,10 @@ function observable(value) {
     const clearedUpdate = currentUpdate;
     currentUpdate = undefined;
 
-    data._listeners.forEach(update => (update._fresh = 0));
     // Update can alter data._listeners, make a copy before running.
-    data._listeners.slice().forEach(update => {
+    data._runListeners = new Set(data._listeners);
+    data._runListeners.forEach(update => (update._fresh = false));
+    data._runListeners.forEach(update => {
       if (!update._fresh) update();
     });
 
@@ -121,6 +124,10 @@ function observable(value) {
   return data;
 }
 
+/**
+ * @namespace
+ * @borrows observable as o
+ */
 export { observable, observable as o };
 
 /**
@@ -131,7 +138,7 @@ export { observable, observable as o };
  * @param {*} value - Seed value.
  * @return {Function} Computation which can be used in other computations.
  */
-export function S(listener, value) {
+function computed(listener, value) {
   listener._update = update;
 
   resetUpdate(update);
@@ -143,10 +150,32 @@ export function S(listener, value) {
       currentUpdate._children.push(update);
     }
 
+    const prevChildren = update._children;
+
     _unsubscribe(update);
-    update._fresh = 1;
+    update._fresh = true;
     currentUpdate = update;
     value = listener(value);
+
+    // If any children computations were removed mark them as fresh.
+    // Check the diff of the children list between pre and post update.
+    prevChildren.forEach(u => {
+      if (update._children.indexOf(u) === -1) {
+        u._fresh = true;
+      }
+    });
+
+    // If any children were marked as fresh remove them from the run lists.
+    const allChildren = getChildrenDeep(update._children);
+    allChildren.forEach(u => {
+      if (u._fresh) {
+        u._observables.forEach(o => {
+          if (o._runListeners) {
+            o._runListeners.delete(u);
+          }
+        });
+      }
+    });
 
     currentUpdate = prevUpdate;
     return value;
@@ -163,6 +192,12 @@ export function S(listener, value) {
 
   return data;
 }
+
+/**
+ * @namespace
+ * @borrows computed as S
+ */
+export { computed, computed as S };
 
 /**
  * Run the given function just before the enclosing computation updates
@@ -183,7 +218,7 @@ export function cleanup(fn) {
  * @return {Function}
  */
 export function subscribe(listener) {
-  S(listener);
+  computed(listener);
   return () => _unsubscribe(listener._update);
 }
 
@@ -198,7 +233,7 @@ export function unsubscribe(listener) {
 function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
   update._observables.forEach(o => {
-    o._listeners.splice(o._listeners.indexOf(update), 1);
+    o._listeners.delete(update);
   });
   update._cleanups.forEach(c => c());
   resetUpdate(update);

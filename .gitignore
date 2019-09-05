@@ -8,10 +8,10 @@ coverage
 
 /site/public/
 dist
+packages/sinuous/module/
 
 /bench/results.json
 /bench/yarn.lock
-
-packages/sinuous/module/
-
 /bench/trace.json
+
+/packages/sinuous/observable/test/perf/perf.txt

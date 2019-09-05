@@ -15,13 +15,25 @@ Sinuous Observable is a tiny reactive library. It shares the core features of [S
 
 ###
 
+- [isListening()](#isListening) ⇒ <code>boolean</code>
 - [root(fn)](#root) ⇒ <code>\*</code>
 - [sample(fn)](#sample) ⇒ <code>\*</code>
+- [transaction(fn)](#transaction) ⇒ <code>\*</code>
 - [observable(value)](#observable) ⇒ <code>function</code>
-- [S(listener, value)](#S) ⇒ <code>function</code>
+- [computed(listener, value)](#computed) ⇒ <code>function</code>
 - [cleanup(fn)](#cleanup) ⇒ <code>function</code>
 - [subscribe(listener)](#subscribe) ⇒ <code>function</code>
 - [unsubscribe(listener)](#unsubscribe)
+
+<a name="isListening"></a>
+
+### isListening() ⇒ <code>boolean</code>
+
+Returns true if there is an active listener.
+
+**Kind**: global function
+
+---
 
 <a name="root"></a>
 
@@ -61,6 +73,21 @@ S(() => {
 
 ---
 
+<a name="transaction"></a>
+
+### transaction(fn) ⇒ <code>\*</code>
+
+Creates a transaction in which an observable can be set multiple times
+but only trigger a computation once.
+
+**Kind**: global function
+
+| Param | Type                  |
+| ----- | --------------------- |
+| fn    | <code>function</code> |
+
+---
+
 <a name="observable"></a>
 
 ### observable(value) ⇒ <code>function</code>
@@ -77,9 +104,9 @@ and set the value by passing one argument of any type.
 
 ---
 
-<a name="S"></a>
+<a name="computed"></a>
 
-### S(listener, value) ⇒ <code>function</code>
+### computed(listener, value) ⇒ <code>function</code>
 
 Creates a new computation which runs when defined and automatically re-runs
 when any of the used observable's values are set.
