@@ -18,7 +18,10 @@ const argv = minimist(process.argv.slice(2), {
 
 async function run() {
   if (argv.overwrite) {
-    await db.deleteMetrics(argv.overwrite);
+    const ids = argv.overwrite.split(',');
+    for (let id of ids) {
+      await db.deleteMetrics(id);
+    }
   }
 
   const headless = true;

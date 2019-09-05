@@ -50,6 +50,9 @@ async function metrics(page, bench, testFunction) {
 
     await page.evaluate(() => console.timeStamp('afterBenchmark'));
 
+    // Wait a little so the paint event is traced.
+    await page.waitFor(100);
+
     const trace = JSON.parse((await page.tracing.stop()).toString());
     const time = getLastPaint(trace) - getFirstClick(trace);
 
@@ -68,13 +71,13 @@ async function metrics(page, bench, testFunction) {
 
 const getFirstClick = (trace) => {
   const evt = trace.traceEvents.find(x => {
-    return x.name === 'EventDispatch' && x.args.data.type === 'click';
+    return x.name === 'EventDispatch' && x.args.data.type === 'click' && x.ts;
   });
   return evt.ts / 1000;
 };
 
 const getLastPaint = (trace) => {
-  const evts = trace.traceEvents.filter(x => x.name === 'Paint');
+  const evts = trace.traceEvents.filter(x => x.name === 'Paint' && x.ts);
   const evt = evts[evts.length - 1];
   return (evt.ts + evt.dur) / 1000;
 };
