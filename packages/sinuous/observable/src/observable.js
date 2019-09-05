@@ -124,6 +124,10 @@ function observable(value) {
   return data;
 }
 
+/**
+ * @namespace
+ * @borrows observable as o
+ */
 export { observable, observable as o };
 
 /**
@@ -189,6 +193,10 @@ function computed(listener, value) {
   return data;
 }
 
+/**
+ * @namespace
+ * @borrows computed as S
+ */
 export { computed, computed as S };
 
 /**

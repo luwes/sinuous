@@ -8,18 +8,23 @@ Basic usage:
 
 ```js
 [
-  ["htm", {
-    "pragma": "React.createElement"
-  }]
-]
+  [
+    'htm',
+    {
+      pragma: 'React.createElement'
+    }
+  ]
+];
 ```
 
 ```js
 // input:
-html`<div id="foo">hello ${you}</div>`
+html`
+  <div id="foo">hello ${you}</div>
+`;
 
 // output:
-React.createElement("div", { id: "foo" }, "hello ", you)
+React.createElement('div', { id: 'foo' }, 'hello ', you);
 ```
 
 ## options
@@ -50,10 +55,18 @@ By default, `babel-plugin-htm` will process all Tagged Templates with a tag func
 By default, `babel-plugin-htm` transpiles to the same output as JSX would, which assumes a target function of the form `h(type, props, ...children)`. If, for the purposes of optimization or simplification, you would like all calls to `h()` to be passed exactly 3 arguments, specify `{variableArity:false}` in your Babel config:
 
 ```js
-html`<div />`  // h('div', null, [])
-html`<div a />`  // h('div', { a: true }, [])
-html`<div>b</div>`  // h('div', null, ['b'])
-html`<div a>b</div>`  // h('div', { a: true }, ['b'])
+html`
+  <div />
+`; // h('div', null, [])
+html`
+  <div a />
+`; // h('div', { a: true }, [])
+html`
+  <div>b</div>
+`; // h('div', null, ['b'])
+html`
+  <div a>b</div>
+`; // h('div', { a: true }, ['b'])
 ```
 
 ### `pragma=false` _(experimental)_
@@ -81,6 +94,5 @@ html`<div id="foo">hello ${you}</div>`
 ] }
 ```
 
-
 [htm]: https://github.com/developit/htm
-[Babel docs]: https://babeljs.io/docs/en/babel-plugin-transform-react-jsx#pragma
+[babel docs]: https://babeljs.io/docs/en/babel-plugin-transform-react-jsx#pragma

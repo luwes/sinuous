@@ -2,6 +2,19 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.14.2 - 2019-09-04
+
+### Fixed
+
+- Prevented running duplicate nested computations.
+- Marked removed children computations as fresh so they skip running.
+- Fixed a `transaction` bug which prevent nullish values from being set.
+- Improved performance by using `Set` for the subscribers [#20](https://github.com/luwes/sinuous/issues/20)
+
+### Added
+
+- Added `import { computed } from 'sinuous/observable'` which `S` is now an alias for.
+
 ## 0.14.1 - 2019-08-29
 
 ### Fixed
@@ -14,7 +27,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Added `import { mini } from 'sinuous/map'`. It's only 570 bytes heiiii! [#32](https://github.com/luwes/sinuous/issues/32)  
+- Added `import { mini } from 'sinuous/map'`. It's only 570 bytes heiiii! [#32](https://github.com/luwes/sinuous/issues/32)
 
 ![Gob](https://media.giphy.com/media/n0WvhHFTpihk4/giphy.gif)
 
@@ -120,10 +133,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Removed plain array inserts. Fragments can be used for this aka
 
 ```js
-  html` 
-    <h1>Title</h1>
-    <p>Some text</p>
-  `
+html`
+  <h1>Title</h1>
+  <p>Some text</p>
+`;
 ```
 
 ## 0.11.4 - 2019-07-07
