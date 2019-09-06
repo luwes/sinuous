@@ -1,4 +1,4 @@
-const { dropWhile, splitWhen } = require('ramda');
+const { splitWhen } = require('ramda');
 
 async function performance(page) {
   try {
@@ -29,7 +29,6 @@ const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
 
 async function metrics(page, bench, testFunction) {
   try {
-    await page._client.send('Performance.enable');
     await page.tracing.start({ path: 'trace.json' });
 
     await page.evaluate(() => console.timeStamp('initBenchmark'));
@@ -72,13 +71,13 @@ async function metrics(page, bench, testFunction) {
 }
 
 function getBenchEventsWindow(events) {
-  events = dropWhile(x => {
+  events = splitWhen(x => {
     return x.name === 'TimeStamp' && x.args.data.message === 'runBenchmark';
   }, events);
 
   events = splitWhen(x => {
     return x.name === 'TimeStamp' && x.args.data.message === 'finishBenchmark';
-  }, events);
+  }, events[1]);
 
   return events[0];
 }
