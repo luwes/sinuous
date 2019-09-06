@@ -30,7 +30,7 @@ const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
 async function metrics(page, bench, testFunction) {
   try {
     await page._client.send('Performance.enable');
-    await page._client.send('HeapProfiler.collectGarbage');
+    await page.evaluate(() => window.gc());
 
     await page.tracing.start({ path: 'trace.json' });
 
@@ -49,15 +49,13 @@ async function metrics(page, bench, testFunction) {
       });
     }
 
-    // Wait a little so the paint event is traced.
-    await page.waitFor(100);
     await page.evaluate(() => console.timeStamp('finishBenchmark'));
 
     const trace = JSON.parse((await page.tracing.stop()).toString());
     const events = getBenchEventsWindow(trace.traceEvents);
     const duration = getLastPaint(events) - getFirstClick(events);
 
-    console.log('*** duration', duration);
+    console.log('***', bench.lib.padEnd(10), bench.id.padEnd(23), duration);
     if (duration < 0) {
       console.log('soundness check failed. reported duration is less than 0');
       throw 'soundness check failed. reported duration is less than 0';
