@@ -29,8 +29,9 @@ const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
 
 async function metrics(page, bench, testFunction) {
   try {
-    await page._client.send('Performance.enable');
-    await page.evaluate(() => window.gc());
+    for (let i = 0; i < 5; i++) {
+      await page.evaluate(() => window.gc());
+    }
 
     await page.tracing.start({ path: 'trace.json' });
 
