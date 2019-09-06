@@ -52,6 +52,12 @@ async function loadResults() {
 }
 
 function plotResults() {
+  const colors = {
+    vanillajs: '#FFDD57',
+    sinuous: '#70EDAC',
+    react: '#61DAFB'
+  };
+
   benchmarks().forEach(benchmark => {
     const libs = results()
       .filter(result => !getId(result).includes('non-keyed'))
@@ -66,6 +72,7 @@ function plotResults() {
       allValues = allValues.concat(lib.values);
       return {
         name: getId(lib),
+        marker: { color: colors[getName(lib)] },
         y: lib.values,
         type: 'box'
       };
@@ -88,6 +95,10 @@ init();
 function getId(lib) {
   // krausest/js-framework-benchmark uses `framework`.
   return lib.id || lib.framework;
+}
+
+function getName(lib) {
+  return getId(lib).split('-')[0];
 }
 
 function median(values){

@@ -29,11 +29,10 @@ const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
 
 async function metrics(page, bench, testFunction) {
   try {
-    for (let i = 0; i < 5; i++) {
-      await page.evaluate(() => window.gc());
-    }
-
+    await page._client.send('Performance.enable');
     await page.tracing.start({ path: 'trace.json' });
+
+    await page.evaluate(() => console.timeStamp('initBenchmark'));
 
     if (bench.throttleCPU) {
       await page._client.send('Emulation.setCPUThrottlingRate', {
@@ -50,6 +49,8 @@ async function metrics(page, bench, testFunction) {
       });
     }
 
+    // Wait a little so the paint event is traced.
+    await page.waitFor(100);
     await page.evaluate(() => console.timeStamp('finishBenchmark'));
 
     const trace = JSON.parse((await page.tracing.stop()).toString());
