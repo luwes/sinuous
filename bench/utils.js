@@ -1,3 +1,5 @@
+const { dropWhile, splitWhen } = require('ramda');
+
 async function performance(page) {
   try {
     const performanceTiming = JSON.parse(
@@ -46,22 +48,39 @@ async function metrics(page, bench, testFunction) {
         rate: 1
       });
     }
-    await page.evaluate(() => console.timeStamp('finishBenchmark'));
-
-    await page.evaluate(() => console.timeStamp('afterBenchmark'));
 
     // Wait a little so the paint event is traced.
     await page.waitFor(100);
+    await page.evaluate(() => console.timeStamp('finishBenchmark'));
 
     const trace = JSON.parse((await page.tracing.stop()).toString());
-    const time = getLastPaint(trace) - getFirstClick(trace);
+    const events = getBenchEventsWindow(trace.traceEvents);
+    const duration = getLastPaint(events) - getFirstClick(events);
+
+    console.log('*** duration', duration);
+    if (duration < 0) {
+      console.log('soundness check failed. reported duration is less than 0');
+      throw 'soundness check failed. reported duration is less than 0';
+    }
 
     return {
-      time
+      time: duration
     };
   } catch (err) {
     console.error(err);
   }
+}
+
+function getBenchEventsWindow(events) {
+  events = dropWhile(x => {
+    return x.name === 'TimeStamp' && x.args.data.message === 'runBenchmark';
+  }, events);
+
+  events = splitWhen(x => {
+    return x.name === 'TimeStamp' && x.args.data.message === 'finishBenchmark';
+  }, events);
+
+  return events[0];
 }
 
 // const getTimestamp = (trace, msg) =>
@@ -69,17 +88,26 @@ async function metrics(page, bench, testFunction) {
 //     return x.name === 'TimeStamp' && x.args.data.message === msg;
 //   }).ts / 1000;
 
-const getFirstClick = (trace) => {
-  const evt = trace.traceEvents.find(x => {
-    return x.name === 'EventDispatch' && x.args.data.type === 'click' && x.ts;
+const getFirstClick = events => {
+  const clicks = events.filter(x => {
+    return x.name === 'EventDispatch' && x.args.data.type === 'click';
   });
-  return evt.ts / 1000;
+  if (clicks.length !== 1) {
+    console.log('exactly one click event is expected', events);
+    throw 'exactly one click event is expected';
+  }
+  return clicks[0].ts / 1000;
 };
 
-const getLastPaint = (trace) => {
-  const evts = trace.traceEvents.filter(x => x.name === 'Paint' && x.ts);
-  const evt = evts[evts.length - 1];
-  return (evt.ts + evt.dur) / 1000;
+const getLastPaint = events => {
+  const paints = events
+    .filter(x => x.name === 'Paint')
+    .map(x => ({ end: x.ts + x.dur }));
+  let lastPaint = paints.reduce(
+    (max, elem) => (max.end > elem.end ? max : elem),
+    { end: 0 }
+  );
+  return lastPaint.end / 1000;
 };
 
 function randomNoRepeats(array) {

@@ -8,6 +8,7 @@ coverage
 
 /site/public/
 dist
+!/bench/css/bootstrap/dist/
 packages/sinuous/module/
 
 /bench/results.json

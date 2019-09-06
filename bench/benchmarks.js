@@ -110,13 +110,11 @@ async function benchSelect(page) {
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1]/td[2]/a');
   for (let i = 0; i < WARMUP_COUNT; i++) {
-    await page.click('#update');
     await clickElementByXPath(page, `//tbody/tr[${i + 1}]/td[2]/a`);
   }
 
   async function run() {
     const result = await metrics(page, options, async () => {
-      await page.click('#update');
       await clickElementByXPath(page, `//tbody/tr[2]/td[2]/a`);
       await testClassContains(page, "//tbody/tr[2]", "danger");
     });
