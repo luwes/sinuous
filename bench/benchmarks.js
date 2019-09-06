@@ -13,6 +13,7 @@ const WARMUP_COUNT = 5;
 
 async function benchBundleSize(page, lib) {
   const options = {
+    lib,
     id: '00_bundlesize',
     label: 'measure bundle size'
   };
@@ -24,8 +25,9 @@ async function benchBundleSize(page, lib) {
   return Object.assign(options, { run });
 }
 
-async function benchRun(page) {
+async function benchRun(page, lib) {
   const options = {
+    lib,
     id: '01_run1k',
     label: 'create 1000 rows'
   };
@@ -41,8 +43,9 @@ async function benchRun(page) {
   return Object.assign(options, { run });
 }
 
-async function benchReplaceAll(page) {
+async function benchReplaceAll(page, lib) {
   const options = {
+    lib,
     id: '02_replace1k',
     label: 'replace all rows'
   };
@@ -67,8 +70,9 @@ async function benchReplaceAll(page) {
   return Object.assign(options, { run });
 }
 
-async function benchUpdate(page) {
+async function benchUpdate(page, lib) {
   const options = {
+    lib,
     id: '03_update10th1k_x16',
     label: 'partial update',
     throttleCPU: 16
@@ -100,8 +104,9 @@ async function benchUpdate(page) {
   return Object.assign(options, { run });
 }
 
-async function benchSelect(page) {
+async function benchSelect(page, lib) {
   const options = {
+    lib,
     id: '04_select1k',
     label: 'select row',
     throttleCPU: 16
@@ -110,13 +115,11 @@ async function benchSelect(page) {
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1]/td[2]/a');
   for (let i = 0; i < WARMUP_COUNT; i++) {
-    await page.click('#update');
     await clickElementByXPath(page, `//tbody/tr[${i + 1}]/td[2]/a`);
   }
 
   async function run() {
     const result = await metrics(page, options, async () => {
-      await page.click('#update');
       await clickElementByXPath(page, `//tbody/tr[2]/td[2]/a`);
       await testClassContains(page, "//tbody/tr[2]", "danger");
     });
@@ -126,8 +129,9 @@ async function benchSelect(page) {
   return Object.assign(options, { run });
 }
 
-async function benchSwapRows(page) {
+async function benchSwapRows(page, lib) {
   const options = {
+    lib,
     id: '05_swap1k',
     label: 'swap rows',
     throttleCPU: 4
@@ -153,8 +157,9 @@ async function benchSwapRows(page) {
   return Object.assign(options, { run });
 }
 
-async function benchRemove(page) {
+async function benchRemove(page, lib) {
   const options = {
+    lib,
     id: '06_remove-one-1k',
     label: 'remove row'
   };
@@ -180,8 +185,9 @@ async function benchRemove(page) {
   return Object.assign(options, { run });
 }
 
-async function benchRunBig(page) {
+async function benchRunBig(page, lib) {
   const options = {
+    lib,
     id: '07_create10k',
     label: 'create 10,000 rows'
   };
@@ -197,8 +203,9 @@ async function benchRunBig(page) {
   return Object.assign(options, { run });
 }
 
-async function benchAppendToManyRows(page) {
+async function benchAppendToManyRows(page, lib) {
   const options = {
+    lib,
     id: '08_create1k-after1k_x2',
     label: 'append rows to large table',
     throttleCPU: 2
@@ -218,8 +225,9 @@ async function benchAppendToManyRows(page) {
   return Object.assign(options, { run });
 }
 
-async function benchClear(page) {
+async function benchClear(page, lib) {
   const options = {
+    lib,
     id: '09_clear1k_x8',
     label: 'clear rows',
     throttleCPU: 8
