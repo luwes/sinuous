@@ -1,0 +1,15 @@
+{
+  "name": "sinuous-hydrate",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Sinuous hydrate",
+  "module": "../module/hydrate.js",
+  "main": "../dist/hydrate.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

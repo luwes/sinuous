@@ -20,7 +20,9 @@
     "map/mini",
     "map/package.json",
     "template/src",
-    "template/package.json"
+    "template/package.json",
+    "hydrate/package.json",
+    "hydrate/src"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"

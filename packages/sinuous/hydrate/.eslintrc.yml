@@ -1,0 +1,3 @@
+rules:
+  jsdoc/check-indentation: off
+  jsdoc/require-description-complete-sentence: off
