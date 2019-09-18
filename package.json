@@ -22,7 +22,8 @@
     "start": "run-p watch serve",
     "http": "http-server -c-1 -p 8000 . ",
     "docs": "node scripts/docs.js && yarn format:docs",
-    "format:docs": "prettier --write '**/*.md'"
+    "format:docs": "prettier --write '**/*.md'",
+    "postinstall": "opencollective-postinstall || true"
   },
   "repository": "luwes/sinuous",
   "keywords": [
@@ -81,5 +82,12 @@
     "rollup-plugin-terser": "^5.1.1",
     "tap-spec": "^5.0.0",
     "tape": "^4.11.0"
+  },
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.2"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/sinuous"
   }
 }
