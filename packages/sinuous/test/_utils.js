@@ -6,16 +6,20 @@ export function normalizeSvg(html) {
       : new XMLSerializer().serializeToString(html);
 
   // Normalization logic from Preact test helpers.
-  return htmlStr
-    .replace(' xmlns="http://www.w3.org/2000/svg"', '')
-    .replace(
-      /<([a-z0-9-]+)((?:\s[a-z0-9:_.-]+=".*?")+)((?:\s*\/)?>)/gi,
-      (s, pre, attrs, after) => {
-        let list = attrs
-          .match(/\s[a-z0-9:_.-]+=".*?"/gi)
-          .sort((a, b) => (a > b ? 1 : -1));
-        if (~after.indexOf('/')) after = '></' + pre + '>';
-        return '<' + pre + list.join('') + after;
-      }
-    );
+  return normalizeAttributes(
+    htmlStr.replace(' xmlns="http://www.w3.org/2000/svg"', '')
+  );
+}
+
+export function normalizeAttributes(htmlStr) {
+  return htmlStr.replace(
+    /<([a-z0-9-]+)((?:\s[a-z0-9:_.-]+=".*?")+)((?:\s*\/)?>)/gi,
+    (s, pre, attrs, after) => {
+      let list = attrs
+        .match(/\s[a-z0-9:_.-]+=".*?"/gi)
+        .sort((a, b) => (a > b ? 1 : -1));
+      if (~after.indexOf('/')) after = '></' + pre + '>';
+      return '<' + pre + list.join('') + after;
+    }
+  );
 }

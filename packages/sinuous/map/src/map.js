@@ -12,13 +12,16 @@ import {
 
 let groupCounter = 0;
 
-export function map(items, expr) {
+export function map(items, expr, cleaning) {
   const { subscribe, root, sample, cleanup } = api;
 
-  const disposers = new Map();
+  // Disable cleaning for templates by default.
+  if (cleaning == null) cleaning = !expr.$t;
+
   let parent = document.createDocumentFragment();
   const beforeNode = parent.appendChild(document.createTextNode(''));
   const afterNode = parent.appendChild(document.createTextNode(''));
+  const disposers = new Map();
 
   function disposeAll() {
     disposers.forEach(d => d());
@@ -34,7 +37,7 @@ export function map(items, expr) {
   function createFn(parent, item, i, data, afterNode) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
-    return root(disposeFn => {
+    return cleaning ? root(disposeFn => {
       const node = addNode(
         parent,
         expr(item, i, data),
@@ -43,7 +46,12 @@ export function map(items, expr) {
       );
       disposers.set(node, disposeFn);
       return node;
-    });
+    }) : addNode(
+      parent,
+      expr(item, i, data),
+      afterNode,
+      ++groupCounter
+    );
   }
 
   const unsubscribe = subscribe(renderedValues => {
@@ -58,8 +66,8 @@ export function map(items, expr) {
         beforeNode,
         afterNode,
         createFn,
-        disposeAll,
-        dispose
+        cleaning && disposeAll,
+        cleaning && dispose
       )
     );
   });
