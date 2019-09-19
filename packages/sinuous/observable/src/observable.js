@@ -81,7 +81,7 @@ export function transaction(fn) {
  */
 function observable(value) {
   // Tiny indicator that this is an observable function.
-  data.$o = 1;
+  data.$o = true;
   data._listeners = new Set();
   // The 'not set' value must be unique, so `nullish` can be set in a transaction.
   data._pending = EMPTY_ARR;

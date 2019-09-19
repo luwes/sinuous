@@ -38,6 +38,12 @@ export function map(items, expr) {
     const beforeNodeIndex = EMPTY_ARR.indexOf.call(childNodes, beforeNode);
     const afterNodeIndex = EMPTY_ARR.indexOf.call(childNodes, afterNode);
 
+    // Optimization
+    // const afterNodeIndex =
+    //   childNodes.pop() === afterNode
+    //     ? childNodes.length
+    //     : EMPTY_ARR.indexOf.call(childNodes, afterNode);
+
     // Create a mapping from keys to their position in the old list
     for (i = 0; i < a.length; i++) {
       aIdx.set(a[i], i);

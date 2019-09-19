@@ -2,8 +2,7 @@ import { GROUPING } from './constants.js';
 
 export function addNode(parent, node, afterNode, counter) {
   let mark;
-  const t = typeof node;
-  if (t === 'string' || t === 'number') {
+  if (!(node instanceof Node)) {
     node = document.createTextNode(node);
   } else if (
     node.nodeType === 11 &&
