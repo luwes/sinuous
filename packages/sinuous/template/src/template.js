@@ -66,7 +66,10 @@ export function template(fn) {
   const cloneActions = recordedActions;
   recordedActions = null;
 
-  return function clone(props) {
+  // Tiny indicator that this is a template clone function.
+  clone.$t = true;
+
+  function clone(props) {
     const keyedActions = {};
     const el = fragment.cloneNode(true);
     el.firstChild.props = props;
@@ -104,7 +107,9 @@ export function template(fn) {
     }
 
     return el;
-  };
+  }
+
+  return clone;
 }
 
 function observeProperty(props, key, value, actions) {

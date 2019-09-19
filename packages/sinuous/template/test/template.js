@@ -1,6 +1,7 @@
 import test from 'tape';
-import { h } from 'sinuous';
+import { h, html } from 'sinuous';
 import { template, o, t } from 'sinuous/template';
+import { map } from 'sinuous/map';
 
 test('tags return functions', function(tt) {
   tt.assert(typeof o() === 'function');
@@ -58,8 +59,8 @@ test('template result fills tags w/ same value', function(tt) {
 });
 
 test('template result fills multiple observable tags w/ same key', function(tt) {
-  const title = template(
-    () => h('h1', { class: o('title') }, h('b', o('title')), h('i', o('title')))
+  const title = template(() =>
+    h('h1', { class: o('title') }, h('b', o('title')), h('i', o('title')))
   );
   const obj = {
     title: ''
@@ -71,6 +72,56 @@ test('template result fills multiple observable tags w/ same key', function(tt) 
   tt.equal(
     rendered.firstChild.outerHTML,
     '<h1 class="banana"><b>banana</b><i>banana</i></h1>'
+  );
+
+  tt.end();
+});
+
+test('template works with map', function(tt) {
+  const Row = template(
+    () => html`
+      <tr class=${o('selected')}>
+        <td class="col-md-1">${t('id')}</td>
+        <td class="col-md-4"><a>${o('label')}</a></td>
+        <td class="col-md-1">
+          <a>
+            <span
+              class="glyphicon glyphicon-remove remove"
+              aria-hidden="true"
+            />
+          </a>
+        </td>
+        <td class="col-md-6" />
+      </tr>
+    `
+  );
+
+  const rows = () =>
+    [1, 2].map(id => ({
+      id,
+      label: `Label ${id}`
+    }));
+
+  tt.equal(
+    new XMLSerializer()
+      .serializeToString(map(rows, Row))
+      .replace(/ xmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''),
+    `<tr>
+        <td class="col-md-1">1</td>
+        <td class="col-md-4"><a>Label 1</a></td>
+        <td class="col-md-1"><a>
+          <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
+        </a></td>
+        <td class="col-md-6"></td>
+      </tr>
+      <tr>
+        <td class="col-md-1">2</td>
+        <td class="col-md-4"><a>Label 2</a></td>
+        <td class="col-md-1"><a>
+          <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
+        </a></td>
+        <td class="col-md-6"></td>
+      </tr>`.replace(/>[\s]+</g, '><')
   );
 
   tt.end();
