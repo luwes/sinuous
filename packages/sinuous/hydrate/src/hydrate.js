@@ -128,9 +128,10 @@ export function hydrate(delta, root) {
                 current = [];
               }
 
+              // IE9 requires an explicit `null` as second argument.
               marker = el.insertBefore(
                 document.createTextNode(''),
-                getChildNode(childNodes, el._index)
+                getChildNode(childNodes, el._index) || null
               );
             }
 
