@@ -109,10 +109,9 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                // $_observable: '__o',
-                // $_observables: '__o',
-                // $_children: '__c',
-                // $_update: '__u'
+                $_tag: '__t',
+                $_props: '__p',
+                $_children: '__c'
               }
             }
           }

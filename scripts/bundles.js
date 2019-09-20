@@ -23,6 +23,15 @@ export const bundles = [
     dest: dest()
   },
   {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous', './sinuous.js', 'sinuous/htm', './htm.js'],
+    formats: [ESM, UMD, IIFE],
+    global: 'hydrate',
+    name: 'hydrate',
+    input: 'packages/sinuous/hydrate/src/index.js',
+    dest: dest()
+  },
+  {
     external: [],
     formats: [ESM, UMD, IIFE],
     global: 'observable',

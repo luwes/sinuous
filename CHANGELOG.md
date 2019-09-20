@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.15.0 - 2019-09-13
+
+### Added
+
+- Added basic `hydrate` feature [#36](https://github.com/luwes/sinuous/pull/36)
+
 ## 0.14.2 - 2019-09-04
 
 ### Fixed
