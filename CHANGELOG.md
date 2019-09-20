@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Added basic `hydrate` feature [#36](https://github.com/luwes/sinuous/pull/36)
+- Disable `observable` cleaning by default in `map` for repeated `template`'s.
 
 ## 0.14.2 - 2019-09-04
 
