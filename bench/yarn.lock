@@ -3829,9 +3829,9 @@ gzip-size@^5.1.1:
     pify "^4.0.1"
 
 handlebars@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.2.0.tgz#57ce8d2175b9bbb3d8b3cf3e4217b1aec8ddcb2e"
-  integrity sha512-Kb4xn5Qh1cxAKvQnzNWZ512DhABzyFNmsaJf3OAkWNa4NkaqWcNI8Tao8Tasi0/F4JD9oyG0YxuFyvyR57d+Gw==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.2.1.tgz#dc69c0e61604224f0c23b38b5b6741db210b57da"
+  integrity sha512-bqPIlDk06UWbVEIFoYj+LVo42WhK96J+b25l7hbFDpxrOXMphFM3fNIm+cluwg4Pk2jiLjWU5nHQY7igGE75NQ==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -6530,10 +6530,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
-sinuous@0.12.6:
-  version "0.12.6"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.12.6.tgz#d8eb5fd3bc45e099a5f109a67940357ffdd3b11c"
-  integrity sha512-vXNlYiN/dBC3TNLrUxkvrvxP/kqxXWDnsU/Hqua+a6aM2eLv8IlQ9KyCrvmOqdo2XWpQFgiKraOnWowvA4Hl0g==
+sinuous@0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.15.0.tgz#55227b8bd21535c84c47090213f3415364836d90"
+  integrity sha512-0LO6qie4XQ+aQPgkY2ZfUQMq8tM7o+/XRBbbLytrYWy55Lne9+qEE3FZmcuuOjXNW6ZHhboSHeSN4/SFoayVAA==
 
 slash@^1.0.0:
   version "1.0.0"
