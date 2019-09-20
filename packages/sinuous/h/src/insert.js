@@ -4,14 +4,14 @@ import { clearAll } from './utils.js';
 
 let groupCounter = 0;
 
-export function insert(parent, value, marker, current, startNode) {
+export function insert(parent, value, marker, current) {
   // This is needed if the parent is a DocumentFragment initially.
   parent = (marker && marker.parentNode) || parent;
 
   const t = typeof value;
   if (value === current);
   else if ((!value && value !== 0) || value === true) {
-    clearAll(parent, current, marker, startNode);
+    clearAll(parent, current, marker);
     current = null;
   } else if (
     (!current || typeof current === 'string') &&
@@ -34,11 +34,11 @@ export function insert(parent, value, marker, current, startNode) {
     current = value;
   } else if (t === 'function') {
     api.subscribe(function() {
-      current = api.insert(parent, value(), marker, current);
+      current = insert(parent, value(), marker, current);
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
-    clearAll(parent, current, marker, startNode);
+    clearAll(parent, current, marker);
 
     if (!(value instanceof Node)) {
       // Passing an empty array creates a DocumentFragment.

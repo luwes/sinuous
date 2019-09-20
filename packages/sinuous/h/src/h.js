@@ -42,6 +42,7 @@ export function context(options, isSvg) {
         }
       } else if (type === 'object') {
         for (let name in arg) {
+          // Create scope for every entry.
           property(name, arg[name], el, isSvg);
         }
       } else if (type === 'function') {
@@ -55,21 +56,20 @@ export function context(options, isSvg) {
           }
         } else {
           // Support Components
-          el = arg.apply(null, args.splice(1));
+          el = arg.apply(null, args.splice(0));
         }
       } else {
         el.appendChild(document.createTextNode('' + arg));
       }
     }
 
-    args.forEach(item);
+    while (args.length) {
+      item(args.shift());
+    }
     return el;
   }
 
-  api.insert = insert;
-  api.property = property;
   api.h = h;
-
   return h;
 }
 

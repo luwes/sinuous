@@ -26,7 +26,7 @@ export function t(key) {
  */
 export function o(key) {
   const observedTag = t(key);
-  observedTag._observable = true;
+  observedTag._observable = 1;
   return observedTag;
 }
 
@@ -72,8 +72,6 @@ export function template(fn) {
   function clone(props) {
     const keyedActions = {};
     const el = fragment.cloneNode(true);
-
-    // Set a custom property `props` for easy access to the passed argument.
     el.firstChild.props = props;
 
     for (let i = 0; i < cloneActions.length; i++) {

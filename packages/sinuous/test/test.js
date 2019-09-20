@@ -23,4 +23,3 @@ import '../map/test/utils.js';
 import '../map/mini/test/mini.js';
 import '../map/mini/test/mini-basic.js';
 import '../template/test/template.js';
-import '../hydrate/test/hydrate.js';
