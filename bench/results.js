@@ -1,6 +1,7 @@
 /* global Plotly */
-import { o, html } from 'https://unpkg.com/sinuous@0.14.2/module/sinuous.js';
-import { S } from 'https://unpkg.com/sinuous@0.14.2/module/observable.js';
+import { o, html } from 'https://unpkg.com/sinuous@0.15.0/module/sinuous.js';
+import { S } from 'https://unpkg.com/sinuous@0.15.0/module/observable.js';
+import { hydrate, html as tree, _ } from 'https://unpkg.com/sinuous@0.15.0/module/hydrate.js';
 
 const url = o('./results.json');
 const results = o([]);
@@ -10,16 +11,17 @@ const benchmarks = S(() => {
 const isLoading = o(false);
 
 function init() {
-  // Would be great this snippet could be hydrated.
-  // Paritial attributes would be awesome too.
-  document.querySelector('.select-bench').append(html`
-    <div class="${() => 'select is-small' + (isLoading() ? ' is-loading' : '')}">
-      <select class="load-input" onchange="${(e) => url(e.target.value)}">
-        <option value="./results.json">Sinuous Benchmark</option>
-        <option value="https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts/results.json">JS Framework Benchmark</option>
-      </select>
+  // Paritial attributes would be awesome.
+  const delta = tree`
+    <div>
+      <div class="${() => 'select is-small' + (isLoading() ? ' is-loading' : '')}">
+        <select onchange="${(e) => url(e.target.value)}">
+          ${_}
+        </select>
+      </div>
     </div>
-  `);
+  `;
+  hydrate(delta, document.querySelector('.select-bench'));
 
   S(loadResults);
 
