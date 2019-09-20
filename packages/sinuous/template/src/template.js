@@ -81,8 +81,16 @@ export function template(fn) {
       const paths = action._paths;
 
       let target = el;
-      for (let j = 0; j < paths.length; j++) {
-        target = target.childNodes[paths[j]];
+      let j = 0;
+      while (j < paths.length) {
+        target = target.firstChild;
+        const path = paths[j];
+        let k = 0;
+        while (k < path) {
+          target = target.nextSibling;
+          k += 1;
+        }
+        j += 1;
       }
 
       const tag = action._tag;
