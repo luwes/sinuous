@@ -102,10 +102,11 @@ test('template works with map', function(tt) {
       label: `Label ${id}`
     }));
 
+  const table = document.createElement('table');
+  table.appendChild(map(rows, Row));
+
   tt.equal(
-    new XMLSerializer()
-      .serializeToString(map(rows, Row))
-      .replace(/ xmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''),
+    table.innerHTML,
     `<tr>
         <td class="col-md-1">1</td>
         <td class="col-md-4"><a>Label 1</a></td>
