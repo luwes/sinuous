@@ -66,19 +66,60 @@ export function template(fn) {
   const cloneActions = recordedActions;
   recordedActions = null;
 
+  let cache;
+  let clonedCache;
+  let rowCount = 0;
+  let max = 0;
+  let divisor;
+  let repeat;
+
   // Tiny indicator that this is a template clone function.
   clone.$t = true;
 
-  function clone(props) {
+  function clone(props, index, list) {
+    const len = list && list.length;
+    if (len - index > 9 && !cache) {
+      divisor = Math.sqrt(len) | 0;
+      repeat = len / divisor | 0;
+      max = divisor * repeat;
+      cache = document.createDocumentFragment();
+      for (let i = 0; i < repeat; i++) {
+        cache.appendChild(fragment.cloneNode(true));
+      }
+    }
+
+    if (cache) {
+      if (index >= max) {
+        clonedCache = cache;
+        cache = null;
+      } else if (index % repeat === 0) {
+        clonedCache = cache.cloneNode(true);
+        rowCount = 0;
+      }
+    }
+
     const keyedActions = {};
-    const el = fragment.cloneNode(true);
+    let fromCache;
+    let el = clonedCache.childNodes[rowCount++];
+    if (el) {
+      fromCache = true;
+    } else {
+      el = fragment.cloneNode(true);
+    }
 
     // Set a custom property `props` for easy access to the passed argument.
-    el.firstChild.props = props;
+    if (fromCache) {
+      el.props = props;
+    } else {
+      el.firstChild.props = props;
+    }
 
     for (let i = 0; i < cloneActions.length; i++) {
       let action = cloneActions[i];
-      const paths = action._paths;
+      let paths = action._paths;
+      if (fromCache) {
+        paths = paths.slice(1);
+      }
 
       let target = el;
       let j = 0;
@@ -108,6 +149,12 @@ export function template(fn) {
       }
     }
 
+    if (fromCache) {
+      if (rowCount >= repeat) {
+        return clonedCache;
+      }
+      return null;
+    }
     return el;
   }
 

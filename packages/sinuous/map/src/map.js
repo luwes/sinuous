@@ -220,11 +220,9 @@ export function reconcile(
 
   // Fast path for add
   if (prevEnd < prevStart) {
-    if (newStart <= newEnd) {
-      while (newStart <= newEnd) {
-        createFn(parent, data[newStart], newStart, data, newAfterNode);
-        newStart++;
-      }
+    while (newStart <= newEnd) {
+      createFn(parent, data[newStart], newStart, data, newAfterNode);
+      newStart++;
     }
     return data.slice();
   }
@@ -237,7 +235,9 @@ export function reconcile(
 
   // Index to resolve position from current to new
   const I = new Map();
-  for (let i = newStart; i <= newEnd; i++) I.set(data[i], i);
+  for (let i = newStart; i <= newEnd; i++) {
+    I.set(data[i], i);
+  }
 
   let reusingNodes = 0;
   let toRemove = [];
