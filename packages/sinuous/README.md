@@ -1,7 +1,7 @@
 # <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="36" alt="Sinuous" /></a>
 
 [![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
-![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous.min.js?compression=gzip&label=gzip&style=flat-square&v=1)
+![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous.min.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
@@ -22,10 +22,10 @@ It was built with these ideas in mind.
 
 | Size                                                                                                                                   | Name                                                  | Description           |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square&v=1)    | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/hydrate`](./packages/sinuous/observable) | Hydrate static HTML       |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/hydrate`](./packages/sinuous/hydrate) | Hydrate static HTML       |
 
 ### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
