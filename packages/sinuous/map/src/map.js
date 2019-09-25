@@ -104,12 +104,12 @@ export function reconcile(
 
   // Fast path for clear
   if (length === 0) {
-    if (!beforeNode.previousSibling && !afterNode.nextSibling) {
+    if (beforeNode.previousSibling || afterNode.nextSibling) {
+      removeNodes(parent, beforeNode.nextSibling, afterNode);
+    } else {
       parent.textContent = '';
       parent.appendChild(beforeNode);
       parent.appendChild(afterNode);
-    } else {
-      removeNodes(parent, beforeNode.nextSibling, afterNode);
     }
 
     onClear && onClear();
@@ -131,7 +131,6 @@ export function reconcile(
   let bEnd = length - 1;
   let tmp;
   let aStartNode = beforeNode.nextSibling;
-  let bStartNode = aStartNode;
   let aEndNode = afterNode.previousSibling;
   let bAfterNode = afterNode;
   let mark;
@@ -143,7 +142,7 @@ export function reconcile(
     // Skip prefix
     while (a[aStart] === b[bStart]) {
       bStart++;
-      bStartNode = aStartNode = step(aStartNode, FORWARD);
+      aStartNode = step(aStartNode, FORWARD);
       if (aEnd < ++aStart || bEnd < bStart) break fixes;
     }
 
@@ -153,35 +152,6 @@ export function reconcile(
       bAfterNode = step(aEndNode, BACKWARD, true);
       aEndNode = bAfterNode.previousSibling;
       if (--aEnd < aStart || bEnd < bStart) break fixes;
-    }
-
-    // Fast path to swap backward
-    while (a[aEnd] === b[bStart]) {
-      loop = true;
-      mark = step(aEndNode, BACKWARD, true);
-      node = mark.previousSibling;
-      if (bStartNode !== mark) {
-        insertNodes(parent, mark, aEndNode.nextSibling, bStartNode);
-        aEndNode = node;
-      }
-      bStart++;
-      aEnd--;
-      if (aEnd < aStart || bEnd < bStart) break fixes;
-    }
-
-    // Fast path to swap forward
-    while (a[aStart] === b[bEnd]) {
-      loop = true;
-      node = step(aStartNode, FORWARD);
-      if (aStartNode !== bAfterNode) {
-        mark = node.previousSibling;
-        insertNodes(parent, aStartNode, node, bAfterNode);
-        bAfterNode = mark;
-        aStartNode = node;
-      }
-      aStart++;
-      bEnd--;
-      if (aEnd < aStart || bEnd < bStart) break fixes;
     }
   }
 
