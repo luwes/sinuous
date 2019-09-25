@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.15.1 - 2019-09-25
+
+### Changed
+
+- Changed map mini import to be `import { map } from 'sinuous/map/mini'` instead of `import { mini } from 'sinuous/map'`.
+- Re-named variables in `map` and golfed down the bundle from 1.45kB to 1.19kB, also by removing the fast path for swap backward and swap forward.
+
 ## 0.15.0 - 2019-09-13
 
 ### Added
