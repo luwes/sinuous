@@ -10,8 +10,6 @@ import {
   step
 } from './utils.js';
 
-let groupCounter = 0;
-
 export function map(items, expr, cleaning) {
   const { subscribe, root, sample, cleanup } = api;
 
@@ -22,6 +20,25 @@ export function map(items, expr, cleaning) {
   const beforeNode = parent.appendChild(document.createTextNode(''));
   const afterNode = parent.appendChild(document.createTextNode(''));
   const disposers = new Map();
+
+  const unsubscribe = subscribe(a => {
+    const b = items();
+    return sample(() =>
+      reconcile(
+        parent,
+        a || [],
+        b || [],
+        beforeNode,
+        afterNode,
+        createFn,
+        cleaning && disposeAll,
+        cleaning && dispose
+      )
+    );
+  });
+
+  cleanup(unsubscribe);
+  cleanup(disposeAll);
 
   function disposeAll() {
     disposers.forEach(d => d());
@@ -37,43 +54,14 @@ export function map(items, expr, cleaning) {
   function createFn(parent, item, i, data, afterNode) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
-    return cleaning ? root(disposeFn => {
-      const node = addNode(
-        parent,
-        expr(item, i, data),
-        afterNode,
-        ++groupCounter
-      );
-      disposers.set(node, disposeFn);
-      return node;
-    }) : addNode(
-      parent,
-      expr(item, i, data),
-      afterNode,
-      ++groupCounter
-    );
+    return cleaning
+      ? root(disposeFn => {
+          const node = addNode(parent, expr(item, i, data), afterNode);
+          disposers.set(node, disposeFn);
+          return node;
+        })
+      : addNode(parent, expr(item, i, data), afterNode);
   }
-
-  const unsubscribe = subscribe(a => {
-    a = a || [];
-
-    const b = items() || [];
-    return sample(() =>
-      reconcile(
-        parent,
-        a,
-        b,
-        beforeNode,
-        afterNode,
-        createFn,
-        cleaning && disposeAll,
-        cleaning && dispose
-      )
-    );
-  });
-
-  cleanup(unsubscribe);
-  cleanup(disposeAll);
 
   return parent;
 }
@@ -126,7 +114,6 @@ export function reconcile(
 
   let aStart = 0;
   let bStart = 0;
-  let loop = true;
   let aEnd = a.length - 1;
   let bEnd = length - 1;
   let tmp;
@@ -134,11 +121,8 @@ export function reconcile(
   let aEndNode = afterNode.previousSibling;
   let bAfterNode = afterNode;
   let mark;
-  let node;
 
-  fixes: while (loop) {
-    loop = false;
-
+  fixes: while (true) {
     // Skip prefix
     while (a[aStart] === b[bStart]) {
       bStart++;
@@ -153,15 +137,17 @@ export function reconcile(
       aEndNode = bAfterNode.previousSibling;
       if (--aEnd < aStart || bEnd < bStart) break fixes;
     }
+
+    break;
   }
 
   // Fast path for shrink
   if (bEnd < bStart) {
     while (aStart <= aEnd--) {
-      node = step(aEndNode, BACKWARD, true);
-      mark = node.previousSibling;
-      removeNodes(parent, node, aEndNode.nextSibling);
-      onRemove && onRemove(node);
+      tmp = step(aEndNode, BACKWARD, true);
+      mark = tmp.previousSibling;
+      removeNodes(parent, tmp, aEndNode.nextSibling);
+      onRemove && onRemove(tmp);
       aEndNode = mark;
     }
     return b.slice();
@@ -184,40 +170,30 @@ export function reconcile(
     I.set(b[i], i);
   }
 
-  let reusingNodes = 0;
+  // Re-using `length` variable for reusing nodes count.
+  length = 0;
   let toRemove = [];
   for (i = aStart; i <= aEnd; i++) {
     tmp = I.get(a[i]);
     if (tmp) {
       P[tmp] = i;
-      reusingNodes++;
+      length++;
     } else {
       toRemove.push(i);
     }
   }
 
   // Fast path for full replace
-  if (reusingNodes === 0) {
+  if (length === 0) {
     return reconcile(
       parent,
-      reconcile(
-        parent,
-        a,
-        [],
-        beforeNode,
-        afterNode,
-        createFn,
-        onClear
-      ),
+      reconcile(parent, a, [], beforeNode, afterNode, createFn, onClear),
       b,
       beforeNode,
       afterNode,
       createFn
     );
   }
-
-  // What else?
-  const longestSeq = longestPositiveIncreasingSubsequence(P, bStart);
 
   // Collect nodes to work with them
   const nodes = [];
@@ -229,12 +205,15 @@ export function reconcile(
 
   for (i = 0; i < toRemove.length; i++) {
     let index = toRemove[i];
-    node = nodes[index];
-    removeNodes(parent, node, step(node, FORWARD));
-    onRemove && onRemove(node);
+    tmp = nodes[index];
+    removeNodes(parent, tmp, step(tmp, FORWARD));
+    onRemove && onRemove(tmp);
   }
 
+  const longestSeq = longestPositiveIncreasingSubsequence(P, bStart);
+  // Re-use `length` for longest sequence length.
   length = longestSeq.length - 1;
+
   for (i = bEnd; i >= bStart; i--) {
     if (longestSeq[length] === i) {
       bAfterNode = nodes[P[longestSeq[length]]];
