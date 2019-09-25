@@ -1,6 +1,8 @@
 import { GROUPING } from './constants.js';
 
-export function addNode(parent, node, afterNode, counter) {
+let groupCounter = 0;
+
+export function addNode(parent, node, afterNode) {
   let mark;
   if (!(node instanceof Node)) {
     node = document.createTextNode(node);
@@ -9,7 +11,7 @@ export function addNode(parent, node, afterNode, counter) {
     (mark = node.firstChild) &&
     mark !== node.lastChild
   ) {
-    mark[GROUPING] = node.lastChild[GROUPING] = counter;
+    mark[GROUPING] = node.lastChild[GROUPING] = ++groupCounter;
   }
 
   // IE9 requires an explicit `null` as second argument.

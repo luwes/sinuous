@@ -10,8 +10,6 @@ import {
   step
 } from './utils.js';
 
-let groupCounter = 0;
-
 export function map(items, expr, cleaning) {
   const { subscribe, root, sample, cleanup } = api;
 
@@ -22,6 +20,25 @@ export function map(items, expr, cleaning) {
   const beforeNode = parent.appendChild(document.createTextNode(''));
   const afterNode = parent.appendChild(document.createTextNode(''));
   const disposers = new Map();
+
+  const unsubscribe = subscribe(a => {
+    const b = items();
+    return sample(() =>
+      reconcile(
+        parent,
+        a || [],
+        b || [],
+        beforeNode,
+        afterNode,
+        createFn,
+        cleaning && disposeAll,
+        cleaning && dispose
+      )
+    );
+  });
+
+  cleanup(unsubscribe);
+  cleanup(disposeAll);
 
   function disposeAll() {
     disposers.forEach(d => d());
@@ -37,43 +54,14 @@ export function map(items, expr, cleaning) {
   function createFn(parent, item, i, data, afterNode) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
-    return cleaning ? root(disposeFn => {
-      const node = addNode(
-        parent,
-        expr(item, i, data),
-        afterNode,
-        ++groupCounter
-      );
-      disposers.set(node, disposeFn);
-      return node;
-    }) : addNode(
-      parent,
-      expr(item, i, data),
-      afterNode,
-      ++groupCounter
-    );
+    return cleaning
+      ? root(disposeFn => {
+          const node = addNode(parent, expr(item, i, data), afterNode);
+          disposers.set(node, disposeFn);
+          return node;
+        })
+      : addNode(parent, expr(item, i, data), afterNode);
   }
-
-  const unsubscribe = subscribe(renderedValues => {
-    renderedValues = renderedValues || [];
-
-    const data = items() || [];
-    return sample(() =>
-      reconcile(
-        parent,
-        renderedValues,
-        data,
-        beforeNode,
-        afterNode,
-        createFn,
-        cleaning && disposeAll,
-        cleaning && dispose
-      )
-    );
-  });
-
-  cleanup(unsubscribe);
-  cleanup(disposeAll);
 
   return parent;
 }
@@ -88,26 +76,28 @@ export function map(items, expr, cleaning) {
 // This implementation is tailored for fine grained change detection and adds support for fragments
 export function reconcile(
   parent,
-  renderedValues,
-  data,
+  a,
+  b,
   beforeNode,
   afterNode,
   createFn,
   onClear,
   onRemove
 ) {
-  const length = data.length;
   // When parent was a DocumentFragment, then items got appended to the DOM.
   parent = afterNode.parentNode;
 
+  let length = b.length;
+  let i;
+
   // Fast path for clear
   if (length === 0) {
-    if (!beforeNode.previousSibling && !afterNode.nextSibling) {
+    if (beforeNode.previousSibling || afterNode.nextSibling) {
+      removeNodes(parent, beforeNode.nextSibling, afterNode);
+    } else {
       parent.textContent = '';
       parent.appendChild(beforeNode);
       parent.appendChild(afterNode);
-    } else {
-      removeNodes(parent, beforeNode.nextSibling, afterNode);
     }
 
     onClear && onClear();
@@ -115,195 +105,129 @@ export function reconcile(
   }
 
   // Fast path for create
-  if (renderedValues.length === 0) {
-    for (let i = 0; i < length; i++) {
-      createFn(parent, data[i], i, data, afterNode);
+  if (a.length === 0) {
+    for (i = 0; i < length; i++) {
+      createFn(parent, b[i], i, b, afterNode);
     }
-    return data.slice();
+    return b.slice();
   }
 
-  let prevStart = 0;
-  let newStart = 0;
-  let loop = true;
-  let prevEnd = renderedValues.length - 1;
-  let newEnd = length - 1;
-  let a;
-  let b;
-  let prevStartNode = beforeNode.nextSibling;
-  let newStartNode = prevStartNode;
-  let prevEndNode = afterNode.previousSibling;
-  let newAfterNode = afterNode;
+  let aStart = 0;
+  let bStart = 0;
+  let aEnd = a.length - 1;
+  let bEnd = length - 1;
+  let tmp;
+  let aStartNode = beforeNode.nextSibling;
+  let aEndNode = afterNode.previousSibling;
+  let bAfterNode = afterNode;
+  let mark;
 
-  fixes: while (loop) {
-    loop = false;
-    let _node;
-
+  fixes: while (true) {
     // Skip prefix
-    a = renderedValues[prevStart];
-    b = data[newStart];
-    while (a === b) {
-      prevStart++;
-      newStart++;
-      newStartNode = prevStartNode = step(prevStartNode, FORWARD);
-      if (prevEnd < prevStart || newEnd < newStart) break fixes;
-      a = renderedValues[prevStart];
-      b = data[newStart];
+    while (a[aStart] === b[bStart]) {
+      bStart++;
+      aStartNode = step(aStartNode, FORWARD);
+      if (aEnd < ++aStart || bEnd < bStart) break fixes;
     }
 
     // Skip suffix
-    a = renderedValues[prevEnd];
-    b = data[newEnd];
-    while (a === b) {
-      prevEnd--;
-      newEnd--;
-      newAfterNode = step(prevEndNode, BACKWARD, true);
-      prevEndNode = newAfterNode.previousSibling;
-      if (prevEnd < prevStart || newEnd < newStart) break fixes;
-      a = renderedValues[prevEnd];
-      b = data[newEnd];
+    while (a[aEnd] === b[bEnd]) {
+      bEnd--;
+      bAfterNode = step(aEndNode, BACKWARD, true);
+      aEndNode = bAfterNode.previousSibling;
+      if (--aEnd < aStart || bEnd < bStart) break fixes;
     }
 
-    // Fast path to swap backward
-    a = renderedValues[prevEnd];
-    b = data[newStart];
-    while (a === b) {
-      loop = true;
-      let mark = step(prevEndNode, BACKWARD, true);
-      _node = mark.previousSibling;
-      if (newStartNode !== mark) {
-        insertNodes(parent, mark, prevEndNode.nextSibling, newStartNode);
-        prevEndNode = _node;
-      }
-      newStart++;
-      prevEnd--;
-      if (prevEnd < prevStart || newEnd < newStart) break fixes;
-      a = renderedValues[prevEnd];
-      b = data[newStart];
-    }
-
-    // Fast path to swap forward
-    a = renderedValues[prevStart];
-    b = data[newEnd];
-    while (a === b) {
-      loop = true;
-      _node = step(prevStartNode, FORWARD);
-      if (prevStartNode !== newAfterNode) {
-        let mark = _node.previousSibling;
-        insertNodes(parent, prevStartNode, _node, newAfterNode);
-        newAfterNode = mark;
-        prevStartNode = _node;
-      }
-      prevStart++;
-      newEnd--;
-      if (prevEnd < prevStart || newEnd < newStart) break fixes;
-      a = renderedValues[prevStart];
-      b = data[newEnd];
-    }
+    break;
   }
 
   // Fast path for shrink
-  if (newEnd < newStart) {
-    if (prevStart <= prevEnd) {
-      let next;
-      let node;
-      while (prevStart <= prevEnd) {
-        node = step(prevEndNode, BACKWARD, true);
-        next = node.previousSibling;
-        removeNodes(parent, node, prevEndNode.nextSibling);
-        onRemove && onRemove(node);
-        prevEndNode = next;
-        prevEnd--;
-      }
+  if (bEnd < bStart) {
+    while (aStart <= aEnd--) {
+      tmp = step(aEndNode, BACKWARD, true);
+      mark = tmp.previousSibling;
+      removeNodes(parent, tmp, aEndNode.nextSibling);
+      onRemove && onRemove(tmp);
+      aEndNode = mark;
     }
-    return data.slice();
+    return b.slice();
   }
 
   // Fast path for add
-  if (prevEnd < prevStart) {
-    if (newStart <= newEnd) {
-      while (newStart <= newEnd) {
-        createFn(parent, data[newStart], newStart, data, newAfterNode);
-        newStart++;
-      }
+  if (aEnd < aStart) {
+    while (bStart <= bEnd) {
+      createFn(parent, b[bStart++], bStart, b, bAfterNode);
     }
-    return data.slice();
+    return b.slice();
   }
 
   // Positions for reusing nodes from current DOM state
-  const P = new Array(newEnd + 1 - newStart);
-  for (let i = newStart; i <= newEnd; i++) {
-    P[i] = -1;
-  }
-
+  const P = new Array(bEnd + 1 - bStart);
   // Index to resolve position from current to new
   const I = new Map();
-  for (let i = newStart; i <= newEnd; i++) I.set(data[i], i);
+  for (i = bStart; i <= bEnd; i++) {
+    P[i] = -1;
+    I.set(b[i], i);
+  }
 
-  let reusingNodes = 0;
+  // Re-using `length` variable for reusing nodes count.
+  length = 0;
   let toRemove = [];
-  for (let i = prevStart; i <= prevEnd; i++) {
-    if (I.has(renderedValues[i])) {
-      P[I.get(renderedValues[i])] = i;
-      reusingNodes++;
+  for (i = aStart; i <= aEnd; i++) {
+    tmp = I.get(a[i]);
+    if (tmp) {
+      P[tmp] = i;
+      length++;
     } else {
       toRemove.push(i);
     }
   }
 
   // Fast path for full replace
-  if (reusingNodes === 0) {
+  if (length === 0) {
     return reconcile(
       parent,
-      reconcile(
-        parent,
-        renderedValues,
-        [],
-        beforeNode,
-        afterNode,
-        createFn,
-        onClear
-      ),
-      data,
+      reconcile(parent, a, [], beforeNode, afterNode, createFn, onClear),
+      b,
       beforeNode,
       afterNode,
       createFn
     );
   }
 
-  // What else?
-  const longestSeq = longestPositiveIncreasingSubsequence(P, newStart);
-
   // Collect nodes to work with them
   const nodes = [];
-  let tmpC = prevStartNode;
-  for (let i = prevStart; i <= prevEnd; i++) {
-    nodes[i] = tmpC;
-    tmpC = step(tmpC, FORWARD);
+  tmp = aStartNode;
+  for (i = aStart; i <= aEnd; i++) {
+    nodes[i] = tmp;
+    tmp = step(tmp, FORWARD);
   }
 
-  for (let i = 0; i < toRemove.length; i++) {
+  for (i = 0; i < toRemove.length; i++) {
     let index = toRemove[i];
-    let node = nodes[index];
-    removeNodes(parent, node, step(node, FORWARD));
-    onRemove && onRemove(node);
+    tmp = nodes[index];
+    removeNodes(parent, tmp, step(tmp, FORWARD));
+    onRemove && onRemove(tmp);
   }
 
-  let lisIdx = longestSeq.length - 1;
-  let tmpD;
-  for (let i = newEnd; i >= newStart; i--) {
-    if (longestSeq[lisIdx] === i) {
-      newAfterNode = nodes[P[longestSeq[lisIdx]]];
-      lisIdx--;
+  const longestSeq = longestPositiveIncreasingSubsequence(P, bStart);
+  // Re-use `length` for longest sequence length.
+  length = longestSeq.length - 1;
+
+  for (i = bEnd; i >= bStart; i--) {
+    if (longestSeq[length] === i) {
+      bAfterNode = nodes[P[longestSeq[length]]];
+      length--;
     } else {
       if (P[i] === -1) {
-        tmpD = createFn(parent, data[i], i, data, newAfterNode);
+        tmp = createFn(parent, b[i], i, b, bAfterNode);
       } else {
-        tmpD = nodes[P[i]];
-        insertNodes(parent, tmpD, step(tmpD, FORWARD), newAfterNode);
+        tmp = nodes[P[i]];
+        insertNodes(parent, tmp, step(tmp, FORWARD), bAfterNode);
       }
-      newAfterNode = tmpD;
+      bAfterNode = tmp;
     }
   }
 
-  return data.slice();
+  return b.slice();
 }
