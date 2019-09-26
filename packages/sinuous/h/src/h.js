@@ -42,9 +42,7 @@ export function context(options, isSvg) {
           el = arg;
         }
       } else if (type === 'object') {
-        for (let name in arg) {
-          property(name, arg[name], el, isSvg);
-        }
+        property(null, arg, el, isSvg);
       } else if (type === 'function') {
         if (el) {
           const marker = el.appendChild(document.createTextNode(''));

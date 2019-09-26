@@ -1,7 +1,11 @@
 import { api } from './api.js';
 
-export function property(name, value, el, isSvg, isCss) {
-  if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
+export function property(name, value, el, isAttr, isCss) {
+  if (!name || (name === 'attrs' && (isAttr = true))) {
+    for (name in value) {
+      property(name, value[name], el, isAttr, isCss);
+    }
+  } else if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
     // Functions added as event handlers are not executed
     // on render unless they have an observable indicator.
     handleEvent(el, name, value);
@@ -11,13 +15,13 @@ export function property(name, value, el, isSvg, isCss) {
       value.$t(2, property, el, name);
     } else {
       api.subscribe(() => {
-        property(name, value(), el, isSvg, isCss);
+        property(name, value(), el, isAttr, isCss);
       });
     }
   } else if (isCss) {
     el.style.setProperty(name, value);
   } else if (
-    isSvg ||
+    isAttr ||
     name.slice(0, 5) === 'data-' ||
     name.slice(0, 5) === 'aria-'
   ) {
@@ -26,13 +30,7 @@ export function property(name, value, el, isSvg, isCss) {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      for (name in value) {
-        property(name, value[name], el, isSvg, true);
-      }
-    }
-  } else if (name === 'attrs') {
-    for (name in value) {
-      property(name, value[name], el, true);
+      property(null, value, el, isAttr, true);
     }
   } else {
     if (name === 'class') name += 'Name';
