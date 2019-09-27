@@ -7,7 +7,7 @@ menu:
     weight: 20
 ---
 
-State in Sinuous is handled by observables. It relies on an add-on called [`sinuous/observable`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/observable) with a powerful API yet small footprint.
+State in Sinuous is handled by observables. It relies on a module called [`sinuous/observable`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/observable) with a powerful API yet small footprint.
 
 ## Reactivity
 
@@ -15,7 +15,7 @@ For the introduction of Sinuous state it's sufficient to know that observables p
 
 Imagine a view with dynamic data, when this view is created initially Sinuous makes certain DOM operations to put the data in its right place. It creates an `h1` element, a text node, maybe adds an attribute or so.
 
-Sinuous simply records these DOM operations and whenever a value of a linked observable changes that DOM operation re-runs. 
+Sinuous simply records these DOM operations and whenever a value of a linked observable changes that DOM operation re-runs.
 
 ### Concept
 
@@ -23,7 +23,7 @@ Sinuous simply records these DOM operations and whenever a value of a linked obs
 import { o, subscribe } from 'sinuous/observable';
 
 const name = o('World');
-subscribe(() => document.body.innerHTML = `<h1>Hello, ${name()}!</h1>`);
+subscribe(() => (document.body.innerHTML = `<h1>Hello, ${name()}!</h1>`));
 ```
 
 The body should now contain `<h1>Hello, World</h1>`.
@@ -47,7 +47,9 @@ import { o, html } from 'sinuous';
 
 const name = o('World');
 document.body.append(
-  html`<h1>Hello, ${name}!</h1>`
+  html`
+    <h1>Hello, ${name}!</h1>
+  `
 );
 ```
 

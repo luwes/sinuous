@@ -13,21 +13,23 @@ The `template` module makes Sinuous a real powerhouse in the UI performance benc
 import { h } from 'sinuous';
 import { template, t, o } from 'sinuous/template';
 
-const Row = template(() => html`
-  <tr class=${ o('selected') }>
-    <td class="col-md-1" textContent=${ t('id') } />
-    <td class="col-md-4"><a>${ o('label') }</a></td>
-    <td class="col-md-1">
-      <a>
-        <span class="glyphicon glyphicon-remove remove" />
-      </a>
-    </td>
-    <td class="col-md-6" />
-  </tr>
-`);
+const Row = template(
+  () => html`
+    <tr class=${o('selected')}>
+      <td class="col-md-1" textContent=${t('id')} />
+      <td class="col-md-4"><a>${o('label')}</a></td>
+      <td class="col-md-1">
+        <a>
+          <span class="glyphicon glyphicon-remove remove" />
+        </a>
+      </td>
+      <td class="col-md-6" />
+    </tr>
+  `
+);
 ```
 
-It looks similar to using a component but there is a big difference in the way the HTML snippet is created. Once the template `Row()` function is called the statics of the HTML snippet are cloned in 1 DOM operation while a regular component with  ```html`` ``` tag would create every node with properties and content one by one which makes a costly difference in performance.
+It looks similar to using a component but there is a big difference in the way the HTML snippet is created. Once the template `Row()` function is called the statics of the HTML snippet are cloned in 1 DOM operation while a regular component with ` html`` ` tag would create every node with properties and content one by one which makes a costly difference in performance.
 
 - `o` is an observable tag.
   It adds a proxy on the passed object property and repeats the recorded tag action when set.
@@ -40,4 +42,3 @@ Row({ id: 1, label: 'Banana', selected: 'peel' });
 ```
 
 Try it on [Codesandbox](https://codesandbox.io/s/sinuous-template-gsw1q)
-

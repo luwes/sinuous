@@ -11,7 +11,9 @@ The smallest Sinuous example looks like this:
 
 ```js
 document.body.append(
-  html`<h1>Hello, world!</h1>`
+  html`
+    <h1>Hello, world!</h1>
+  `
 );
 ```
 

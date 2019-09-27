@@ -5,4 +5,3 @@ menu:
     title: FAQ
     weight: 20
 ---
-

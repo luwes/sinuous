@@ -9,7 +9,7 @@ menu:
     weight: 10
 ---
 
-Sinuous is a small JS library for creating user interfaces. 
+Sinuous is a small JS library for creating user interfaces.
 
 One of the main goals is to keep that plain JavaScript feel and introduce as few specialized concepts as possible while offering a simple way to create declarative views.
 
@@ -25,9 +25,9 @@ npm install sinuous
 
 A component is a plain JS closure which can be re-used by adding `<${Component}/>` to your view.  
 A component returns a regular HTML element. No render function needed.  
-Any defined attributes are passed to the component as props. 
+Any defined attributes are passed to the component as props.
 
-A view can be declared with JavaScript's native tagged template literals  ```html`` ``` or with `h` function calls.
+A view can be declared with JavaScript's native tagged template literals ` html`` ` or with `h` function calls.
 
 State is defined as observables, don't let this scare you, in this context it simply translates to dynamic parts in your view. An observable returns a function that can act as a getter or setter. Get the value by passing no arguments, set a new value by passing the value as argument.
 
@@ -41,7 +41,7 @@ import { observable, html } from 'sinuous';
  * @param  {object} props
  * @return {Element}
  */
-const Timer = (props) => {
+const Timer = props => {
   // Create an obervable with number `0`.
   const seconds = observable(0);
 
@@ -59,7 +59,8 @@ const Timer = (props) => {
 
 document.querySelector('.counter-example').append(
   // Use the component and pass some props.
-  html`<${Timer} unit=Seconds />`
+  html`
+    <${Timer} unit="Seconds" />
+  `
 );
 ```
-

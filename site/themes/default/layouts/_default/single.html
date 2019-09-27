@@ -7,7 +7,17 @@
         {{- partial "sidebar.html" . -}}
       </div>
       <div class="column content">
-        <h1>{{ .Title }}</h1>
+        <div class="columns is-gapless is-marginless is-vcentered">
+          <div class="column">
+            <h1>{{ .Title }}</h1>
+          </div>
+          <div class="column">
+            <span class="is-pulled-right is-size-7">
+              <i class="fab fa-github"></i>
+              <a class="has-text-dark" href="{{.Site.Params.GithubSite}}/edit/master/content/{{.File.Path}}">Edit on Github</a>
+            </span>
+          </div>
+        </div>
         {{- .Content -}}
       </div>
     </div>

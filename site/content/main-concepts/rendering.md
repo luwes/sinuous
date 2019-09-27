@@ -13,7 +13,7 @@ Rendering in Sinuous is handled by [hyperscript](https://github.com/hyperhype/hy
 HTMLElement = h(tag|Component|Fragment, [props?, text?, Element?, Observable?,...])
 ```
 
-Luckily we don't have to worry about that too much because of the fantastic [`htm`](https://github.com/developit/htm) package. 
+Luckily we don't have to worry about that too much because of the fantastic [`htm`](https://github.com/developit/htm) package.
 
 This module converts native JS tagged template literals to `h` function calls. Sinuous supports both runtime and compile time transformation with [`sinuous/htm`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/htm) and [`sinuous/babel-plugin-htm`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/babel-plugin-htm) respectively.
 
@@ -23,7 +23,9 @@ The compile time version is preferred in production as the HTM runtime (0.5kB) w
 
 ```js
 import { html } from 'sinuous';
-const element = html`<h1>Hello world!</h1>`;
+const element = html`
+  <h1>Hello world!</h1>
+`;
 ```
 
 This returns a real HTML element that can be appended to the DOM.  
@@ -43,7 +45,8 @@ const content = o('This is some text.');
 const p = html`
   <p class=${property}>
     ${content}
-  </p>`;
+  </p>
+`;
 ```
 
 If there is need for a computation in the view, one thing to keep in mind is that to retrieve the value of an observable a function call is needed and the computation is wrapped in a closure. Let's take a look.
@@ -65,7 +68,7 @@ browsers and a nicer API for booleans. There are some gotchas, however.
 Attributes such as `colspan` are camel cased to `colSpan`, and `for` on the
 label element is `htmlFor` to avoid collision with the language keyword.
 
-``` js
+```js
 html`<a href=https://sinuous.netlify.com></a>`;
 ```
 
@@ -73,11 +76,12 @@ html`<a href=https://sinuous.netlify.com></a>`;
 
 If an attribute starts with `on` and is a function, then it will be registered as an event listener.
 
-``` js
+```js
 html`
-  <a href=# onclick=${() => alert('you are 1,000,000th visitor!')}>
+  <a href="#" onclick=${() => alert('you are 1,000,000th visitor!')}>
     Click here to win a prize
-  </a>`;
+  </a>
+`;
 ```
 
 ### styles
@@ -85,9 +89,10 @@ html`
 If an attribute has a `style` property, then that will be handled specially.
 It accepts either an object or a string.
 
-``` js
+```js
 html`
   <h1 style=${{ 'font-family': 'Comic Sans', color: 'springgreen' }}>
     Happy Birthday!
-  </h1>`;
+  </h1>
+`;
 ```
