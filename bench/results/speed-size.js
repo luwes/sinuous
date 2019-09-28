@@ -133,7 +133,7 @@ function plotResults() {
     }
   };
 
-  Plotly.newPlot('speed-size', data, layout);
+  Plotly.newPlot('speed-size', data, layout, { responsive: true });
 }
 
 init();
