@@ -16,3 +16,4 @@ packages/sinuous/module/
 /bench/trace.json
 
 /packages/sinuous/observable/test/perf/perf.txt
+!/bench/results/dist/
