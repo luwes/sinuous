@@ -98,10 +98,18 @@ function plotResults() {
       };
     });
 
+    const title = benchmark.startsWith('0')
+      ? 'Duration in ms (lower is better)'
+      : benchmark.startsWith('2')
+      ? 'Memory in MB (lower is better)'
+      : benchmark.startsWith('3')
+      ? 'Startup metrics'
+      : '';
+
     const layout = {
       title: benchmark,
       yaxis: {
-        title: 'Duration in ms (lower is better)',
+        title,
         range: [0, Math.max(...allValues)]
       }
     };
