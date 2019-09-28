@@ -1,11 +1,14 @@
 /* global Plotly */
-import { o, html } from 'https://unpkg.com/sinuous@0.15.0/module/sinuous.js';
-import { S } from 'https://unpkg.com/sinuous@0.15.0/module/observable.js';
-import { hydrate, html as tree, _ } from 'https://unpkg.com/sinuous@0.15.0/module/hydrate.js';
+import { o, h } from 'sinuous';
+import { subscribe, computed } from 'sinuous/observable';
+import { hydrate, h as hy } from 'sinuous/hydrate';
+import { colors, getId, getName } from './helpers.js';
+import { median } from './utils.js';
 
-const url = o('./results.json');
+const url = o(document.querySelector('.load-input').value);
 const results = o([]);
-const benchmarks = S(() => {
+const selected = o('#10-fastest');
+const benchmarks = computed(() => {
   return [...new Set(results().map((result) => result.benchmark))].sort();
 });
 const isLoading = o(false);
@@ -15,19 +18,23 @@ function init() {
   const delta = tree`
     <div>
       <div class="${() => 'select is-small' + (isLoading() ? ' is-loading' : '')}">
-        <select onchange="${(e) => url(e.target.value)}">
-          ${_}
-        </select>
+        <select onchange="${(e) => url(e.target.value)}" />
       </div>
     </div>
   `;
   hydrate(delta, document.querySelector('.select-bench'));
 
-  S(loadResults);
+  document.querySelectorAll('.filter-list a').forEach(node => {
+    hydrate(tree`
+      <a class=${() => (node.href.includes(selected()) ? 'is-active' : '')} />
+    `, node);
+  });
+
+  subscribe(loadResults);
 
   document.querySelector('.benchmarks-list').append(html`
     ${() => benchmarks().map((benchmark) => html`
-      <li><a href="#${benchmark}">${benchmark}</a></li>
+      <li><a onclick=${scrollTo} href="#${benchmark}">${benchmark}</a></li>
     `)}
   `);
 
@@ -39,7 +46,19 @@ function init() {
     `)}
   `);
 
-  S(plotResults);
+  subscribe(plotResults);
+
+  window.addEventListener('hashchange', function() {
+    if (location.hash) selected(location.hash);
+  });
+  if (location.hash) selected(location.hash);
+}
+
+function scrollTo(e) {
+  e.preventDefault();
+  document.getElementById(e.target.href.split('#')[1]).scrollIntoView({
+    behavior: 'smooth'
+  });
 }
 
 async function loadResults() {
@@ -54,20 +73,18 @@ async function loadResults() {
 }
 
 function plotResults() {
-  const colors = {
-    vanillajs: '#FFDD57',
-    sinuous: '#70EDAC',
-    react: '#61DAFB'
-  };
-
   benchmarks().forEach(benchmark => {
-    const libs = results()
+    let libs = results()
       .filter(result => !getId(result).includes('non-keyed'))
       .filter(result => result.benchmark === benchmark)
       .sort((a, b) => {
         return median(a.values) > median(b.values) ? 1 : -1;
-      })
-      .slice(0, 10);
+      });
+
+    const cap = selected().match(/\d+/);
+    if (cap) {
+      libs = libs.slice(0, parseInt(cap[0]));
+    }
 
     let allValues = [];
     const data = libs.map(lib => {
@@ -83,6 +100,7 @@ function plotResults() {
     const layout = {
       title: benchmark,
       yaxis: {
+        title: 'Duration in ms (lower is better)',
         range: [0, Math.max(...allValues)]
       }
     };
@@ -92,28 +110,3 @@ function plotResults() {
 }
 
 init();
-
-
-function getId(lib) {
-  // krausest/js-framework-benchmark uses `framework`.
-  return lib.id || lib.framework;
-}
-
-function getName(lib) {
-  return getId(lib).split('-')[0];
-}
-
-function median(values){
-  if(values.length ===0) return 0;
-
-  values.sort(function(a,b){
-    return a-b;
-  });
-
-  var half = Math.floor(values.length / 2);
-
-  if (values.length % 2)
-    return values[half];
-
-  return (values[half - 1] + values[half]) / 2.0;
-}
