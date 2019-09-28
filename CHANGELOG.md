@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.15.2 - 2019-09-28
+
+### Fixed
+
+- Fixed babel-plugin-htm `TypeError: Cannot read property '0' of null`.
+
+### Changed
+
+- Made `property` api accept plain objects.
+
 ## 0.15.1 - 2019-09-25
 
 ### Changed
