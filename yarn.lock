@@ -2590,10 +2590,10 @@ eslint-plugin-import@^2.18.2:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jsdoc@^15.9.2:
-  version "15.9.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-15.9.2.tgz#fe02042ed6d2e140dc7710afd129382712c95101"
-  integrity sha512-dJjIWFJlh4ti3CegWYN0jUUdjEsWvJ8TZJ/cMQldioVLxMmU3UZeZsHzxYcCicJwSVhQ+uGm+dbUyEIm0slX3Q==
+eslint-plugin-jsdoc@^15.9.5:
+  version "15.9.5"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-15.9.5.tgz#5cb7a7b9649b2aa4b104f780e4c5bee902d975bb"
+  integrity sha512-OQOUf8Li9PRzULQG8Wi7QOd10aCZVAp/RkqOw0FYPT2j0F9lcPB21jBb6BLlWgR4F7XjdzbUmgVvhHYZGOWCVg==
   dependencies:
     comment-parser "^0.6.2"
     debug "^4.1.1"
