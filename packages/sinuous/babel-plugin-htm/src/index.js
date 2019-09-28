@@ -163,7 +163,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         let matchName = htmlName;
         if (htmlName[0]==='/') {
           match = tag.match(patternStringToRegExp(htmlName));
-          matchName = match[0];
+          matchName = match && match[0];
         }
 
         if (match) {
