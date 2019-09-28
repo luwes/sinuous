@@ -75,7 +75,7 @@ async function run() {
     const bench = await createBench(page, lib);
     const value = await bench.run();
 
-    const pkg = require(`./libs/${lib}/package.json`);
+    const pkg = require(`../libs/${lib}/package.json`);
     const version = _.get(pkg, `dependencies.${lib}`);
     const id = lib + (version ? '-' + semver.coerce(version).version : '');
 

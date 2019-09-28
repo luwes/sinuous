@@ -3828,9 +3828,9 @@ gzip-size@^5.1.1:
     pify "^4.0.1"
 
 handlebars@^4.1.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.3.2.tgz#c10366a4300f708f78a421472c5d7851dbe886ab"
-  integrity sha512-LuccMnDrKB72bbClEIucoBNAIMpqmWvIGSKNEngDcYFT6hlCq7ZoCWc26ZT9mr6tfWTJeTswSldoI5LOeezzDQ==
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.3.4.tgz#aab065294c27ad16ff4e711240a7288d2753306d"
+  integrity sha512-vvpo6mpK4ScNC1DbGRZ2d5BznS6ht0r1hi20RivsibMc6jNvFAeZQ6qk5VNspo6SOwVOJQbjHyBCpuS7BzA1pw==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -6017,9 +6017,9 @@ react-dom@16.8.6:
     scheduler "^0.13.6"
 
 react-is@^16.8.1:
-  version "16.9.0"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
-  integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
+  version "16.10.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.0.tgz#3d6a031e57fff73c3cfa0347feb3e8f40c5141e5"
+  integrity sha512-WRki2sBb7MTpYp7FtDEmSeGKX2vamYyq3rc9o7fKUG+/DHVyJu69NnvJsiSwwhh2Tt8XN40MQHkDBEXwyfxncQ==
 
 react@16.8.6:
   version "16.8.6"
@@ -6537,6 +6537,11 @@ sinuous@0.15.0:
   resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.15.0.tgz#55227b8bd21535c84c47090213f3415364836d90"
   integrity sha512-0LO6qie4XQ+aQPgkY2ZfUQMq8tM7o+/XRBbbLytrYWy55Lne9+qEE3FZmcuuOjXNW6ZHhboSHeSN4/SFoayVAA==
 
+sinuous@^0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.15.2.tgz#cf424615d87daf5e53af9114b685b41618936c8c"
+  integrity sha512-PRFZ0eVu3eo8HjMyemKKpbqo4i5+Nxzuzk3ULTBv6gbEQgZjQDQDQ9H4byGA95Z6v1YFjjOQTvhzqqe+Tx7GHw==
+
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -6999,9 +7004,9 @@ terser@^3.14.1:
     source-map-support "~0.5.10"
 
 terser@^4.0.0, terser@^4.1.2:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-4.3.3.tgz#f626c6779cadd60a3018e072fedeceabe4769db1"
-  integrity sha512-Nzr7dpRjSzMEUS+z2UYQBtzE0LDm5k0Yy8RgLRPy85QUo1TjU5lIOBwzS5/FVAMaVyHZ3WTTU2BuQcMn8KXnNQ==
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-4.3.4.tgz#ad91bade95619e3434685d69efa621a5af5f877d"
+  integrity sha512-Kcrn3RiW8NtHBP0ssOAzwa2MsIRQ8lJWiBG/K7JgqPlomA3mtb2DEmp4/hrUA+Jujx+WZ02zqd7GYD+QRBB/2Q==
   dependencies:
     commander "^2.20.0"
     source-map "~0.6.1"

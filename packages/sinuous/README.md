@@ -30,9 +30,9 @@ It was built with these ideas in mind.
 ### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
 ```js
-import { o, html } from 'sinuous';
+import { observable, html } from 'sinuous';
 
-const counter = o(0);
+const counter = observable(0);
 const view = () => {
   return html`
     <div>Counter ${counter}</div>

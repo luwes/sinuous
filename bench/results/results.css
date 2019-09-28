@@ -1,0 +1,29 @@
+/*@media screen and (min-width: 769px) {
+  .menu.is-pinned {
+    width: inherit;
+    position: fixed;
+    top: 100px;
+  }
+}*/
+
+.navbar-brand i.navbar-icon,
+.navbar-brand svg.navbar-icon {
+  display: inline-block;
+  width: 1.25em;
+  margin-right: 5px;
+}
+
+.menu-label svg.fa-fw,
+.menu-label i.fa-fw {
+  display: inline-block;
+  width: 1.25em;
+  margin-right: 1px;
+  position: relative;
+  top: -1px;
+}
+
+.bd-tw-button {
+  background-color: #55acee;
+  color: #fff;
+  border-color: transparent!important;
+}
