@@ -1,0 +1,20 @@
+{
+  "name": "sinuous-bench-results",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build-prod": "rollup -c --environment production",
+    "build-dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "plotly.js-dist": "^1.49.0",
+    "sinuous": "^0.15.2"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.4",
+    "rollup": "1.11.3",
+    "rollup-plugin-babel": "4.3.2",
+    "rollup-plugin-node-resolve": "4.2.3",
+    "rollup-plugin-terser": "4.0.4"
+  }
+}

@@ -1,4 +1,3 @@
-
 export const colors = {
   vanillajs: '#FFDD57',
   sinuous: '#70EDAC',
@@ -22,6 +21,26 @@ export const colors = {
   mithril: '#1E5799',
   sifrr: '#364F6B'
 };
+
+export const defaultBenchmarks = [
+  '01_run1k',
+  '02_replace1k',
+  '03_update10th1k_x16',
+  '04_select1k',
+  '05_swap1k',
+  '06_remove-one-1k',
+  '07_create10k',
+  '08_create1k-after1k_x2',
+  '09_clear1k_x8',
+  '21_ready-memory',
+  '22_run-memory',
+  '23_update5-memory',
+  '24_run5-memory',
+  '25_run-clear-memory',
+  '31_startup-ci',
+  '32_startup-bt',
+  '34_startup-totalbytes'
+];
 
 export function getId(lib) {
   // krausest/js-framework-benchmark uses `framework`.

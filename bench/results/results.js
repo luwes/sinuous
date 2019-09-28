@@ -2,14 +2,15 @@
 import { o, h } from 'sinuous';
 import { subscribe, computed } from 'sinuous/observable';
 import { hydrate, h as hy } from 'sinuous/hydrate';
-import { colors, getId, getName } from './helpers.js';
-import { median } from './utils.js';
+import { colors, getId, getName, defaultBenchmarks } from './helpers.js';
+import { median, unique } from './utils.js';
 
 const url = o(document.querySelector('.load-input').value);
 const results = o([]);
 const selected = o('#10-fastest');
 const benchmarks = computed(() => {
-  return [...new Set(results().map((result) => result.benchmark))].sort();
+  const bs = results().map((result) => result.benchmark);
+  return unique(bs.length ? bs : defaultBenchmarks).sort();
 });
 const isLoading = o(false);
 

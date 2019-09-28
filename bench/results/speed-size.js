@@ -3,7 +3,7 @@ import { o } from 'sinuous';
 import { computed, subscribe } from 'sinuous/observable';
 import { hydrate, h } from 'sinuous/hydrate';
 import { colors, getId, getName } from './helpers.js';
-import { median, getOutlierThresholds } from './utils.js';
+import { median, getOutlierThresholds, unique } from './utils.js';
 
 const url = o(
   'https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts/results.json'
@@ -11,11 +11,11 @@ const url = o(
 const results = o([]);
 const selected = o('#all');
 const removeOutliers = o(true);
-const benchmarks = computed(() => {
-  return [...new Set(results().map(result => result.benchmark))]
+const benchmarks = computed(() =>
+  unique(results().map(r => r.benchmark))
     .sort()
-    .slice(0, 9);
-});
+    .slice(0, 9)
+);
 const isLoading = o(false);
 
 function init() {
@@ -94,7 +94,6 @@ function plotResults() {
     })
     .sort((a, b) => a.slowdown - b.slowdown);
 
-
   const allTotalBytes = perfLibs.map(lib => lib.totalbytes);
   const { max } = getOutlierThresholds(allTotalBytes);
   if (removeOutliers()) {
@@ -111,6 +110,7 @@ function plotResults() {
   const data = perfLibs.map(lib => {
     return {
       name: getId(lib),
+      // text: getName(lib),
       marker: { color: colors[getName(lib)] },
       x: [100 / lib.slowdown],
       y: [lib.totalbytes],

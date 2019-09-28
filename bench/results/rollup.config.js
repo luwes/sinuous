@@ -2,6 +2,12 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 
+const defaults = {
+  watch: {
+    clearScreen: false
+  },
+};
+
 const plugins = [
   babel({
     exclude: 'node_modules/**',
@@ -21,17 +27,19 @@ if (process.env.production) {
 }
 
 export default [{
-  input: 'results/results.js',
+  ...defaults,
+  input: 'results.js',
   output: {
-    file: 'results/dist/results.js',
+    file: 'dist/results.js',
     format: 'iife'
   },
   plugins
 },
 {
-  input: 'results/speed-size.js',
+  ...defaults,
+  input: 'speed-size.js',
   output: {
-    file: 'results/dist/speed-size.js',
+    file: 'dist/speed-size.js',
     format: 'iife'
   },
   plugins

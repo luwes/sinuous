@@ -4,34 +4,29 @@
   "scripts": {
     "start": "http-server -c-1 -p 8000 . ",
     "bench": "node src/bench.js",
-    "build-prod": "rollup -c --environment production && lerna run --parallel build-prod",
-    "build-dev": "rollup -c -w & lerna run --parallel build-dev"
+    "build-prod": "yarn workspace sinuous-bench-results build-prod && lerna run --parallel build-prod",
+    "build-dev": "yarn workspace sinuous-bench-results build-dev & lerna run --parallel build-dev"
   },
   "workspaces": {
     "packages": [
-      "libs/*"
+      "libs/*",
+      "results"
     ]
   },
   "dependencies": {
     "fs-extra": "^8.1.0",
     "gzip-size": "^5.1.1",
     "http-server": "^0.11.1",
+    "jstat": "^1.9.0",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "minimist": "^1.2.0",
     "plotly.js-dist": "^1.49.0",
     "puppeteer": "^1.19.0",
     "ramda": "^0.26.1",
-    "semver": "^6.3.0",
-    "sinuous": "^0.15.2"
+    "semver": "^6.3.0"
   },
   "devDependencies": {
-    "@babel/core": "7.4.4",
-    "jstat": "^1.9.0",
-    "lerna": "^3.16.4",
-    "rollup": "1.11.3",
-    "rollup-plugin-babel": "4.3.2",
-    "rollup-plugin-node-resolve": "4.2.3",
-    "rollup-plugin-terser": "4.0.4"
+    "lerna": "^3.16.4"
   }
 }
