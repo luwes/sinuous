@@ -6,6 +6,16 @@
   }
 }*/
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.section {
+  flex: 1;
+}
+
 .navbar-brand i.navbar-icon,
 .navbar-brand svg.navbar-icon {
   display: inline-block;

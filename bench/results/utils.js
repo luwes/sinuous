@@ -1,4 +1,8 @@
 
+export function unique(arr) {
+  return [...new Set(arr)];
+}
+
 export function median(values) {
   if (values.length === 0) return 0;
 
