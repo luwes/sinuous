@@ -105,7 +105,7 @@ function plotResults() {
       }
     };
 
-    Plotly.newPlot(benchmark, data, layout);
+    Plotly.newPlot(benchmark, data, layout, { responsive: true });
   });
 }
 
