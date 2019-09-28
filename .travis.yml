@@ -36,6 +36,7 @@ jobs:
       script: COVERAGE=true yarn test --single-run
     - script:
       - git fetch && git checkout origin/gh-pages -- bench/results.json
+      - echo '!/bench/results/dist/' >> .gitignore
       - (cd bench && yarn && yarn build-prod)
       - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.8.6,sinuous-0.14.1,sinuous-0.12.6))
       name: "Benchmark"
