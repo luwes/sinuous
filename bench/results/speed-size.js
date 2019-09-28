@@ -1,4 +1,5 @@
 /* global Plotly */
+import ColorHash from 'color-hash';
 import { o } from 'sinuous';
 import { computed, subscribe } from 'sinuous/observable';
 import { hydrate, h } from 'sinuous/hydrate';
@@ -111,7 +112,7 @@ function plotResults() {
     return {
       name: getId(lib),
       // text: getName(lib),
-      marker: { color: colors[getName(lib)] },
+      marker: { color: colors[getName(lib)] || new ColorHash().hex(getName(lib)) },
       x: [100 / lib.slowdown],
       y: [lib.totalbytes],
       mode: 'markers',
