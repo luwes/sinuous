@@ -37,3 +37,32 @@ body {
   color: #fff;
   border-color: transparent!important;
 }
+
+.menu-list a {
+  position: relative;
+}
+
+.menu-list a.is-loading::after {
+  border-color: transparent transparent #fff #fff!important;
+}
+
+.menu-list a.is-loading::after {
+  position: absolute;
+  right: 1em;
+  top: calc(50% - (1em / 2));
+  position: absolute!important;
+}
+
+.menu-list a.is-loading::after {
+  -webkit-animation: spinAround .5s infinite linear;
+  animation: spinAround .5s infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}

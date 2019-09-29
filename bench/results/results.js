@@ -14,6 +14,7 @@ const benchmarks = computed(() => {
   return unique(bs.length ? bs : defaultBenchmarks).sort();
 });
 const isLoading = o(false);
+const isPlotting = o(false);
 
 function init() {
   // Paritial attributes would be awesome.
@@ -50,9 +51,11 @@ function init() {
 
   subscribe(plotResults);
 
-  window.addEventListener('hashchange', function() {
-    if (location.hash) selected(location.hash);
-  });
+  window.addEventListener('hashchange', selectByHash);
+  selectByHash();
+}
+
+function selectByHash() {
   if (location.hash) selected(location.hash);
 }
 
@@ -74,49 +77,69 @@ async function loadResults() {
   isLoading(false);
 }
 
+let toRender = [];
+let requestId;
 function plotResults() {
-  benchmarks().forEach(benchmark => {
-    let libs = results()
-      .filter(result => !getId(result).includes('non-keyed'))
-      .filter(result => result.benchmark === benchmark)
-      .sort((a, b) => {
-        return median(a.values) > median(b.values) ? 1 : -1;
-      });
+  if (!results().length) return;
+  cancelAnimationFrame(requestId);
+  toRender = benchmarks().slice();
+  console.log('Restart plotting!');
+  isPlotting(true);
+  renderLoop();
+}
 
-    const cap = selected().match(/\d+/);
-    if (cap) {
-      libs = libs.slice(0, parseInt(cap[0]));
-    }
+function renderLoop() {
+  const benchmark = toRender.shift();
+  if (!benchmark) {
+    console.log('Finished plotting!');
+    isPlotting(false);
+    return;
+  }
+  render(benchmark);
+  requestId = requestAnimationFrame(renderLoop);
+}
 
-    let allValues = [];
-    const data = libs.map(lib => {
-      allValues = allValues.concat(lib.values);
-      return {
-        name: getId(lib),
-        marker: { color: colors[getName(lib)] || new ColorHash().hex(getName(lib)) },
-        y: lib.values,
-        type: 'box'
-      };
+function render(benchmark) {
+  let libs = results()
+    .filter(result => !getId(result).includes('non-keyed'))
+    .filter(result => result.benchmark === benchmark)
+    .sort((a, b) => {
+      return median(a.values) > median(b.values) ? 1 : -1;
     });
 
-    const title = benchmark.startsWith('0')
-      ? 'Duration in ms (lower is better)'
-      : benchmark.startsWith('2')
-      ? 'Memory in MB (lower is better)'
-      : benchmark.startsWith('3')
-      ? 'Startup metrics'
-      : '';
+  const cap = selected().match(/\d+/);
+  if (cap) {
+    libs = libs.slice(0, parseInt(cap[0]));
+  }
 
-    const layout = {
-      title: benchmark,
-      yaxis: {
-        title,
-        range: [0, Math.max(...allValues)]
-      }
+  let allValues = [];
+  const data = libs.map(lib => {
+    allValues = allValues.concat(lib.values);
+    return {
+      name: getId(lib),
+      marker: { color: colors[getName(lib)] || new ColorHash().hex(getName(lib)) },
+      y: lib.values,
+      type: 'box'
     };
-
-    Plotly.newPlot(benchmark, data, layout, { responsive: true });
   });
+
+  const title = benchmark.startsWith('0')
+    ? 'Duration in ms (lower is better)'
+    : benchmark.startsWith('2')
+    ? 'Memory in MB (lower is better)'
+    : benchmark.startsWith('3')
+    ? 'Startup metrics'
+    : '';
+
+  const layout = {
+    title: benchmark,
+    yaxis: {
+      title,
+      range: [0, Math.max(...allValues)]
+    }
+  };
+
+  Plotly.newPlot(benchmark, data, layout, { responsive: true });
 }
 
 init();
