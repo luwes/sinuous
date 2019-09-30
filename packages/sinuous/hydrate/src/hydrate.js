@@ -18,37 +18,40 @@ export function context(isSvg) {
     }
 
     const args = EMPTY_ARR.slice.call(arguments);
-    const tree = {
-      _children: []
-    };
+    const tree = { _children: [] };
 
     function item(arg) {
       if (isSvg) tree._isSvg = isSvg;
       if (arg == null);
       else if (arg === _) {
-        tree._children.push(arg);
+        addChild(tree, arg);
       } else if (typeof arg === 'string') {
-        if (tree._tag) {
-          tree._children.push(arg);
+        if (tree.type) {
+          addChild(tree, { type: null, _props: arg });
         } else {
-          tree._tag = arg;
+          tree.type = arg;
         }
       } else if (Array.isArray(arg)) {
         arg.forEach(item);
       } else if (typeof arg === 'object') {
-        if (arg._tag) {
-          tree._children.push(arg);
+        if (arg.type) {
+          addChild(tree, arg);
         } else {
           tree._props = arg;
         }
       } else if (typeof arg === 'function') {
-        tree._children.push(arg);
+        addChild(tree, arg);
       }
+    }
+
+    function addChild(parent, child) {
+      parent._children.push(child);
+      child._parent = parent;
     }
 
     args.forEach(item);
 
-    return tree._tag
+    return tree.type
       ? tree
       : tree._children[1]
       ? tree._children
@@ -63,7 +66,7 @@ export function context(isSvg) {
  *
  * `delta` looks like:
  * {
- *   _tag: 'div',
+ *   type: 'div',
  *   _props: { class: '' },
  *   _children: []
  * }
@@ -73,52 +76,83 @@ export function context(isSvg) {
  * @return {Node} Returns the `root`.
  */
 export function hydrate(delta, root) {
-  const children = Array.isArray(delta) ? delta : delta._children;
-  const args = [root, delta._props, children];
-  const isSvg = delta._isSvg;
+  const args = [root, delta._props, delta._children || delta];
   let el;
-  let childNodes;
 
   function item(arg) {
     if (arg instanceof Node) {
       el = arg;
       // Keep a child pointer for multiple hydrate calls per element.
       el._index = el._index || 0;
-      // Make a copy of the current child tree.
-      childNodes = EMPTY_ARR.slice.call(el.childNodes);
     } else if (Array.isArray(arg)) {
       arg.forEach(item);
     } else if (el) {
-      let target = getChildNode(childNodes, el._index);
+      let target = getChildNode(el, el._index);
       if (target) {
+        // Skip placeholder underscore.
         if (arg === _) {
           el._index++;
-        } else if (typeof arg === 'string') {
-          if (target.data !== arg) target.data = arg;
-          el._index++;
         } else if (typeof arg === 'object') {
-          if (arg._children) {
+          if (arg.type === null) {
+            el._index++;
+
+            // This is a text vnode, add noskip so spaces don't get skipped.
+            target._noskip = true;
+
+            // Leave whitespace alone.
+            if (target.data.trim() !== arg._props.trim()) {
+              if (
+                target.nodeType === 3 &&
+                arg._parent._children.length !== filterChildNodes(el).length
+              ) {
+                // If the parent's virtual children length don't match the DOM's,
+                // it's probably adjacent text nodes stuck together. Split them.
+                target.splitText(
+                  target.data.indexOf(arg._props) + arg._props.length
+                );
+              }
+              // Leave whitespace alone.
+              if (target.data.trim() !== arg._props.trim()) {
+                target.data = arg._props;
+              }
+            }
+          } else if (arg.type) {
             hydrate(arg, target);
             el._index++;
           } else {
             for (let name in arg) {
-              api.property(name, arg[name], el, isSvg);
+              api.property(name, arg[name], el, delta._isSvg);
             }
           }
         } else if (typeof arg === 'function') {
           let hydrated;
           let current = target.data;
+          let prefix = '';
           let marker;
           let startNode;
           api.subscribe(function() {
             isHydrated = hydrated;
 
             let result = arg();
+            const isStringable =
+              typeof result === 'string' || typeof result === 'number';
+            result = isStringable ? prefix + result : result;
             if (hydrated) {
               current = api.insert(el, result, marker, current, startNode);
             } else {
-              if (typeof result === 'string' || typeof result === 'number') {
+              if (isStringable) {
                 el._index++;
+
+                if (
+                  target.nodeType === 3 &&
+                  arg._parent._children.length !== filterChildNodes(el).length
+                ) {
+                  // If the parent's virtual children length don't match the DOM's,
+                  // it's probably adjacent text nodes stuck together. Split them.
+                  target.splitText(target.data.indexOf(result) + result.length);
+                  // Leave prefix whitespace intact.
+                  prefix = current.match(/^\s*/)[0];
+                }
               } else {
                 if (Array.isArray(result)) {
                   startNode = target;
@@ -131,7 +165,7 @@ export function hydrate(delta, root) {
               // IE9 requires an explicit `null` as second argument.
               marker = el.insertBefore(
                 document.createTextNode(''),
-                getChildNode(childNodes, el._index) || null
+                getChildNode(el, el._index) || null
               );
             }
 
@@ -139,9 +173,6 @@ export function hydrate(delta, root) {
             hydrated = true;
           });
         }
-      } else {
-        // Adjecent text cannot be walked, fallback to creation.
-        (isSvg ? hs : h)(el, arg);
       }
     }
   }
@@ -151,7 +182,14 @@ export function hydrate(delta, root) {
   return el;
 }
 
-function getChildNode(childNodes, index) {
-  return childNodes
-    .filter(child => child.nodeType !== 3 || child.data.trim())[index];
+function filterChildNodes(parent) {
+  return EMPTY_ARR.slice
+    .call(parent.childNodes)
+    .filter(
+      child => child.nodeType !== 3 || child.data.trim() || child._noskip
+    );
+}
+
+function getChildNode(parent, index) {
+  return filterChildNodes(parent)[index];
 }

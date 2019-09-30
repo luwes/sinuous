@@ -44,18 +44,6 @@ test('hydrate works with nested children and patches text', function(t) {
     </div>
   `;
 
-  t.deepEqual(delta, {
-    _tag: 'div',
-    _props: { class: 'container' },
-    _children: [
-      { _tag: 'h1', _children: ['Banana milkshake'] },
-      { _tag: 'div', _props: { class: 'main' }, _children: [
-        { _tag: 'button', _children: ['Cherry'] },
-        'Text node patch'
-      ] }
-    ]
-  });
-
   const div = hydrate(delta, document.querySelector('div'));
 
   t.equal(
@@ -280,45 +268,6 @@ test('hydrate can add a fragment from function', function(t) {
   t.end();
 });
 
-test('hydrate can add conditional observables in content', function(t) {
-  document.body.innerHTML = `
-    <div class="hamburger">
-      Pickle
-      Ketchup
-      Cheese
-      Ham
-    </div>
-  `;
-
-  const sauce = observable('');
-  const delta = html`
-    <div class="hamburger">
-      Pickle
-      ${() => sauce() === 'mayo' ? ' Mayo ' : ' Ketchup '}
-      Cheese
-      Ham
-    </div>
-  `;
-  const div = hydrate(delta, document.querySelector('div'));
-
-  t.equal(
-    div.outerHTML,
-    `<div class="hamburger">Pickle Ketchup Cheese
-      Ham</div>`
-  );
-
-  sauce('mayo');
-
-  t.equal(
-    div.outerHTML,
-    `<div class="hamburger">Pickle Mayo Cheese
-      Ham</div>`
-  );
-
-  div.parentNode.removeChild(div);
-  t.end();
-});
-
 test('hydrates adjacent text nodes', function(t) {
   document.body.innerHTML = `
     <div>Hi John Snow<span>!</span></div>
@@ -334,6 +283,89 @@ test('hydrates adjacent text nodes', function(t) {
   t.equal(
     div.outerHTML,
     `<div>Hi John Snow<span>!</span></div>`
+  );
+
+  name('Wesley Luyten');
+
+  t.equal(
+    div.outerHTML,
+    `<div>Hi Wesley Luyten<span>!</span></div>`
+  );
+
+  div.parentNode.removeChild(div);
+  t.end();
+});
+
+test('hydrate can add conditional observables in content', function(t) {
+  document.body.innerHTML = `
+    <div class="hamburger">Pickle Ketchup Cheese Ham</div>
+  `;
+
+  const sauce = observable('');
+  const delta = html`
+    <div class="hamburger">
+      Pickle ${() => sauce() === 'mayo' ? 'Mayo' : 'Ketchup'} Cheese Ham
+    </div>
+  `;
+  const div = hydrate(delta, document.querySelector('div'));
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">Pickle Ketchup Cheese Ham</div>`
+  );
+
+  sauce('mayo');
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">Pickle Mayo Cheese Ham</div>`
+  );
+
+  div.parentNode.removeChild(div);
+  t.end();
+});
+
+test('hydrate can add conditional observables in content w/ newlines', function(t) {
+  document.body.innerHTML = `
+    <div class="hamburger">
+      Pickle
+      Ketchup
+      Cheese
+      Ham
+    </div>
+  `;
+
+  const sauce = observable('');
+  const delta = html`
+    <div class="hamburger">
+      Pickle
+      ${() => sauce() === 'mayo' ? 'Mayo' : 'Ketchup'}
+      Cheese
+      Ham
+    </div>
+  `;
+  const div = hydrate(delta, document.querySelector('div'));
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">
+      Pickle
+      Ketchup
+      Cheese
+      Ham
+    </div>`
+  );
+
+  sauce('mayo');
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">
+      Pickle
+      Mayo
+      Cheese
+      Ham
+    </div>`
   );
 
   div.parentNode.removeChild(div);
