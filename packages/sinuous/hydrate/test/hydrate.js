@@ -1,7 +1,6 @@
 import test from 'tape';
 import spy from 'ispy';
-import { normalizeSvg } from '../../test/_utils.js';
-import { h, hs, html, svg, hydrate, _ } from 'sinuous/hydrate';
+import { h, html, hydrate, _ } from 'sinuous/hydrate';
 import { observable } from 'sinuous';
 
 test('hydrate adds event listeners', function(t) {
@@ -44,18 +43,6 @@ test('hydrate works with nested children and patches text', function(t) {
       </div>
     </div>
   `;
-
-  t.deepEqual(delta, {
-    _tag: 'div',
-    _props: { class: 'container' },
-    _children: [
-      { _tag: 'h1', _children: ['Banana milkshake'] },
-      { _tag: 'div', _props: { class: 'main' }, _children: [
-        { _tag: 'button', _children: ['Cherry'] },
-        'Text node patch'
-      ] }
-    ]
-  });
 
   const div = hydrate(delta, document.querySelector('div'));
 
@@ -199,69 +186,6 @@ test('hydrate works with a placeholder character', function(t) {
   t.end();
 });
 
-test('supports hydrating SVG via hyperscript', function(t) {
-  document.body.innerHTML = `<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>`;
-
-  const delta = hs(
-    'svg',
-    { class: 'redbox', viewBox: '0 0 100 100' },
-    hs('path', { d: 'M 8.74211 7.70899' })
-  );
-
-  const svg = hydrate(delta, document.querySelector('svg'));
-
-  t.equal(
-    normalizeSvg(svg),
-    '<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>'
-  );
-  t.end();
-});
-
-test('supports hydrating SVG', function(t) {
-  document.body.innerHTML = `<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>`;
-
-  const delta = svg`
-    <svg class="redbox" viewBox="0 0 100 100">
-      <path d="M 8.74211 7.70899"></path>
-    </svg>
-  `;
-
-  const el = hydrate(delta, document.querySelector('svg'));
-
-  t.equal(
-    normalizeSvg(el),
-    '<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>'
-  );
-  t.end();
-});
-
-test('can hydrate an array of svg elements', function(t) {
-  document.body.innerHTML = `<svg><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle><rect x="0"></rect><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle></svg>`;
-
-  const circles = observable([1, 2, 3]);
-  const delta = svg`<svg>
-    ${() => circles().map(c => svg`<circle cx="0" cy="${c}" r="10" />`)}
-    <rect x="0"></rect>
-    ${() => circles().map(c => svg`<circle cx="0" cy="${c}" r="10" />`)}
-  </svg>`;
-
-  const el = hydrate(delta, document.querySelector('svg'));
-
-  t.equal(
-    normalizeSvg(el),
-    '<svg><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle><rect x="0"></rect><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle></svg>'
-  );
-
-  circles([1, 2, 3, 4]);
-
-  t.equal(
-    normalizeSvg(el),
-    '<svg><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle><circle cx="0" cy="4" r="10"></circle><rect x="0"></rect><circle cx="0" cy="1" r="10"></circle><circle cx="0" cy="2" r="10"></circle><circle cx="0" cy="3" r="10"></circle><circle cx="0" cy="4" r="10"></circle></svg>'
-  );
-
-  t.end();
-});
-
 test('hydrate can add a node from function', function(t) {
   document.body.innerHTML = `
     <div>
@@ -344,7 +268,64 @@ test('hydrate can add a fragment from function', function(t) {
   t.end();
 });
 
+test('hydrates adjacent text nodes', function(t) {
+  document.body.innerHTML = `
+    <div>Hi John Snow<span>!</span></div>
+  `;
+
+  const greeting = observable('Hi');
+  const name = observable('John Snow');
+  const delta = html`
+    <div>${greeting} ${name}<span>!</span></div>
+  `;
+  const div = hydrate(delta, document.querySelector('div'));
+
+  t.equal(
+    div.outerHTML,
+    `<div>Hi John Snow<span>!</span></div>`
+  );
+
+  name('Wesley Luyten');
+
+  t.equal(
+    div.outerHTML,
+    `<div>Hi Wesley Luyten<span>!</span></div>`
+  );
+
+  div.parentNode.removeChild(div);
+  t.end();
+});
+
 test('hydrate can add conditional observables in content', function(t) {
+  document.body.innerHTML = `
+    <div class="hamburger">Pickle Ketchup Cheese Ham</div>
+  `;
+
+  const sauce = observable('');
+  const delta = html`
+    <div class="hamburger">
+      Pickle ${() => sauce() === 'mayo' ? 'Mayo' : 'Ketchup'} Cheese Ham
+    </div>
+  `;
+  const div = hydrate(delta, document.querySelector('div'));
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">Pickle Ketchup Cheese Ham</div>`
+  );
+
+  sauce('mayo');
+
+  t.equal(
+    div.outerHTML,
+    `<div class="hamburger">Pickle Mayo Cheese Ham</div>`
+  );
+
+  div.parentNode.removeChild(div);
+  t.end();
+});
+
+test('hydrate can add conditional observables in content w/ newlines', function(t) {
   document.body.innerHTML = `
     <div class="hamburger">
       Pickle
@@ -358,7 +339,7 @@ test('hydrate can add conditional observables in content', function(t) {
   const delta = html`
     <div class="hamburger">
       Pickle
-      ${() => sauce() === 'mayo' ? ' Mayo ' : ' Ketchup '}
+      ${() => sauce() === 'mayo' ? 'Mayo' : 'Ketchup'}
       Cheese
       Ham
     </div>
@@ -367,16 +348,24 @@ test('hydrate can add conditional observables in content', function(t) {
 
   t.equal(
     div.outerHTML,
-    `<div class="hamburger">Pickle Ketchup Cheese
-      Ham</div>`
+    `<div class="hamburger">
+      Pickle
+      Ketchup
+      Cheese
+      Ham
+    </div>`
   );
 
   sauce('mayo');
 
   t.equal(
     div.outerHTML,
-    `<div class="hamburger">Pickle Mayo Cheese
-      Ham</div>`
+    `<div class="hamburger">
+      Pickle
+      Mayo
+      Cheese
+      Ham
+    </div>`
   );
 
   div.parentNode.removeChild(div);
