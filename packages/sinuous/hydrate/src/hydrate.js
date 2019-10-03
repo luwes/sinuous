@@ -23,14 +23,8 @@ export function context(isSvg) {
     function item(arg) {
       if (isSvg) tree._isSvg = isSvg;
       if (arg == null);
-      else if (arg === _) {
+      else if (arg === _ || typeof arg === 'function') {
         addChild(tree, arg);
-      } else if (typeof arg === 'string') {
-        if (tree.type) {
-          addChild(tree, { type: null, _props: arg });
-        } else {
-          tree.type = arg;
-        }
       } else if (Array.isArray(arg)) {
         arg.forEach(item);
       } else if (typeof arg === 'object') {
@@ -39,8 +33,13 @@ export function context(isSvg) {
         } else {
           tree._props = arg;
         }
-      } else if (typeof arg === 'function') {
-        addChild(tree, arg);
+      } else {
+        // The rest is made into a string.
+        if (tree.type) {
+          addChild(tree, { type: null, _props: arg });
+        } else {
+          tree.type = arg;
+        }
       }
     }
 
@@ -53,7 +52,7 @@ export function context(isSvg) {
 
     return tree.type
       ? tree
-      : tree._children[1]
+      : tree._children.length > 1
       ? tree._children
       : tree._children[0];
   }
@@ -102,7 +101,6 @@ export function hydrate(delta, root) {
             // Leave whitespace alone.
             if (target.data.trim() !== arg._props.trim()) {
               if (
-                target.nodeType === 3 &&
                 arg._parent._children.length !== filterChildNodes(el).length
               ) {
                 // If the parent's virtual children length don't match the DOM's,
@@ -144,7 +142,6 @@ export function hydrate(delta, root) {
                 el._index++;
 
                 if (
-                  target.nodeType === 3 &&
                   arg._parent._children.length !== filterChildNodes(el).length
                 ) {
                   // If the parent's virtual children length don't match the DOM's,
