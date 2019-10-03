@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.15.3 - 2019-10-03
+
+### Fixed
+
+- Added better support for adjacent text nodes in `hydrate`.
+
 ## 0.15.2 - 2019-09-28
 
 ### Fixed
