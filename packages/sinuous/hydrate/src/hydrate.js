@@ -87,7 +87,7 @@ export function hydrate(delta, root) {
     } else if (Array.isArray(arg)) {
       arg.forEach(item);
     } else if (el) {
-      let target = getChildNode(el, el._index);
+      let target = filterChildNodes(el)[el._index];
       if (target) {
         // Skip placeholder underscore.
         if (arg === _) {
@@ -165,7 +165,7 @@ export function hydrate(delta, root) {
               // IE9 requires an explicit `null` as second argument.
               marker = el.insertBefore(
                 document.createTextNode(''),
-                getChildNode(el, el._index) || null
+                filterChildNodes(el)[el._index] || null
               );
             }
 
@@ -182,14 +182,23 @@ export function hydrate(delta, root) {
   return el;
 }
 
+/**
+ * Filter out whitespace text nodes unless it has a noskip indicator.
+ *
+ * Don't use `parent.childNodes` here to keep support for IE9, it has a
+ * bug where `childNodes` returns incorrectly after `child.splitText()`.
+ *
+ * @param  {Node} parent
+ * @return {Array}
+ */
 function filterChildNodes(parent) {
-  return EMPTY_ARR.slice
-    .call(parent.childNodes)
-    .filter(
-      child => child.nodeType !== 3 || child.data.trim() || child._noskip
-    );
-}
-
-function getChildNode(parent, index) {
-  return filterChildNodes(parent)[index];
+  let el = parent.firstChild;
+  let arr = [];
+  while (el) {
+    if (el.nodeType !== 3 || el.data.trim() || el._noskip) {
+      arr.push(el);
+    }
+    el = el.nextSibling;
+  }
+  return arr;
 }
