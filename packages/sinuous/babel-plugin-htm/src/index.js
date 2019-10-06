@@ -17,6 +17,55 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   const inlineVNodes = options.monomorphic || pragma===false;
   let currentPragma;
 
+  // The tagged template tag function name we're looking for.
+  // This is static because it's generally assigned via htm.bind(h),
+  // which could be imported from elsewhere, making tracking impossible.
+  const htmlName = options.tag || '/html|svg/';
+
+  function TaggedTemplateExpression(path, state) {
+    const tag = path.node.tag.name;
+    let match = tag === htmlName;
+    let matchName = htmlName;
+    if (htmlName[0]==='/') {
+      match = tag.match(patternStringToRegExp(htmlName));
+      matchName = match && match[0];
+    }
+
+    if (match) {
+      const matchIndex = htmlName.replace(/\//g, '').split('|').indexOf(matchName);
+      currentPragma = pragma && dottedIdentifier(pragma.split('|')[matchIndex]);
+
+      const statics = path.node.quasi.quasis.map(e => e.value.raw);
+      const expr = path.node.quasi.expressions;
+
+      let tree = treeify(build(statics), expr);
+
+      // Turn array expression in Array so it can be converted below
+      // to a pragma call expression for fragments.
+      if (t.isArrayExpression(tree)) {
+        tree = tree.elements;
+      }
+
+      const node = Array.isArray(tree)
+        ? t.callExpression(currentPragma, [
+            t.arrayExpression(tree.map(root => transform(root, state)))
+          ])
+        : t.isNode(tree) || typeof tree === 'string'
+        ? t.callExpression(currentPragma, [
+            t.arrayExpression([transform(tree, state)])
+          ])
+        : transform(tree, state);
+
+      path.replaceWith(node);
+    }
+  }
+
+  function patternStringToRegExp(str) {
+    const parts = str.split('/').slice(1);
+    const end = parts.pop() || '';
+    return new RegExp(parts.join('/'), end);
+  }
+
   function dottedIdentifier(keypath) {
     const path = keypath.split('.');
     let out;
@@ -27,35 +76,16 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     return out;
   }
 
-  function patternStringToRegExp(str) {
-    const parts = str.split('/').slice(1);
-    const end = parts.pop() || '';
-    return new RegExp(parts.join('/'), end);
-  }
+  function transform(node, state) {
+    if (t.isNode(node)) return node;
+    if (typeof node === 'string') return stringValue(node);
+    if (node === undefined) return t.identifier('undefined');
 
-  function propertyName(key) {
-    if (t.isValidIdentifier(key)) {
-      return t.identifier(key);
-    }
-    return t.stringLiteral(key);
-  }
-
-  function objectProperties(obj) {
-    return Object.keys(obj).map(key => {
-      const values = obj[key].map(valueOrNode =>
-        t.isNode(valueOrNode) ? valueOrNode : t.valueToNode(valueOrNode)
-      );
-
-      let node = values[0];
-      if (values.length > 1 && !t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
-        node = t.binaryExpression('+', t.stringLiteral(''), node);
-      }
-      values.slice(1).forEach(value => {
-        node = t.binaryExpression('+', node, value);
-      });
-
-      return t.objectProperty(propertyName(key), node);
-    });
+    const { tag, props, children } = node;
+    const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
+    const newProps = spreadNode(props, state);
+    const newChildren = t.arrayExpression((children || []).map(child => transform(child, state)));
+    return createVNode(newTag, newProps, newChildren);
   }
 
   function stringValue(str) {
@@ -69,35 +99,6 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       ]);
     }
     return t.stringLiteral(str);
-  }
-
-  function createVNode(tag, props, children) {
-    // Never pass children=[[]].
-    if (
-      children.elements.length === 1 &&
-      t.isArrayExpression(children.elements[0]) &&
-      children.elements[0].elements.length === 0
-    ) {
-      children = children.elements[0];
-    }
-
-    if (inlineVNodes) {
-      return t.objectExpression([
-        options.monomorphic && t.objectProperty(propertyName('type'), t.numericLiteral(1)),
-        t.objectProperty(propertyName('tag'), tag),
-        t.objectProperty(propertyName('props'), props),
-        t.objectProperty(propertyName('children'), children),
-        options.monomorphic && t.objectProperty(propertyName('text'), t.nullLiteral())
-      ].filter(Boolean));
-    }
-
-    // Passing `{variableArity:false}` always produces `h(tag, props, children)` - where `children` is always an Array.
-    // Otherwise, the default is `h(tag, props, ...children)`.
-    if (options.variableArity !== false) {
-      children = children.elements;
-    }
-
-    return t.callExpression(currentPragma, [tag, props].concat(children));
   }
 
   function spreadNode(args, state) {
@@ -138,62 +139,64 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     return t.isNode(props) ? props : t.objectExpression(objectProperties(props));
   }
 
-  function transform(node, state) {
-    if (t.isNode(node)) return node;
-    if (typeof node === 'string') return stringValue(node);
-    if (node === undefined) return t.identifier('undefined');
+  function objectProperties(obj) {
+    return Object.keys(obj).map(key => {
+      const values = obj[key].map(valueOrNode =>
+        t.isNode(valueOrNode) ? valueOrNode : t.valueToNode(valueOrNode)
+      );
 
-    const { tag, props, children } = node;
-    const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
-    const newProps = spreadNode(props, state);
-    const newChildren = t.arrayExpression((children || []).map(child => transform(child, state)));
-    return createVNode(newTag, newProps, newChildren);
+      let node = values[0];
+      if (values.length > 1 && !t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
+        node = t.binaryExpression('+', t.stringLiteral(''), node);
+      }
+      values.slice(1).forEach(value => {
+        node = t.binaryExpression('+', node, value);
+      });
+
+      return t.objectProperty(propertyName(key), node);
+    });
   }
 
-  // The tagged template tag function name we're looking for.
-  // This is static because it's generally assigned via htm.bind(h),
-  // which could be imported from elsewhere, making tracking impossible.
-  const htmlName = options.tag || '/html|svg/';
+  function createVNode(tag, props, children) {
+    // Never pass children=[[]].
+    if (
+      children.elements.length === 1 &&
+      t.isArrayExpression(children.elements[0]) &&
+      children.elements[0].elements.length === 0
+    ) {
+      children = children.elements[0];
+    }
+
+    if (inlineVNodes) {
+      return t.objectExpression([
+        options.monomorphic && t.objectProperty(propertyName('type'), t.numericLiteral(1)),
+        t.objectProperty(propertyName('tag'), tag),
+        t.objectProperty(propertyName('props'), props),
+        t.objectProperty(propertyName('children'), children),
+        options.monomorphic && t.objectProperty(propertyName('text'), t.nullLiteral())
+      ].filter(Boolean));
+    }
+
+    // Passing `{variableArity:false}` always produces `h(tag, props, children)` - where `children` is always an Array.
+    // Otherwise, the default is `h(tag, props, ...children)`.
+    if (options.variableArity !== false) {
+      children = children.elements;
+    }
+
+    return t.callExpression(currentPragma, [tag, props].concat(children));
+  }
+
+  function propertyName(key) {
+    if (t.isValidIdentifier(key)) {
+      return t.identifier(key);
+    }
+    return t.stringLiteral(key);
+  }
+
   return {
     name: 'htm',
     visitor: {
-      TaggedTemplateExpression(path, state) {
-        const tag = path.node.tag.name;
-        let match = tag === htmlName;
-        let matchName = htmlName;
-        if (htmlName[0]==='/') {
-          match = tag.match(patternStringToRegExp(htmlName));
-          matchName = match && match[0];
-        }
-
-        if (match) {
-          const matchIndex = htmlName.replace(/\//g, '').split('|').indexOf(matchName);
-          currentPragma = dottedIdentifier(pragma.split('|')[matchIndex]);
-
-          const statics = path.node.quasi.quasis.map(e => e.value.raw);
-          const expr = path.node.quasi.expressions;
-
-          let tree = treeify(build(statics), expr);
-
-          // Turn array expression in Array so it can be converted below
-          // to a pragma call expression for fragments.
-          if (t.isArrayExpression(tree)) {
-            tree = tree.elements;
-          }
-
-          const node = Array.isArray(tree)
-            ? t.callExpression(currentPragma, [
-                t.arrayExpression(tree.map(root => transform(root, state)))
-              ])
-            : t.isNode(tree)
-            ? t.callExpression(currentPragma, [
-                t.arrayExpression([transform(tree, state)])
-              ])
-            : transform(tree, state);
-
-          path.replaceWith(node);
-        }
-      }
+      TaggedTemplateExpression
     }
   };
 }

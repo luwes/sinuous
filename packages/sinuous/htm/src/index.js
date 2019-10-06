@@ -14,15 +14,15 @@
 import { MINI } from './constants.js';
 import { build, evaluate } from './build.js';
 
-const getCacheMap = (statics) => {
+const getCacheMap = statics => {
   let tpl = CACHE.get(statics);
   if (!tpl) {
-    CACHE.set(statics, tpl = build(statics));
+    CACHE.set(statics, (tpl = build(statics)));
   }
   return tpl;
 };
 
-const getCacheKeyed = (statics) => {
+const getCacheKeyed = statics => {
   let key = '';
   for (let i = 0; i < statics.length; i++) {
     key += statics[i].length + '-' + statics[i];
@@ -37,8 +37,13 @@ const getCache = USE_MAP ? getCacheMap : getCacheKeyed;
 const cached = function(statics) {
   const children = evaluate(this, getCache(statics), arguments, []);
   const result = children.length > 1 ? children : children[0];
-  return Array.isArray(result) ? this(result)
-    : result instanceof Node ? result : this([result]);
+  if (result) {
+    return Array.isArray(result)
+      ? this(result)
+      : typeof result === 'object'
+      ? result
+      : this([result]);
+  }
 };
 
 export default MINI ? build : cached;
