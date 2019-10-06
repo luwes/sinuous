@@ -50,7 +50,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         ? t.callExpression(currentPragma, [
             t.arrayExpression(tree.map(root => transform(root, state)))
           ])
-        : t.isNode(tree)
+        : t.isNode(tree) || typeof tree === 'string'
         ? t.callExpression(currentPragma, [
             t.arrayExpression([transform(tree, state)])
           ])
