@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.16.0 - 2019-10-06
+
+### Added
+
+- Added partial attribute support [#40](https://github.com/luwes/sinuous/pull/40)
+
 ## 0.15.3 - 2019-10-03
 
 ### Fixed
