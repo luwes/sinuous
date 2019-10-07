@@ -72,6 +72,7 @@ export const treeify = (built, fields) => {
 
 
 export const evaluate = (h, built, fields, args) => {
+  let propBody = {};
   for (let i = 1; i < built.length; i++) {
     const field = built[i];
     const value = typeof field === 'number' ? fields[field] : field;
@@ -87,7 +88,27 @@ export const evaluate = (h, built, fields, args) => {
       (args[1] = args[1] || {})[built[++i]] = value;
     }
     else if (type === PROP_APPEND) {
-      args[1][built[++i]] += (value + '');
+      let key = built[++i];
+      let prev = (args[1] = args[1] || {})[key];
+      let parts = propBody[key];
+
+      if (!parts && (typeof value === 'function' || typeof prev === 'function')) {
+        parts = (prev && [prev]) || [];
+
+        args[1][key] = function() {
+          let prop = '';
+          for (var j = 0; j < parts.length; j++) {
+            prop += typeof parts[j] === 'function' ? parts[j]() : parts[j];
+          }
+          return prop;
+        };
+      }
+
+      if (parts) {
+        parts.push(value);
+      } else {
+        args[1][key] += (value + '');
+      }
     }
     else if (type) {
       // code === CHILD_RECURSE

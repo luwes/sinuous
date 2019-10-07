@@ -246,6 +246,42 @@ test('prop with multiple static and dynamic values get concatenated as strings',
   t.end();
 });
 
+test('prop with multiple static and observables', t => {
+  const observableMock = () => 'foo';
+
+  t.equal(
+    html`
+      <a href="before${observableMock}after" />
+    `.props.href(),
+    'beforefooafter'
+  );
+  t.equal(
+    html`
+      <a href="${function() { return 'foo'; }}${1}" />
+    `.props.href(),
+    'foo1'
+  );
+  t.equal(
+    html`
+      <a href="${1}between${observableMock}" />
+    `.props.href(),
+    '1betweenfoo'
+  );
+  t.equal(
+    html`
+      <a href=/before/${() => 'foo'}/after />
+    `.props.href(),
+    '/before/foo/after'
+  );
+  t.equal(
+    html`
+      <a href=/before/${observableMock}/>
+    `.props.href(),
+    '/before/foo'
+  );
+  t.end();
+});
+
 test('spread props', t => {
   t.deepEqual(
     html`
