@@ -17,10 +17,10 @@ const isLoading = o(false);
 const isPlotting = o(false);
 
 function init() {
-  // Paritial attributes would be awesome.
+  const isLoadingClass = () => isLoading() ? ' is-loading' : '';
   const delta = tree`
     <div>
-      <div class="${() => 'select is-small' + (isLoading() ? ' is-loading' : '')}">
+      <div class="select is-small${isLoadingClass}">
         <select onchange="${(e) => url(e.target.value)}" />
       </div>
     </div>
