@@ -146,15 +146,39 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       );
 
       let node = values[0];
-      if (values.length > 1 && !t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
-        node = t.binaryExpression('+', t.stringLiteral(''), node);
+      if (values.length > 1) {
+        if (!t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
+          node = t.binaryExpression('+', t.stringLiteral(''), concatFunctionNode(node));
+        }
+        values.slice(1).forEach(value => {
+          node = t.binaryExpression('+', node, concatFunctionNode(value));
+        });
+        if (values.some(isFunctionLike)) {
+          node = t.functionExpression(null, [], t.blockStatement([
+            t.returnStatement(node)
+          ]));
+        }
       }
-      values.slice(1).forEach(value => {
-        node = t.binaryExpression('+', node, value);
-      });
 
       return t.objectProperty(propertyName(key), node);
     });
+  }
+
+  function isFunctionLike(node) {
+    return (
+      t.isIdentifier(node) ||
+      t.isFunctionExpression(node) ||
+      t.isArrowFunctionExpression(node)
+    );
+  }
+
+  function concatFunctionNode(node) {
+    if (isFunctionLike(node)) {
+      const typeofNode = t.unaryExpression('typeof', node);
+      const isNodeFunction = t.binaryExpression('===', typeofNode, t.stringLiteral('function'));
+      return t.conditionalExpression(isNodeFunction, t.callExpression(node, []), node);
+    }
+    return node;
   }
 
   function createVNode(tag, props, children) {

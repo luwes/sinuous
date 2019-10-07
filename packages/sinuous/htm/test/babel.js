@@ -422,7 +422,7 @@ describe('htm/babel', () => {
     ), {
       ...options,
       plugins: [htmBabelPlugin]
-   });
-   eval(code);
+    });
+    eval(code);
   });
 });
