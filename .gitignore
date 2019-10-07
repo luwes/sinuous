@@ -11,7 +11,7 @@ dist
 !/bench/css/bootstrap/dist/
 packages/sinuous/module/
 
-/bench/results.json
+/bench/results/results.json
 /bench/yarn.lock
 /bench/trace.json
 
