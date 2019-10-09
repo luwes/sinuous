@@ -29,15 +29,44 @@ It was built with these ideas in mind.
 
 ### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
+Sinuous creates DOM elements via hyperscript (`h`) calls. This allows the developer more freedom in the choice of the view syntax. Tagged templates allow for the HTML to be transformed to `h` calls at runtime by the ` html`` ` tag or at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). JSX needs to transformed at build time with `@babel/plugin-transform-react-jsx`.
+
+#### Tagged template
+
 ```js
 import { observable, html } from 'sinuous';
 
 const counter = observable(0);
-const view = () => {
-  return html`
-    <div>Counter ${counter}</div>
-  `;
-};
+const view = () => html`
+  <div>Counter ${counter}</div>
+`;
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+#### Hyperscript
+
+```js
+import { observable, h } from 'sinuous';
+
+const counter = observable(0);
+const view = () => h('div', 'Counter ', counter);
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+#### JSX
+
+```jsx
+/** @jsx h */
+import { observable, h } from 'sinuous';
+
+const counter = observable(0);
+const view = () => (
+  <div>Counter {counter}</div>
+);
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
