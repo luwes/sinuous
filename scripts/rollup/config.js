@@ -97,8 +97,9 @@ function getConfig(options) {
         terser({
           sourcemap: true,
           warnings: true,
+          keep_fnames: /observable/, // Terser bug with naming functions
           compress: {
-            passes: 10
+            passes: 2
           },
           mangle: {
             properties: {
