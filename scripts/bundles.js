@@ -118,6 +118,16 @@ export const fixtures = [
   },
   {
     formats: [IIFE],
+    global: 'sinuousHelloJsx',
+    name: 'hello',
+    input: 'site/content/examples/hello-jsx/src/hello.js',
+    gzip: true,
+    babel: {
+      plugins: ['@babel/plugin-transform-react-jsx']
+    }
+  },
+  {
+    formats: [IIFE],
     global: 'sinuousCounter',
     name: 'counter',
     input: 'site/content/examples/counter/src/counter.js',

@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.16.1 - 2019-11-02
+
+### Fixed
+
+- Fixed a minifying error caused by a Terser bug. 
+  See [`scripts/rollup/config.js`](scripts/rollup/config.js)
+
 ## 0.16.0 - 2019-10-06
 
 ### Added

@@ -3,6 +3,55 @@ import spy from 'ispy';
 import { h, html, hydrate, _ } from 'sinuous/hydrate';
 import { observable } from 'sinuous';
 
+test('hydrate w/ observables bug', function(t) {
+  document.body.innerHTML = `
+    <div class="box level">
+      <div class="level-item">
+        <button class="button">-</button>
+      </div>
+      <div class="level-item">
+        <h1 class="title">0</h1>
+      </div>
+      <div class="level-item">
+        <button class="button">+</button>
+      </div>
+    </div>
+  `;
+
+  const count = observable(0);
+  const down = spy();
+  down.delegate = () => count(count() - 1);
+  const up = spy();
+  up.delegate = () => count(count() + 1);
+
+  const delta = html`
+    <div class="box level">
+      <div class="level-item">
+        <button class="button" onclick="${down}">
+          -
+        </button>
+      </div>
+      <div class="level-item">
+        <h1 class="title">${count}</h1>
+      </div>
+      <div class="level-item">
+        <button class="button" onclick="${up}">
+          +
+        </button>
+      </div>
+    </div>
+  `;
+
+  const box = hydrate(delta, document.querySelector('.box'));
+
+  box.querySelectorAll('.button')[0].click();
+  t.equal(down.callCount, 1, 'click called');
+
+  t.equal(box.querySelector('h1').textContent, '-1');
+
+  t.end();
+});
+
 test('hydrate adds event listeners', function(t) {
   document.body.innerHTML = `
     <div>
