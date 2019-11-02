@@ -6723,9 +6723,9 @@ sinuous@0.16.0:
   integrity sha512-US97Dx8JGd7Sn1hOVxGqVRt7E6auy3vBMz0OwsP8UbLCflANhScNBPLe0r5CWIHS2M/ZEJkJUKIsiJCDW34/iQ==
 
 sinuous@^0.16.0:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.16.1.tgz#b8753a43307d963858a4bfa07c498541343c7f7c"
-  integrity sha512-Ayg2IacnHbOrglFMeoDSeIqVV1AHlQN768pD+u/0b/pj7CRtsx8H8PSbMy7+ilsr5mm9GEaVlT9YO/LxfhLDGA==
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.16.2.tgz#914146fbb5e1e691439b7b3593f6e6c5a9c937c5"
+  integrity sha512-cqFjUpgNhjydlAiPZEyl/TYrsni/Whi/W6CtBrUFar1/bMRDYfdZRLpaUvlTb4KhsTmPElyeoGLnph97icW/UQ==
 
 slash@^1.0.0:
   version "1.0.0"

@@ -3,7 +3,6 @@ import * as R from 'ramda';
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import { uglify } from 'rollup-plugin-uglify';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
 import replace from 'rollup-plugin-replace';
@@ -95,15 +94,15 @@ function getConfig(options) {
       nodeResolve(),
       [UMD, IIFE].includes(format) && babel(options.babel),
       [ESM, UMD, IIFE].includes(format) &&
-        // Use uglify for ES5 code, Terser has a bug that made the observable
-        // module throw an `i.t.has is not a function` TypeError.
-        ([UMD, IIFE].includes(format) ? uglify : terser)({
+        terser({
           sourcemap: true,
           warnings: true,
           compress: {
             passes: 2
           },
-          mangle: {
+          // Don't mangle UMD until this Terser bug is fixed.
+          // Observable module throws an `i.t.has is not a function` TypeError.
+          mangle: [ESM, IIFE].includes(format) && {
             properties: {
               regex: /^_/
             }
