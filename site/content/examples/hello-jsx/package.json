@@ -1,0 +1,12 @@
+{
+  "name": "sinuous-hello-jsx",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "sinuous": "0.16.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "eslint-plugin-react": "^7.16.0"
+  }
+}
