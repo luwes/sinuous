@@ -27,21 +27,65 @@ It was built with these ideas in mind.
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 
-### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+## In a nutshell
+
+### View syntax
+
+In contrast to some other UI libraries, a goal Sinuous strives for is to have good interoperability. Sinuous creates DOM elements via **hyperscript** `h` calls. This allows the developer more freedom in the choice of the view syntax.
+
+**Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
+at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). 
+
+**JSX** needs to transformed at build time with `@babel/plugin-transform-react-jsx`.
+
+**Handlebars/Mustache** is also possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](./issues/49).
+
+> Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+
+#### Tagged template (recommended)
 
 ```js
 import { observable, html } from 'sinuous';
 
 const counter = observable(0);
-const view = () => {
-  return html`
-    <div>Counter ${counter}</div>
-  `;
-};
+const view = () => html`
+  <div>Counter ${counter}</div>
+`;
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
+
+#### Hyperscript
+
+```js
+import { observable, h } from 'sinuous';
+
+const counter = observable(0);
+const view = () => h('div', 'Counter ', counter);
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+#### JSX
+
+```jsx
+/** @jsx h */
+import { observable, h } from 'sinuous';
+
+const counter = observable(0);
+const view = () => (
+  <div>Counter {counter}</div>
+);
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+### Hydrate
+
+
 
 ### Examples
 
