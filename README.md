@@ -27,11 +27,22 @@ It was built with these ideas in mind.
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 
-### Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+## In a nutshell
 
-Sinuous creates DOM elements via hyperscript (`h`) calls. This allows the developer more freedom in the choice of the view syntax. Tagged templates allow for the HTML to be transformed to `h` calls at runtime by the ` html`` ` tag or at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). JSX needs to transformed at build time with `@babel/plugin-transform-react-jsx`.
+### View syntax
 
-#### Tagged template
+In contrast to some other UI libraries, a goal Sinuous strives for is to have good interoperability. Sinuous creates DOM elements via **hyperscript** `h` calls. This allows the developer more freedom in the choice of the view syntax.
+
+**Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
+at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). 
+
+**JSX** needs to transformed at build time with `@babel/plugin-transform-react-jsx`.
+
+**Handlebars/Mustache** is also possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](./issues/49).
+
+> Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+
+#### Tagged template (recommended)
 
 ```js
 import { observable, html } from 'sinuous';
