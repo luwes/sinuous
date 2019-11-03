@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.16.3 - 2019-11-03
+
+### Added
+
+- Added sourcemaps to all bundles
+
 ## 0.16.2 - 2019-11-02
 ## 0.16.1 - 2019-11-02
 
