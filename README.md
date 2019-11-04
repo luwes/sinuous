@@ -36,9 +36,9 @@ In contrast to some other UI libraries, a goal Sinuous strives for is to have go
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). 
 
-**JSX** needs to transformed at build time with `@babel/plugin-transform-react-jsx`.
+**JSX** needs to transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx).
 
-**Handlebars/Mustache** is also possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](./issues/49).
+**Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
 > Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
 
@@ -81,6 +81,20 @@ const view = () => (
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
+```
+
+### Reactivity
+
+The Sinuous [`observable`](./packages/sinuous/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality.
+
+```js
+import { observable, computed, subscribe } from 'sinuous/observable';
+
+const length = observable(0);
+const squared = computed(() => Math.pow(length(), 2));
+
+subscribe(() => console.log(squared()));
+length(4); // => logs 16
 ```
 
 ### Examples
