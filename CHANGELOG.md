@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.17.0 - 2019-11-24
+
+### Added
+
+- Added implicit root selector to `hydrate`.
+
 ## 0.16.3 - 2019-11-03
 
 ### Added
