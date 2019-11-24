@@ -5078,6 +5078,11 @@ simple-concat@^1.0.0:
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
   integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
 
+sinuous@0.16.3:
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.16.3.tgz#ccaae5df97376b5edd71e3a6f7c50626545ed80f"
+  integrity sha512-+vArKbvO9M9Dw5rKR2LXUlSIgxgjs1V9ywI25AXgcYYpwcXcQy1JfiLH0I0KASXkf8BoLIN36hEhCuGSFTDERQ==
+
 size-plugin-core@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/size-plugin-core/-/size-plugin-core-0.0.6.tgz#9d717f0ff3649855a0d8c2e883b34dc42e2bb5ec"
