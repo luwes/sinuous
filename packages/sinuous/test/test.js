@@ -25,3 +25,4 @@ import '../map/mini/test/mini-basic.js';
 import '../template/test/template.js';
 import '../hydrate/test/hydrate.js';
 import '../hydrate/test/svg.js';
+import '../hydrate/test/selector.js';
