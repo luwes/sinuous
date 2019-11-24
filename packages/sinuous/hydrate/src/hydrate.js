@@ -71,10 +71,24 @@ export function context(isSvg) {
  * }
  *
  * @param  {object} delta
- * @param  {Node} root
+ * @param  {Node} [root]
  * @return {Node} Returns the `root`.
  */
 export function hydrate(delta, root) {
+  if (!root) {
+    let selector = '';
+    let prop;
+    if ((prop = delta._props.id)) {
+      selector = '#';
+    } else if ((prop = delta._props.class) || (prop = delta._props.className)) {
+      selector = '.';
+    }
+    selector += (typeof prop === 'function' ? prop() : prop)
+      .split(' ')
+      .join('.');
+    root = document.querySelector(selector);
+  }
+
   const args = [root, delta._props, delta._children || delta];
   let el;
 

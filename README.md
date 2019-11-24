@@ -40,7 +40,9 @@ at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
-> Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))
+---
+
+**Counter Example (_1.4kB gzip_) ([Codesandbox](https://codesandbox.io/s/sinuous-counter-z6k71))**
 
 #### Tagged template (recommended)
 
@@ -85,7 +87,9 @@ setInterval(() => counter(counter() + 1), 1000);
 
 ### Reactivity
 
-The Sinuous [`observable`](./packages/sinuous/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality.
+The Sinuous [`observable`](./packages/sinuous/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality. It works under this philosophy:
+
+*Anything that can be derived from the application state, should be derived. Automatically.*
 
 ```js
 import { observable, computed, subscribe } from 'sinuous/observable';
