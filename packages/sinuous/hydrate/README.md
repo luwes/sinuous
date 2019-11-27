@@ -65,29 +65,38 @@ Creates a virtual tree structure for SVG.
 
 ### _
 
-Placeholder for content in tags that is skipped.
+A placeholder for content in tags that get skipped. The placeholder prevents duplication of long static texts in JavaScript which would add unnecessary bytes to your bundle.
+
 For example:
 
 ```js
+import { hydrate, html, _ } from 'sinuous/hydrate';
+
 document.body.innerHTML = `
   <div class="container">
     <h1>Banana</h1>
     <div class="main">
-      <button>Cherry</button>
-      Text node
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+        ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+        aliquip ex ea commodo consequat. Duis aute irure dolor in 
+        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
+        culpa qui officia deserunt mollit anim id est laborum.
+      </p>
       <button class="btn">Bom</button>
     </div>
   </div>
 `;
 
-const tree = html`
-  <div>
+hydrate(html`
+  <div class="container">
     <h1>${_}</h1>
     <div>
-      <button>${_}</button>
-      ${_}
-      <button class="btn" onclick=${click}>Bom</button>
+      <p>${_}</p>
+      <button onclick=${click}>${_}</button>
     </div>
   </div>
-`;
+`);
 ```
