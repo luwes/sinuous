@@ -108,6 +108,17 @@ export const fixtures = [
   // },
   {
     formats: [IIFE],
+    global: 'sinuousSite',
+    name: 'site',
+    input: 'site/assets/src/site.js',
+    dest: () => 'site/assets/js',
+    sourcemap: true,
+    babel: {
+      plugins: ['sinuous/babel-plugin-htm']
+    }
+  },
+  {
+    formats: [IIFE],
     global: 'sinuousHello',
     name: 'hello',
     input: 'site/content/examples/hello/src/hello.js',

@@ -10,27 +10,19 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  {{ $css := resources.Get "/scss/custom.scss" | toCSS | minify | fingerprint }}
+  {{- $css := resources.Get "/scss/custom.scss" | toCSS | minify | fingerprint -}}
   <link rel="stylesheet" href="{{ $css.Permalink }}">
   <link rel="stylesheet" href="/css/prism.css">
 
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="/favicon.ico" rel="icon" type="image/x-icon" />
-
   <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js" integrity="sha384-qD/MNBVMm3hVYCbRTSOW130+CWeRIKbpot9/gR1BHkd7sIct4QKhT1hOPd+2hO8K" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/0a4853ec71.js" crossorigin="anonymous"></script>
 
-  {{ $prism := resources.Get "js/prism.js" }}
+  {{- $prism := resources.Get "js/prism.js" -}}
   {{ $prismTemplates := resources.Get "js/prism-js-templates.js" }}
-  {{ $site := resources.Get "js/site.js" }}
-  {{ $js := slice $prism $prismTemplates $site | resources.Concat "js/bundle.js" | minify | fingerprint }}
+  {{ $site := resources.Get "js/site.min.js" }}
+  {{ $js := slice $prism $prismTemplates $site | resources.Concat "js/bundle.js" | minify | fingerprint -}}
   <script src="{{ $js.Permalink }}"></script>
-  <script src="//cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-  <!-- only required polyfill for Swiss -->
-  <script src="//unpkg.com/@webcomponents/custom-elements"></script>
-  <!-- custom event in this example for IE11 -->
-  <script src="//unpkg.com/custom-event-polyfill"></script>
+  {{ $sourcemap := resources.Get "js/site.min.js.map" -}}
+  <!-- {{ $sourcemap.Permalink }} -->
 </head>
