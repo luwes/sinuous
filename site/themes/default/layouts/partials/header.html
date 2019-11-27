@@ -1,3 +1,4 @@
+{{ readFile "static/images/symbol-defs.svg" | safeHTML }}
 <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
   <div class="container">
     <div class="navbar-brand">
@@ -37,9 +38,7 @@
         </div>
         <div class="navbar-item">
           <a class="button is-dark" href="{{.Site.Params.Github}}">
-            <span class="icon">
-              <i class="fab fa-github"></i>
-            </span>
+            <svg class="icon icon-github-header"><use xlink:href="#icon-github"></use></svg>
             <span>Github</span>
           </a>
         </div>
