@@ -75,6 +75,10 @@ export function context(isSvg) {
  * @return {Node} Returns the `root`.
  */
 export function hydrate(delta, root) {
+  if (!delta) {
+    return;
+  }
+
   if (!root) {
     let selector = '';
     let prop;
