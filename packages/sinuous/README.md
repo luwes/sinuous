@@ -107,6 +107,7 @@ length(4); // => logs 16
 - [SVG Clock](https://sinuous.netlify.com/examples/clock/) Analog SVG Clock
 - [TodoMVC](https://github.com/luwes/sinuous-todomvc) Classic TodoMVC example
 - [JS Framework Benchmark](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) Most Popular UI library bench
+- [Triangle Demo](https://github.com/luwes/sinuous-sierpinski-triangle-demo) Sinuous Sierpinski Triangle Demo
 
 ### Motivation
 

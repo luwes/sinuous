@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.17.1 - 2019-11-28
+
+### Fixed
+
+- Fixed `hydrate` content function that returns a stringable.
+
 ## 0.17.0 - 2019-11-24
 
 ### Added
