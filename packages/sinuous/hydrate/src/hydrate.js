@@ -164,6 +164,10 @@ export function hydrate(delta, root) {
                   // Leave prefix whitespace intact.
                   prefix = current.match(/^\s*/)[0];
                 }
+                // Leave whitespace alone.
+                if (target.data.trim() !== result.trim()) {
+                  target.data = result;
+                }
               } else {
                 if (Array.isArray(result)) {
                   startNode = target;
