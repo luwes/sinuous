@@ -3,6 +3,23 @@ import spy from 'ispy';
 import { h, html, hydrate, _ } from 'sinuous/hydrate';
 import { observable } from 'sinuous';
 
+test('hydrate function bug', function(t) {
+  document.body.innerHTML = `
+    <div class="navbar-item">
+      <a>...</a>
+    </div>
+  `;
+
+  const div = hydrate(html`
+    <div class="navbar-item">
+      <a>${() => 'Wesley'}</a>
+    </div>
+  `);
+
+  t.equal(div.querySelector('a').textContent, 'Wesley');
+  t.end();
+});
+
 test('hydrate w/ observables bug', function(t) {
   document.body.innerHTML = `
     <div class="box level">

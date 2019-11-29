@@ -6,7 +6,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "site/assets/*",
+      "site/*",
       "site/content/**/*"
     ]
   },
