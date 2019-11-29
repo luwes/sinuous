@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "sinuous": "0.17.0"
+    "sinuous": "0.17.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.7.4",
-    "eslint-plugin-react": "^7.16.0"
+    "eslint-plugin-react": "^7.17.0"
   }
 }
