@@ -22,7 +22,9 @@
     "template/src",
     "template/package.json",
     "hydrate/package.json",
-    "hydrate/src"
+    "hydrate/src",
+    "all/package.json",
+    "all/src"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"
