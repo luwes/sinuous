@@ -2,7 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.18.0 - 2019-12-03
+
+### Added
+
+- Added `all` package for easy use with a script tag.
+
 ## 0.17.2 - 2019-11-28
+
 ## 0.17.1 - 2019-11-28
 
 ### Fixed
@@ -22,11 +29,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added sourcemaps to all bundles
 
 ## 0.16.2 - 2019-11-02
+
 ## 0.16.1 - 2019-11-02
 
 ### Fixed
 
-- Fixed a minifying error caused by a Terser bug. 
+- Fixed a minifying error caused by a Terser bug.
   See [`scripts/rollup/config.js`](scripts/rollup/config.js)
 
 ## 0.16.0 - 2019-10-06

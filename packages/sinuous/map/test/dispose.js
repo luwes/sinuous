@@ -15,7 +15,10 @@ test('disposer index works correctly', function(t) {
   let five = o(5);
   // initialize 1, 2, 3, at indexes 0, 1, 2
   const list = o([one, two, three]);
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3'));
 
   // insert 4, 5 at index 0, 1 overwriting disposers[0, 1]
@@ -44,7 +47,10 @@ test('last algorithm insertNodes -> disposes correct index', function(t) {
   let four = o(4);
   let five = o(5);
   const list = o([one, two, three, four, five]);
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3,4,5'));
 
   list([one, four, five, three, two]);
@@ -71,7 +77,10 @@ test('swap backward -> disposes correct index', function(t) {
   let four = o(4);
   let five = o(5);
   const list = o([one, two, three, four, five]);
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3,4,5'));
 
   list([one, two, five, three, four]);
@@ -98,7 +107,10 @@ test('swap forward -> disposes correct index', function(t) {
   let four = o(4);
   let five = o(5);
   const list = o([one, two, three, four, five]);
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3,4,5'));
 
   list([two, three, one, four, five]);
@@ -123,7 +135,10 @@ test('removing one observable diposes correct index', function(t) {
   let four = o(4);
   let six = o(6);
   const list = o([1, two, 3, four, 5, six, 7]);
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3,4,5,6,7'));
 
   list([1, two, four, 3, 5, six, 7]);
@@ -148,7 +163,10 @@ test('explicit dispose works and disposes observables', function(t) {
   let dispose;
   const el = root(d => {
     dispose = d;
-    return h('ul', map(list, item => h('li', item)));
+    return h(
+      'ul',
+      map(list, item => h('li', item))
+    );
   });
   t.equal(el.innerHTML, lis('1,2,3,4'));
 
@@ -173,7 +191,10 @@ test('emptying list disposes observables', function(t) {
   let four = o(4);
   const list = o([1, 2, 3, four]);
 
-  const el = h('ul', map(list, item => h('li', item)));
+  const el = h(
+    'ul',
+    map(list, item => h('li', item))
+  );
   t.equal(el.innerHTML, lis('1,2,3,4'));
 
   list([2, 2, four, 3]);

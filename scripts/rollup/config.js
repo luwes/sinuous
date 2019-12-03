@@ -55,7 +55,14 @@ function shouldSkipBundle(bundleName, bundleType) {
 }
 
 function getConfig(options) {
-  const { name, input, dest, format, external = [], sourcemap = true } = options;
+  const {
+    name,
+    input,
+    dest,
+    format,
+    external = [],
+    sourcemap = true
+  } = options;
   const output = dest
     ? `${dest(format)}/${name}${formatOptions[format].ext}`
     : path.join(
@@ -64,10 +71,14 @@ function getConfig(options) {
       );
 
   const replacePeersForESM = external.map((name, i) => {
-    return ESM === format && i % 2 == 0 && replace({
-      delimiters: ['', ''],
-      [`from '${name}'`]: `from '${external[i+1]}'`
-    });
+    return (
+      ESM === format &&
+      i % 2 == 0 &&
+      replace({
+        delimiters: ['', ''],
+        [`from '${name}'`]: `from '${external[i + 1]}'`
+      })
+    );
   });
 
   return {

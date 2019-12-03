@@ -1,10 +1,10 @@
 import test from 'tape';
 import { o, S, root, transaction } from '../src/observable.js';
 
-test("batches changes until end", function (t) {
+test('batches changes until end', function(t) {
   var d = o(1);
 
-  transaction(function () {
+  transaction(function() {
     d(2);
     t.equal(d(), 1);
   });
@@ -13,12 +13,14 @@ test("batches changes until end", function (t) {
   t.end();
 });
 
-test("halts propagation within its scope", function (t) {
-  root(function () {
+test('halts propagation within its scope', function(t) {
+  root(function() {
     var d = o(1);
-    var f = S(function() { return d(); });
+    var f = S(function() {
+      return d();
+    });
 
-    transaction(function () {
+    transaction(function() {
       d(2);
       t.equal(f(), 1);
     });

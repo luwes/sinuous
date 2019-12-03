@@ -1,6 +1,6 @@
 import test from 'tape';
 import { normalizeSvg } from '../../test/_utils.js';
-import { hs, svg, hydrate  } from 'sinuous/hydrate';
+import { hs, svg, hydrate } from 'sinuous/hydrate';
 import { observable } from 'sinuous';
 
 test('supports hydrating SVG via hyperscript', function(t) {

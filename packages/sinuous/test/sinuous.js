@@ -18,7 +18,9 @@ test('simple', function(t) {
 });
 
 test('returns a simple string', t => {
-  const frag = html`a`;
+  const frag = html`
+    a
+  `;
   t.assert(frag instanceof DocumentFragment);
   t.assert(frag.childNodes[0] instanceof Text);
   t.equal(frag.childNodes[0].textContent, 'a');
@@ -26,7 +28,9 @@ test('returns a simple string', t => {
 });
 
 test('returns a simple number', t => {
-  const frag = html`${9}`;
+  const frag = html`
+    ${9}
+  `;
   t.assert(frag instanceof DocumentFragment);
   t.assert(frag.childNodes[0] instanceof Text);
   t.equal(frag.childNodes[0].textContent, '9');
@@ -52,7 +56,9 @@ test('returns a document fragment', t => {
 
 test('returns a simple observable string', t => {
   const title = o('Banana');
-  const frag = html`${title}`;
+  const frag = html`
+    ${title}
+  `;
   t.assert(frag instanceof DocumentFragment);
   t.assert(frag.childNodes[0] instanceof Text);
   t.equal(frag.childNodes[0].textContent, 'Banana');

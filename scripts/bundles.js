@@ -8,7 +8,7 @@ export const bundleFormats = {
   UMD
 };
 
-const dest = (path = '') => (format) => {
+const dest = (path = '') => format => {
   return `packages/sinuous/${format === ESM ? 'module' : 'dist'}${path}`;
 };
 
@@ -75,7 +75,12 @@ export const bundles = [
   },
   {
     // order is important, every even pkg name is replaced w/ next uneven file in ESM
-    external: ['sinuous/observable', './observable.js', 'sinuous/htm', './htm.js'],
+    external: [
+      'sinuous/observable',
+      './observable.js',
+      'sinuous/htm',
+      './htm.js'
+    ],
     formats: [ESM, UMD, IIFE],
     global: 'sinuous',
     name: 'sinuous',
@@ -96,7 +101,7 @@ export const bundles = [
     name: 'all',
     input: 'packages/sinuous/all/src/index.js',
     dest: dest()
-  },
+  }
 ];
 
 export const fixtures = [

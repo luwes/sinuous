@@ -12,16 +12,11 @@ test('getChildrenDeep', function(t) {
   };
   const father = {
     name: 'father',
-    _children: [
-      child,
-      child2
-    ]
+    _children: [child, child2]
   };
   const grandfather = {
     name: 'grandfather',
-    _children: [
-      father
-    ]
+    _children: [father]
   };
 
   t.deepEqual(getChildrenDeep(grandfather._children, []), [
