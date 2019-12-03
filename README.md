@@ -27,6 +27,15 @@ It was built with these ideas in mind.
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable       |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 
+### All-in-one
+
+| Size                                                                                                                                   | Name                                       | Description           |
+| -------------------------------------------------------------------------------------------------------------------------------------- |----------------------------------------------------- | --------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/all`](./packages/sinuous/all)     |  All modules in one bundle for easy use with a script tag    |
+
+**cdn**: https://unpkg.com/sinuous/dist/all  
+**module**: https://unpkg.com/sinuous/module/all
+
 ## In a nutshell
 
 ### View syntax
