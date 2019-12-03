@@ -100,9 +100,7 @@ function getConfig(options) {
           compress: {
             passes: 2
           },
-          // Don't mangle UMD until this Terser bug is fixed.
-          // Observable module throws an `i.t.has is not a function` TypeError.
-          mangle: [ESM, IIFE].includes(format) && {
+          mangle: {
             properties: {
               regex: /^_/
             }
