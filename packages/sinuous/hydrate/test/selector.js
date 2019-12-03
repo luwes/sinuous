@@ -9,9 +9,11 @@ test('hydrate selects root node via id selector', function(t) {
     </div>
   `;
 
-  const div = hydrate(html`<div id="root">
-    <button title="Apply pressure">something</button>
-  </div>`);
+  const div = hydrate(html`
+    <div id="root">
+      <button title="Apply pressure">something</button>
+    </div>
+  `);
 
   t.equal(div, document.querySelector('#root'));
 
@@ -26,9 +28,11 @@ test('hydrate selects root node via class selector', function(t) {
     </div>
   `;
 
-  const div = hydrate(html`<div class="root pure">
-    <button title="Apply pressure">something</button>
-  </div>`);
+  const div = hydrate(html`
+    <div class="root pure">
+      <button title="Apply pressure">something</button>
+    </div>
+  `);
 
   t.equal(div, document.querySelector('.root.pure'));
   t.equal(div, document.querySelector('.root'));
@@ -46,10 +50,16 @@ test('hydrate selects root node via partial class selector', function(t) {
   `;
 
   const isActive = observable('');
-  const div = hydrate(html`<div class="root pure${isActive}">
-    <button onclick=${() => isActive(isActive() ? '' : ' is-active')}
-      title="Apply pressure">something</button>
-  </div>`);
+  const div = hydrate(html`
+    <div class="root pure${isActive}">
+      <button
+        onclick=${() => isActive(isActive() ? '' : ' is-active')}
+        title="Apply pressure"
+      >
+        something
+      </button>
+    </div>
+  `);
 
   const btn = div.children[0];
   btn.click();

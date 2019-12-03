@@ -16,19 +16,26 @@ import { openLogin } from './auth.js';
 const isActive = observable('');
 
 hydrate(
-  html`<a class="login-btn button is-dark" onclick=${openLogin} />`
+  html`
+    <a class="login-btn button is-dark" onclick=${openLogin} />
+  `
 );
 
 hydrate(
-  html`<a class="navbar-burger burger${isActive}"
-    onclick=${() => isActive(!isActive() ? ' is-active' : '')} />`
+  html`
+    <a
+      class="navbar-burger burger${isActive}"
+      onclick=${() => isActive(!isActive() ? ' is-active' : '')}
+    />
+  `
 );
 
 hydrate(
-  html`<a class="navbar-menu${isActive}" />`
+  html`
+    <a class="navbar-menu${isActive}" />
+  `
 );
 ```
-
 
 # API
 
@@ -43,7 +50,6 @@ Passing the root node is not needed if it can be derived from the `id` or `class
 | ------ | ------------------- | ----------------------- |
 | tree   | <code>Object</code> | Virtual tree structure. |
 | [root] | <code>Node</code>   | Root node.              |
-
 
 ### html`` or h()
 
@@ -62,8 +68,7 @@ Looks like:
 
 Creates a virtual tree structure for SVG.
 
-
-### _
+### \_
 
 A placeholder for content in tags that get skipped. The placeholder prevents duplication of long static texts in JavaScript which would add unnecessary bytes to your bundle.
 

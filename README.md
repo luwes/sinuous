@@ -29,9 +29,9 @@ It was built with these ideas in mind.
 
 ### All-in-one
 
-| Size                                                                                                                                   | Name                                       | Description           |
-| -------------------------------------------------------------------------------------------------------------------------------------- |----------------------------------------------------- | --------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/all`](./packages/sinuous/all)     |  All modules in one bundle for easy use with a script tag    |
+| Size                                                                                                                            | Name                                    | Description                                              |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a script tag |
 
 **cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
@@ -43,7 +43,7 @@ It was built with these ideas in mind.
 In contrast to some other UI libraries, a goal Sinuous strives for is to have good interoperability. Sinuous creates DOM elements via **hyperscript** `h` calls. This allows the developer more freedom in the choice of the view syntax.
 
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
-at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm). 
+at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
 **JSX** needs to transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx).
 
@@ -86,9 +86,7 @@ setInterval(() => counter(counter() + 1), 1000);
 import { observable, h } from 'sinuous';
 
 const counter = observable(0);
-const view = () => (
-  <div>Counter {counter}</div>
-);
+const view = () => <div>Counter {counter}</div>;
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
@@ -98,7 +96,7 @@ setInterval(() => counter(counter() + 1), 1000);
 
 The Sinuous [`observable`](./packages/sinuous/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality. It works under this philosophy:
 
-*Anything that can be derived from the application state, should be derived. Automatically.*
+_Anything that can be derived from the application state, should be derived. Automatically._
 
 ```js
 import { observable, computed, subscribe } from 'sinuous/observable';

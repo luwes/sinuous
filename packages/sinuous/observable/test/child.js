@@ -1,12 +1,6 @@
 import test from 'tape';
 import spy from 'ispy';
-import {
-  o,
-  S,
-  transaction,
-  observable,
-  sample
-} from '../src/observable.js';
+import { o, S, transaction, observable, sample } from '../src/observable.js';
 
 test('parent cleans up inner subscriptions', function(t) {
   let i = 0;
@@ -17,7 +11,7 @@ test('parent cleans up inner subscriptions', function(t) {
   let childValue;
   let childValue2;
 
-  const child = (d) => {
+  const child = d => {
     S(function nested() {
       childValue = d();
       i++;
@@ -25,7 +19,7 @@ test('parent cleans up inner subscriptions', function(t) {
     return 'Hi';
   };
 
-  const child2 = (d) => {
+  const child2 = d => {
     S(function nested2() {
       childValue2 = d();
     });
@@ -49,7 +43,7 @@ test('parent cleans up inner subscriptions', function(t) {
   });
 
   // 2nd
-  data("name");
+  data('name');
   t.equal(childValue, 'name');
   t.equal(childValue2, 'name');
 
@@ -59,7 +53,7 @@ test('parent cleans up inner subscriptions', function(t) {
   t.equal(childValue2, null);
 
   // 4th
-  data("name2");
+  data('name2');
   t.equal(childValue, 'name2');
   t.equal(childValue2, 'name2');
 
@@ -75,7 +69,7 @@ test('parent cleans up inner conditional subscriptions', function(t) {
 
   let childValue;
 
-  const child = (d) => {
+  const child = d => {
     S(function nested() {
       childValue = d();
       i++;
@@ -98,18 +92,18 @@ test('parent cleans up inner conditional subscriptions', function(t) {
   });
 
   let view;
-  S(() => (view =  memo()));
+  S(() => (view = memo()));
 
   t.equal(view, undefined);
 
   // Run 1st time
-  data("name");
+  data('name');
   t.equal(childValue, 'name');
 
   t.equal(view, 'Hi');
 
   // 2nd
-  data("name2");
+  data('name2');
   t.equal(childValue, 'name2');
 
   // data is null -> cache is false -> child is not run here
@@ -131,7 +125,7 @@ test('parent cleans up inner conditional subscriptions w/ other child', function
   let childValue;
   let childValue2;
 
-  const child = (d) => {
+  const child = d => {
     S(function nested() {
       childValue = d();
       i++;
@@ -139,7 +133,7 @@ test('parent cleans up inner conditional subscriptions w/ other child', function
     return 'Hi';
   };
 
-  const child2 = (d) => {
+  const child2 = d => {
     S(function nested2() {
       childValue2 = d();
     });
@@ -163,12 +157,12 @@ test('parent cleans up inner conditional subscriptions w/ other child', function
   });
 
   let view;
-  S(() => (view =  memo()));
+  S(() => (view = memo()));
 
   t.equal(view, undefined);
 
   // 2nd
-  data("name");
+  data('name');
   t.equal(childValue, 'name');
   t.equal(childValue2, 'name');
 
@@ -182,7 +176,7 @@ test('parent cleans up inner conditional subscriptions w/ other child', function
   t.equal(view, undefined);
 
   // 4th
-  data("name2");
+  data('name2');
   t.equal(childValue, 'name2');
   t.equal(childValue2, 'name2');
 
@@ -269,7 +263,6 @@ test('insures that new dependencies are updated before dependee', function(t) {
   order = '';
   a(0);
 
-
   t.equal(order, 'bc', '3rd bcd test');
   t.equal(c(), 1);
   t.end();
@@ -280,8 +273,8 @@ test('unrelated state via transaction updates view correctly', function(t) {
     trigger = observable(false),
     cache = observable(sample(() => !!trigger())),
     child = data => {
-      S(() => console.log("nested", data().length));
-      return "Hi";
+      S(() => console.log('nested', data().length));
+      return 'Hi';
     };
 
   S(prev => {
@@ -294,18 +287,18 @@ test('unrelated state via transaction updates view correctly', function(t) {
   const memo = S(() => (cache() ? child(data) : undefined));
 
   let view;
-  S(() => (view =  memo()));
+  S(() => (view = memo()));
   t.equal(view, undefined);
 
   transaction(() => {
     trigger(true);
-    data("name");
+    data('name');
   });
   t.equal(view, 'Hi');
 
   transaction(() => {
     trigger(true);
-    data("name2");
+    data('name2');
   });
 
   transaction(() => {

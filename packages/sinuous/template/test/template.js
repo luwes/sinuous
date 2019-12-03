@@ -108,7 +108,8 @@ test('template works with map', function(tt) {
 
   tt.equal(
     normalizeAttributes(table.innerHTML),
-    normalizeAttributes(`<tr>
+    normalizeAttributes(
+      `<tr>
         <td class="col-md-1">1</td>
         <td class="col-md-4"><a>Label 1</a></td>
         <td class="col-md-1"><a>
@@ -123,7 +124,8 @@ test('template works with map', function(tt) {
           <span class="glyphicon glyphicon-remove remove" aria-hidden="true"></span>
         </a></td>
         <td class="col-md-6"></td>
-      </tr>`.replace(/>[\s]+</g, '><'))
+      </tr>`.replace(/>[\s]+</g, '><')
+    )
   );
 
   tt.end();
