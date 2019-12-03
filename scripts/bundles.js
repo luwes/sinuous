@@ -88,7 +88,15 @@ export const bundles = [
     name: 'babel-plugin-htm',
     input: 'packages/sinuous/babel-plugin-htm/src/index.js',
     dest: dest()
-  }
+  },
+  {
+    external: [],
+    formats: [ESM, UMD, IIFE],
+    global: 'sinuous',
+    name: 'all',
+    input: 'packages/sinuous/all/src/index.js',
+    dest: dest()
+  },
 ];
 
 export const fixtures = [
