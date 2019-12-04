@@ -61,7 +61,8 @@ function getConfig(options) {
     dest,
     format,
     external = [],
-    sourcemap = true
+    sourcemap = true,
+    extend = false
   } = options;
   const output = dest
     ? `${dest(format)}/${name}${formatOptions[format].ext}`
@@ -90,6 +91,7 @@ function getConfig(options) {
     output: {
       format,
       sourcemap,
+      extend,
       file: output,
       name: options.global,
       exports: options.exports,

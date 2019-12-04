@@ -97,7 +97,9 @@ export const bundles = [
   {
     external: [],
     formats: [ESM, UMD, IIFE],
-    global: 'sinuous',
+    // multiple globals - @see https://github.com/rollup/rollup/issues/494
+    global: 'window',
+    extend: true,
     name: 'all',
     input: 'packages/sinuous/all/src/index.js',
     dest: dest()
