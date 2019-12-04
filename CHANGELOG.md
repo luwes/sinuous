@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.18.1 - 2019-12-03
+
+### Added
+
+Add `S` alias for the `all` package which is meant to include in your webpage with a script tag.
+
 ## 0.18.0 - 2019-12-03
 
 ### Added
