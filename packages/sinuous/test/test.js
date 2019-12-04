@@ -26,3 +26,4 @@ import '../template/test/template.js';
 import '../hydrate/test/hydrate.js';
 import '../hydrate/test/svg.js';
 import '../hydrate/test/selector.js';
+import '../all/test/all.js';

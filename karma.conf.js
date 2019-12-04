@@ -118,6 +118,11 @@ module.exports = function(config) {
 
     files: [
       {
+        pattern: 'packages/sinuous/dist/all.min.js',
+        watched: true,
+        included: true
+      },
+      {
         pattern: config.grep || 'packages/sinuous*/**/test.js',
         watched: false
       },
