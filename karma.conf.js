@@ -118,11 +118,6 @@ module.exports = function(config) {
 
     files: [
       {
-        pattern: 'packages/sinuous/dist/all.min.js',
-        watched: true,
-        included: true
-      },
-      {
         pattern: config.grep || 'packages/sinuous*/**/test.js',
         watched: false
       },
@@ -156,7 +151,7 @@ module.exports = function(config) {
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
-            'packages/*/!(htm)/**/src/**/*.js'
+            'packages/*/!{htm,all}/**/src/**/*.js'
         }),
         sauceLabs && babel({
           include: [

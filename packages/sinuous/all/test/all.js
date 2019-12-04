@@ -1,5 +1,5 @@
-/* global sinuous, S */
 import test from 'tape';
+import { sinuous, S } from '../src/index.js';
 
 test('test functions exist on namespace S', function(t) {
 
@@ -32,10 +32,11 @@ test('test functions exist on namespace S', function(t) {
 });
 
 test('test noConflict restores S and returns sinuous', function(t) {
-  t.equal(S, sinuous);
+  t.equal(S, sinuous, 'S equals sinuous');
+
   const $ = S.noConflict();
-  t.equal(S, undefined);
-  t.equal($, sinuous);
+  t.equal(window.S, undefined, 'S equals undefined');
+  t.equal($, window.sinuous, '$ equals sinuous');
 
   t.end();
 });
