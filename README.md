@@ -36,7 +36,19 @@ It was built with these ideas in mind.
 **cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
 
+
+## Examples
+
+- [**Counter**](https://codesandbox.io/s/sinuous-counter-z6k71) (@ CodeSandbox)
+- [**Analog SVG Clock**](https://sinuous.netlify.com/examples/clock/) ⏰
+- [**Classic TodoMVC**](https://luwes.github.io/sinuous-todomvc/) _([GitHub Project](https://github.com/luwes/sinuous-todomvc))_
+- [**JS Framework Benchmark**](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) (@ GitHub)
+- [**Sierpinski Triangle**](https://luwes.github.io/sinuous-sierpinski-triangle-demo/) _([GitHub Project](https://github.com/luwes/sinuous-sierpinski-triangle-demo))_
+- [**60FPS Rainbow Spiral**](https://luwes.github.io/sinuous-rainbow-spiral/) _([GitHub Project](https://github.com/luwes/sinuous-rainbow-spiral))_ 🌈
+- [**Three.js Boxes**](https://luwes.github.io/sinuous-three-boxes/) _([GitHub Project](https://github.com/luwes/sinuous-three-boxes))_ 📦
+
 ---
+
 
 _See [complete docs](https://sinuous.netlify.com/introduction/getting-started/), or in a nutshell..._
 
@@ -135,14 +147,6 @@ hydrate(
   html`<a class="navbar-menu${isActive}" />`
 );
 ```
-
-## Examples
-
-- [Counter](https://codesandbox.io/s/sinuous-counter-z6k71) Simple Counter
-- [SVG Clock](https://sinuous.netlify.com/examples/clock/) Analog SVG Clock
-- [TodoMVC](https://github.com/luwes/sinuous-todomvc) Classic TodoMVC example
-- [JS Framework Benchmark](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) Most Popular UI library bench
-- [Triangle Demo](https://github.com/luwes/sinuous-sierpinski-triangle-demo) Sinuous Sierpinski Triangle Demo
 
 ## Motivation
 
