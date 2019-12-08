@@ -141,6 +141,10 @@ export { observable, observable as o };
 function computed(listener, value) {
   listener._update = update;
 
+  // if (currentUpdate == null) {
+  //   console.warn("computations created without a root or parent will never be disposed");
+  // }
+
   resetUpdate(update);
   update();
 
@@ -167,19 +171,14 @@ function computed(listener, value) {
 
     // If any children were marked as fresh remove them from the run lists.
     const allChildren = getChildrenDeep(update._children);
-    allChildren.forEach(u => {
-      if (u._fresh) {
-        u._observables.forEach(o => {
-          if (o._runListeners) {
-            o._runListeners.delete(u);
-          }
-        });
-      }
-    });
+    allChildren.forEach(removeFreshChildren);
 
     currentUpdate = prevUpdate;
     return value;
   }
+
+  // Tiny indicator that this is an observable function.
+  data.$o = true;
 
   function data() {
     if (update._fresh) {
@@ -191,6 +190,16 @@ function computed(listener, value) {
   }
 
   return data;
+}
+
+function removeFreshChildren(u) {
+  if (u._fresh) {
+    u._observables.forEach(o => {
+      if (o._runListeners) {
+        o._runListeners.delete(u);
+      }
+    });
+  }
 }
 
 /**

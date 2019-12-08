@@ -14,7 +14,7 @@ export function property(name, value, el, isAttr, isCss) {
       // Record property action in template.
       value.$t(2, property, el, name);
     } else {
-      api.subscribe(() => {
+      api.subscribe(function setProperty() {
         property(name, value(), el, isAttr, isCss);
       });
     }

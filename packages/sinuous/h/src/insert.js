@@ -33,7 +33,7 @@ export function insert(parent, value, marker, current, startNode) {
     }
     current = value;
   } else if (t === 'function') {
-    api.subscribe(function() {
+    api.subscribe(function insertContent() {
       current = api.insert(parent, value(), marker, current);
     });
   } else {
