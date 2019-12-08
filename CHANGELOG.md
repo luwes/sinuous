@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.18.2 - 2019-12-07
+
+### Fixed
+
+Fixed memory leak in observable [#51](https://github.com/luwes/sinuous/pull/51)
+
 ## 0.18.1 - 2019-12-03
 
 ### Added
