@@ -234,6 +234,9 @@ function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
   update._observables.forEach(o => {
     o._listeners.delete(update);
+    if (o._runListeners) {
+      o._runListeners.delete(update);
+    }
   });
   update._cleanups.forEach(c => c());
   resetUpdate(update);
