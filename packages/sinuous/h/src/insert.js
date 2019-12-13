@@ -6,20 +6,17 @@ export function insert(parent, value, marker, current, startNode) {
   // This is needed if the parent is a DocumentFragment initially.
   parent = (marker && marker.parentNode) || parent;
 
-  const type = typeof value;
   if (value === current);
-  else if ((!value && value !== 0) || value === true) {
-    clearAll(parent, current, marker, startNode);
-    current = null;
-  } else if (
+  else if (
     (!current || typeof current === 'string') &&
-    (type === 'string' || (type === 'number' && (value += '')))
+    (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
     if (current == null || !parent.firstChild) {
       if (marker) {
-        add(parent, document.createTextNode(value), marker);
+        add(parent, value, marker);
       } else {
+        // textContent is a lot faster than append -> createTextNode.
         parent.textContent = value;
       }
     } else {
@@ -30,14 +27,18 @@ export function insert(parent, value, marker, current, startNode) {
       }
     }
     current = value;
-  } else if (type === 'function') {
+  } else if (typeof value === 'function') {
     api.subscribe(function insertContent() {
       current = api.insert(parent, value(), marker, current);
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
     clearAll(parent, current, marker, startNode);
-    current = add(parent, value, marker);
+    current = null;
+
+    if (value && value !== true) {
+      current = add(parent, value, marker);
+    }
   }
 
   return current;

@@ -48,7 +48,7 @@ export const bundles = [
     dest: dest()
   },
   {
-    external: [],
+    external: ['sinuous', './sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'template',
     name: 'template',

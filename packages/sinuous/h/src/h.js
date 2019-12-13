@@ -19,11 +19,10 @@ export function context(options, isSvg) {
     let el;
 
     function item(arg) {
-      const type = typeof arg;
       if (arg == null);
-      else if (type === 'string') {
+      else if (typeof arg === 'string') {
         if (el) {
-          add(el, document.createTextNode(arg));
+          add(el, arg);
         } else {
           if (isSvg) {
             el = document.createElementNS('http://www.w3.org/2000/svg', arg);
@@ -42,23 +41,18 @@ export function context(options, isSvg) {
           // Support updates
           el = arg;
         }
-      } else if (type === 'object') {
-        property(null, arg, el, isSvg);
-      } else if (type === 'function') {
+      } else if (typeof arg === 'object') {
+        api.property(null, arg, el, isSvg);
+      } else if (typeof arg === 'function') {
         if (el) {
-          const marker = add(el, document.createTextNode(''));
-          if (arg.$t) {
-            // Record insert action in template, marker is used as pre-fill.
-            arg.$t(1, insert, el, '');
-          } else {
-            insert(el, arg, marker);
-          }
+          const marker = add(el, '');
+          api.insert(el, arg, marker);
         } else {
           // Support Components
           el = arg.apply(null, args.splice(1));
         }
       } else {
-        add(el, document.createTextNode('' + arg));
+        add(el, '' + arg);
       }
     }
 
