@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.18.3 - 2019-12-07
+
+### Removed
+
+Golf down some bytes in `map` (-68 B) ⛳️
+
 ## 0.18.2 - 2019-12-07
 
 ### Fixed
