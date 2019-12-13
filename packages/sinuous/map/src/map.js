@@ -3,7 +3,6 @@
 import { api } from 'sinuous';
 import { FORWARD, BACKWARD } from './constants.js';
 import {
-  addNode,
   longestPositiveIncreasingSubsequence,
   insertNodes,
   removeNodes,
@@ -11,7 +10,7 @@ import {
 } from './utils.js';
 
 export function map(items, expr, cleaning) {
-  const { subscribe, root, sample, cleanup } = api;
+  const { subscribe, root, sample, cleanup, add } = api;
 
   // Disable cleaning for templates by default.
   if (cleaning == null) cleaning = !expr.$t;
@@ -56,11 +55,11 @@ export function map(items, expr, cleaning) {
     // their parents' update cycle.
     return cleaning
       ? root(disposeFn => {
-          const node = addNode(parent, expr(item, i, data), afterNode);
+          const node = add(parent, expr(item, i, data), afterNode);
           disposers.set(node, disposeFn);
           return node;
         })
-      : addNode(parent, expr(item, i, data), afterNode);
+      : add(parent, expr(item, i, data), afterNode);
   }
 
   return parent;

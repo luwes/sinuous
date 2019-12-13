@@ -1,5 +1,6 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
 import { api } from './api.js';
+import { add } from './add.js';
 import { EMPTY_ARR } from './constants.js';
 import { insert } from './insert.js';
 import { property } from './property.js';
@@ -22,7 +23,7 @@ export function context(options, isSvg) {
       if (arg == null);
       else if (type === 'string') {
         if (el) {
-          el.appendChild(document.createTextNode(arg));
+          add(el, document.createTextNode(arg));
         } else {
           if (isSvg) {
             el = document.createElementNS('http://www.w3.org/2000/svg', arg);
@@ -36,7 +37,7 @@ export function context(options, isSvg) {
         arg.forEach(item);
       } else if (arg instanceof Node) {
         if (el) {
-          el.appendChild(arg);
+          add(el, arg);
         } else {
           // Support updates
           el = arg;
@@ -45,7 +46,7 @@ export function context(options, isSvg) {
         property(null, arg, el, isSvg);
       } else if (type === 'function') {
         if (el) {
-          const marker = el.appendChild(document.createTextNode(''));
+          const marker = add(el, document.createTextNode(''));
           if (arg.$t) {
             // Record insert action in template, marker is used as pre-fill.
             arg.$t(1, insert, el, '');
@@ -57,7 +58,7 @@ export function context(options, isSvg) {
           el = arg.apply(null, args.splice(1));
         }
       } else {
-        el.appendChild(document.createTextNode('' + arg));
+        add(el, document.createTextNode('' + arg));
       }
     }
 
@@ -68,6 +69,7 @@ export function context(options, isSvg) {
   api.insert = insert;
   api.property = property;
   api.h = h;
+  api.add = add;
 
   return h;
 }
