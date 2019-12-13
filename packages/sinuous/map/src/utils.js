@@ -1,24 +1,5 @@
 import { GROUPING } from './constants.js';
 
-let groupCounter = 0;
-
-export function addNode(parent, node, afterNode) {
-  let mark;
-  if (!(node instanceof Node)) {
-    node = document.createTextNode(node);
-  } else if (
-    node.nodeType === 11 &&
-    (mark = node.firstChild) &&
-    mark !== node.lastChild
-  ) {
-    mark[GROUPING] = node.lastChild[GROUPING] = ++groupCounter;
-  }
-
-  // IE9 requires an explicit `null` as second argument.
-  parent.insertBefore(node, afterNode || null);
-  return mark || node;
-}
-
 export function step(node, direction, inner) {
   const key = node[GROUPING];
   if (key) {

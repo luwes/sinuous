@@ -1,6 +1,6 @@
 import test from 'tape';
 import { h } from 'sinuous';
-import { addNode } from '../src/utils.js';
+import { add as addNode } from '../src/add.js';
 
 let counter = 0;
 
