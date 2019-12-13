@@ -6,7 +6,9 @@ let groupCounter = 0;
 export function add(parent, value, marker) {
   let mark;
 
-  if (!(value instanceof Node)) {
+  if (typeof value === 'string') {
+    value = document.createTextNode(value);
+  } else if (!(value instanceof Node)) {
     // Passing an empty array creates a DocumentFragment.
     value = api.h(EMPTY_ARR, value);
   }

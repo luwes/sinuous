@@ -1,6 +1,36 @@
+import { api } from 'sinuous';
 import { EMPTY_ARR } from './constants.js';
 
 let recordedActions;
+
+let oldInsert = api.insert;
+api.insert = function(parent, tag, a, b, c) {
+  if (tag && tag.$t) {
+    let current = '';
+    const action = (element, value) => {
+      oldInsert(element, value, null, current);
+    };
+    action._tag = tag;
+    action._el = parent;
+    recordedActions.push(action);
+    return;
+  }
+  return oldInsert(parent, tag, a, b, c);
+};
+
+let oldProperty = api.property;
+api.property = function(name, tag, el, a, b) {
+  if (tag && tag.$t) {
+    const action = (element, value) => {
+      oldProperty(name, value, element);
+    };
+    action._tag = tag;
+    action._el = el;
+    recordedActions.push(action);
+    return;
+  }
+  return oldProperty(name, tag, el, a, b);
+};
 
 /**
  * Template tag.
@@ -9,13 +39,7 @@ let recordedActions;
  */
 export function t(key) {
   const tag = () => key;
-  tag.$t = (type, fn, el, str) => {
-    const create = type === 1 ? createInsert : createProperty;
-    const action = create(fn, str);
-    action._tag = tag;
-    action._el = el;
-    recordedActions.push(action);
-  };
+  tag.$t = true;
   return tag;
 }
 
@@ -28,18 +52,6 @@ export function o(key) {
   const observedTag = t(key);
   observedTag._observable = true;
   return observedTag;
-}
-
-function createInsert(insert, current) {
-  return (element, value) => {
-    insert(element, value, null, current);
-  };
-}
-
-function createProperty(property, name) {
-  return (element, value) => {
-    property(name, value, element);
-  };
 }
 
 /**

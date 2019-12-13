@@ -3,21 +3,16 @@ import { api } from './api.js';
 export function property(name, value, el, isAttr, isCss) {
   if (!name || (name === 'attrs' && (isAttr = true))) {
     for (name in value) {
-      property(name, value[name], el, isAttr, isCss);
+      api.property(name, value[name], el, isAttr, isCss);
     }
   } else if (name[0] === 'o' && name[1] === 'n' && !value.$o) {
     // Functions added as event handlers are not executed
     // on render unless they have an observable indicator.
     handleEvent(el, name, value);
   } else if (typeof value === 'function') {
-    if (value.$t) {
-      // Record property action in template.
-      value.$t(2, property, el, name);
-    } else {
-      api.subscribe(function setProperty() {
-        property(name, value(), el, isAttr, isCss);
-      });
-    }
+    api.subscribe(function setProperty() {
+      api.property(name, value(), el, isAttr, isCss);
+    });
   } else if (isCss) {
     el.style.setProperty(name, value);
   } else if (
@@ -30,7 +25,7 @@ export function property(name, value, el, isAttr, isCss) {
     if (typeof value === 'string') {
       el.style.cssText = value;
     } else {
-      property(null, value, el, isAttr, true);
+      api.property(null, value, el, isAttr, true);
     }
   } else {
     if (name === 'class') name += 'Name';
