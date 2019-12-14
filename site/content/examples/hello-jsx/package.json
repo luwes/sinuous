@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "sinuous": "0.18.3"
+    "sinuous": "0.18.4"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.7.4",
