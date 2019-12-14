@@ -38,7 +38,7 @@ jobs:
       - git fetch && git checkout origin/gh-pages -- bench/results/results.json
       - echo '!/bench/results/dist/' >> .gitignore
       - (cd bench && yarn && yarn build-prod)
-      - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.10.2,sinuous-0.16.0))
+      - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.10.2,sinuous-0.18.4))
       name: "Benchmark"
       deploy:
         provider: pages
