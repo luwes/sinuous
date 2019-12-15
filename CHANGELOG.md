@@ -2,13 +2,19 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.18.4 - 2019-12-07
+## 0.18.5 - 2019-12-15
+
+### Added 
+
+Add special bundle to display bundle size of Sinuous w/ observable included.
+
+## 0.18.4 - 2019-12-13
 
 ### Changed
 
 Use Sinuous api instead of template hooks and golf some bytes 🏌️‍♂️
 
-## 0.18.3 - 2019-12-07
+## 0.18.3 - 2019-12-13
 
 ### Removed
 

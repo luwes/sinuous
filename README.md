@@ -1,40 +1,30 @@
-# <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="36" alt="Sinuous" /></a>
+# <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="40" alt="Sinuous" /></a>
 
-[![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
-![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous.min.js?v=1&compression=gzip&label=gzip&style=flat-square)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&color=blue&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
+![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous-observable.min.js?v=1&compression=gzip&label=gzip&style=flat-square&color=blue)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&color=blue)](https://codecov.io/gh/luwes/sinuous)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square&color=blue)](https://github.com/prettier/prettier)
+
+> Declarative views, no VDOM, direct DOM manipulation performance, truly reactive. 
 
 **npm**: `npm install sinuous --save`  
 **cdn**: https://unpkg.com/sinuous  
 **module**: https://unpkg.com/sinuous?module
 
-### Intro
+---
 
-Sinuous provides the clarity of declarative views and the performance of direct DOM manipulation.  
-It was built with these ideas in mind.
+- **Small.** hello world at `~1.5kB` gzip.
+- **Simple.** plain JavaScript feel; template literals, standard HTML.
+- **Performance.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
 
-- Small: use in other mini libraries like custom elements.
-- Simple: plain Javascript feel; template literals, standard HTML.
-- [Performance](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html): top ranked of 80+ UI libs
+Why use Sinuous over framework x?
 
-### Add-ons
+- **Smaller.** Produces smaller bundles for medium to large apps compared to Svelte, React and Vue. [¹]
+- **Faster.** Sinuous is `1.1x` slower than VanillaJS while Vue and React are about `1.7x` slower. [²]
+- **Truly reactive.** "Mobx" mini built-in, anything is derived automatically from the app state.
 
-| Size                                                                                                                                   | Name                                                  | Description           |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable *(included by default)*      |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 
-### All-in-one
-
-| Size                                                                                                                            | Name                                    | Description                                              |
-| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a \<script\> tag |
-
-**cdn**: https://unpkg.com/sinuous/dist/all  
-**module**: https://unpkg.com/sinuous/module/all
+---
 
 
 ## Examples
@@ -46,6 +36,25 @@ It was built with these ideas in mind.
 - [**Sierpinski Triangle**](https://luwes.github.io/sinuous-sierpinski-triangle-demo/) _([GitHub Project](https://github.com/luwes/sinuous-sierpinski-triangle-demo))_
 - [**60FPS Rainbow Spiral**](https://luwes.github.io/sinuous-rainbow-spiral/) _([GitHub Project](https://github.com/luwes/sinuous-rainbow-spiral))_ 🌈
 - [**Three.js Boxes**](https://luwes.github.io/sinuous-three-boxes/) _([GitHub Project](https://github.com/luwes/sinuous-three-boxes))_ 📦
+
+
+### Add-ons
+
+| Size                                                                                                                                   | Name                                                  | Description           |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square&color=blue) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable *(included by default)*      |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square&color=blue)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square&color=blue)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square&color=blue)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
+
+### All-in-one
+
+| Size                                                                                                                            | Name                                    | Description                                              |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&color=blue&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a \<script\> tag |
+
+**cdn**: https://unpkg.com/sinuous/dist/all  
+**module**: https://unpkg.com/sinuous/module/all
 
 ---
 
@@ -180,3 +189,16 @@ Sinuous can work with different observable libraries. See the [wiki for more inf
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
 
 [homepage]: https://saucelabs.com
+
+## Footnotes
+
+#### ¹ Smaller
+
+Sinuous [TodoMVC](https://github.com/luwes/sinuous-todomvc/) 2.9kB < Svelte [TodoMVC](https://github.com/sveltejs/svelte-todomvc) 3.5kB
+
+#### ² Faster
+
+See slowdowns at [JS Framework Benchmark](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)
+
+[¹]:#-smaller
+[²]:#-faster
