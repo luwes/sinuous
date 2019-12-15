@@ -88,6 +88,17 @@ export const bundles = [
     dest: dest()
   },
   {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous/htm', './htm.js'],
+    formats: [IIFE],
+    global: 'so',
+    // only used to display bundle size, `observable` is a peer dependency to
+    // avoid issues with the global `currentUpdate` variable.
+    name: 'sinuous-observable',
+    input: 'packages/sinuous/src/index.js',
+    dest: dest()
+  },
+  {
     external: [],
     formats: [ESM, CJS],
     name: 'babel-plugin-htm',
