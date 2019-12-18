@@ -16,8 +16,8 @@ export function map(items, expr, cleaning) {
   if (cleaning == null) cleaning = !expr.$t;
 
   let parent = document.createDocumentFragment();
-  const beforeNode = parent.appendChild(document.createTextNode(''));
-  const afterNode = parent.appendChild(document.createTextNode(''));
+  const beforeNode = add(parent, '');
+  const afterNode = add(parent, '');
   const disposers = new Map();
 
   const unsubscribe = subscribe(a => {
