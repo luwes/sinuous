@@ -93,7 +93,7 @@ export const bundles = [
     formats: [IIFE],
     global: 'so',
     // only used to display bundle size, `observable` is a peer dependency to
-    // avoid issues with the global `currentUpdate` variable.
+    // avoid issues with the global `tracking` variable.
     name: 'sinuous-observable',
     input: 'packages/sinuous/src/index.js',
     dest: dest()
