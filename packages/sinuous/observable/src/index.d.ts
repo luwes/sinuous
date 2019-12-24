@@ -1,35 +1,30 @@
-export = observable;
-export as namespace observable;
 
-declare namespace observable {
-
-  interface ObservableCreator<T> {
-    (value: T): Observable<T>;
-  }
-  interface Observable<T> {
-    (): T;
-    (nextValue: T): T;
-  }
-  const observable: ObservableCreator<Observable<any>>;
-  const o: ObservableCreator<Observable<any>>;
-
-  interface Computed<T> {
-    (): T;
-  }
-  interface ComputedCreator<T> {
-    (observer: (v: T) => T, seed: T): Computed<T>;
-    (observer: () => T): Computed<T>;
-  }
-  const computed: ComputedCreator<any>;
-  const S: ComputedCreator<any>;
-
-  function subscribe<T>(observer: () => T): () => void;
-  function unsubscribe<T>(observer: () => T): void;
-  function isListening(): boolean;
-  function root<T>(fn: () => T): T;
-  function sample<T>(fn: () => T): T;
-  function transaction<T>(fn: () => T): T;
-
-  type CleanupFn = () => any;
-  function cleanup(fn: CleanupFn): CleanupFn;
+export interface ObservableCreator<T> {
+  (value: T): Observable<T>;
 }
+export interface Observable<T> {
+  (): T;
+  (nextValue: T): T;
+}
+export const observable: ObservableCreator<Observable<any>>;
+export const o: ObservableCreator<Observable<any>>;
+
+export interface Computed<T> {
+  (): T;
+}
+export interface ComputedCreator<T> {
+  (observer: (v: T) => T, seed: T): Computed<T>;
+  (observer: () => T): Computed<T>;
+}
+export const computed: ComputedCreator<Computed<any>>;
+export const S: ComputedCreator<Computed<any>>;
+
+export function subscribe<T>(observer: () => T): () => void;
+export function unsubscribe<T>(observer: () => T): void;
+export function isListening(): boolean;
+export function root<T>(fn: () => T): T;
+export function sample<T>(fn: () => T): T;
+export function transaction<T>(fn: () => T): T;
+
+type CleanupFn = () => any;
+export function cleanup(fn: CleanupFn): CleanupFn;
