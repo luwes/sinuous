@@ -5,6 +5,7 @@
   "description": "Sinuous hydrate",
   "module": "../module/hydrate.js",
   "main": "../dist/hydrate.js",
+  "types": "src/index.d.ts",
   "files": [
     "src"
   ],
