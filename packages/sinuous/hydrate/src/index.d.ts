@@ -1,3 +1,4 @@
+import { JSXInternal } from '../../src/jsx';
 import { Observable } from '../../observable/src';
 
 interface VNode<P = {}> {
@@ -30,27 +31,47 @@ export const html: (strings: TemplateStringsArray, ...values: any[]) => VNode | 
 export const svg: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
 
 export function h(
-  type: string | FunctionComponent,
-  props: object,
+  type: string,
+  props:
+    | JSXInternal.HTMLAttributes &
+      Record<string, any>
+    | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
 export function h(
-  type: string | FunctionComponent,
+  type: FunctionComponent,
+  props:
+    | JSXInternal.HTMLAttributes &
+      Record<string, any>
+    | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
 export function h(
   children: ElementChildren[]
 ): VNode | VNode[];
+export namespace h {
+  export import JSX = JSXInternal;
+}
 
 export function hs(
-  type: string | FunctionComponent,
-  props: object,
+  type: string,
+  props:
+    | JSXInternal.SVGAttributes &
+      Record<string, any>
+    | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
 export function hs(
-  type: string | FunctionComponent,
+  type: FunctionComponent,
+  props:
+    | JSXInternal.SVGAttributes &
+      Record<string, any>
+    | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
 export function hs(
   children: ElementChildren[]
 ): VNode | VNode[];
+export namespace hs {
+  export import JSX = JSXInternal;
+}
