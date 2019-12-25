@@ -34,7 +34,7 @@ export function property(name, value, el, isAttr, isCss) {
 }
 
 function handleEvent(el, name, value) {
-  name = name.slice(2);
+  name = name.slice(2).toLowerCase();
 
   const removeListener = api.cleanup(() =>
     el.removeEventListener(name, eventProxy)
