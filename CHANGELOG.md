@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.19.0 - 2019-12-25
+
+### Added 
+
+Add type declarations [#52](https://github.com/luwes/sinuous/pull/52)
+
 ## 0.18.5 - 2019-12-15
 
 ### Added 

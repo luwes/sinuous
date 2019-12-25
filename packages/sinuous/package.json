@@ -1,9 +1,10 @@
 {
   "name": "sinuous",
-  "version": "0.18.5",
+  "version": "0.19.0",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
+  "types": "src/index.d.ts",
   "files": [
     "module",
     "dist",
