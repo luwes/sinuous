@@ -19,7 +19,7 @@
 
 Why use Sinuous over framework x?
 
-- **Smaller.** Produces smaller bundles for medium to large apps compared to Svelte, React and Vue. [¹]
+- **Smaller.** Produces smaller bundles compared to Svelte, React and Vue. [¹]
 - **Faster.** Sinuous is `1.1x` slower than VanillaJS while Vue and React are about `1.7x` slower. [²]
 - **Truly reactive.** "Mobx" mini built-in, anything is derived automatically from the app state.
 
@@ -66,10 +66,12 @@ _See [complete docs](https://sinuous.netlify.com/introduction/getting-started/),
 
 A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM elements via **hyperscript** `h` calls. This allows the developer more freedom in the choice of the view syntax.
 
+**Hyperscript** directly call `h(type: string, props: object, ...children)`.
+
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
-**JSX** needs to transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx).
+**JSX** needs to be transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx) or TypeScript.
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
