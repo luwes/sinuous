@@ -1,4 +1,3 @@
-
 export interface ObservableCreator<T> {
   (value: T): Observable<T>;
 }

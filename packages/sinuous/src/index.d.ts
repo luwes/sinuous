@@ -19,14 +19,14 @@ declare namespace sinuous {
     | undefined;
   type ElementChildren = ElementChild[] | ElementChild;
 
-	interface SinuousDOMAttributes {
-		children?: ElementChildren;
-	}
+  interface SinuousDOMAttributes {
+    children?: ElementChildren;
+  }
 
   interface FunctionComponent<P = {}> {
     (props: object, ...children: ElementChildren[]): any
     (...children: ElementChildren[]): any
-	}
+  }
 
   const observable: ObservableCreator<Observable<any>>;
   const o: ObservableCreator<Observable<any>>;
@@ -53,9 +53,9 @@ declare namespace sinuous {
   function h(
     children: ElementChildren[]
   ): DocumentFragment;
-	namespace h {
-		export import JSX = JSXInternal;
-	}
+  namespace h {
+    export import JSX = JSXInternal;
+  }
 
   function hs(
     type: string,
@@ -76,8 +76,8 @@ declare namespace sinuous {
   function hs(
     children: ElementChildren[]
   ): DocumentFragment;
-	namespace hs {
-		export import JSX = JSXInternal;
-	}
+  namespace hs {
+    export import JSX = JSXInternal;
+  }
 
 }
