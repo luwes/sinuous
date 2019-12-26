@@ -14,9 +14,9 @@
 ---
 
 - **Small.** hello world at `~1.5kB` gzip. [¹]
-- **Simple.** plain JavaScript feel; template literals, standard HTML.
-- **Performance.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
+- **Fast.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
 - **Truly reactive.** automatically derived from the app state.
+- **DevEx.** no compile step needed, choose your [view syntax](#view-syntax).
 
 
 ---
