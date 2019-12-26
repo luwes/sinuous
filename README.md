@@ -4,11 +4,11 @@
 ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous-observable.min.js?v=1&compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
 
-> Declarative views, no VDOM, direct DOM manipulation performance, truly reactive. 
-
+ 
 **npm**: `npm i sinuous`  
 **cdn**: https://unpkg.com/sinuous  
 **module**: https://unpkg.com/sinuous?module
+
 
 ---
 
@@ -19,7 +19,6 @@
 
 
 ---
-
 
 ## Examples
 
