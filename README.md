@@ -20,7 +20,7 @@
 
 ---
 
-## Examples
+### Examples
 
 - [**Counter**](https://codesandbox.io/s/sinuous-counter-z6k71) (@ CodeSandbox)
 - [**Analog SVG Clock**](https://sinuous.netlify.com/examples/clock/) ⏰
