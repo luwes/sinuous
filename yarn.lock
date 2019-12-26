@@ -550,7 +550,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-react-jsx@^7.7.4":
+"@babel/plugin-transform-react-jsx@^7.7.7":
   version "7.7.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx/-/plugin-transform-react-jsx-7.7.7.tgz#5cbaa7445b4a09f774029f3cc7bb448ff3122a5d"
   integrity sha512-SlPjWPbva2+7/ZJbGcoqjl4LsQaLpKEzxW9hcxU7675s24JmdotJOSJ4cgAbV82W3FcZpHIGmRZIlUL8ayMvjw==
@@ -5290,11 +5290,6 @@ simple-concat@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
   integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
-
-sinuous@0.18.5, sinuous@^0.18.0:
-  version "0.18.5"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.18.5.tgz#c77cfa409f8a3198d6f35e6389292bf04bae8241"
-  integrity sha512-UQ/+gF91Y7H+AT7PRCJqPOCAZjnrfGr1sMHZxgn018W3H1kFagbI2ohMjSqLPT7etzQcK5uIR7U1G/1FtYKRmA==
 
 size-plugin-core@^0.0.7:
   version "0.0.7"

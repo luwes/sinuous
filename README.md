@@ -7,7 +7,7 @@
 
 > Declarative views, no VDOM, direct DOM manipulation performance, truly reactive. 
 
-**npm**: `npm install sinuous --save`  
+**npm**: `npm i sinuous`  
 **cdn**: https://unpkg.com/sinuous  
 **module**: https://unpkg.com/sinuous?module
 
