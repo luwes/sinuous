@@ -13,15 +13,10 @@
 
 ---
 
-- **Small.** hello world at `~1.5kB` gzip.
+- **Small.** hello world at `~1.5kB` gzip. [¹]
 - **Simple.** plain JavaScript feel; template literals, standard HTML.
 - **Performance.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
-
-Why use Sinuous over framework x?
-
-- **Smaller.** Produces smaller bundles compared to Svelte, React and Vue. [¹]
-- **Faster.** Sinuous is `1.1x` slower than VanillaJS while Vue and React are about `1.7x` slower. [²]
-- **Truly reactive.** "Mobx" mini built-in, anything is derived automatically from the app state.
+- **Truly reactive.** automatically derived from the app state.
 
 
 ---
@@ -199,9 +194,4 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homep
 
 Sinuous [TodoMVC](https://github.com/luwes/sinuous-todomvc/) 2.9kB < Svelte [TodoMVC](https://github.com/sveltejs/svelte-todomvc) 3.5kB
 
-#### ² Faster
-
-See slowdowns at [JS Framework Benchmark](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)
-
 [¹]:#-smaller
-[²]:#-faster
