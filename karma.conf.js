@@ -151,7 +151,7 @@ module.exports = function(config) {
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
-            'packages/*/!{htm,all}/**/src/**/*.js'
+            'packages/*/!(htm)/**/src/**/*.js'
         }),
         sauceLabs && babel({
           include: [
