@@ -2,7 +2,7 @@ export = sinuous;
 export as namespace sinuous;
 
 import { JSXInternal } from './jsx';
-import { Observable, ObservableCreator } from '../observable/src';
+import { Observable, ObservableCreator, subscribe, cleanup, root, sample } from '../observable/src';
 
 declare namespace sinuous {
   export import JSX = JSXInternal;
@@ -79,5 +79,32 @@ declare namespace sinuous {
   namespace hs {
     export import JSX = JSXInternal;
   }
+
+  /**
+   * Options required for reactive state, defaults to the Sinuous observable API.
+   */
+  interface Options {
+    subscribe: typeof subscribe;
+    cleanup: typeof cleanup;
+    root: typeof root;
+    sample: typeof sample;
+  }
+
+  /**
+   * Creates a new hyperscript function with the passed reactive API.
+   * @param options
+   * @param isSvg
+   */
+  function context(options: Options, isSvg?: boolean): typeof h | typeof hs;
+
+  /**
+   * Sinuous internal API.
+   */
+  interface Api extends Options {
+    insert<T>(parent: Node, value: T, marker?: Node, current?: T, startNode?: Node): T;
+    property(name: string, value: any, el: Node, isAttr?: boolean, isCss?: boolean): void;
+  }
+
+  const api: Api;
 
 }
