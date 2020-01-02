@@ -86,9 +86,13 @@ export function hydrate(delta, root) {
       selector = '#';
     } else if ((prop = delta._props.class) || (prop = delta._props.className)) {
       selector = '.';
+    } else {
+      prop = delta.type;
     }
     selector += (typeof prop === 'function' ? prop() : prop)
       .split(' ')
+      // Escape CSS selector https://bit.ly/36h9I83
+      .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
       .join('.');
     root = document.querySelector(selector);
   }
