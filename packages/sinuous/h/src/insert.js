@@ -29,7 +29,7 @@ export function insert(parent, value, marker, current, startNode) {
     current = value;
   } else if (typeof value === 'function') {
     api.subscribe(function insertContent() {
-      current = api.insert(parent, value(), marker, current);
+      current = api.insert(parent, value.call(parent), marker, current);
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
