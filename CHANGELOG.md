@@ -2,41 +2,56 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.19.1 - 2020-01-01
+
+### Fixed
+
+- Fixed CSS selector escaping in `hydrate`.
+
+### Added
+
+- Added types for `context()` and internal `api` methods.
+- Added tag name selecting in `hydrate`, for example:
+
+```js
+hydrate(html`<body onclick="${blur}">`);
+```
+
 ## 0.19.0 - 2019-12-25
 
 ### Added 
 
-Add type declarations [#52](https://github.com/luwes/sinuous/pull/52)
+- Added type declarations [#52](https://github.com/luwes/sinuous/pull/52)
 
 ## 0.18.5 - 2019-12-15
 
 ### Added 
 
-Add special bundle to display bundle size of Sinuous w/ observable included.
+- Added special bundle to display bundle size of Sinuous w/ observable included.
 
 ## 0.18.4 - 2019-12-13
 
 ### Changed
 
-Use Sinuous api instead of template hooks and golf some bytes 🏌️‍♂️
+- Use Sinuous api instead of template hooks and golf some bytes 🏌️‍♂️
 
 ## 0.18.3 - 2019-12-13
 
 ### Removed
 
-Golf down some bytes in `map` (-68 B) ⛳️
+- Golf down some bytes in `map` (-68 B) ⛳️
 
 ## 0.18.2 - 2019-12-07
 
 ### Fixed
 
-Fixed memory leak in observable [#51](https://github.com/luwes/sinuous/pull/51)
+- Fixed memory leak in observable [#51](https://github.com/luwes/sinuous/pull/51)
 
 ## 0.18.1 - 2019-12-03
 
 ### Added
 
-Add `S` alias for the `all` package which is meant to include in your webpage with a script tag.
+- Add `S` alias for the `all` package which is meant to include in your webpage with a script tag.
 
 ## 0.18.0 - 2019-12-03
 

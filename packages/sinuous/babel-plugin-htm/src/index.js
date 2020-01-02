@@ -147,7 +147,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
 
       let node = values[0];
       if (values.length > 1) {
-        if (!t.isStringLiteral(node) && !t.isStringLiteral(values[1])) {
+        if (!t.isStringLiteral(node)) {
           node = t.binaryExpression('+', t.stringLiteral(''), concatFunctionNode(node));
         }
         values.slice(1).forEach(value => {

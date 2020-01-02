@@ -257,6 +257,12 @@ test('prop with multiple static and observables', t => {
   );
   t.equal(
     html`
+      <a href="${observableMock}after" />
+    `.props.href(),
+    'fooafter'
+  );
+  t.equal(
+    html`
       <a href="${function() { return 'foo'; }}${1}" />
     `.props.href(),
     'foo1'

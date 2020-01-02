@@ -1,33 +1,26 @@
 # <a href="https://github.com/luwes/sinuous"><img src="https://raw.githubusercontent.com/luwes/sinuous/master/media/sinuous-logo.svg?sanitize=true" height="40" alt="Sinuous" /></a>
 
-[![Build Status](https://img.shields.io/travis/luwes/sinuous/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/sinuous)
+[![Version](https://img.shields.io/npm/v/sinuous.svg?color=success&style=flat-square)](https://www.npmjs.com/package/sinuous)
 ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/sinuous-observable.min.js?v=1&compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-> Declarative views, no VDOM, direct DOM manipulation performance, truly reactive. 
-
+ 
 **npm**: `npm i sinuous`  
 **cdn**: https://unpkg.com/sinuous  
 **module**: https://unpkg.com/sinuous?module
 
+
 ---
 
-- **Small.** hello world at `~1.5kB` gzip.
-- **Simple.** plain JavaScript feel; template literals, standard HTML.
-- **Performance.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
-
-Why use Sinuous over framework x?
-
-- **Smaller.** Produces smaller bundles compared to Svelte, React and Vue. [¹]
-- **Faster.** Sinuous is `1.1x` slower than VanillaJS while Vue and React are about `1.7x` slower. [²]
-- **Truly reactive.** "Mobx" mini built-in, anything is derived automatically from the app state.
+- **Small.** hello world at `~1.5kB` gzip. [¹]
+- **Fast.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
+- **Truly reactive.** automatically derived from the app state.
+- **DevEx.** no compile step needed, choose your [view syntax](#view-syntax).
 
 
 ---
 
-
-## Examples
+### Examples
 
 - [**Counter**](https://codesandbox.io/s/sinuous-counter-z6k71) (@ CodeSandbox)
 - [**Analog SVG Clock**](https://sinuous.netlify.com/examples/clock/) ⏰
@@ -199,9 +192,4 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homep
 
 Sinuous [TodoMVC](https://github.com/luwes/sinuous-todomvc/) 2.9kB < Svelte [TodoMVC](https://github.com/sveltejs/svelte-todomvc) 3.5kB
 
-#### ² Faster
-
-See slowdowns at [JS Framework Benchmark](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html)
-
 [¹]:#-smaller
-[²]:#-faster
