@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.19.2 - 2020-01-02
+
+# Added
+
+- Added element context to accessor calls in `property` and `insert` api.
+
 ## 0.19.1 - 2020-01-01
 
 ### Fixed
