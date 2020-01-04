@@ -1,7 +1,20 @@
 import test from 'tape';
 import spy from 'ispy';
 import { h, html, hydrate, _ } from 'sinuous/hydrate';
-import { observable } from 'sinuous';
+import { observable, html as newhtml } from 'sinuous';
+
+test('hydrates root bug', function(t) {
+  document.body.innerHTML = `
+    <img class="hidden" />
+  `;
+
+  const img = hydrate(html`
+    <img class="hidden block" />
+  `, document.querySelector('img'));
+
+  t.equal(img.className, 'hidden block');
+  t.end();
+});
 
 test('hydrate function undefined bug', function(t) {
   document.body.innerHTML = `
@@ -452,5 +465,98 @@ test('hydrate can add conditional observables in content w/ newlines', function(
   );
 
   div.parentNode.removeChild(div);
+  t.end();
+});
+
+test('hydrate can create dom after hydration', function(t) {
+  document.body.innerHTML = `
+    <button>
+      ...
+    </button>
+  `;
+
+  const avatar = observable('W');
+
+  const button = hydrate(html`
+    <button>
+      ${avatar}
+    </button>
+  `, document.querySelector('button'));
+
+  t.equal(button.childNodes[0].textContent, 'W');
+
+  avatar(newhtml`
+    W
+    <img class="hidden" src="https://sinuous.io/" />
+  `);
+
+  t.equal(button.childNodes[1].src, 'https://sinuous.io/');
+
+  t.end();
+});
+
+test('hydrate components', function(t) {
+  document.body.innerHTML = `
+    <div id="wrap">
+      <div class="name">
+        <span>Wes</span>
+      </div>
+    </div>
+  `;
+
+  const name = observable('Wes');
+
+  const Name = (props) => {
+    return html`
+      <div class="name hidden">
+        <span>${props.text}</span>
+      </div>
+    `;
+  };
+
+  const div = hydrate(html`
+    <div id="wrap">
+      <${Name} text=${name} />
+    </div>
+  `);
+
+  t.equal(div.children[0].className, 'name hidden');
+  t.equal(div.children[0].children[0].textContent, 'Wes');
+
+  name('Joe');
+
+  t.equal(div.children[0].children[0].textContent, 'Joe');
+
+  t.end();
+});
+
+test('hydrate root component', function(t) {
+  document.body.innerHTML = `
+    <div class="name">
+      <span>Wes</span>
+    </div>
+  `;
+
+  const name = observable('Wes');
+
+  const Name = (props) => {
+    return html`
+      <div class="name">
+        <span>${props.text}</span>
+      </div>
+    `;
+  };
+
+  const div = hydrate(html`
+    <${Name} text=${name} />
+  `);
+
+  t.equal(div.className, 'name');
+  t.equal(div.children[0].textContent, 'Wes');
+
+  name('Joe');
+
+  t.equal(div.children[0].textContent, 'Joe');
+
   t.end();
 });
