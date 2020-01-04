@@ -202,9 +202,7 @@ export function hydrate(delta, root) {
 
       if (typeof arg === 'object') {
         if (!arg._children && !arg._props) {
-          for (let name in arg) {
-            api.property(name, arg[name], el, delta._isSvg);
-          }
+          api.property(null, arg, el, delta._isSvg);
         }
       }
     }
