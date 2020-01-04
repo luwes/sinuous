@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.19.3 - 2020-01-04
+
+### Fixed
+
+- Fixed hydrate root props handling.
+
+### Added
+
+- Hydrate components support.
+
 ## 0.19.2 - 2020-01-02
 
 # Added

@@ -20,11 +20,16 @@ export function context(isSvg) {
     const args = EMPTY_ARR.slice.call(arguments);
     const tree = { _children: [] };
 
-    function item(arg) {
+    function item(arg, i) {
       if (isSvg) tree._isSvg = isSvg;
       if (arg == null);
       else if (arg === _ || typeof arg === 'function') {
-        addChild(tree, arg);
+        // Components can only be the first argument.
+        if (tree.type || i > 0) {
+          addChild(tree, arg);
+        } else {
+          tree.type = arg;
+        }
       } else if (Array.isArray(arg)) {
         arg.forEach(item);
       } else if (typeof arg === 'object') {
@@ -77,6 +82,11 @@ export function context(isSvg) {
 export function hydrate(delta, root) {
   if (!delta) {
     return;
+  }
+
+  if (typeof delta.type === 'function') {
+    // Support Components
+    delta = delta.type.apply(null, [delta._props].concat(delta._children));
   }
 
   if (!root) {
@@ -139,10 +149,6 @@ export function hydrate(delta, root) {
           } else if (arg.type) {
             hydrate(arg, target);
             el._index++;
-          } else {
-            for (let name in arg) {
-              api.property(name, arg[name], el, delta._isSvg);
-            }
           }
         } else if (typeof arg === 'function') {
           let hydrated;
@@ -185,16 +191,18 @@ export function hydrate(delta, root) {
                 current = [];
               }
 
-              // IE9 requires an explicit `null` as second argument.
-              marker = el.insertBefore(
-                document.createTextNode(''),
-                filterChildNodes(el)[el._index] || null
-              );
+              marker = api.add(el, '', filterChildNodes(el)[el._index]);
             }
 
             isHydrated = false;
             hydrated = true;
           });
+        }
+      }
+
+      if (typeof arg === 'object') {
+        if (!arg._children && !arg._props) {
+          api.property(null, arg, el, delta._isSvg);
         }
       }
     }
