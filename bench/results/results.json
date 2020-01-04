@@ -34,16 +34,16 @@
       "id": "vanillajs",
       "benchmark": "05_swap1k",
       "values": [
-        96.588,
-        96.331,
-        87.102
+        80.286,
+        76.807,
+        76.795
       ],
-      "min": 87.102,
-      "max": 96.588,
-      "mean": 93.34033333333332,
-      "median": 96.331,
-      "geometricMean": 93.23360056174477,
-      "standardDeviation": 5.404083116804672
+      "min": 76.795,
+      "max": 80.286,
+      "mean": 77.96266666666666,
+      "median": 76.807,
+      "geometricMean": 77.94552550587014,
+      "standardDeviation": 2.0120746341359537
     },
     {
       "id": "vanillajs",
@@ -79,16 +79,16 @@
       "id": "vanillajs",
       "benchmark": "07_create10k",
       "values": [
-        1711.565,
-        1797.851,
-        1675.013
+        1596.752,
+        1581.667,
+        1659.961
       ],
-      "min": 1675.013,
-      "max": 1797.851,
-      "mean": 1728.143,
-      "median": 1711.565,
-      "geometricMean": 1727.3821400761474,
-      "standardDeviation": 63.07468687199336
+      "min": 1581.667,
+      "max": 1659.961,
+      "mean": 1612.793333333333,
+      "median": 1596.752,
+      "geometricMean": 1612.4396501983454,
+      "standardDeviation": 41.538908150471855
     },
     {
       "id": "sinuous-0.14.2",
@@ -109,31 +109,31 @@
       "id": "vanillajs",
       "benchmark": "01_run1k",
       "values": [
-        205.362,
-        155.896,
-        153.215
+        154.553,
+        161.474,
+        150.437
       ],
-      "min": 153.215,
-      "max": 205.362,
-      "mean": 171.49099999999999,
-      "median": 155.896,
-      "geometricMean": 169.9099378254047,
-      "standardDeviation": 29.363760334807257
+      "min": 150.437,
+      "max": 161.474,
+      "mean": 155.488,
+      "median": 154.553,
+      "geometricMean": 155.42166927824644,
+      "standardDeviation": 5.57759007098943
     },
     {
       "id": "vanillajs",
       "benchmark": "03_update10th1k_x16",
       "values": [
-        372.406,
-        351.912,
-        334.072
+        332.218,
+        286.241,
+        226.549
       ],
-      "min": 334.072,
-      "max": 372.406,
-      "mean": 352.7966666666666,
-      "median": 351.912,
-      "geometricMean": 352.4495342107927,
-      "standardDeviation": 19.18230604837003
+      "min": 226.549,
+      "max": 332.218,
+      "mean": 281.6693333333333,
+      "median": 286.241,
+      "geometricMean": 278.2524838434343,
+      "standardDeviation": 52.98263387500978
     },
     {
       "id": "sinuous-0.14.2",
@@ -274,16 +274,16 @@
       "id": "vanillajs",
       "benchmark": "06_remove-one-1k",
       "values": [
-        79.177,
-        79.512,
-        74.132
+        60.893,
+        64.488,
+        58.705
       ],
-      "min": 74.132,
-      "max": 79.512,
-      "mean": 77.60700000000001,
-      "median": 79.177,
-      "geometricMean": 77.56738414316267,
-      "standardDeviation": 3.014096050227994
+      "min": 58.705,
+      "max": 64.488,
+      "mean": 61.362,
+      "median": 60.893,
+      "geometricMean": 61.31599645864564,
+      "standardDeviation": 2.9198874978327507
     },
     {
       "id": "react-16.8.6",
@@ -319,31 +319,31 @@
       "id": "vanillajs",
       "benchmark": "02_replace1k",
       "values": [
-        200.023,
-        213.65,
-        236.621
+        185.992,
+        191.319,
+        166.883
       ],
-      "min": 200.023,
-      "max": 236.621,
-      "mean": 216.76466666666667,
-      "median": 213.65,
-      "geometricMean": 216.24465073259572,
-      "standardDeviation": 18.496736531975944
+      "min": 166.883,
+      "max": 191.319,
+      "mean": 181.398,
+      "median": 185.992,
+      "geometricMean": 181.08736735139675,
+      "standardDeviation": 12.849441661021684
     },
     {
       "id": "vanillajs",
       "benchmark": "08_create1k-after1k_x2",
       "values": [
-        381.419,
-        395.731,
-        413.27
+        378.407,
+        355.402,
+        342.356
       ],
-      "min": 381.419,
-      "max": 413.27,
-      "mean": 396.8066666666667,
-      "median": 395.731,
-      "geometricMean": 396.59334775437367,
-      "standardDeviation": 15.952722160601096
+      "min": 342.356,
+      "max": 378.407,
+      "mean": 358.72166666666664,
+      "median": 355.402,
+      "geometricMean": 358.4145713051979,
+      "standardDeviation": 18.2533227203524
     },
     {
       "id": "react-16.8.6",
@@ -409,31 +409,31 @@
       "id": "vanillajs",
       "benchmark": "04_select1k",
       "values": [
-        40.282,
-        60.793,
-        66.037
+        53.96,
+        35.755,
+        42.715
       ],
-      "min": 40.282,
-      "max": 66.037,
-      "mean": 55.70400000000001,
-      "median": 60.793,
-      "geometricMean": 54.481699353916305,
-      "standardDeviation": 13.610784216936219
+      "min": 35.755,
+      "max": 53.96,
+      "mean": 44.14333333333334,
+      "median": 42.715,
+      "geometricMean": 43.51741048908142,
+      "standardDeviation": 9.186163961814165
     },
     {
       "id": "vanillajs",
       "benchmark": "09_clear1k_x8",
       "values": [
-        284.611,
-        285.297,
-        335.654
+        296.954,
+        255.538,
+        233.618
       ],
-      "min": 284.611,
-      "max": 335.654,
-      "mean": 301.854,
-      "median": 285.297,
-      "geometricMean": 300.94022250117,
-      "standardDeviation": 29.273668184906374
+      "min": 233.618,
+      "max": 296.954,
+      "mean": 262.0366666666667,
+      "median": 255.538,
+      "geometricMean": 260.7456013896292,
+      "standardDeviation": 32.16421498083442
     },
     {
       "id": "react-16.8.6",
@@ -839,16 +839,16 @@
       "id": "react-16.10.2",
       "benchmark": "06_remove-one-1k",
       "values": [
-        80.957,
-        89.597,
-        84.166
+        67.974,
+        74.691,
+        70.368
       ],
-      "min": 80.957,
-      "max": 89.597,
-      "mean": 84.90666666666665,
-      "median": 84.166,
-      "geometricMean": 84.83235447685489,
-      "standardDeviation": 4.367360797247387
+      "min": 67.974,
+      "max": 74.691,
+      "mean": 71.01100000000001,
+      "median": 70.368,
+      "geometricMean": 70.95703115342907,
+      "standardDeviation": 3.404351480091326
     },
     {
       "id": "sinuous-0.16.0",
@@ -899,61 +899,61 @@
       "id": "react-16.10.2",
       "benchmark": "09_clear1k_x8",
       "values": [
-        419.32,
-        422.037,
-        457.597
+        342.995,
+        401.259,
+        328.438
       ],
-      "min": 419.32,
-      "max": 457.597,
-      "mean": 432.98466666666667,
-      "median": 422.037,
-      "geometricMean": 432.63975532173464,
-      "standardDeviation": 21.358153860606333
+      "min": 328.438,
+      "max": 401.259,
+      "mean": 357.564,
+      "median": 342.995,
+      "geometricMean": 356.22302845250323,
+      "standardDeviation": 38.53461211690084
     },
     {
       "id": "react-16.10.2",
       "benchmark": "03_update10th1k_x16",
       "values": [
-        479.893,
-        423.083,
-        348.543
+        336.451,
+        293.757,
+        300.33
       ],
-      "min": 348.543,
-      "max": 479.893,
-      "mean": 417.173,
-      "median": 423.083,
-      "geometricMean": 413.62690950166416,
-      "standardDeviation": 65.87413528844229
+      "min": 293.757,
+      "max": 336.451,
+      "mean": 310.1793333333333,
+      "median": 300.33,
+      "geometricMean": 309.62516755592145,
+      "standardDeviation": 22.988071566213073
     },
     {
       "id": "react-16.10.2",
       "benchmark": "02_replace1k",
       "values": [
-        264.419,
-        238.247,
-        274.484
+        218.993,
+        214.784,
+        228.208
       ],
-      "min": 238.247,
-      "max": 274.484,
-      "mean": 259.05,
-      "median": 264.419,
-      "geometricMean": 258.5903879557715,
-      "standardDeviation": 18.705605122529434
+      "min": 214.784,
+      "max": 228.208,
+      "mean": 220.66166666666663,
+      "median": 218.993,
+      "geometricMean": 220.59094169721368,
+      "standardDeviation": 6.865805148220664
     },
     {
       "id": "react-16.10.2",
       "benchmark": "07_create10k",
       "values": [
-        2764.782,
-        2865.639,
-        2924.792
+        2803.076,
+        2844.232,
+        2574.285
       ],
-      "min": 2764.782,
-      "max": 2924.792,
-      "mean": 2851.7376666666664,
-      "median": 2865.639,
-      "geometricMean": 2850.9687231708313,
-      "standardDeviation": 80.90571874925354
+      "min": 2574.285,
+      "max": 2844.232,
+      "mean": 2740.5310000000004,
+      "median": 2803.076,
+      "geometricMean": 2737.907926750152,
+      "standardDeviation": 145.4364241550239
     },
     {
       "id": "sinuous-0.16.0",
@@ -989,16 +989,16 @@
       "id": "react-16.10.2",
       "benchmark": "05_swap1k",
       "values": [
-        937.991,
-        980.643,
-        980.822
+        909.455,
+        821.754,
+        822.455
       ],
-      "min": 937.991,
-      "max": 980.822,
-      "mean": 966.4853333333334,
-      "median": 980.643,
-      "geometricMean": 966.2731995967513,
-      "standardDeviation": 24.67697883318244
+      "min": 821.754,
+      "max": 909.455,
+      "mean": 851.2213333333334,
+      "median": 822.455,
+      "geometricMean": 850.2469100346469,
+      "standardDeviation": 50.43305265729345
     },
     {
       "id": "react-16.10.2",
@@ -1049,16 +1049,16 @@
       "id": "react-16.10.2",
       "benchmark": "01_run1k",
       "values": [
-        262.671,
-        275.138,
-        277.482
+        308.346,
+        274.478,
+        258.201
       ],
-      "min": 262.671,
-      "max": 277.482,
-      "mean": 271.76366666666667,
-      "median": 275.138,
-      "geometricMean": 271.6851117384622,
-      "standardDeviation": 7.9612200279438
+      "min": 258.201,
+      "max": 308.346,
+      "mean": 280.3416666666667,
+      "median": 274.478,
+      "geometricMean": 279.5768837574251,
+      "standardDeviation": 25.581579238454626
     },
     {
       "id": "sinuous-0.16.0",
@@ -1079,31 +1079,31 @@
       "id": "react-16.10.2",
       "benchmark": "08_create1k-after1k_x2",
       "values": [
-        673.754,
-        625.061,
-        749.441
+        576.427,
+        545.991,
+        543.729
       ],
-      "min": 625.061,
-      "max": 749.441,
-      "mean": 682.752,
-      "median": 673.754,
-      "geometricMean": 680.853596414869,
-      "standardDeviation": 62.67630415874886
+      "min": 543.729,
+      "max": 576.427,
+      "mean": 555.3823333333333,
+      "median": 545.991,
+      "geometricMean": 555.1846269063934,
+      "standardDeviation": 18.26027539040234
     },
     {
       "id": "react-16.10.2",
       "benchmark": "04_select1k",
       "values": [
-        102.995,
-        99.346,
-        68.981
+        518.471,
+        82.282,
+        67.477
       ],
-      "min": 68.981,
-      "max": 102.995,
-      "mean": 90.44066666666667,
-      "median": 99.346,
-      "geometricMean": 89.03593788917405,
-      "standardDeviation": 18.673959685437193
+      "min": 67.477,
+      "max": 518.471,
+      "mean": 222.74333333333334,
+      "median": 82.282,
+      "geometricMean": 142.25308436064495,
+      "standardDeviation": 256.21463000838446
     },
     {
       "id": "sinuous-0.16.0",
@@ -1124,46 +1124,46 @@
       "id": "sinuous-0.18.4",
       "benchmark": "09_clear1k_x8",
       "values": [
-        301.303,
-        340.355,
-        302.52
+        312.558,
+        249.642,
+        260.305
       ],
-      "min": 301.303,
-      "max": 340.355,
-      "mean": 314.726,
-      "median": 302.52,
-      "geometricMean": 314.21715652248054,
-      "standardDeviation": 22.203704713403138
+      "min": 249.642,
+      "max": 312.558,
+      "mean": 274.16833333333335,
+      "median": 260.305,
+      "geometricMean": 272.8413947241025,
+      "standardDeviation": 33.67120093393363
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "08_create1k-after1k_x2",
       "values": [
-        444.811,
-        412.863,
-        512.429
+        402.219,
+        376.148,
+        364.486
       ],
-      "min": 412.863,
-      "max": 512.429,
-      "mean": 456.70099999999996,
-      "median": 444.811,
-      "geometricMean": 454.85369547022754,
-      "standardDeviation": 50.83675996756676
+      "min": 364.486,
+      "max": 402.219,
+      "mean": 380.951,
+      "median": 376.148,
+      "geometricMean": 380.6279975485687,
+      "standardDeviation": 19.319586667421223
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "06_remove-one-1k",
       "values": [
-        62.888,
-        72.825,
-        92.14
+        61.199,
+        59.031,
+        59.549
       ],
-      "min": 62.888,
-      "max": 92.14,
-      "mean": 75.95100000000001,
-      "median": 72.825,
-      "geometricMean": 75.00648748646184,
-      "standardDeviation": 14.874433871579786
+      "min": 59.031,
+      "max": 61.199,
+      "mean": 59.92633333333333,
+      "median": 59.549,
+      "geometricMean": 59.91924230811138,
+      "standardDeviation": 1.1321843195051466
     },
     {
       "id": "sinuous-0.18.4",
@@ -1184,91 +1184,91 @@
       "id": "sinuous-0.18.4",
       "benchmark": "01_run1k",
       "values": [
-        183.912,
-        173.693,
-        170.778
+        163.168,
+        176.423,
+        158.992
       ],
-      "min": 170.778,
-      "max": 183.912,
-      "mean": 176.12766666666667,
-      "median": 173.693,
-      "geometricMean": 176.03867952970685,
-      "standardDeviation": 6.8971871319642615
+      "min": 158.992,
+      "max": 176.423,
+      "mean": 166.19433333333333,
+      "median": 163.168,
+      "geometricMean": 166.03073425067208,
+      "standardDeviation": 9.101041716931826
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "04_select1k",
       "values": [
-        57.038,
-        59.948,
-        72.589
+        75.646,
+        42.797,
+        47.339
       ],
-      "min": 57.038,
-      "max": 72.589,
-      "mean": 63.19166666666666,
-      "median": 59.948,
-      "geometricMean": 62.84488468434289,
-      "standardDeviation": 8.267371428291664
+      "min": 42.797,
+      "max": 75.646,
+      "mean": 55.26066666666666,
+      "median": 47.339,
+      "geometricMean": 53.51466259247222,
+      "standardDeviation": 17.799685456022345
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "02_replace1k",
       "values": [
-        226.008,
-        235.042,
-        185.138
+        187.759,
+        184.456,
+        176.589
       ],
-      "min": 185.138,
-      "max": 235.042,
-      "mean": 215.396,
-      "median": 226.008,
-      "geometricMean": 214.2503884332001,
-      "standardDeviation": 26.590660240016607
+      "min": 176.589,
+      "max": 187.759,
+      "mean": 182.93466666666666,
+      "median": 184.456,
+      "geometricMean": 182.8741830862884,
+      "standardDeviation": 5.738298208818818
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "05_swap1k",
       "values": [
-        88.27,
-        95.938,
-        94.383
+        101.196,
+        87.747,
+        81.668
       ],
-      "min": 88.27,
-      "max": 95.938,
-      "mean": 92.86366666666667,
-      "median": 94.383,
-      "geometricMean": 92.80382038670702,
-      "standardDeviation": 4.053496803172953
+      "min": 81.668,
+      "max": 101.196,
+      "mean": 90.20366666666666,
+      "median": 87.747,
+      "geometricMean": 89.84264196645884,
+      "standardDeviation": 9.993102838124566
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "07_create10k",
       "values": [
-        2213.19,
-        1971.073,
-        2041.198
+        1941.716,
+        1905.689,
+        1940.158
       ],
-      "min": 1971.073,
-      "max": 2213.19,
-      "mean": 2075.1536666666666,
-      "median": 2041.198,
-      "geometricMean": 2072.6955458126517,
-      "standardDeviation": 124.5788942651737
+      "min": 1905.689,
+      "max": 1941.716,
+      "mean": 1929.1876666666667,
+      "median": 1940.158,
+      "geometricMean": 1929.1157128968337,
+      "standardDeviation": 20.365346604792396
     },
     {
       "id": "sinuous-0.18.4",
       "benchmark": "03_update10th1k_x16",
       "values": [
-        346.621,
-        353.377,
-        324.559
+        307.87,
+        261.635,
+        269.28
       ],
-      "min": 324.559,
-      "max": 353.377,
-      "mean": 341.519,
-      "median": 346.621,
-      "geometricMean": 341.2942218159707,
-      "standardDeviation": 15.071233658861493
+      "min": 261.635,
+      "max": 307.87,
+      "mean": 279.59499999999997,
+      "median": 269.28,
+      "geometricMean": 278.883253968654,
+      "standardDeviation": 24.783426417668736
     }
   ]
 }
