@@ -11,7 +11,7 @@ export function property(name, value, el, isAttr, isCss) {
     handleEvent(el, name, value);
   } else if (typeof value === 'function') {
     api.subscribe(function setProperty() {
-      api.property(name, value.call(el), el, isAttr, isCss);
+      api.property(name, value.call({ el, name }), el, isAttr, isCss);
     });
   } else if (isCss) {
     el.style.setProperty(name, value);
