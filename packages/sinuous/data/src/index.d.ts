@@ -5,10 +5,10 @@ interface CloneFunction {
   (props: Record<string, any>): Node;
 }
 
-export function template(elementRef: () => Node): CloneFunction;
+export function template(elementRef: string): CloneFunction;
 
 interface FillFunction {
   (props: Record<string, any>): Node;
 }
 
-export function fill(elementRef: () => Node): FillFunction;
+export function fill(elementRef: string): FillFunction;

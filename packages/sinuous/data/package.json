@@ -1,0 +1,17 @@
+{
+  "name": "sinuous-data",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Sinuous data",
+  "module": "../module/data.js",
+  "main": "../dist/data.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

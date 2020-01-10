@@ -25,7 +25,9 @@
     "hydrate/package.json",
     "hydrate/src",
     "all/package.json",
-    "all/src"
+    "all/src",
+    "data/package.json",
+    "data/src"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"

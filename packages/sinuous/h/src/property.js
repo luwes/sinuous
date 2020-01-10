@@ -1,6 +1,7 @@
 import { api } from './api.js';
 
 export function property(name, value, el, isAttr, isCss) {
+  if (value == null) return;
   if (!name || (name === 'attrs' && (isAttr = true))) {
     for (name in value) {
       api.property(name, value[name], el, isAttr, isCss);
