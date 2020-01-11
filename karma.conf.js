@@ -141,6 +141,7 @@ module.exports = function(config) {
           'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
           'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
           'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
+          'sinuous/data': __dirname + '/packages/sinuous/data/src/data.js',
           'sinuous/hydrate': __dirname + '/packages/sinuous/hydrate/src/index.js',
           'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
           'sinuous': __dirname + '/packages/sinuous/src/index.js',

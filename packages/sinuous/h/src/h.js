@@ -2,8 +2,6 @@
 import { api } from './api.js';
 import { add } from './add.js';
 import { EMPTY_ARR } from './constants.js';
-import { insert } from './insert.js';
-import { property } from './property.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
@@ -60,10 +58,6 @@ export function context(options, isSvg) {
     return el;
   }
 
-  api.insert = insert;
-  api.property = property;
   api.h = h;
-  api.add = add;
-
   return h;
 }

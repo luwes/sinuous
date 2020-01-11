@@ -3,127 +3,147 @@ import { EMPTY_ARR } from './constants.js';
 
 let recordedActions;
 
-let oldInsert = api.insert;
-api.insert = function(parent, tag, a, b, c) {
-  if (tag && tag.$t) {
-    let current = '';
-    const action = (element, value) => {
-      oldInsert(element, value, null, current);
-    };
-    action._tag = tag;
-    action._el = parent;
-    recordedActions.push(action);
-    return;
-  }
-  return oldInsert(parent, tag, a, b, c);
-};
-
-let oldProperty = api.property;
-api.property = function(name, tag, el, a, b) {
-  if (tag && tag.$t) {
-    const action = (element, value) => {
-      oldProperty(name, value, element);
-    };
-    action._tag = tag;
-    action._el = el;
-    recordedActions.push(action);
-    return;
-  }
-  return oldProperty(name, tag, el, a, b);
-};
-
-/**
- * Template tag.
- * @param  {string} key
- * @return {Function}
- */
-export function t(key) {
-  const tag = () => key;
-  tag.$t = true;
-  return tag;
-}
-
 /**
  * Observable template tag.
  * @param  {string} key
  * @return {Function}
  */
 export function o(key) {
-  const observedTag = t(key);
-  observedTag._observable = true;
-  return observedTag;
+  return t(key, true);
 }
 
 /**
- * Creates a template.
- * @param  {Function} fn
+ * Template tag.
+ * @param  {string} key
+ * @param {boolean} observable
  * @return {Function}
  */
-export function template(fn) {
+export function t(key, observable) {
+  const tag = function() {
+    // eslint-disable-next-line
+    const { el, name } = this;
+    let action;
+    if (name == null) {
+      let current = '';
+      action = (element, value) => {
+        api.insert(element, value, null, current);
+      };
+      action._insert = true;
+    } else {
+      action = (element, value, prop) => {
+        api.property(name || prop, value, element);
+      };
+    }
+    action._tag = tag;
+    action._el = el;
+    action._key = key;
+    action._observable = observable;
+    recordedActions.push(action);
+  };
+  return tag;
+}
+
+export function fill(elementRef) {
+  return template(elementRef, true);
+}
+
+/**
+ * Creates a template function.
+ * @param   {Function} elementRef
+ * @param   {boolean} noclone
+ * @return  {Function}
+ */
+export function template(elementRef, noclone) {
   recordedActions = [];
 
-  const fragment = document.createDocumentFragment();
-  fragment.appendChild(fn());
+  const tpl = elementRef();
 
-  recordedActions.forEach(action => {
-    action._paths = [];
-    let el = action._el;
-    let parent;
-    while ((parent = el.parentNode)) {
-      action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
-      el = parent;
-    }
-  });
+  let fragment = tpl.content || (tpl.parentNode && tpl);
+  if (!fragment) {
+    fragment = document.createDocumentFragment();
+    fragment.appendChild(tpl);
+  }
+
+  if (!noclone) {
+    recordedActions.forEach(action => {
+      action._paths = [];
+      let el = action._el;
+      let parent;
+      while ((parent = el.parentNode) !== fragment.parentNode) {
+        action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
+        el = parent;
+      }
+    });
+  }
 
   const cloneActions = recordedActions;
   recordedActions = null;
 
-  // Tiny indicator that this is a template clone function.
-  clone.$t = true;
+  // Tiny indicator that this is a template create function.
+  create.$t = true;
 
-  function clone(props) {
+  function create(props) {
+    const root = noclone ? fragment : fragment.cloneNode(true);
     const keyedActions = {};
-    const el = fragment.cloneNode(true);
 
     // Set a custom property `props` for easy access to the passed argument.
-    el.firstChild.props = props;
+    root.firstChild.props = props;
 
-    for (let i = 0; i < cloneActions.length; i++) {
-      let action = cloneActions[i];
+    cloneActions.forEach(action => {
       const paths = action._paths;
+      let target = action._el;
 
-      let target = el;
-      let j = 0;
-      while (j < paths.length) {
-        target = target.firstChild;
-        const path = paths[j];
-        let k = 0;
-        while (k < path) {
-          target = target.nextSibling;
-          k += 1;
+      if (!noclone) {
+        target = root;
+        let j = 0;
+        while (j < paths.length) {
+          target = target.firstChild;
+          const path = paths[j];
+          let k = 0;
+          while (k < path) {
+            target = target.nextSibling;
+            k += 1;
+          }
+          j += 1;
         }
-        j += 1;
       }
 
-      const tag = action._tag;
-      const key = tag();
-      const value = props[key];
-      if (value != null) {
-        action(target, value);
-      }
+      const key = action._key;
+      let elProps = props;
 
-      if (tag._observable) {
-        if (!keyedActions[key]) {
-          observeProperty(props, key, value, (keyedActions[key] = []));
+      const createAction = (prop, i, keys) => {
+        const value = elProps[prop];
+        if (value != null) {
+          if (keys && action._insert && prop !== '_') {
+            return;
+          }
+          action(target, value, prop);
         }
-        keyedActions[key].push(action.bind(null, target));
-      }
-    }
 
-    return el;
+        if (action._observable) {
+          if (!keyedActions[key]) {
+            observeProperty(elProps, prop, value, (keyedActions[key] = []));
+          }
+          keyedActions[key].push(action.bind(null, target));
+        }
+      };
+
+      if (typeof props[key] === 'function') {
+        props[key] = props[key].call({ el: target });
+      }
+
+      if (typeof props[key] === 'object') {
+        elProps = props[key];
+        Object.keys(elProps).forEach(createAction);
+      } else {
+        createAction(key);
+      }
+    });
+
+    return root;
   }
 
-  return clone;
+  return create;
 }
 
 function observeProperty(props, key, value, actions) {
@@ -133,7 +153,7 @@ function observeProperty(props, key, value, actions) {
     },
     set(newValue) {
       value = newValue;
-      actions.forEach(action => action(newValue));
+      actions.forEach(action => action(newValue, key));
     }
   });
 }

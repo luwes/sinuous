@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.19.3",
+  "version": "0.20.0",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
@@ -25,7 +25,9 @@
     "hydrate/package.json",
     "hydrate/src",
     "all/package.json",
-    "all/src"
+    "all/src",
+    "data/package.json",
+    "data/src"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"
