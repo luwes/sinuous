@@ -1,6 +1,7 @@
 import test from 'tape';
 import spy from 'ispy';
 import { fill } from 'sinuous/data';
+import { normalizeAttributes } from '../../test/_utils.js';
 
 test('fill does not clone', function(t) {
   document.body.innerHTML = `
@@ -34,27 +35,27 @@ test('fill mutates the DOM', function(t) {
   const div = fill('.container')(data);
 
   t.equal(
-    div.outerHTML,
-    `<div class="container">
+    normalizeAttributes(div.outerHTML),
+    normalizeAttributes(`<div class="container">
       <h1 data-t="">Banana milkshake</h1>
       <div class="main">
         <button>Cherry</button>
         <span data-o="">Text node patch</span>
       </div>
-    </div>`
+    </div>`)
   );
 
   data[1]._ = '🧑';
 
   t.equal(
-    div.outerHTML,
-    `<div class="container">
+    normalizeAttributes(div.outerHTML),
+    normalizeAttributes(`<div class="container">
       <h1 data-t="">Banana milkshake</h1>
       <div class="main">
         <button>Cherry</button>
         <span data-o="">🧑</span>
       </div>
-    </div>`
+    </div>`)
   );
 
   div.parentNode.removeChild(div);
