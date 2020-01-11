@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.20.0 - 2020-01-10
+
+### Added
+
+- Added `sinuous/data` module [#53](https://github.com/luwes/sinuous/pull/53)
+- Improved `sinuous/template`, accepts objects and functions as data.
+
 ## 0.19.3 - 2020-01-04
 
 ### Fixed
