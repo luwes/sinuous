@@ -48,7 +48,7 @@ export function fill(elementRef) {
 }
 
 /**
- * Creates a template.
+ * Creates a template function.
  * @param   {Function} elementRef
  * @param   {boolean} noclone
  * @return  {Function}

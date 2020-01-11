@@ -6,7 +6,7 @@ export function fill(elementRef) {
 }
 
 /**
- * Creates a template.
+ * Creates a template function.
  * @param   {string} elementRef
  * @param   {boolean} noclone
  * @return  {Function}
@@ -22,25 +22,30 @@ function recordDataAttributes(fragment) {
   EMPTY_ARR.slice
     .call(fragment.querySelectorAll('[data-t],[data-o]'))
     .forEach((el, i) => {
-      let tag = 't';
+      let dataset = el.dataset.t;
       let tagFn = t;
       if ('o' in el.dataset) {
-        tag = 'o';
+        dataset = el.dataset.o;
         tagFn = o;
       }
-      if (el.dataset[tag]) {
-        let tags = el.dataset[tag].split(' ');
+      if (dataset) {
+        let tags = dataset.split(' ');
         tags.forEach(id => {
           const [name, key] = id.split(':');
           if (key) {
+            // Record a named property action.
             tagFn(key).call({ el, name });
           } else {
+            // Record a blank property action, name can be filled in later.
             tagFn(name).call({ el, name: 0 });
+            // Record an insert action.
             tagFn(name).call({ el });
           }
         });
       } else {
+        // Record a blank property action, name can be filled in later.
         tagFn(i).call({ el, name: 0 });
+        // Record an insert action.
         tagFn(i).call({ el });
       }
     });
