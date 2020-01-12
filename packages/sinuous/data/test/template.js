@@ -27,8 +27,12 @@ test('template works w/ template element', function(t) {
 
   const div = template('template');
   const el = div({ text: 'Apple' });
+
   t.assert(el !== div({ text: 'Apple' }));
+  t.assert(el !== div({ text: 'Banana' }));
+
   t.assert(el.children[0].children[0].textContent === 'Apple');
   t.assert(el.children[1].textContent === 'Apple');
+
   t.end();
 });

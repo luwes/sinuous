@@ -14,13 +14,17 @@ export function fill(elementRef) {
 export function template(elementRef, noclone) {
   return tpl(() => {
     let fragment = document.querySelector(elementRef);
-    return recordDataAttributes(fragment.content || fragment);
+    return recordDataAttributes(fragment);
   }, noclone);
 }
 
 function recordDataAttributes(fragment) {
   EMPTY_ARR.slice
-    .call(fragment.querySelectorAll('[data-t],[data-o]'))
+    .call(
+      (fragment.content || fragment.parentNode).querySelectorAll(
+        '[data-t],[data-o]'
+      )
+    )
     .forEach((el, i) => {
       let dataset = el.dataset.t;
       let tagFn = t;

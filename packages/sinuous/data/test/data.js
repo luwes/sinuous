@@ -11,7 +11,7 @@ test('fill w/ named data attributes', function(t) {
   `;
 
   const data = {
-    fruit: () => ({ _: 'Banana milkshake', class: 'whippedcream' }),
+    fruit: { _: 'Banana milkshake', class: 'whippedcream' },
     veggie: { _: 'Brussel sprout' }
   };
   const div = fill('.container')(data);

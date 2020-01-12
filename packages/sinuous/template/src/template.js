@@ -112,7 +112,7 @@ export function template(elementRef, noclone) {
       let elProps = props;
 
       const createAction = (prop, i, keys) => {
-        const value = elProps[prop];
+        let value = elProps[prop];
         if (value != null) {
           if (keys && action._insert && prop !== '_') {
             return;
@@ -122,15 +122,21 @@ export function template(elementRef, noclone) {
 
         if (action._observable) {
           if (!keyedActions[key]) {
-            observeProperty(elProps, prop, value, (keyedActions[key] = []));
+            keyedActions[key] = [];
+
+            Object.defineProperty(elProps, prop, {
+              get() {
+                return value;
+              },
+              set(newValue) {
+                value = newValue;
+                keyedActions[key].forEach(action => action(newValue, prop));
+              }
+            });
           }
           keyedActions[key].push(action.bind(null, target));
         }
       };
-
-      if (typeof props[key] === 'function') {
-        props[key] = props[key].call({ el: target });
-      }
 
       if (typeof props[key] === 'object') {
         elProps = props[key];
@@ -144,16 +150,4 @@ export function template(elementRef, noclone) {
   }
 
   return create;
-}
-
-function observeProperty(props, key, value, actions) {
-  Object.defineProperty(props, key, {
-    get() {
-      return value;
-    },
-    set(newValue) {
-      value = newValue;
-      actions.forEach(action => action(newValue, key));
-    }
-  });
 }
