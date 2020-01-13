@@ -1,4 +1,4 @@
-import { template as tpl, o, t } from 'sinuous/template';
+import { template as tpl, t } from 'sinuous/template';
 import { EMPTY_ARR } from './constants.js';
 
 export function fill(elementRef) {
@@ -18,40 +18,36 @@ export function template(elementRef, noclone) {
   }, noclone);
 }
 
+const tags = ['t', 'o', 'bind'];
+
 function recordDataAttributes(fragment) {
+  const root = fragment.content || fragment.parentNode;
+  let index = 0;
   EMPTY_ARR.slice
-    .call(
-      (fragment.content || fragment.parentNode).querySelectorAll(
-        '[data-t],[data-o]'
-      )
-    )
-    .forEach((el, i) => {
-      let dataset = el.dataset.t;
-      let tagFn = t;
-      if ('o' in el.dataset) {
-        dataset = el.dataset.o;
-        tagFn = o;
-      }
-      if (dataset) {
-        let tags = dataset.split(' ');
-        tags.forEach(id => {
-          const [name, key] = id.split(':');
-          if (key) {
-            // Record a named property action.
-            tagFn(key).call({ el, name });
-          } else {
-            // Record a blank property action, name can be filled in later.
-            tagFn(name).call({ el, name: 0 });
-            // Record an insert action.
-            tagFn(name).call({ el });
-          }
-        });
-      } else {
-        // Record a blank property action, name can be filled in later.
-        tagFn(i).call({ el, name: 0 });
-        // Record an insert action.
-        tagFn(i).call({ el });
-      }
+    .call(root.querySelectorAll('[data-t],[data-o],[data-bind]'))
+    .forEach(el => {
+      tags.forEach((tag, i) => {
+        const dataset = el.dataset[tag];
+        if (dataset == null) return;
+
+        const observed = i > 0;
+        const bind = i > 1;
+        if (dataset) {
+          let pairs = dataset.split(' ');
+          pairs.forEach(id => {
+            const [name, key] = id.split(':');
+            if (key) {
+              // Record a named property action.
+              t(key, observed, bind).call({ el, name });
+            } else {
+              t(name, observed, bind).call({ el });
+            }
+          });
+        } else {
+          t(index, observed, bind).call({ el });
+        }
+        index++;
+      });
     });
   return fragment;
 }

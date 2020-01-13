@@ -12,6 +12,8 @@ test('template does clone', function(t) {
   const el = div({ text: '🧬' });
   t.assert(el !== div({ text: '🧬' }));
   t.assert(el.children[0].textContent === '🧬');
+
+  document.body.innerHTML = '';
   t.end();
 });
 
@@ -34,5 +36,23 @@ test('template works w/ template element', function(t) {
   t.assert(el.children[0].children[0].textContent === 'Apple');
   t.assert(el.children[1].textContent === 'Apple');
 
+  document.body.innerHTML = '';
+  t.end();
+});
+
+test('template w/ bind this', function(t) {
+  document.body.innerHTML = `
+    <div class="container">
+      <input data-bind="this:vakske">
+    </div>
+  `;
+
+  const data = {};
+  const div = template('.container')(data);
+  const input = div.children[0];
+
+  t.equal(data.vakske, input);
+
+  document.body.innerHTML = '';
   t.end();
 });
