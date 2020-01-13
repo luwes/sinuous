@@ -69,14 +69,3 @@ Each tag accepts three mapping variants:
     pet() { console.log('Watch my fur son'); }
   });
 ```
-
-### Data
-
-- Functions can be used as data and will be executed automatically with `{ el: target }` as context (aka `this`).
-
-```js
-  template('#id')({ mykey: function() {
-    console.log(this instanceof Node);
-    return { _: 'My content', class: 'my-class' };
-  });
-```

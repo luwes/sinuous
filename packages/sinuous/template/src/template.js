@@ -4,7 +4,7 @@ import { EMPTY_ARR } from './constants.js';
 let recordedActions;
 
 /**
- * Observable template tag.
+ * Observed template tag.
  * @param  {string} key
  * @return {Function}
  */
@@ -15,29 +15,29 @@ export function o(key) {
 /**
  * Template tag.
  * @param  {string} key
- * @param {boolean} observable
+ * @param {boolean} observed
+ * @param {boolean} bind
  * @return {Function}
  */
-export function t(key, observable) {
+export function t(key, observed, bind) {
   const tag = function() {
     // eslint-disable-next-line
     const { el, name } = this;
-    let action;
-    if (name == null) {
-      let current = '';
-      action = (element, value) => {
+
+    let current = '';
+    let action = (element, prop, value) => {
+      if (prop == null) {
         api.insert(element, value, null, current);
-      };
-      action._insert = true;
-    } else {
-      action = (element, value, prop) => {
-        api.property(name || prop, value, element);
-      };
-    }
-    action._tag = tag;
+      } else {
+        api.property(prop, value, element);
+      }
+    };
+
     action._el = el;
+    action._name = name;
     action._key = key;
-    action._observable = observable;
+    action._observed = observed;
+    action._bind = bind;
     recordedActions.push(action);
   };
   return tag;
@@ -112,27 +112,38 @@ export function template(elementRef, noclone) {
       let elProps = props;
 
       const createAction = (prop, i, keys) => {
-        const value = elProps[prop];
+        let name = action._name || (keys && prop);
+        if (name === '_') name = null;
+
+        let value = elProps[prop];
         if (value != null) {
-          if (keys && action._insert && prop !== '_') {
-            return;
-          }
-          action(target, value, prop);
+          action(target, name, value);
         }
 
-        if (action._observable) {
+        if (action._observed) {
           if (!keyedActions[key]) {
-            observeProperty(elProps, prop, value, (keyedActions[key] = []));
+            keyedActions[key] = [];
+
+            Object.defineProperty(elProps, prop, {
+              get() {
+                if (name === 'this') return target;
+                return action._bind ? target[name] : value;
+              },
+              set(newValue) {
+                value = newValue;
+                keyedActions[key].forEach(action => action(newValue));
+              }
+            });
           }
-          keyedActions[key].push(action.bind(null, target));
+          keyedActions[key].push(action.bind(null, target, name));
         }
       };
 
-      if (typeof props[key] === 'function') {
-        props[key] = props[key].call({ el: target });
-      }
-
-      if (typeof props[key] === 'object') {
+      if (
+        !(props[key] instanceof Node) &&
+        !(props[key] instanceof Array) &&
+        typeof props[key] === 'object'
+      ) {
         elProps = props[key];
         Object.keys(elProps).forEach(createAction);
       } else {
@@ -144,16 +155,4 @@ export function template(elementRef, noclone) {
   }
 
   return create;
-}
-
-function observeProperty(props, key, value, actions) {
-  Object.defineProperty(props, key, {
-    get() {
-      return value;
-    },
-    set(newValue) {
-      value = newValue;
-      actions.forEach(action => action(newValue, key));
-    }
-  });
 }

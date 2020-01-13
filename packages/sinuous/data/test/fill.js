@@ -62,7 +62,7 @@ test('fill mutates the DOM', function(t) {
   t.end();
 });
 
-test('fill adds event listeners', function(t) {
+test('fill adds event listeners & top level attribute', function(t) {
   document.body.innerHTML = `
     <div>
       <button data-t>something</button>
@@ -70,11 +70,10 @@ test('fill adds event listeners', function(t) {
   `;
 
   const click = spy();
-  const div = fill('div')([{ onclick: click }]);
-  const btn = div.children[0];
+  const btn = fill('button')([{ onclick: click }]);
   btn.click();
   t.equal(click.callCount, 1, 'click called');
 
-  div.parentNode.removeChild(div);
+  btn.parentNode.parentNode.removeChild(btn.parentNode);
   t.end();
 });
