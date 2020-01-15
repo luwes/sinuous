@@ -21,10 +21,14 @@ export function template(elementRef, noclone) {
 const tags = ['t', 'o', 'bind'];
 
 function recordDataAttributes(fragment) {
-  const root = fragment.content || fragment.parentNode;
+  const root = fragment.content || fragment;
   let index = 0;
-  EMPTY_ARR.slice
-    .call(root.querySelectorAll('[data-t],[data-o],[data-bind]'))
+  [fragment]
+    .concat(
+      EMPTY_ARR.slice.call(
+        root.querySelectorAll('[data-t],[data-o],[data-bind]')
+      )
+    )
     .forEach(el => {
       tags.forEach((tag, i) => {
         const dataset = el.dataset[tag];
