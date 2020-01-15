@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.20.1 - 2020-01-15
+
+### Fixed
+
+- Fixed some issues with the new `data` module.
+
 ## 0.20.0 - 2020-01-10
 
 ### Added
