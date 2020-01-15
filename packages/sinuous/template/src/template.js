@@ -113,7 +113,7 @@ export function template(elementRef, noclone) {
 
       const createAction = (prop, i, keys) => {
         let name = action._name || (keys && prop);
-        if (name === '_') name = null;
+        if (name === '_' || name === 'this') name = null;
 
         let value = elProps[prop];
         if (value != null) {
@@ -126,8 +126,13 @@ export function template(elementRef, noclone) {
 
             Object.defineProperty(elProps, prop, {
               get() {
-                if (name === 'this') return target;
-                return action._bind ? target[name] : value;
+                if (action._bind) {
+                  if (name in target) {
+                    return target[name];
+                  }
+                  return target;
+                }
+                return value;
               },
               set(newValue) {
                 value = newValue;
