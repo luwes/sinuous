@@ -2,6 +2,7 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.21.3 - 2020-01-17
 ## 0.21.2 - 2020-01-17
 ## 0.21.1 - 2020-01-17
 

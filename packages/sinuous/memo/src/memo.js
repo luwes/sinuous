@@ -1,14 +1,18 @@
 // Adapted from https://github.com/caiogondim/fast-memoize.js - MIT License
+import { EMPTY_ARR } from './constants.js';
 
 export function memo(func) {
   let cache = {};
   return function() {
-    const args = [].slice.call(arguments);
+    const args = EMPTY_ARR.slice.call(arguments);
 
     const argsWithFuncIds = args.map(x => {
       if (isPlainObject(x)) {
-        Object.keys(x).forEach(prop => (x[prop] = memoizedIdFunc(x[prop])));
-        return x;
+        return Object.keys(x)
+          .reduce((acc, curr) => {
+            acc[curr] = memoizedIdFunc(x[curr]);
+            return acc;
+          }, {});
       }
       return memoizedIdFunc(x);
     });
@@ -24,7 +28,7 @@ export function memo(func) {
       // shell, on next render the comp would just be cleared.
       // Store the child refs in an array and memo and return this.
       if (computedValue && computedValue.nodeType === 11) {
-        computedValue = [].slice.call(computedValue.childNodes);
+        computedValue = EMPTY_ARR.slice.call(computedValue.childNodes);
       }
 
       cache[cacheKey] = computedValue;
@@ -33,15 +37,13 @@ export function memo(func) {
   };
 }
 
-function memoizedIdFunc(x) {
-  if (typeof x === 'function') return memoizedId(x);
-  return x;
-}
-
 let id = 0;
-function memoizedId(x) {
-  if (!x.__memoizedId) x.__memoizedId = ++id;
-  return { __memoizedId: x.__memoizedId };
+function memoizedIdFunc(x) {
+  if (typeof x === 'function') {
+    if (!x.__memoizedId) x.__memoizedId = ++id;
+    return { __memoizedId: x.__memoizedId };
+  }
+  return x;
 }
 
 /**
