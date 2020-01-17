@@ -30,6 +30,7 @@
 - [**60FPS Rainbow Spiral**](https://luwes.github.io/sinuous-rainbow-spiral/) _([GitHub Project](https://github.com/luwes/sinuous-rainbow-spiral))_ 🌈
 - [**Three.js Boxes**](https://luwes.github.io/sinuous-three-boxes/) _([GitHub Project](https://github.com/luwes/sinuous-three-boxes))_ 📦
 - [**JSX Typescript**](https://luwes.github.io/sinuous-typescript-jsx/) _([GitHub Project](https://github.com/luwes/sinuous-typescript-jsx))_
+- [**Data - Github Users**](https://luwes.github.io/sinuous-data-github-users/) _([GitHub Project](https://github.com/luwes/sinuous-data-github-users))_
 
 
 ### Add-ons
@@ -40,6 +41,7 @@
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
 
 ### All-in-one
 

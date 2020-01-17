@@ -143,6 +143,7 @@ module.exports = function(config) {
           'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
           'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
           'sinuous/data': __dirname + '/packages/sinuous/data/src/data.js',
+          'sinuous/memo': __dirname + '/packages/sinuous/memo/src/memo.js',
           'sinuous/hydrate': __dirname + '/packages/sinuous/hydrate/src/index.js',
           'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
           'sinuous': __dirname + '/packages/sinuous/src/index.js',
@@ -157,8 +158,7 @@ module.exports = function(config) {
         }),
         sauceLabs && babel({
           include: [
-            'packages/sinuous/**',
-            'node_modules/@luwes/**'
+            'packages/sinuous/**'
           ]
         })
       ].filter(Boolean),

@@ -30,3 +30,4 @@ import '../data/test/fill.js';
 import '../data/test/template.js';
 import '../data/test/data.js';
 import '../template/test/template.js';
+import '../memo/test/memo.js';

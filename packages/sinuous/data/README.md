@@ -2,7 +2,6 @@
 
 ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous/data.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Sinuous Data makes it possible to write as little HTML as possible in JavaScript. The module is built on top of `sinuous/template` and exports 2 methods; `template` and `fill` which create a clone and a fill function respectively.
 

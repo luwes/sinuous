@@ -64,6 +64,14 @@ export const bundles = [
     dest: dest()
   },
   {
+    external: [],
+    formats: [ESM, UMD, IIFE],
+    global: 'memo',
+    name: 'memo',
+    input: 'packages/sinuous/memo/src/memo.js',
+    dest: dest()
+  },
+  {
     // order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', '../sinuous.js'],
     formats: [ESM, UMD, IIFE],
