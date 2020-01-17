@@ -848,6 +848,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@luwes/memo@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@luwes/memo/-/memo-1.0.0.tgz#69c5ffa67d197e7629c15949c8fbb8c01ddcbdc9"
+  integrity sha512-20iXsmKngzyl8FAfh3IwyzCzxoq8bCrMuOHy6AP9P9i4vCugHAGaKUOmkQNrWJezQxcMuxsBeGkv8Yxb4nMvLA==
+
 "@types/estree@*":
   version "0.0.40"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.40.tgz#0e6cb9b9bbd098031fa19e4b4e8131bc70e5de13"

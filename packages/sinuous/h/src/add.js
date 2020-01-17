@@ -25,5 +25,6 @@ export function add(parent, value, marker) {
   // IE9 requires an explicit `null` as second argument.
   parent.insertBefore(value, marker || null);
 
-  return mark || value;
+  // Explicit undefined to store if frag.firstChild is null.
+  return mark === undefined ? value : mark;
 }

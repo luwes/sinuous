@@ -1,5 +1,6 @@
 import test from 'tape';
 import { o, h, html } from 'sinuous';
+import memo from '@luwes/memo';
 import { insert } from '../src/insert.js';
 
 const insertValue = val => {
@@ -11,6 +12,47 @@ const insertValue = val => {
 // insert
 // <div>before<!-- insert -->after</div>
 const container = document.createElement('div');
+
+test('empty fragment clear bug', t => {
+  let scratch = h('div');
+  h(document.body, scratch);
+
+  const value = o(99);
+  const props = { val: value };
+  const comp = memo(({ val }) => html`
+    <h1>Hello world</h1>
+    <p>Bye bye ${val}</p>
+  `);
+
+  const comp2 = memo(({ val }) => html`
+    <h1>Bye world</h1>
+    <p>Hello hello ${val}</p>
+  `);
+
+  let active = o(comp);
+  const res = html`
+    <h3>Dynamic Components</h3>
+    <hr/>
+    ${() => {
+      const c = active();
+      return c(props);
+    }}
+  `;
+  scratch.appendChild(res);
+
+  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Hello world</h1><p>Bye bye 99</p>`);
+
+  active(comp2);
+  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Bye world</h1><p>Hello hello 99</p>`);
+
+  active(comp);
+  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
+
+  active(comp2);
+  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
+
+  t.end();
+});
 
 test('inserts observable into simple text', t => {
   let scratch = h('div');
