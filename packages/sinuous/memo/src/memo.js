@@ -26,23 +26,25 @@ export function memo(func, equalityCheck) {
 }
 
 function defaultEqualityCheck(newVal, oldVal) {
-  if (newVal === oldVal && !isPlainObject(newVal)) return true;
-
-  let countA = 0;
-  let countB = 0;
-  for (let key in newVal) {
-    if (
-      Object.hasOwnProperty.call(newVal, key) &&
-      newVal[key] !== oldVal[key]
-    ) {
-      return false;
+  if (isPlainObject(newVal)) {
+    let countA = 0;
+    let countB = 0;
+    for (let key in newVal) {
+      if (
+        Object.hasOwnProperty.call(newVal, key) &&
+        newVal[key] !== oldVal[key]
+      ) {
+        return false;
+      }
+      countA++;
     }
-    countA++;
+    for (let key in oldVal) {
+      if (Object.hasOwnProperty.call(oldVal, key)) countB++;
+    }
+    return countA === countB;
   }
-  for (let key in oldVal) {
-    if (Object.hasOwnProperty.call(oldVal, key)) countB++;
-  }
-  return countA === countB;
+
+  return newVal === oldVal;
 }
 
 /**
