@@ -1,50 +1,47 @@
-// Adapted from https://github.com/reduxjs/reselect - MIT License
+// Adapted from https://github.com/caiogondim/fast-memoize.js - MIT License
 
-export function memo(func, equalityCheck) {
-  equalityCheck = equalityCheck || defaultEqualityCheck;
-
-  let lastArgs = null;
-  let lastResult = null;
-  // we reference arguments instead of spreading them for performance reasons
+export function memo(func) {
+  let cache = {};
   return function() {
-    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
-      // apply arguments instead of spreading for performance.
-      lastResult = func.apply(null, arguments);
+    const args = [].slice.call(arguments);
+
+    const argsWithFuncIds = args.map(x => {
+      if (isPlainObject(x)) {
+        Object.keys(x).forEach(prop => (x[prop] = memoizedIdFunc(x[prop])));
+        return x;
+      }
+      return memoizedIdFunc(x);
+    });
+
+    const cacheKey = JSON.stringify(argsWithFuncIds);
+    let computedValue = cache[cacheKey];
+    if (computedValue === undefined) {
+      // eslint-disable-next-line
+      computedValue = func.apply(this, args);
 
       // Memoizing the contents of a document fragment is impossible because
       // once it is appended, it's cleared of its children leaving an empty
       // shell, on next render the comp would just be cleared.
       // Store the child refs in an array and memo and return this.
-      if (lastResult && lastResult.nodeType === 11) {
-        lastResult = [].slice.call(lastResult.childNodes);
+      if (computedValue && computedValue.nodeType === 11) {
+        computedValue = [].slice.call(computedValue.childNodes);
       }
-    }
 
-    lastArgs = arguments;
-    return lastResult;
+      cache[cacheKey] = computedValue;
+    }
+    return computedValue;
   };
 }
 
-function defaultEqualityCheck(newVal, oldVal) {
-  if (isPlainObject(newVal)) {
-    let countA = 0;
-    let countB = 0;
-    for (let key in newVal) {
-      if (
-        Object.hasOwnProperty.call(newVal, key) &&
-        newVal[key] !== oldVal[key]
-      ) {
-        return false;
-      }
-      countA++;
-    }
-    for (let key in oldVal) {
-      if (Object.hasOwnProperty.call(oldVal, key)) countB++;
-    }
-    return countA === countB;
-  }
+function memoizedIdFunc(x) {
+  if (typeof x === 'function') return memoizedId(x);
+  return x;
+}
 
-  return newVal === oldVal;
+let id = 0;
+function memoizedId(x) {
+  if (!x.__memoizedId) x.__memoizedId = ++id;
+  return { __memoizedId: x.__memoizedId };
 }
 
 /**
@@ -61,21 +58,4 @@ function isPlainObject(obj) {
   }
 
   return Object.getPrototypeOf(obj) === proto;
-}
-
-function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
-  if (prev === null || next === null || prev.length !== next.length) {
-    return false;
-  }
-
-  // Do this in a for loop (and not a `forEach` or an `every`)
-  // so we can determine equality as fast as possible.
-  const length = prev.length;
-  for (let i = 0; i < length; i++) {
-    if (!equalityCheck(prev[i], next[i])) {
-      return false;
-    }
-  }
-
-  return true;
 }
