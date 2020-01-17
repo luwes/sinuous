@@ -2,7 +2,7 @@ import test from 'tape';
 import { memo } from 'sinuous/memo';
 import { html } from 'sinuous';
 
-test('exported memoize with multiple arguments', t => {
+test('memo with multiple arguments', t => {
   // eslint-disable-next-line
   const memoized = memo((...args) =>
     args.reduce((sum, value) => sum + value, 0)
@@ -12,7 +12,23 @@ test('exported memoize with multiple arguments', t => {
   t.end();
 });
 
-test('exported memoize with valueEquals override', t => {
+test('memo with functions', t => {
+  // a rather absurd equals operation we can verify in tests
+  let called = 0;
+  const fn1 = (a) => a;
+  const fn2 = (a) => a;
+  const memoized = memo(a => {
+    called++;
+    return a;
+  });
+  t.equal(memoized(fn1), fn1);
+  t.equal(called, 1);
+  t.equal(memoized(fn2), fn2);
+  t.equal(called, 2);
+  t.end();
+});
+
+test('memo with valueEquals override', t => {
   // a rather absurd equals operation we can verify in tests
   let called = 0;
   const valueEquals = (a, b) => typeof a === typeof b;
@@ -28,7 +44,7 @@ test('exported memoize with valueEquals override', t => {
   t.end();
 });
 
-test('exported memoize passes correct objects to equalityCheck', t => {
+test('memo passes correct objects to equalityCheck', t => {
   let fallthroughs = 0;
   function shallowEqual(newVal, oldVal) {
     if (newVal === oldVal) return true;
@@ -78,7 +94,7 @@ test('exported memoize passes correct objects to equalityCheck', t => {
   t.end();
 });
 
-test('exported memoize with comparing object props', t => {
+test('memo with comparing object props', t => {
   // a rather absurd equals operation we can verify in tests
   let called = 0;
   const memoized = memo(a => {

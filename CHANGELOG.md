@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.21.1 - 2020-01-17
+
+### Fixed
+
+- Fixed `memo` issue.
+
 ## 0.21.0 - 2020-01-17
 
 ### Added
