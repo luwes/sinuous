@@ -45,6 +45,7 @@ test('memo with functions in objects', t => {
   t.equal(called, 1);
   t.equal(memoized(obj2), obj2);
   t.equal(called, 2);
+  t.equal(typeof obj2.fn2, 'function');
   t.end();
 });
 
