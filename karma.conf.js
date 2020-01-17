@@ -157,7 +157,8 @@ module.exports = function(config) {
         }),
         sauceLabs && babel({
           include: [
-            'packages/sinuous/**'
+            'packages/sinuous/**',
+            'node_modules/@luwes/**'
           ]
         })
       ].filter(Boolean),

@@ -43,7 +43,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/plugin-transform-object-assign": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
-    "@luwes/memo": "^1.0.0",
+    "@luwes/memo": "^1.0.1",
     "ansi-colors": "^4.1.1",
     "babel-eslint": "^10.0.2",
     "browserify": "^16.5.0",
