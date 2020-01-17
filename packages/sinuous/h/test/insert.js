@@ -1,6 +1,5 @@
 import test from 'tape';
 import { o, h, html } from 'sinuous';
-import memo from '@luwes/memo';
 import { insert } from '../src/insert.js';
 
 const insertValue = val => {
@@ -19,15 +18,15 @@ test('empty fragment clear bug', t => {
 
   const value = o(99);
   const props = { val: value };
-  const comp = memo(({ val }) => html`
+  const comp = ({ val }) => html`
     <h1>Hello world</h1>
     <p>Bye bye ${val}</p>
-  `);
+  `;
 
-  const comp2 = memo(({ val }) => html`
+  const comp2 = ({ val }) => html`
     <h1>Bye world</h1>
     <p>Hello hello ${val}</p>
-  `);
+  `;
 
   let active = o(comp);
   const res = html`
@@ -40,15 +39,17 @@ test('empty fragment clear bug', t => {
   `;
   scratch.appendChild(res);
 
+  const emptyFrag = () => document.createDocumentFragment();
+
   t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Hello world</h1><p>Bye bye 99</p>`);
 
   active(comp2);
   t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Bye world</h1><p>Hello hello 99</p>`);
 
-  active(comp);
+  active(emptyFrag);
   t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
 
-  active(comp2);
+  active(emptyFrag);
   t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
 
   t.end();
