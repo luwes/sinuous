@@ -37,4 +37,11 @@ const custom = function() {
   }
 };
 
-export default custom;
+const wrapper = function() {
+  if (this.wrap) {
+    return this.wrap.apply(custom.bind(this), arguments);
+  }
+  return custom.apply(this, arguments);
+};
+
+export default wrapper;

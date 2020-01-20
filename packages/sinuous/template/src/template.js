@@ -94,7 +94,9 @@ export function template(elementRef, noClone) {
     const root = noClone ? fragment : fragment.cloneNode(true);
 
     // Set a custom property `props` for easy access to the passed argument.
-    root.firstChild.props = props;
+    if (root.firstChild) {
+      root.firstChild.props = props;
+    }
 
     cloneActions.forEach(action => {
       const paths = action._paths;
