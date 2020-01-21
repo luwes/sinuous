@@ -15,11 +15,12 @@ export function o(key) {
 /**
  * Template tag.
  * @param  {string} key
- * @param {boolean} observed
- * @param {boolean} bind
+ * @param {boolean} [observed]
+ * @param {boolean} [bind]
+ * @param {*} [defaultValue]
  * @return {Function}
  */
-export function t(key, observed, bind) {
+export function t(key, observed, bind, defaultValue) {
   const tag = function() {
     // eslint-disable-next-line
     const { el, name } = this;
@@ -39,6 +40,8 @@ export function t(key, observed, bind) {
     action._observed = observed;
     action._bind = bind;
     recordedActions.push(action);
+
+    return defaultValue;
   };
   return tag;
 }
@@ -54,11 +57,13 @@ export function fill(elementRef) {
  * @return  {Function}
  */
 export function template(elementRef, noClone) {
+  const prevRecordedActions = recordedActions;
   recordedActions = [];
 
   const tpl = elementRef();
 
-  let fragment = tpl.content || (tpl.parentNode && tpl);
+  let fragment = tpl.content
+    || ((tpl.parentNode || tpl.nodeType === 11) && tpl);
   if (!fragment) {
     fragment = document.createDocumentFragment();
     fragment.appendChild(tpl);
@@ -77,7 +82,7 @@ export function template(elementRef, noClone) {
   }
 
   const cloneActions = recordedActions;
-  recordedActions = null;
+  recordedActions = prevRecordedActions;
 
   // Tiny indicator that this is a template create function.
   create.$t = true;
