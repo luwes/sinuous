@@ -15,11 +15,12 @@ export function o(key) {
 /**
  * Template tag.
  * @param  {string} key
- * @param {boolean} observed
- * @param {boolean} bind
+ * @param {boolean} [observed]
+ * @param {boolean} [bind]
+ * @param {*} [defaultValue]
  * @return {Function}
  */
-export function t(key, observed, bind) {
+export function t(key, observed, bind, defaultValue) {
   const tag = function() {
     // eslint-disable-next-line
     const { el, name } = this;
@@ -39,6 +40,8 @@ export function t(key, observed, bind) {
     action._observed = observed;
     action._bind = bind;
     recordedActions.push(action);
+
+    return defaultValue;
   };
   return tag;
 }
