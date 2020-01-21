@@ -50,10 +50,10 @@ export function fill(elementRef) {
 /**
  * Creates a template function.
  * @param   {Function} elementRef
- * @param   {boolean} noclone
+ * @param   {boolean} noClone
  * @return  {Function}
  */
-export function template(elementRef, noclone) {
+export function template(elementRef, noClone) {
   recordedActions = [];
 
   const tpl = elementRef();
@@ -64,7 +64,7 @@ export function template(elementRef, noclone) {
     fragment.appendChild(tpl);
   }
 
-  if (!noclone) {
+  if (!noClone) {
     recordedActions.forEach(action => {
       action._paths = [];
       let el = action._el;
@@ -82,9 +82,11 @@ export function template(elementRef, noclone) {
   // Tiny indicator that this is a template create function.
   create.$t = true;
 
-  function create(props) {
-    const root = noclone ? fragment : fragment.cloneNode(true);
+  function create(props, forceNoClone) {
+    if (forceNoClone) noClone = forceNoClone;
+
     const keyedActions = {};
+    const root = noClone ? fragment : fragment.cloneNode(true);
 
     // Set a custom property `props` for easy access to the passed argument.
     root.firstChild.props = props;
@@ -93,7 +95,7 @@ export function template(elementRef, noclone) {
       const paths = action._paths;
       let target = action._el;
 
-      if (!noclone) {
+      if (!noClone) {
         target = root;
         let j = 0;
         while (j < paths.length) {
