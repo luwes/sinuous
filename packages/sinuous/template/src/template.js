@@ -62,7 +62,8 @@ export function template(elementRef, noClone) {
 
   const tpl = elementRef();
 
-  let fragment = tpl.content || (tpl.parentNode && tpl);
+  let fragment = tpl.content
+    || ((tpl.parentNode || tpl.nodeType === 11) && tpl);
   if (!fragment) {
     fragment = document.createDocumentFragment();
     fragment.appendChild(tpl);
