@@ -58,6 +58,5 @@ export function context(options, isSvg) {
     return el;
   }
 
-  api.h = h;
   return h;
 }
