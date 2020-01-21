@@ -57,6 +57,7 @@ export function fill(elementRef) {
  * @return  {Function}
  */
 export function template(elementRef, noClone) {
+  const prevRecordedActions = recordedActions;
   recordedActions = [];
 
   const tpl = elementRef();
@@ -80,7 +81,7 @@ export function template(elementRef, noClone) {
   }
 
   const cloneActions = recordedActions;
-  recordedActions = null;
+  recordedActions = prevRecordedActions;
 
   // Tiny indicator that this is a template create function.
   create.$t = true;
