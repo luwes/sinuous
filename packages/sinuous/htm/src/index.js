@@ -14,29 +14,20 @@
 import { MINI } from './constants.js';
 import { build, evaluate } from './build.js';
 
-const getCacheMap = statics => {
-  let tpl = CACHE.get(statics);
-  if (!tpl) {
-    CACHE.set(statics, (tpl = build(statics)));
+const CACHES = new Map();
+
+const regular = function(statics) {
+  let tmp = CACHES.get(this);
+  if (!tmp) {
+    tmp = new Map();
+    CACHES.set(this, tmp);
   }
-  return tpl;
+  tmp = evaluate(this, tmp.get(statics) || (tmp.set(statics, tmp = build(statics)), tmp), arguments, []);
+  return tmp.length > 1 ? tmp : tmp[0];
 };
 
-const getCacheKeyed = statics => {
-  let key = '';
-  for (let i = 0; i < statics.length; i++) {
-    key += statics[i].length + '-' + statics[i];
-  }
-  return CACHE[key] || (CACHE[key] = build(statics));
-};
-
-const USE_MAP = !MINI && typeof Map === 'function';
-const CACHE = USE_MAP ? new Map() : {};
-const getCache = USE_MAP ? getCacheMap : getCacheKeyed;
-
-const cached = function(statics) {
-  const children = evaluate(this, getCache(statics), arguments, []);
-  const result = children.length > 1 ? children : children[0];
+const custom = function() {
+  const result = (MINI ? build : regular).apply(this, arguments);
   if (result) {
     return Array.isArray(result)
       ? this(result)
@@ -46,4 +37,4 @@ const cached = function(statics) {
   }
 };
 
-export default MINI ? build : cached;
+export default custom;
