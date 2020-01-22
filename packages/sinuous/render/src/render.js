@@ -1,5 +1,5 @@
 import { api } from 'sinuous';
-import { fill, t } from 'sinuous/template';
+import { template, t } from 'sinuous/template';
 import { EMPTY_ARR } from './constants.js';
 
 const cache = {};
@@ -19,7 +19,7 @@ export function context(isSvg) {
     const statics = args[0];
     const fields = args.slice(1);
 
-    for (var i = 1; i < args.length; i++) {
+    for (let i = 1; i < args.length; i++) {
       args[i] = x(args[i]);
     }
 
@@ -32,27 +32,22 @@ export function context(isSvg) {
 }
 
 function factory(createElement, args, statics, fields) {
-  const templateKey = JSON.stringify(statics);
+  const tplKey = JSON.stringify(statics);
 
-  let template = cache[templateKey];
-  if (template) {
-    template._fill(fields);
-    return template._el;
+  let tpl = cache[tplKey];
+  if (tpl) {
+    return tpl(fields, true);
   }
 
   const prevTagIndex = tagIndex;
   tagIndex = 0;
 
-  template = {};
-  template._fill = fill(() => {
-    template._el = createElement.apply(createElement, args);
-    return template._el;
-  });
+  tpl = template(() => createElement.apply(null, args));
+  cache[tplKey] = tpl;
 
   tagIndex = prevTagIndex;
-  cache[templateKey] = template;
 
-  return template._el;
+  return tpl.el;
 }
 
 export function x(value) {

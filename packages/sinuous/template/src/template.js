@@ -84,9 +84,6 @@ export function template(elementRef, noClone) {
   const cloneActions = recordedActions;
   recordedActions = prevRecordedActions;
 
-  // Tiny indicator that this is a template create function.
-  create.$t = true;
-
   function create(props, forceNoClone) {
     if (forceNoClone) noClone = forceNoClone;
 
@@ -167,6 +164,10 @@ export function template(elementRef, noClone) {
 
     return root;
   }
+
+  // Tiny indicator that this is a template create function.
+  create.$t = true;
+  create.el = fragment;
 
   return create;
 }

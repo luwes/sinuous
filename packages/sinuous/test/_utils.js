@@ -23,3 +23,7 @@ export function normalizeAttributes(htmlStr) {
     }
   );
 }
+
+export function fragOuterHTML(fragment) {
+  return [].slice.call(fragment.childNodes).map(c => c.outerHTML).join('');
+}

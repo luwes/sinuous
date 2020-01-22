@@ -1,6 +1,7 @@
 import test from 'tape';
 import { h } from 'sinuous';
 import { rhtml } from 'sinuous/render';
+import { fragOuterHTML } from '../../test/_utils.js';
 
 test('creates proper template', t => {
   const h1 = rhtml`
@@ -9,7 +10,7 @@ test('creates proper template', t => {
       <h2></h2>
     </div>`;
 
-  t.equal(h1().outerHTML, '<div><h1>1</h1><h2></h2></div>');
+  t.equal(fragOuterHTML(h1()), '<div><h1>1</h1><h2></h2></div>');
   t.equal(h1(), h1());
 
   // console.log(h1());
@@ -24,8 +25,8 @@ test('simple render', t => {
       <h1>${title}</h1>
     `;
 
-  t.equal(Comp('Yo')().outerHTML, '<h1>Yo</h1>');
-  t.equal(Comp('Hi')().outerHTML, '<h1>Hi</h1>');
+  t.equal(fragOuterHTML(Comp('Yo')()), '<h1>Yo</h1>');
+  t.equal(fragOuterHTML(Comp('Hi')()), '<h1>Hi</h1>');
   t.equal(Comp('Yo')(), Comp('Hi')());
   t.equal(Comp('Hi')().textContent, 'Hi');
 
@@ -37,18 +38,18 @@ test('render w/ multiple holes', t => {
     rhtml`
       <div>
         <h1>${title}</h1>
-        <div>${desc}</div>
+        <div><i>${desc}</i></div>
       </div>
     `;
 
   t.equal(
-    Comp('Yo', 'Hello man')().outerHTML,
-    '<div><h1>Yo</h1><div>Hello man</div></div>'
+    fragOuterHTML(Comp('Yo', 'Hello man')()),
+    '<div><h1>Yo</h1><div><i>Hello man</i></div></div>'
   );
 
   t.equal(
-    Comp('Hi', 'there')().outerHTML,
-    '<div><h1>Hi</h1><div>there</div></div>'
+    fragOuterHTML(Comp('Hi', 'there')()),
+    '<div><h1>Hi</h1><div><i>there</i></div></div>'
   );
 
   t.equal(Comp('Yo', 'Hello man')(), Comp('Hi', 'there')());

@@ -38,10 +38,8 @@ const custom = function() {
 };
 
 const wrapper = function() {
-  if (this.wrap) {
-    return this.wrap.apply(custom.bind(this), arguments);
-  }
-  return custom.apply(this, arguments);
+  const h = custom.bind(this);
+  return (this.wrap || h).apply(h, arguments);
 };
 
 export default wrapper;
