@@ -3798,10 +3798,9 @@ karma-sauce-launcher@^1:
     saucelabs "^1.4.0"
     wd "^1.4.0"
 
-karma-tap-pretty-reporter@^4.1.0:
+karma-tap-pretty-reporter@luwes/karma-tap-pretty-reporter:
   version "4.1.0"
-  resolved "https://registry.yarnpkg.com/karma-tap-pretty-reporter/-/karma-tap-pretty-reporter-4.1.0.tgz#04ec1eb2839fc99a378def9fa713679335a7a795"
-  integrity sha512-YyNjPuPVkI55meJ969ZO0VuLxI+RLurMCM8dcL31xXZbVW/w1S3d5e73P6ysdFskk00Wy8osE+qxilOgLid7Vw==
+  resolved "https://codeload.github.com/luwes/karma-tap-pretty-reporter/tar.gz/a8215ec480028152d71a0348c7d26c9eba75bb6c"
 
 karma-tap@^4.1.4:
   version "4.1.4"
@@ -5439,6 +5438,11 @@ simple-concat@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
   integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
+
+sinuous@0.20.1, sinuous@^0.20.0:
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.20.1.tgz#809bae922f49af84a809a8d6902414c4b7386fe2"
+  integrity sha512-n5sSkLPLxq5QuiS4TkKjoyGBtYlBKwN9euXBSJzC5f6F1+EP2MN3orvijUye3wUCnlvZSF8ezPQs/+TCAe2Yig==
 
 size-plugin-core@^0.0.7:
   version "0.0.7"
