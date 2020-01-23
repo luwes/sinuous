@@ -20,36 +20,37 @@ export function context(isSvg) {
     const fields = args.slice(1);
 
     for (let i = 1; i < args.length; i++) {
-      args[i] = x(args[i]);
+      args[i] = x();
     }
 
-    return function() {
-      return factory(createElement, args, statics, fields);
-    };
+    function create() {
+      const tplKey = JSON.stringify(statics);
+
+      let tpl = cache[tplKey];
+      if (!tpl) {
+        const prevTagIndex = tagIndex;
+        tagIndex = 0;
+
+        tpl = template(() => createElement.apply(null, args));
+        cache[tplKey] = tpl;
+
+        tagIndex = prevTagIndex;
+      }
+
+      const noClone = this && this.el._endMark === this.endMark;
+      return tpl(fields, noClone);
+    }
+    return create;
   };
 
   return h;
 }
 
-function factory(createElement, args, statics, fields) {
-  const tplKey = JSON.stringify(statics);
-
-  let tpl = cache[tplKey];
-  if (tpl) {
-    return tpl(fields, true);
-  }
-
-  const prevTagIndex = tagIndex;
-  tagIndex = 0;
-
-  tpl = template(() => createElement.apply(null, args));
-  cache[tplKey] = tpl;
-
-  tagIndex = prevTagIndex;
-
-  return tpl.el;
+export function render(value, el) {
+  el._endMark = el._endMark || api.add(el, '');
+  el._current = api.insert(el, value, el._endMark, el._current || '');
 }
 
-export function x(value) {
-  return () => t(tagIndex++, null, null, value);
+export function x() {
+  return () => t(tagIndex++);
 }

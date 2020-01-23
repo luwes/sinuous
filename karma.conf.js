@@ -112,7 +112,7 @@ module.exports = function(config) {
 
     formatError(msg) {
       msg = msg.replace(/\([^<]+/gm, '');
-      msg = msg.replace(/(\bat\s.*)/gm, c.dim('$1'));
+      msg = msg.replace(/(\bat\s.*)/gms, argv.stack ? c.dim('$1') : '');
       return msg;
     },
 

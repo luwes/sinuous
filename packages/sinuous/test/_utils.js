@@ -24,6 +24,6 @@ export function normalizeAttributes(htmlStr) {
   );
 }
 
-export function fragOuterHTML(fragment) {
+export function fragInnerHTML(fragment) {
   return [].slice.call(fragment.childNodes).map(c => c.outerHTML).join('');
 }

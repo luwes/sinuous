@@ -1,6 +1,6 @@
 import htm from 'sinuous/htm';
 import { context } from './render.js';
-export { x } from './render.js';
+export { render, x } from './render.js';
 
 export const r = context();
 export const rs = context(true);

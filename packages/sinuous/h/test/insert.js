@@ -12,49 +12,6 @@ const insertValue = val => {
 // <div>before<!-- insert -->after</div>
 const container = document.createElement('div');
 
-test('empty fragment clear bug', t => {
-  let scratch = h('div');
-  h(document.body, scratch);
-
-  const value = o(99);
-  const props = { val: value };
-  const comp = ({ val }) => html`
-    <h1>Hello world</h1>
-    <p>Bye bye ${val}</p>
-  `;
-
-  const comp2 = ({ val }) => html`
-    <h1>Bye world</h1>
-    <p>Hello hello ${val}</p>
-  `;
-
-  let active = o(comp);
-  const res = html`
-    <h3>Dynamic Components</h3>
-    <hr/>
-    ${() => {
-      const c = active();
-      return c(props);
-    }}
-  `;
-  scratch.appendChild(res);
-
-  const emptyFrag = () => document.createDocumentFragment();
-
-  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Hello world</h1><p>Bye bye 99</p>`);
-
-  active(comp2);
-  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr><h1>Bye world</h1><p>Hello hello 99</p>`);
-
-  active(emptyFrag);
-  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
-
-  active(emptyFrag);
-  t.equal(scratch.innerHTML, `<h3>Dynamic Components</h3><hr>`);
-
-  t.end();
-});
-
 test('inserts observable into simple text', t => {
   let scratch = h('div');
   h(document.body, scratch);

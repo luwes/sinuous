@@ -2,6 +2,7 @@ import { api } from 'sinuous';
 import { EMPTY_ARR } from './constants.js';
 
 let recordedActions;
+let actionId = 0;
 
 /**
  * Observed template tag.
@@ -23,17 +24,38 @@ export function o(key) {
 export function t(key, observed, bind, defaultValue) {
   const tag = function() {
     // eslint-disable-next-line
-    const { el, name } = this;
+    const { el, name, endMark } = this;
 
-    let current = '';
+    let endMarkPath = endMark && createPath(el, endMark);
     let action = (element, prop, value) => {
       if (prop == null) {
-        api.insert(element, value, null, current);
+        // Action + element is a unique reference we can use to store state.
+        // Element is needed because of cloning.
+        element._refs = element._refs || {};
+        let ref = element._refs[action._id] || (element._refs[action._id] = {});
+
+        if (endMarkPath) {
+          ref._endMark = ref._endMark || getPath(element, endMarkPath);
+        }
+
+        // A startMark is needed because when there is no clone the childNodes
+        // are pulled out the DOM and put back in via the document fragment
+        // endMark.previousSibling would clear an element before the current.
+        ref._startMark = ref._startMark || api.add(element, '', ref._endMark);
+
+        ref._current = api.insert(
+          element,
+          value,
+          ref._endMark,
+          ref._current || '',
+          ref._startMark.nextSibling
+        );
       } else {
         api.property(prop, value, element);
       }
     };
 
+    action._id = actionId++;
     action._el = el;
     action._name = name;
     action._key = key;
@@ -62,22 +84,21 @@ export function template(elementRef, noClone) {
 
   const tpl = elementRef();
 
-  let fragment = tpl.content
-    || ((tpl.parentNode || tpl.nodeType === 11) && tpl);
+  let fragment =
+    tpl.content || ((tpl.parentNode || tpl.nodeType === 11) && tpl);
+
   if (!fragment) {
     fragment = document.createDocumentFragment();
     fragment.appendChild(tpl);
   }
 
+  if (fragment.nodeType === 11) {
+    fragment._childNodes = EMPTY_ARR.slice.call(fragment.childNodes);
+  }
+
   if (!noClone) {
     recordedActions.forEach(action => {
-      action._paths = [];
-      let el = action._el;
-      let parent;
-      while ((parent = el.parentNode) !== fragment.parentNode) {
-        action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
-        el = parent;
-      }
+      action._paths = createPath(fragment, action._el);
     });
   }
 
@@ -88,7 +109,15 @@ export function template(elementRef, noClone) {
     if (forceNoClone) noClone = forceNoClone;
 
     const keyedActions = {};
-    const root = noClone ? fragment : fragment.cloneNode(true);
+    let root;
+    if (noClone) {
+      if (fragment._childNodes && !fragment.firstChild) {
+        fragment._childNodes.forEach(child => fragment.appendChild(child));
+      }
+      root = fragment;
+    } else {
+      root = fragment.cloneNode(true);
+    }
 
     // Set a custom property `props` for easy access to the passed argument.
     if (root.firstChild) {
@@ -96,29 +125,14 @@ export function template(elementRef, noClone) {
     }
 
     cloneActions.forEach(action => {
-      const paths = action._paths;
-      let target = action._el;
-
-      if (!noClone) {
-        target = root;
-        let j = 0;
-        while (j < paths.length) {
-          target = target.firstChild;
-          const path = paths[j];
-          let k = 0;
-          while (k < path) {
-            target = target.nextSibling;
-            k += 1;
-          }
-          j += 1;
-        }
-      }
-
+      const target = noClone ? action._el : getPath(root, action._paths);
       const key = action._key;
       let elProps = props;
 
       const createAction = (prop, i, keys) => {
         let name = action._name || (keys && prop);
+        // If the field is a plain object, the `_` prop is the element content.
+        // For `sinuous/data` e.g. data-bind="this:my" refers to the current element.
         if (name === '_' || name === 'this') name = null;
 
         let value = elProps[prop];
@@ -167,7 +181,32 @@ export function template(elementRef, noClone) {
 
   // Tiny indicator that this is a template create function.
   create.$t = true;
-  create.el = fragment;
 
   return create;
+}
+
+function createPath(root, el) {
+  let paths = [];
+  let parent;
+  while ((parent = el.parentNode) !== root.parentNode) {
+    paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
+    el = parent;
+  }
+  return paths;
+}
+
+function getPath(root, paths) {
+  let target = root;
+  let j = 0;
+  while (j < paths.length) {
+    target = target.firstChild;
+    const path = paths[j];
+    let k = 0;
+    while (k < path) {
+      target = target.nextSibling;
+      k += 1;
+    }
+    j += 1;
+  }
+  return target;
 }
