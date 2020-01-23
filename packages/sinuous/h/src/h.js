@@ -43,8 +43,8 @@ export function context(options, isSvg) {
         api.property(null, arg, el, isSvg);
       } else if (typeof arg === 'function') {
         if (el) {
-          const marker = add(el, '');
-          api.insert(el, arg, marker);
+          const endMark = add(el, '');
+          api.insert(el, arg, endMark);
         } else {
           // Support Components
           el = arg.apply(null, args.splice(1));
