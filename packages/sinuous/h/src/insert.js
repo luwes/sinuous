@@ -29,7 +29,13 @@ export function insert(el, value, marker, current, startNode) {
     current = value;
   } else if (typeof value === 'function') {
     api.subscribe(function insertContent() {
-      current = api.insert(el, value.call({ el }), marker, current);
+      current = api.insert(el, value.call({ el }), marker, current, startNode);
+
+      // Save startNode of current. In clearAll() marker.previousSibling
+      // is not always accurate if content gets pulled before clearing.
+      if (current instanceof Node) {
+        startNode = current;
+      }
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
