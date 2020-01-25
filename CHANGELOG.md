@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.21.4 - 2020-01-24
+
+### Fixed
+
+- Fixed an issue where the clearing of a DOM node that was previously pulled out or moved in the DOM cleared siblings before the content.
+- Fixed memoizing by adding support for Arrays and DOM nodes to be serialized.
+
 ## 0.21.3 - 2020-01-17
 ## 0.21.2 - 2020-01-17
 ## 0.21.1 - 2020-01-17

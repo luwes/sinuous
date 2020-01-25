@@ -7,12 +7,12 @@ export function memo(func) {
     const args = EMPTY_ARR.slice.call(arguments);
 
     const argsWithFuncIds = args.map(x => {
-      if (isPlainObject(x)) {
-        return Object.keys(x)
-          .reduce((acc, curr) => {
-            acc[curr] = memoizedIdFunc(x[curr]);
-            return acc;
-          }, {});
+      if (isPlainObject(x) || Array.isArray(x)) {
+        let obj = {};
+        for (let key in x) {
+          obj[key] = memoizedIdFunc(x[key]);
+        }
+        return obj;
       }
       return memoizedIdFunc(x);
     });
@@ -39,9 +39,9 @@ export function memo(func) {
 
 let id = 0;
 function memoizedIdFunc(x) {
-  if (typeof x === 'function') {
-    if (!x.__memoizedId) x.__memoizedId = ++id;
-    return { __memoizedId: x.__memoizedId };
+  if (typeof x === 'function' || x instanceof Node) {
+    if (!x.$m) x.$m = ++id;
+    return { $m: x.$m };
   }
   return x;
 }
