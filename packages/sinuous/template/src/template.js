@@ -26,30 +26,28 @@ export function t(key, observed, bind, defaultValue) {
     // eslint-disable-next-line
     const { el, name, endMark } = this;
 
-    let endMarkPath = endMark && createPath(el, endMark);
-    let action = (element, prop, value) => {
+    const action = (element, endMark, prop, value) => {
       if (prop == null) {
         // Action + element is a unique reference we can use to store state.
         // Element is needed because of cloning.
-        element._refs = element._refs || {};
-        let ref = element._refs[action._id] || (element._refs[action._id] = {});
+        element._parts = element._parts || {};
+        let part = element._parts[action._id] || (element._parts[action._id] = {});
+        part._endMark = endMark;
 
-        if (endMarkPath) {
-          ref._endMark = ref._endMark || getPath(element, endMarkPath);
-        }
-
-        // A startMark is needed because when there is no clone the childNodes
-        // are pulled out the DOM and put back in via the document fragment
-        // endMark.previousSibling would clear an element before the current.
-        ref._startMark = ref._startMark || api.add(element, '', ref._endMark);
-
-        ref._current = api.insert(
+        part._current = api.insert(
           element,
           value,
-          ref._endMark,
-          ref._current || '',
-          ref._startMark.nextSibling
+          endMark,
+          part._current || '',
+          part._startNode
         );
+
+        // A startNode is needed because when there is no clone the childNodes
+        // are pulled out the DOM and put back in via the document fragment
+        // endMark.previousSibling would clear an element 1 before the current.
+        if (part._current instanceof Node) {
+          part._startNode = part._current;
+        }
       } else {
         api.property(prop, value, element);
       }
@@ -57,6 +55,7 @@ export function t(key, observed, bind, defaultValue) {
 
     action._id = actionId++;
     action._el = el;
+    action._endMark = endMark;
     action._name = name;
     action._key = key;
     action._observed = observed;
@@ -99,6 +98,7 @@ export function template(elementRef, noClone) {
   if (!noClone) {
     recordedActions.forEach(action => {
       action._paths = createPath(fragment, action._el);
+      action._endMarkPath = action._endMark && createPath(action._el, action._endMark);
     });
   }
 
@@ -126,6 +126,10 @@ export function template(elementRef, noClone) {
 
     cloneActions.forEach(action => {
       const target = noClone ? action._el : getPath(root, action._paths);
+      const endMark = noClone
+        ? action._endMark
+        : action._endMarkPath && getPath(target, action._endMarkPath);
+
       const key = action._key;
       let elProps = props;
 
@@ -137,7 +141,7 @@ export function template(elementRef, noClone) {
 
         let value = elProps[prop];
         if (value != null) {
-          action(target, name, value);
+          action(target, endMark, name, value);
         }
 
         if (action._observed) {
@@ -160,7 +164,7 @@ export function template(elementRef, noClone) {
               }
             });
           }
-          keyedActions[key].push(action.bind(null, target, name));
+          keyedActions[key].push(action.bind(null, target, endMark, name));
         }
       };
 

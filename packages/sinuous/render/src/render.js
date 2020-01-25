@@ -3,7 +3,6 @@ import { template, t } from 'sinuous/template';
 import { EMPTY_ARR } from './constants.js';
 
 const cache = {};
-let tagIndex;
 
 /**
  * Create a sinuous `treeify` function.
@@ -20,24 +19,23 @@ export function context(isSvg) {
     const fields = args.slice(1);
 
     for (let i = 1; i < args.length; i++) {
-      args[i] = x();
+      args[i] = x(i - 1);
     }
 
     function create() {
+      const ctx = this;
       const tplKey = JSON.stringify(statics);
 
       let tpl = cache[tplKey];
       if (!tpl) {
-        const prevTagIndex = tagIndex;
-        tagIndex = 0;
-
         tpl = template(() => createElement.apply(null, args));
         cache[tplKey] = tpl;
-
-        tagIndex = prevTagIndex;
       }
 
-      const noClone = this && this.el._endMark === this.endMark;
+      const parts = ctx && ctx.el && ctx.el._parts;
+      const noClone = parts && Object.keys(parts)
+        .some(k => parts[k]._endMark === ctx.endMark);
+
       return tpl(fields, noClone);
     }
     return create;
@@ -47,10 +45,13 @@ export function context(isSvg) {
 }
 
 export function render(value, el) {
-  el._endMark = el._endMark || api.add(el, '');
-  el._current = api.insert(el, value, el._endMark, el._current || '');
+  el._parts = el._parts || {};
+  let part = el._parts[0] || (el._parts[0] = {});
+
+  part._endMark = part._endMark || api.add(el, '');
+  part._current = api.insert(el, value, part._endMark, part._current || '');
 }
 
-export function x() {
-  return () => t(tagIndex++);
+export function x(tagIndex) {
+  return t(tagIndex);
 }

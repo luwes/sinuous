@@ -7,7 +7,7 @@ import { GROUPING } from './constants.js';
  * @param  {Node} endMark - This is the ending marker node.
  * @param  {Node} startNode - This is the start node.
  */
-export function clearAll(parent, current, endMark, startNode) {
+export function clear(parent, current, endMark, startNode) {
   if (endMark) {
     // `current` can't be `0`, it's coerced to a string in insert.
     if (current) {
@@ -25,8 +25,11 @@ export function clearAll(parent, current, endMark, startNode) {
       let tmp;
       while (startNode && startNode !== endMark) {
         tmp = startNode.nextSibling;
-        parent.removeChild(startNode);
-        startNode[GROUPING] = 0;
+        // Is needed in case the child was pulled out the parent before clearing.
+        if (parent === startNode.parentNode) {
+          parent.removeChild(startNode);
+          startNode[GROUPING] = 0;
+        }
         startNode = tmp;
       }
     }
