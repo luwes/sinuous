@@ -30,15 +30,15 @@ export function t(key, observed, bind, defaultValue) {
       if (prop == null) {
         // Action + element is a unique reference we can use to store state.
         // Element is needed because of cloning.
-        element._parts = element._parts || {};
-        let part = element._parts[action._id] || (element._parts[action._id] = {});
+        let parts = element._parts = element._parts || {};
+        let part = parts[action._id] || (parts[action._id] = {});
         part._endMark = endMark;
 
         part._current = api.insert(
           element,
           value,
           endMark,
-          part._current || '',
+          part._current,
           part._startNode
         );
 
@@ -95,6 +95,8 @@ export function template(elementRef, noClone) {
     fragment._childNodes = EMPTY_ARR.slice.call(fragment.childNodes);
   }
 
+  let stamp = fragment.cloneNode(true);
+
   if (!noClone) {
     recordedActions.forEach(action => {
       action._paths = createPath(fragment, action._el);
@@ -106,7 +108,7 @@ export function template(elementRef, noClone) {
   recordedActions = prevRecordedActions;
 
   function create(props, forceNoClone) {
-    if (forceNoClone) noClone = forceNoClone;
+    if (forceNoClone != null) noClone = forceNoClone;
 
     const keyedActions = {};
     let root;
@@ -116,7 +118,7 @@ export function template(elementRef, noClone) {
       }
       root = fragment;
     } else {
-      root = fragment.cloneNode(true);
+      root = stamp.cloneNode(true);
     }
 
     // Set a custom property `props` for easy access to the passed argument.
@@ -124,12 +126,16 @@ export function template(elementRef, noClone) {
       root.firstChild.props = props;
     }
 
+    // These paths have to be resolved before any elements are inserted.
     cloneActions.forEach(action => {
-      const target = noClone ? action._el : getPath(root, action._paths);
-      const endMark = noClone
+      action._target = noClone ? action._el : getPath(root, action._paths);
+      action._endMarkTarget = noClone
         ? action._endMark
-        : action._endMarkPath && getPath(target, action._endMarkPath);
+        : action._endMarkPath && getPath(action._target, action._endMarkPath);
+    });
 
+    cloneActions.forEach(action => {
+      const target = action._target;
       const key = action._key;
       let elProps = props;
 
@@ -140,8 +146,9 @@ export function template(elementRef, noClone) {
         if (name === '_' || name === 'this') name = null;
 
         let value = elProps[prop];
+
         if (value != null) {
-          action(target, endMark, name, value);
+          action(target, action._endMarkTarget, name, value);
         }
 
         if (action._observed) {
@@ -164,11 +171,14 @@ export function template(elementRef, noClone) {
               }
             });
           }
-          keyedActions[key].push(action.bind(null, target, endMark, name));
+          keyedActions[key].push(
+            action.bind(null, target, action._endMarkTarget, name)
+          );
         }
       };
 
       if (
+        props[key] &&
         !(props[key] instanceof Node) &&
         !(props[key] instanceof Array) &&
         typeof props[key] === 'object'
@@ -179,6 +189,12 @@ export function template(elementRef, noClone) {
         createAction(key);
       }
     });
+
+    // Copy the childNodes after inserting the values. This is needed for
+    // fills with primitive values that stay the same between renders.
+    if (fragment.nodeType === 11) {
+      fragment._childNodes = EMPTY_ARR.slice.call(fragment.childNodes);
+    }
 
     return root;
   }

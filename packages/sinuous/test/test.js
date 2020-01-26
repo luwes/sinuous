@@ -29,7 +29,8 @@
 // import '../all/test/all.js';
 // import '../memo/test/memo.js';
 // import '../data/test/fill.js';
-import '../data/test/template.js';
-import '../data/test/data.js';
-import '../template/test/template.js';
+// import '../data/test/template.js';
+// import '../data/test/data.js';
+// import '../template/test/template.js';
 import '../render/test/render.js';
+import '../render/test/lit-html.js';

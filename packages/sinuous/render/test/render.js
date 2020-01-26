@@ -1,7 +1,14 @@
-import test from 'tape';
+import tape from 'tape';
 import { h } from 'sinuous';
 import { rhtml, render } from 'sinuous/render';
-import { fragInnerHTML } from '../../test/_utils.js';
+import { fragInnerHTML, beforeEach } from '../../test/_utils.js';
+
+let container;
+
+const test = beforeEach(tape, (assert) => {
+  container = document.createElement('div');
+  assert.end();
+});
 
 test('creates proper template', t => {
   const h1 = rhtml`
@@ -49,54 +56,45 @@ test('render w/ multiple holes', t => {
 });
 
 test('render w/ conditional branch', t => {
-  let scratch = h('div');
-  h(document.body, scratch);
-
   const Comp = title => rhtml`
     <div>
       <h1 class="red">
-        ${title
-          ? rhtml`<span>${title}</span>`
-          : rhtml`<span>No name</span>`
-        }
+        ${title ? rhtml`<span>${title}</span>` : rhtml`<span>No name</span>`}
       </h1>
     </div>
   `;
 
-  render(Comp('Yo'), scratch);
-  t.equal(scratch.innerHTML, '<div><h1 class="red"><span>Yo</span></h1></div>');
+  render(Comp('Yo'), container);
+  t.equal(container.innerHTML, '<div><h1 class="red"><span>Yo</span></h1></div>');
 
-  render(Comp(''), scratch);
-  t.equal(scratch.innerHTML, '<div><h1 class="red"><span>No name</span></h1></div>');
+  render(Comp(''), container);
+  t.equal(
+    container.innerHTML,
+    '<div><h1 class="red"><span>No name</span></h1></div>'
+  );
 
   t.end();
 });
 
 test('render w/ multiple holes as document fragments', t => {
-  let scratch = h('div');
-  h(document.body, scratch);
-
   const Comp = (title, desc) =>
     rhtml`
       <h1>${title}</h1>
       <div>${desc}</div>
     `;
 
-  render(Comp('Yo', 'Hello man'), scratch);
-  const h1 = scratch.children[0];
-  t.equal(scratch.innerHTML, '<h1>Yo</h1><div>Hello man</div>');
+  render(Comp('Yo', 'Hello man'), container);
+  const h1 = container.children[0];
+  t.equal(container.innerHTML, '<h1>Yo</h1><div>Hello man</div>');
 
-  render(Comp('Hi', 'What up?'), scratch);
-  t.equal(scratch.innerHTML, '<h1>Hi</h1><div>What up?</div>');
-  t.equal(scratch.children[0], h1);
+  render(Comp('Hi', 'What up?'), container);
+  t.equal(container.innerHTML, '<h1>Hi</h1><div>What up?</div>');
+  t.equal(container.children[0], h1);
 
   t.end();
 });
 
 test('nested render 2', t => {
-  let scratch = h('div');
-  h(document.body, scratch);
-
   const Comp = (title, desc = '') => rhtml`
     <div>
       9
@@ -111,22 +109,19 @@ test('nested render 2', t => {
       `}
     </div>`;
 
-  render(Comp('Yo', 'hello'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<div>9<h1>Yo</h1><p>hello</p></div></div>');
+  render(Comp('Yo', 'hello'), container);
+  t.equal(container.innerHTML, '<div>9<div>9<h1>Yo</h1><p>hello</p></div></div>');
 
-  render(Comp('Hi'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<div>9<h1>Hi</h1><p></p></div></div>');
+  render(Comp('Hi'), container);
+  t.equal(container.innerHTML, '<div>9<div>9<h1>Hi</h1><p></p></div></div>');
 
-  render(Comp('What?'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<div>9<h1>What?</h1><p></p></div></div>');
+  render(Comp('What?'), container);
+  t.equal(container.innerHTML, '<div>9<div>9<h1>What?</h1><p></p></div></div>');
 
   t.end();
 });
 
 test('nested render', t => {
-  let scratch = h('div');
-  h(document.body, scratch);
-
   const Comp = (title, desc = '') => rhtml`
     <div>
       9
@@ -136,14 +131,15 @@ test('nested render', t => {
       ${desc ? rhtml`<p>${desc}</p>` : rhtml`<p>Nope</p>`}
     </div>`;
 
-  render(Comp('Yo', 'hello'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<h1>Yo</h1><p>hello</p></div>');
+  render(Comp('Yo', 'hello'), container);
+  t.equal(container.innerHTML, '<div>9<h1>Yo</h1><p>hello</p></div>');
 
-  render(Comp('Hi'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<h1>Hi</h1><p>Nope</p></div>');
+  render(Comp('Hi'), container);
+  t.equal(container.innerHTML, '<div>9<h1>Hi</h1><p>Nope</p></div>');
 
-  render(Comp('What up?', 'dude'), scratch);
-  t.equal(scratch.innerHTML, '<div>9<h1>What up?</h1><p>dude</p></div>');
+  render(Comp('What up?', 'dude'), container);
+  t.equal(container.innerHTML, '<div>9<h1>What up?</h1><p>dude</p></div>');
 
   t.end();
 });
+
