@@ -6,6 +6,10 @@ export function insert(el, value, endMark, current, startNode) {
   // This is needed if the el is a DocumentFragment initially.
   el = (endMark && endMark.parentNode) || el;
 
+  // Save startNode of current. In clear() endMark.previousSibling
+  // is not always accurate if content gets pulled before clearing.
+  startNode = startNode || current instanceof Node && current;
+
   if (value === current);
   else if (
     (!current || typeof current === 'string') &&
@@ -30,12 +34,6 @@ export function insert(el, value, endMark, current, startNode) {
   } else if (typeof value === 'function') {
     api.subscribe(function insertContent() {
       current = api.insert(el, value.call({ el, endMark }), endMark, current, startNode);
-
-      // Save startNode of current. In clear() endMark.previousSibling
-      // is not always accurate if content gets pulled before clearing.
-      if (current instanceof Node) {
-        startNode = current;
-      }
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.

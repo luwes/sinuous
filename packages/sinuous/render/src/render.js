@@ -3,7 +3,6 @@ import { template, t } from 'sinuous/template';
 import { EMPTY_ARR } from './constants.js';
 
 const cache = {};
-const tpls = new WeakMap();
 
 /**
  * Create a sinuous `treeify` function.
@@ -39,9 +38,8 @@ export function context(isSvg) {
       let clone = endMark && templateResult._endMark !== endMark;
 
       // A template can only be used once, after it must be cloned.
-      let tplEndMark = tpls.get(tpl);
-      if (tplEndMark) clone = tplEndMark !== endMark;
-      else tpls.set(tpl, endMark);
+      if (tpl._endMark) clone = tpl._endMark !== endMark;
+      else tpl._endMark = endMark;
 
       return tpl(fields, !clone);
     }
@@ -52,15 +50,8 @@ export function context(isSvg) {
 }
 
 export function render(value, el) {
-  el._parts = el._parts || {};
-  let part = el._parts[0] || (el._parts[0] = {});
-
-  part._endMark = part._endMark || api.add(el, '');
-  part._current = api.insert(el, value, part._endMark, part._current, part._startNode);
-
-  if (part._current instanceof Node) {
-    part._startNode = part._current;
-  }
+  el._endMark = el._endMark || api.add(el, '');
+  el._current = api.insert(el, value, el._endMark, el._current);
 }
 
 export function x(tagIndex) {
