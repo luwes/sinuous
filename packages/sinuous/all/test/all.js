@@ -23,10 +23,10 @@ test('test functions exist on namespace S', function(t) {
   t.equal(typeof S.isListening, 'function', 'no isListening fun');
 
   t.equal(typeof S.hydrate.hydrate, 'function', 'no hydrate.hydrate fun');
-  t.equal(typeof S.hydrate.html, 'function', 'no hydrate.html fun');
-  t.equal(typeof S.hydrate.svg, 'function', 'no hydrate.svg fun');
-  t.equal(typeof S.hydrate.h, 'function', 'no hydrate.h fun');
-  t.equal(typeof S.hydrate.hs, 'function', 'no hydrate.hs fun');
+  t.equal(typeof S.hydrate.dhtml, 'function', 'no hydrate.dhtml fun');
+  t.equal(typeof S.hydrate.dsvg, 'function', 'no hydrate.dsvg fun');
+  t.equal(typeof S.hydrate.dh, 'function', 'no hydrate.dh fun');
+  t.equal(typeof S.hydrate.dhs, 'function', 'no hydrate.dhs fun');
 
   t.end();
 });

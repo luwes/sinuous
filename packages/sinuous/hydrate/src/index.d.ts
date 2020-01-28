@@ -27,10 +27,10 @@ interface FunctionComponent<P = {}> {
 
 export function hydrate(delta: VNode, root?: Node): Node;
 
-export const html: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
-export const svg: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
+export const dhtml: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
+export const dsvg: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
 
-export function h(
+export function dh(
   type: string,
   props:
     | JSXInternal.HTMLAttributes &
@@ -38,7 +38,7 @@ export function h(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function h(
+export function dh(
   type: FunctionComponent,
   props:
     | JSXInternal.HTMLAttributes &
@@ -46,14 +46,14 @@ export function h(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function h(
+export function dh(
   children: ElementChildren[]
 ): VNode | VNode[];
-export namespace h {
+export namespace dh {
   export import JSX = JSXInternal;
 }
 
-export function hs(
+export function dhs(
   type: string,
   props:
     | JSXInternal.SVGAttributes &
@@ -61,7 +61,7 @@ export function hs(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function hs(
+export function dhs(
   type: FunctionComponent,
   props:
     | JSXInternal.SVGAttributes &
@@ -69,9 +69,9 @@ export function hs(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function hs(
+export function dhs(
   children: ElementChildren[]
 ): VNode | VNode[];
-export namespace hs {
+export namespace dhs {
   export import JSX = JSXInternal;
 }
