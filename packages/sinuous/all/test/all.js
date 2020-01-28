@@ -25,8 +25,8 @@ test('test functions exist on namespace S', function(t) {
   t.equal(typeof S.hydrate.hydrate, 'function', 'no hydrate.hydrate fun');
   t.equal(typeof S.hydrate.dhtml, 'function', 'no hydrate.dhtml fun');
   t.equal(typeof S.hydrate.dsvg, 'function', 'no hydrate.dsvg fun');
-  t.equal(typeof S.hydrate.dh, 'function', 'no hydrate.dh fun');
-  t.equal(typeof S.hydrate.dhs, 'function', 'no hydrate.dhs fun');
+  t.equal(typeof S.hydrate.d, 'function', 'no hydrate.d fun');
+  t.equal(typeof S.hydrate.ds, 'function', 'no hydrate.ds fun');
 
   t.end();
 });

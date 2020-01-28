@@ -30,7 +30,7 @@ export function hydrate(delta: VNode, root?: Node): Node;
 export const dhtml: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
 export const dsvg: (strings: TemplateStringsArray, ...values: any[]) => VNode | VNode[];
 
-export function dh(
+export function d(
   type: string,
   props:
     | JSXInternal.HTMLAttributes &
@@ -38,7 +38,7 @@ export function dh(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function dh(
+export function d(
   type: FunctionComponent,
   props:
     | JSXInternal.HTMLAttributes &
@@ -46,14 +46,14 @@ export function dh(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function dh(
+export function d(
   children: ElementChildren[]
 ): VNode | VNode[];
-export namespace dh {
+export namespace d {
   export import JSX = JSXInternal;
 }
 
-export function dhs(
+export function ds(
   type: string,
   props:
     | JSXInternal.SVGAttributes &
@@ -61,7 +61,7 @@ export function dhs(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function dhs(
+export function ds(
   type: FunctionComponent,
   props:
     | JSXInternal.SVGAttributes &
@@ -69,9 +69,9 @@ export function dhs(
     | null,
   ...children: ElementChildren[]
 ): VNode | VNode[];
-export function dhs(
+export function ds(
   children: ElementChildren[]
 ): VNode | VNode[];
-export namespace dhs {
+export namespace ds {
   export import JSX = JSXInternal;
 }

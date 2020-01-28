@@ -1,15 +1,15 @@
 import test from 'tape';
 import { normalizeSvg } from '../../test/_utils.js';
-import { dhs, dsvg, hydrate } from 'sinuous/hydrate';
+import { ds, dsvg, hydrate } from 'sinuous/hydrate';
 import { observable } from 'sinuous';
 
 test('supports hydrating SVG via hyperscript', function(t) {
   document.body.innerHTML = `<svg class="redbox" viewBox="0 0 100 100"><path d="M 8.74211 7.70899"></path></svg>`;
 
-  const delta = dhs(
+  const delta = ds(
     'svg',
     { class: 'redbox', viewBox: '0 0 100 100' },
-    dhs('path', { d: 'M 8.74211 7.70899' })
+    ds('path', { d: 'M 8.74211 7.70899' })
   );
 
   const svg = hydrate(delta, document.querySelector('svg'));

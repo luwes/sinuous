@@ -1,6 +1,6 @@
 import test from 'tape';
 import spy from 'ispy';
-import { dh, dhtml, hydrate, _ } from 'sinuous/hydrate';
+import { d, dhtml, hydrate, _ } from 'sinuous/hydrate';
 import { observable, html } from 'sinuous';
 
 test('hydrates root bug', function(t) {
@@ -107,8 +107,8 @@ test('hydrate adds event listeners', function(t) {
   `;
 
   const click = spy();
-  const delta = dh('div', [
-    dh('button', { onclick: click, title: 'Apply pressure' }, 'something')
+  const delta = d('div', [
+    d('button', { onclick: click, title: 'Apply pressure' }, 'something')
   ]);
   const div = hydrate(delta, document.querySelector('div'));
   const btn = div.children[0];
@@ -166,9 +166,9 @@ test('hydrate can add observables', function(t) {
 
   const count = observable(0);
   const toggle = observable('off');
-  const delta = dh('div', [
+  const delta = d('div', [
     count,
-    dh('button', { class: 'toggle' }, toggle),
+    d('button', { class: 'toggle' }, toggle),
     count
   ]);
   const div = hydrate(delta, document.querySelector('div'));
