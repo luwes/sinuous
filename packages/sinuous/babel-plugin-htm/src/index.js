@@ -17,6 +17,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   const inlineVNodes = options.monomorphic || pragma===false;
   const wrapExpression = options.wrapExpression;
   let currentPragma;
+  let fields;
 
   // The tagged template tag function name we're looking for.
   // This is static because it's generally assigned via htm.bind(h),
@@ -24,6 +25,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   const htmlName = options.tag || '/html|svg/';
 
   function TaggedTemplateExpression(path, state) {
+    fields = new Map();
     const tag = path.node.tag.name;
     let match = tag === htmlName;
     let matchName = htmlName;
@@ -37,14 +39,20 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       currentPragma = pragma && dottedIdentifier(pragma.split('|')[matchIndex]);
 
       const statics = path.node.quasi.quasis.map(e => e.value.raw);
-      const expr = path.node.quasi.expressions;
+      const exprs = path.node.quasi.expressions;
 
-      let tree = treeify(build(statics), expr);
+      let tree = treeify(build(statics), exprs);
 
       // Turn array expression in Array so it can be converted below
       // to a pragma call expression for fragments.
       if (t.isArrayExpression(tree)) {
         tree = tree.elements;
+      }
+
+      if (wrapExpression) {
+        exprs.forEach(expr => {
+          fields.set(expr, path.scope.generateUidIdentifier("field"));
+        });
       }
 
       let node = Array.isArray(tree)
@@ -58,11 +66,17 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         : transform(tree, state);
 
       if (wrapExpression) {
-        node = t.callExpression(dottedIdentifier(wrapExpression), [
-          t.arrowFunctionExpression([], node),
-          t.arrayExpression(statics.map(str => t.stringLiteral(str))),
-          ...expr
-        ]);
+        let fieldIds = Array.from(fields.values());
+        fieldIds.unshift(path.scope.generateUidIdentifier("statics"));
+
+        node =
+          t.callExpression(dottedIdentifier(`${wrapExpression}.apply`), [
+            t.arrowFunctionExpression(fieldIds, node),
+            t.arrayExpression([
+              t.arrayExpression(statics.map(str => t.stringLiteral(str))),
+              ...exprs
+            ])
+          ]);
       }
 
       path.replaceWith(node);
@@ -86,6 +100,8 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   }
 
   function transform(node, state) {
+    node = maybeField(node);
+
     if (t.isNode(node)) return node;
     if (typeof node === 'string') return stringValue(node);
     if (node === undefined) return t.identifier('undefined');
@@ -95,6 +111,13 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     const newProps = spreadNode(props, state);
     const newChildren = t.arrayExpression((children || []).map(child => transform(child, state)));
     return createVNode(newTag, newProps, newChildren);
+  }
+
+  function maybeField(node) {
+    if (fields.has(node)) {
+      return fields.get(node);
+    }
+    return node;
   }
 
   function stringValue(str) {
@@ -145,13 +168,13 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   }
 
   function propsNode(props) {
-    return t.isNode(props) ? props : t.objectExpression(objectProperties(props));
+    return t.isNode(props) ?  maybeField(props) : t.objectExpression(objectProperties(props));
   }
 
   function objectProperties(obj) {
     return Object.keys(obj).map(key => {
       const values = obj[key].map(valueOrNode =>
-        t.isNode(valueOrNode) ? valueOrNode : t.valueToNode(valueOrNode)
+        t.isNode(valueOrNode) ?  maybeField(valueOrNode) : t.valueToNode(valueOrNode)
       );
 
       let node = values[0];
@@ -163,9 +186,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
           node = t.binaryExpression('+', node, concatFunctionNode(value));
         });
         if (values.some(isFunctionLike)) {
-          node = t.arrowFunctionExpression([], t.blockStatement([
-            t.returnStatement(node)
-          ]));
+          node = t.arrowFunctionExpression([], node);
         }
       }
 

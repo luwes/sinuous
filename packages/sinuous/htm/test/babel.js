@@ -427,8 +427,30 @@ describe('htm/babel', () => {
             ]
           }
         ).code,
-        `var name="world";h.wrap(()=>h("div",{id:"hello"},"hello, ",name),["<div id=hello>hello, ","</div>"],name);`
+        `var name="world";h.wrap.apply((_statics,_field)=>h("div",{id:"hello"},"hello, ",_field),[["<div id=hello>hello, ","</div>"],name]);`
       );
+      t.end();
+    });
+
+    test('should transform to a wrapped expression', t => {
+      t.equal(
+        transform(
+          'var name="world";html`<div id=hello>hello, ${html`<h1>${name}</h1>`}</div>`;',
+          {
+            ...options,
+            plugins: [
+              [
+                htmBabelPlugin,
+                {
+                  wrapExpression: 'h.wrap'
+                }
+              ]
+            ]
+          }
+        ).code,
+        `var name="world";h.wrap.apply((_statics,_field)=>h("div",{id:"hello"},"hello, ",_field),[["<div id=hello>hello, ","</div>"],h.wrap.apply((_statics2,_field2)=>h("h1",null,_field2),[["<h1>","</h1>"],name])]);`
+      );
+
       t.end();
     });
   });
