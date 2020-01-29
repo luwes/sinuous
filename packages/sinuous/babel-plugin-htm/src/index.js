@@ -15,6 +15,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   const useBuiltIns = options.useBuiltIns;
   const useNativeSpread = options.useNativeSpread;
   const inlineVNodes = options.monomorphic || pragma===false;
+  const wrapExpression = options.wrapExpression;
   let currentPragma;
 
   // The tagged template tag function name we're looking for.
@@ -46,7 +47,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         tree = tree.elements;
       }
 
-      const node = Array.isArray(tree)
+      let node = Array.isArray(tree)
         ? t.callExpression(currentPragma, [
             t.arrayExpression(tree.map(root => transform(root, state)))
           ])
@@ -55,6 +56,14 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
             t.arrayExpression([transform(tree, state)])
           ])
         : transform(tree, state);
+
+      if (wrapExpression) {
+        node = t.callExpression(dottedIdentifier(wrapExpression), [
+          t.arrowFunctionExpression([], node),
+          t.arrayExpression(statics.map(str => t.stringLiteral(str))),
+          ...expr
+        ]);
+      }
 
       path.replaceWith(node);
     }
@@ -154,7 +163,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
           node = t.binaryExpression('+', node, concatFunctionNode(value));
         });
         if (values.some(isFunctionLike)) {
-          node = t.functionExpression(null, [], t.blockStatement([
+          node = t.arrowFunctionExpression([], t.blockStatement([
             t.returnStatement(node)
           ]));
         }

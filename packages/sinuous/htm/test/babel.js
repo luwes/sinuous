@@ -410,6 +410,29 @@ describe('htm/babel', () => {
     });
   });
 
+  describe('{wrapExpressions:"h.wrap"}', () => {
+    test('should transform to a wrapped expression', t => {
+      t.equal(
+        transform(
+          'var name="world";html`<div id=hello>hello, ${name}</div>`;',
+          {
+            ...options,
+            plugins: [
+              [
+                htmBabelPlugin,
+                {
+                  wrapExpression: 'h.wrap'
+                }
+              ]
+            ]
+          }
+        ).code,
+        `var name="world";h.wrap(()=>h("div",{id:"hello"},"hello, ",name),["<div id=hello>hello, ","</div>"],name);`
+      );
+      t.end();
+    });
+  });
+
   describe('main test suite', () => {
     // Run all of the main tests against the Babel plugin:
     const mod = fs.readFileSync(
@@ -425,4 +448,5 @@ describe('htm/babel', () => {
     });
     eval(code);
   });
+
 });
