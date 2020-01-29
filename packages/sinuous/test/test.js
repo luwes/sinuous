@@ -34,3 +34,4 @@ import '../data/test/data.js';
 import '../template/test/template.js';
 import '../render/test/render.js';
 import '../render/test/lit-html.js';
+import '../render/test/observable.js';
