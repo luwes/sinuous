@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.21.4",
+  "version": "0.22.0",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
@@ -29,7 +29,9 @@
     "data/package.json",
     "data/src",
     "memo/package.json",
-    "memo/src"
+    "memo/src",
+    "render/package.json",
+    "render/src"
   ],
   "peerDependencies": {
     "sinuous": ">=0.6.0"
