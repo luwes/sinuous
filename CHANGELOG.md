@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.22.0 - 2020-01-30 - BREAKING CHANGES
+
+### Changed
+
+- Renamed `html` and `svg` to `dhtml` and `dsvg` in `sinuous/hydrate`.
+
+### Added
+
+- Added `sinuous/render` module for top down render functions.
+
+
 ## 0.21.4 - 2020-01-24
 
 ### Fixed
