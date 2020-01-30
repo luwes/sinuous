@@ -9,19 +9,19 @@ Sinuous Hydrate is a small add-on for [Sinuous](https://github.com/luwes/sinuous
 
 ```js
 import { observable } from 'sinuous';
-import { hydrate, h } from 'sinuous/hydrate';
+import { hydrate, d } from 'sinuous/hydrate';
 import { openLogin } from './auth.js';
 
 const isActive = observable('');
 
 hydrate(
-  html`
+  dhtml`
     <a class="login-btn button is-dark" onclick=${openLogin} />
   `
 );
 
 hydrate(
-  html`
+  dhtml`
     <a
       class="navbar-burger burger${isActive}"
       onclick=${() => isActive(!isActive() ? ' is-active' : '')}
@@ -30,7 +30,7 @@ hydrate(
 );
 
 hydrate(
-  html`
+  dhtml`
     <a class="navbar-menu${isActive}" />
   `
 );
@@ -50,7 +50,7 @@ Passing the root node is not needed if it can be derived from the `id` or `class
 | tree   | <code>Object</code> | Virtual tree structure. |
 | [root] | <code>Node</code>   | Root node.              |
 
-### html`` or h()
+### dhtml`` or d()
 
 Creates a virtual tree structure for HTML.
 Looks like:
@@ -63,7 +63,7 @@ Looks like:
   }
 ```
 
-### svg`` or hs()
+### dsvg`` or ds()
 
 Creates a virtual tree structure for SVG.
 
@@ -74,7 +74,7 @@ A placeholder for content in tags that get skipped. The placeholder prevents dup
 For example:
 
 ```js
-import { hydrate, html, _ } from 'sinuous/hydrate';
+import { hydrate, dhtml, _ } from 'sinuous/hydrate';
 
 document.body.innerHTML = `
   <div class="container">
@@ -94,7 +94,7 @@ document.body.innerHTML = `
   </div>
 `;
 
-hydrate(html`
+hydrate(dhtml`
   <div class="container">
     <h1>${_}</h1>
     <div>
