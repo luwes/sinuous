@@ -91,7 +91,9 @@ export function template(elementRef, noClone) {
     }
 
     // Set a custom property `props` for easy access to the passed argument.
-    root.firstChild.props = props;
+    if (root.firstChild) {
+      root.firstChild.props = props;
+    }
 
     // These paths have to be resolved before any elements are inserted.
     cloneActions.forEach(action => {
@@ -166,6 +168,6 @@ function createPath(root, el) {
 }
 
 function getPath(target, paths) {
-  paths.forEach(depth => (target = EMPTY_ARR.slice.call(target.childNodes)[depth]));
+  paths.forEach(depth => (target = target.childNodes[depth]));
   return target;
 }
