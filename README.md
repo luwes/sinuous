@@ -42,6 +42,9 @@
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/memo.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/memo`](./packages/sinuous/memo)     | Memoize components and functions |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/render.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/render`](./packages/sinuous/data)     | Top/down rendering *(experimental)* |
+
 
 ### All-in-one
 
