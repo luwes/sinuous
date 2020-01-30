@@ -166,6 +166,6 @@ function createPath(root, el) {
 }
 
 function getPath(target, paths) {
-  paths.forEach(depth => (target = target.childNodes[depth]));
+  paths.forEach(depth => (target = EMPTY_ARR.slice.call(target.childNodes)[depth]));
   return target;
 }

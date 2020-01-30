@@ -35,10 +35,10 @@ var sauceLabsLaunchers = {
     browserName: 'MicrosoftEdge',
     platform: 'Windows 10'
   },
-  sl_ie_11: {
+  sl_ie_9: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '11.0',
+    version: '9.0',
     platform: 'Windows 7'
   }
 };
