@@ -6,10 +6,10 @@ import * as observable from 'sinuous/observable';
 import { api, context } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
-export const o = observable.o;
-
 api.h = context(observable);
 api.hs = context(observable, true);
+
+export const o = observable.o;
 
 // Makes it possible to intercept `h` calls and customize.
 export function h() {

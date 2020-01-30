@@ -73,6 +73,15 @@ export const bundles = [
   },
   {
     // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    external: ['sinuous', './sinuous.js', 'sinuous/template', './template.js', 'sinuous/htm', './htm.js'],
+    formats: [ESM, UMD, IIFE],
+    global: 'render',
+    name: 'render',
+    input: 'packages/sinuous/render/src/index.js',
+    dest: dest()
+  },
+  {
+    // order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', '../sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'mini',

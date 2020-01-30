@@ -3,7 +3,7 @@ import { EMPTY_ARR, GROUPING } from './constants.js';
 
 let groupCounter = 0;
 
-export function add(parent, value, marker) {
+export function add(parent, value, endMark) {
   let mark;
 
   if (typeof value === 'string') {
@@ -21,9 +21,9 @@ export function add(parent, value, marker) {
     mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
   }
 
-  // If marker is `null`, value will be added to the end of the list.
+  // If endMark is `null`, value will be added to the end of the list.
   // IE9 requires an explicit `null` as second argument.
-  parent.insertBefore(value, marker || null);
+  parent.insertBefore(value, endMark || null);
 
   // Explicit undefined to store if frag.firstChild is null.
   return mark === undefined ? value : mark;

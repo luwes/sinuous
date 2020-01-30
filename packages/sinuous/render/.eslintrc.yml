@@ -1,0 +1,2 @@
+rules:
+  fp/no-this: off
