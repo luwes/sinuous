@@ -37,4 +37,9 @@ const custom = function() {
   }
 };
 
-export default custom;
+const wrapper = function() {
+  const h = custom.bind(this);
+  return (this.wrap || h).apply(h, arguments);
+};
+
+export default wrapper;

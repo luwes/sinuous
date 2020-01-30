@@ -23,3 +23,28 @@ export function normalizeAttributes(htmlStr) {
     }
   );
 }
+
+export function fragInnerHTML(fragment) {
+  return [].slice
+    .call(fragment.childNodes)
+    .map(c => c.outerHTML)
+    .join('');
+}
+
+export function beforeEach(test, handler) {
+  return function tapish(name, listener) {
+    test(name, function(assert) {
+      var _end = assert.end;
+      assert.end = function() {
+        assert.end = _end;
+        listener(assert);
+      };
+
+      handler(assert);
+    });
+  };
+}
+
+export function stripExpressionMarkers(value) {
+  return value;
+}

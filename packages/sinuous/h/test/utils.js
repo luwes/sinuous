@@ -1,11 +1,11 @@
 import test from 'tape';
-import { clearAll } from '../src/utils.js';
+import { clear } from '../src/clear.js';
 
-test('clearAll', function(t) {
+test('clear', function(t) {
   const parent = document.createElement('div');
   parent.appendChild(document.createComment(''));
   parent.appendChild(document.createElement('span'));
-  clearAll(parent);
+  clear(parent);
   t.equal(parent.innerHTML, '');
   t.equal(parent.childNodes.length, 0);
 
@@ -15,11 +15,11 @@ test('clearAll', function(t) {
   parent.appendChild(document.createElement('b'));
   let marker = document.createComment('');
   parent.appendChild(marker);
-  clearAll(parent, current, marker);
+  clear(parent, current, marker);
   t.equal(parent.innerHTML, 'first<div></div><!---->');
   t.equal(parent.childNodes.length, 3);
 
-  clearAll(parent);
+  clear(parent);
   parent.appendChild(document.createTextNode('first'));
   parent.appendChild(document.createElement('span'));
   const startNode = document.createElement('span');
@@ -28,7 +28,7 @@ test('clearAll', function(t) {
   parent.appendChild(document.createElement('b'));
   marker = document.createComment('');
   parent.appendChild(marker);
-  clearAll(parent, current, marker, startNode);
+  clear(parent, current, marker, startNode);
   t.equal(parent.innerHTML, 'first<span></span><!---->');
   t.equal(parent.childNodes.length, 3);
 

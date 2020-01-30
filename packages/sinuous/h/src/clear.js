@@ -4,15 +4,15 @@ import { GROUPING } from './constants.js';
  * Clear all nodes in the parent.
  * @param  {Node} parent
  * @param  {*} current
- * @param  {Node} marker - This is the ending marker node.
+ * @param  {Node} endMark - This is the ending marker node.
  * @param  {Node} startNode - This is the start node.
  */
-export function clearAll(parent, current, marker, startNode) {
-  if (marker) {
+export function clear(parent, current, endMark, startNode) {
+  if (endMark) {
     // `current` can't be `0`, it's coerced to a string in insert.
     if (current) {
       if (!startNode) {
-        startNode = marker.previousSibling || parent.lastChild;
+        startNode = endMark.previousSibling || parent.lastChild;
         // Support fragments
         const key = startNode[GROUPING];
         if (key) {
@@ -23,10 +23,13 @@ export function clearAll(parent, current, marker, startNode) {
         }
       }
       let tmp;
-      while (startNode && startNode !== marker) {
+      while (startNode && startNode !== endMark) {
         tmp = startNode.nextSibling;
-        parent.removeChild(startNode);
-        startNode[GROUPING] = 0;
+        // Is needed in case the child was pulled out the parent before clearing.
+        if (parent === startNode.parentNode) {
+          parent.removeChild(startNode);
+          startNode[GROUPING] = 0;
+        }
         startNode = tmp;
       }
     }
