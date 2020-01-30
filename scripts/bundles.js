@@ -165,7 +165,12 @@ export const fixtures = [
     dest: () => 'site/assets/js',
     sourcemap: true,
     babel: {
-      plugins: ['sinuous/babel-plugin-htm']
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          pragma: 'd',
+          tag: 'dhtml'
+        }]
+      ]
     }
   },
   {
