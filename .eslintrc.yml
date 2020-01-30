@@ -15,11 +15,14 @@ parserOptions:
 
 globals:
   html: readonly
+  dhtml: readonly
+  rhtml: readonly
   svg: readonly
-  tree: readonly
+  dsvg: readonly
+  rsvg: readonly
 
 rules:
   semi: error
   no-unused-vars:
     - error
-    - varsIgnorePattern: ^hs?y?$
+    - varsIgnorePattern: ^hs?|ds?$
