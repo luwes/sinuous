@@ -9,6 +9,7 @@ import { build, treeify } from '../../htm/src/build.js';
  * @param {boolean} [options.useBuiltIns=false]  Use the native Object.assign instead of trying to polyfill it.
  * @param {boolean} [options.useNativeSpread=false]  Use the native { ...a, ...b } syntax for prop spreads.
  * @param {boolean} [options.variableArity=true] If `false`, always passes exactly 3 arguments to the pragma function.
+ * @param {boolean} [options.wrapExpression=''] If set wraps the generated expression with a function passing the same arguments the tagged template would receive.
  */
 export default function htmBabelPlugin({ types: t }, options = {}) {
   const pragma = options.pragma===false ? false : (options.pragma || 'h|hs');
@@ -66,17 +67,16 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         : transform(tree, state);
 
       if (wrapExpression) {
-        let fieldIds = Array.from(fields.values());
-        fieldIds.unshift(path.scope.generateUidIdentifier("statics"));
+        let taggedArgs = Array.from(fields.values());
+        taggedArgs.unshift(path.scope.generateUidIdentifier("statics"));
 
-        node =
-          t.callExpression(dottedIdentifier(`${wrapExpression}.apply`), [
-            t.arrowFunctionExpression(fieldIds, node),
-            t.arrayExpression([
-              t.arrayExpression(statics.map(str => t.stringLiteral(str))),
-              ...exprs
-            ])
-          ]);
+        node = t.callExpression(dottedIdentifier(`${wrapExpression}.apply`), [
+          t.arrowFunctionExpression(taggedArgs, node),
+          t.arrayExpression([
+            t.arrayExpression(statics.map(str => t.stringLiteral(str))),
+            ...exprs
+          ])
+        ]);
       }
 
       path.replaceWith(node);
