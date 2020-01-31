@@ -2,6 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
+import size from 'rollup-plugin-size';
 
 const defaults = {
   watch: {
@@ -10,14 +11,18 @@ const defaults = {
 };
 
 const plugins = [
+  size(),
   babel({
     exclude: 'node_modules/**',
     plugins: [
-      ['sinuous/babel-plugin-htm'],
       ['sinuous/babel-plugin-htm', {
-        'pragma': 'hy|hys',
-        'tag': '/tree|trees/'
-      }, 'for hydrate']
+        import: 'sinuous/hydrate',
+        pragma: 'd',
+        tag: 'dhtml'
+      }, 'for hydrate'],
+      ['sinuous/babel-plugin-htm', {
+        import: 'sinuous'
+      }]
     ]
   }),
   resolve(),

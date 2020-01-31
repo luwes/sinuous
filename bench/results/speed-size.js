@@ -2,7 +2,7 @@
 import ColorHash from 'color-hash';
 import { o } from 'sinuous';
 import { computed, subscribe } from 'sinuous/observable';
-import { hydrate, h } from 'sinuous/hydrate';
+import { hydrate, dhtml } from 'sinuous/hydrate';
 import { colors, getId, getName } from './helpers.js';
 import { median, getOutlierThresholds, unique } from './utils.js';
 
@@ -23,13 +23,13 @@ function init() {
   subscribe(loadResults);
 
   document.querySelectorAll('.filter-list a').forEach(node => {
-    hydrate(html`
+    hydrate(dhtml`
       <a class=${() => (node.href.includes(selected()) ? 'is-active' : '')} />
     `, node);
   });
 
   hydrate(
-    html`<input oninput=${checkOutliers} />`,
+    dhtml`<input oninput=${checkOutliers} />`,
     document.querySelector('.outlier-check')
   );
 
