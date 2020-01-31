@@ -12,33 +12,23 @@ import { build, treeify } from '../../htm/src/build.js';
  * @param {boolean} [options.wrapExpression=''] If set wraps the generated expression with a function passing the same arguments the tagged template would receive.
  */
 export default function htmBabelPlugin({ types: t }, options = {}) {
-  const pragma = options.pragma===false ? false : (options.pragma || 'h|hs');
+  const pragma = options.pragma===false ? false : dottedIdentifier(options.pragma || 'h');
   const useBuiltIns = options.useBuiltIns;
   const useNativeSpread = options.useNativeSpread;
   const inlineVNodes = options.monomorphic || pragma===false;
   const wrapExpression = options.wrapExpression;
-  let currentPragma;
   let fields;
 
   // The tagged template tag function name we're looking for.
   // This is static because it's generally assigned via htm.bind(h),
   // which could be imported from elsewhere, making tracking impossible.
-  const htmlName = options.tag || '/html|svg/';
+  const htmlName = options.tag || 'html';
 
   function TaggedTemplateExpression(path, state) {
     fields = new Map();
+
     const tag = path.node.tag.name;
-    let match = tag === htmlName;
-    let matchName = htmlName;
-    if (htmlName[0]==='/') {
-      match = tag.match(patternStringToRegExp(htmlName));
-      matchName = match && match[0];
-    }
-
-    if (match) {
-      const matchIndex = htmlName.replace(/\//g, '').split('|').indexOf(matchName);
-      currentPragma = pragma && dottedIdentifier(pragma.split('|')[matchIndex]);
-
+    if (htmlName[0]==='/' ? patternStringToRegExp(htmlName).test(tag) : tag === htmlName) {
       const statics = path.node.quasi.quasis.map(e => e.value.raw);
       const exprs = path.node.quasi.expressions;
 
@@ -57,11 +47,11 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       }
 
       let node = Array.isArray(tree)
-        ? t.callExpression(currentPragma, [
+        ? t.callExpression(pragma, [
             t.arrayExpression(tree.map(root => transform(root, state)))
           ])
         : t.isNode(tree) || typeof tree === 'string'
-        ? t.callExpression(currentPragma, [
+        ? t.callExpression(pragma, [
             t.arrayExpression([transform(tree, state)])
           ])
         : transform(tree, state);
@@ -237,7 +227,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       children = children.elements;
     }
 
-    return t.callExpression(currentPragma, [tag, props].concat(children));
+    return t.callExpression(pragma, [tag, props].concat(children));
   }
 
   function propertyName(key) {
