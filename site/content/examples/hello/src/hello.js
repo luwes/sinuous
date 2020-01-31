@@ -1,4 +1,4 @@
-import { h } from 'sinuous';
+import { html } from 'sinuous';
 
 const HelloMessage = ({ name }) => html`
   <!-- Prints Hello World -->

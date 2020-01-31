@@ -13,14 +13,6 @@ parserOptions:
   ecmaVersion: 9
   sourceType: module
 
-globals:
-  html: readonly
-  dhtml: readonly
-  rhtml: readonly
-  svg: readonly
-  dsvg: readonly
-  rsvg: readonly
-
 rules:
   semi: error
   no-unused-vars:

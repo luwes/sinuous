@@ -1,4 +1,4 @@
-import { o, h, hs } from 'sinuous';
+import { o, html, svg } from 'sinuous';
 
 const ClockContainer = () => {
   const date = o(new Date());

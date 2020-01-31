@@ -410,6 +410,133 @@ describe('htm/babel', () => {
     });
   });
 
+  describe('{import:"preact"}', () => {
+    test('should do nothing when pragma=false', (t) => {
+      t.equal(
+        transform('var name="world",vnode=html`<div id=hello>hello, ${name}</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              pragma: false,
+              import: 'preact'
+            }]
+          ]
+        }).code
+      , `var name="world",vnode={tag:"div",props:{id:"hello"},children:["hello, ",name]};`);
+      t.end();
+    });
+    test('should do nothing when tag is not used', (t) => {
+      t.equal(
+        transform('console.log("hi");', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              import: 'preact'
+            }]
+          ]
+        }).code
+      , `console.log("hi");`);
+      t.end();
+    });
+    test('should add import', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              import: 'preact'
+            }]
+          ]
+        }).code
+      , `import{h}from"preact";h("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+    test('should add import for pragma', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              pragma: 'createElement',
+              import: 'react'
+            }]
+          ]
+        }).code
+      , `import{createElement}from"react";createElement("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+  });
+
+  describe('{import:Object}', () => {
+    test('should add import', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              import: {
+                module: 'preact',
+                export: 'h'
+              }
+            }]
+          ]
+        }).code
+      , `import{h}from"preact";h("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+    test('should add import as pragma', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              pragma: 'hh',
+              import: {
+                module: 'preact',
+                export: 'h'
+              }
+            }]
+          ]
+        }).code
+      , `import{h as hh}from"preact";hh("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+    test('should add import default', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              pragma: 'React.createElement',
+              import: {
+                module: 'react',
+                export: 'default'
+              }
+            }]
+          ]
+        }).code
+      , `import React from"react";React.createElement("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+    test('should add import *', (t) => {
+      t.equal(
+        transform('html`<div id=hello>hello</div>`;', {
+          ...options,
+          plugins: [
+            [htmBabelPlugin, {
+              pragma: 'Preact.h',
+              import: {
+                module: 'preact',
+                export: '*'
+              }
+            }]
+          ]
+        }).code
+      , `import*as Preact from"preact";Preact.h("div",{id:"hello"},"hello");`);
+      t.end();
+    });
+  });
+
   describe('{wrapExpressions:"h.wrap"}', () => {
     test('should transform to a wrapped expression', t => {
       t.equal(

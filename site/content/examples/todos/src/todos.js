@@ -1,4 +1,4 @@
-import { o, h } from 'sinuous';
+import { o, html } from 'sinuous';
 import { map } from 'sinuous/map';
 
 const TodoApp = () => {

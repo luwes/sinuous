@@ -1,8 +1,8 @@
 /* global Plotly */
 import ColorHash from 'color-hash';
-import { o, h } from 'sinuous';
-import { subscribe, computed } from 'sinuous/observable';
-import { hydrate, h as hy } from 'sinuous/hydrate';
+import { html } from 'sinuous';
+import { o, subscribe, computed } from 'sinuous/observable';
+import { hydrate, dhtml } from 'sinuous/hydrate';
 import { colors, getId, getName, defaultBenchmarks } from './helpers.js';
 import { median, unique } from './utils.js';
 
@@ -18,7 +18,7 @@ const isPlotting = o(false);
 
 function init() {
   const isLoadingClass = () => isLoading() ? ' is-loading' : '';
-  const delta = tree`
+  const delta = dhtml`
     <div>
       <div class="select is-small${isLoadingClass}">
         <select onchange="${(e) => url(e.target.value)}" />
@@ -28,7 +28,7 @@ function init() {
   hydrate(delta, document.querySelector('.select-bench'));
 
   document.querySelectorAll('.filter-list a').forEach(node => {
-    hydrate(tree`
+    hydrate(dhtml`
       <a class=${() => (node.href.includes(selected()) ? 'is-active' : '')} />
     `, node);
   });

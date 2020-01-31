@@ -1,5 +1,5 @@
 import { observable } from 'sinuous';
-import { hydrate, d } from 'sinuous/hydrate';
+import { hydrate, dhtml } from 'sinuous/hydrate';
 import { ready } from './utils.js';
 
 ready(() => {

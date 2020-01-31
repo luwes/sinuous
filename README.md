@@ -43,7 +43,7 @@
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/memo.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/memo`](./packages/sinuous/memo)     | Memoize components and functions |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/render.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/render`](./packages/sinuous/data)     | Top/down rendering *(experimental)* |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/render.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/render`](./packages/sinuous/render)     | Top/down rendering *(experimental)* |
 
 
 ### All-in-one
@@ -144,17 +144,17 @@ You could say using hydrate is a bit like using [jQuery](https://jquery.com/), y
 
 ```js
 import { observable } from 'sinuous';
-import { hydrate, html } from 'sinuous/hydrate';
+import { hydrate, dhtml } from 'sinuous/hydrate';
 
 const isActive = observable('');
 
 hydrate(
-  html`<a class="navbar-burger burger${isActive}"
+  dhtml`<a class="navbar-burger burger${isActive}"
     onclick=${() => isActive(isActive() ? '' : ' is-active')} />`
 );
 
 hydrate(
-  html`<a class="navbar-menu${isActive}" />`
+  dhtml`<a class="navbar-menu${isActive}" />`
 );
 ```
 

@@ -1,4 +1,4 @@
-import { o, h } from 'sinuous';
+import { o, html } from 'sinuous';
 
 const Timer = (props) => {
   const seconds = o(0);

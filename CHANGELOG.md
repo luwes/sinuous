@@ -2,6 +2,25 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.23.0 - 2020-01-31
+
+### Added
+
+- Added auto-import pragma option to `sinuous/babel-plugin-htm`. For example:
+
+```js
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }],
+        ['sinuous/babel-plugin-htm', {
+          pragma: 'hs',
+          tag: 'svg',
+          import: 'sinuous'
+        }, 'svg']
+      ]
+```
+
 ## 0.22.0 - 2020-01-30 - BREAKING CHANGES
 
 ### Changed

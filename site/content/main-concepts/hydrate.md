@@ -17,23 +17,23 @@ You could say using hydrate is a bit like using [jQuery](https://jquery.com/), y
 
 ```js
 import { observable } from 'sinuous';
-import { hydrate, html } from 'sinuous/hydrate';
+import { hydrate, dhtml } from 'sinuous/hydrate';
 
 const isActive = observable('');
 
 hydrate(
-  html`<a class="navbar-burger burger${isActive}"
+  dhtml`<a class="navbar-burger burger${isActive}"
     onclick=${() => isActive(isActive() ? '' : ' is-active')} />`
 );
 
 hydrate(
-  html`<a class="navbar-menu${isActive}" />`
+  dhtml`<a class="navbar-menu${isActive}" />`
 );
 ```
 
 Try it on [Codesandbox](https://codesandbox.io/s/sinuous-hydrate-xbzu6)
 
-As you can see it looks very similar to how you would create a DOM tree but the ` html`` ` tag from `hydrate` doesn't return a Node element. It returns a virtual node tree which is used to to add the dynamic parts to the existing HTML elements in the document. 
+As you can see it looks very similar to how you would create a DOM tree but the ` dhtml`` ` tag from `hydrate` doesn't return a Node element. It returns a virtual node tree which is used to to add the dynamic parts to the existing HTML elements in the document. 
 
 You might have noticed there is no explicit element selector in the example above to define which DOM element should be hydrated. It's still possible to pass this as the 2nd argument of `hydrate()` but since in a lot of cases an `id` or `class` is declared in the root element those attributes are used to get the DOM element instance. 
 
@@ -58,7 +58,7 @@ Passing the root node is not needed if it can be derived from the `id` or `class
 | [root] | <code>Node</code>   | Root node.              |
 
 
-### html`` or h()
+### dhtml`` or d()
 
 Creates a virtual tree structure for HTML.
 Looks like:
@@ -71,7 +71,7 @@ Looks like:
   }
 ```
 
-### svg`` or hs()
+### dsvg`` or ds()
 
 Creates a virtual tree structure for SVG.
 
@@ -82,7 +82,7 @@ A placeholder for content in tags that get skipped. The placeholder prevents dup
 For example:
 
 ```js
-import { hydrate, html, _ } from 'sinuous/hydrate';
+import { hydrate, dhtml, _ } from 'sinuous/hydrate';
 
 document.body.innerHTML = `
   <div class="container">
@@ -102,7 +102,7 @@ document.body.innerHTML = `
   </div>
 `;
 
-hydrate(html`
+hydrate(dhtml`
   <div class="container">
     <h1>${_}</h1>
     <div>
