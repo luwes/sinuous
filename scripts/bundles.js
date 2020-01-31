@@ -168,7 +168,8 @@ export const fixtures = [
       plugins: [
         ['sinuous/babel-plugin-htm', {
           pragma: 'd',
-          tag: 'dhtml'
+          tag: 'dhtml',
+          import: 'sinuous/hydrate'
         }]
       ]
     }
@@ -180,7 +181,11 @@ export const fixtures = [
     input: 'site/content/examples/hello/src/hello.js',
     gzip: true,
     babel: {
-      plugins: ['sinuous/babel-plugin-htm']
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }]
+      ]
     }
   },
   {
@@ -200,7 +205,11 @@ export const fixtures = [
     input: 'site/content/examples/counter/src/counter.js',
     gzip: true,
     babel: {
-      plugins: ['sinuous/babel-plugin-htm']
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }]
+      ]
     }
   },
   {
@@ -210,7 +219,11 @@ export const fixtures = [
     input: 'site/content/examples/todos/src/todos.js',
     gzip: true,
     babel: {
-      plugins: ['sinuous/babel-plugin-htm']
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }]
+      ]
     }
   },
   {
@@ -220,7 +233,16 @@ export const fixtures = [
     input: 'site/content/examples/clock/src/clock.js',
     gzip: true,
     babel: {
-      plugins: ['sinuous/babel-plugin-htm']
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }],
+        ['sinuous/babel-plugin-htm', {
+          pragma: 'hs',
+          tag: 'svg',
+          import: 'sinuous'
+        }, 'svg']
+      ]
     }
   }
 ];
