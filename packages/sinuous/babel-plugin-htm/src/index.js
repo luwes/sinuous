@@ -5,6 +5,7 @@ import { build, treeify } from '../../htm/src/build.js';
  * @param {object} options
  * @param {string} [options.pragma=h]  JSX/hyperscript pragma.
  * @param {string} [options.tag=html]  The tagged template "tag" function name to process.
+ * @param {string | boolean | object} [options.import=false]  Import the tag automatically
  * @param {boolean} [options.monomorphic=false]  Output monomorphic inline objects instead of using String literals.
  * @param {boolean} [options.useBuiltIns=false]  Use the native Object.assign instead of trying to polyfill it.
  * @param {boolean} [options.useNativeSpread=false]  Use the native { ...a, ...b } syntax for prop spreads.
@@ -12,12 +13,45 @@ import { build, treeify } from '../../htm/src/build.js';
  * @param {boolean} [options.wrapExpression=''] If set wraps the generated expression with a function passing the same arguments the tagged template would receive.
  */
 export default function htmBabelPlugin({ types: t }, options = {}) {
-  const pragma = options.pragma===false ? false : dottedIdentifier(options.pragma || 'h');
+  const pragmaString = options.pragma===false ? false : options.pragma || 'h';
+  const pragma = pragmaString===false ? false : dottedIdentifier(pragmaString);
   const useBuiltIns = options.useBuiltIns;
   const useNativeSpread = options.useNativeSpread;
   const inlineVNodes = options.monomorphic || pragma===false;
+  const importDeclaration = pragmaImport(options.import || false);
   const wrapExpression = options.wrapExpression;
   let fields;
+
+  function pragmaImport(imp) {
+    if (pragmaString === false || imp === false) {
+      return null;
+    }
+    const pragmaRoot = t.identifier(pragmaString.split('.')[0]);
+    const { module, export: export_ } = typeof imp !== 'string' ? imp : {
+      module: imp,
+      export: null
+    };
+
+    let specifier;
+    if (export_ === '*') {
+      specifier = t.importNamespaceSpecifier(pragmaRoot);
+    }
+    else if (export_ === 'default') {
+      specifier = t.importDefaultSpecifier(pragmaRoot);
+    }
+    else {
+      specifier = t.importSpecifier(pragmaRoot, export_ ? t.identifier(export_) : pragmaRoot);
+    }
+    return t.importDeclaration([specifier], t.stringLiteral(module));
+  }
+
+  const Program = {
+    exit(path, state) {
+      if (state.get('hasHtm') && importDeclaration) {
+        path.unshiftContainer('body', importDeclaration);
+      }
+    }
+  };
 
   // The tagged template tag function name we're looking for.
   // This is static because it's generally assigned via htm.bind(h),
@@ -70,6 +104,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       }
 
       path.replaceWith(node);
+      state.set('hasHtm', true);
     }
   }
 
@@ -240,6 +275,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   return {
     name: 'htm',
     visitor: {
+      Program,
       TaggedTemplateExpression
     }
   };
