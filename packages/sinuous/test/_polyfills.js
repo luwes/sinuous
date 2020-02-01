@@ -1,11 +1,5 @@
 /* eslint-disable */
 
-import Map from '@ungap/map';
-window.Map = window.Map || Map;
-
-import Set from '@ungap/set';
-window.Set = window.Set || Set;
-
 /**
  * Protect window.console method calls, e.g. console is not defined on IE
  * unless dev tools are open, and IE doesn't define console.debug
@@ -18,11 +12,35 @@ window.Set = window.Set || Set;
  */
 (function() {
   // Union of Chrome, Firefox, IE, Opera, and Safari console methods
-  var methods = ["assert", "cd", "clear", "count", "countReset",
-    "debug", "dir", "dirxml", "error", "exception", "group", "groupCollapsed",
-    "groupEnd", "info", "log", "markTimeline", "profile", "profileEnd",
-    "select", "table", "time", "timeEnd", "timeStamp", "timeline",
-    "timelineEnd", "trace", "warn"];
+  var methods = [
+    'assert',
+    'cd',
+    'clear',
+    'count',
+    'countReset',
+    'debug',
+    'dir',
+    'dirxml',
+    'error',
+    'exception',
+    'group',
+    'groupCollapsed',
+    'groupEnd',
+    'info',
+    'log',
+    'markTimeline',
+    'profile',
+    'profileEnd',
+    'select',
+    'table',
+    'time',
+    'timeEnd',
+    'timeStamp',
+    'timeline',
+    'timelineEnd',
+    'trace',
+    'warn'
+  ];
   var length = methods.length;
   var console = (window.console = window.console || {});
   var method;
@@ -30,7 +48,6 @@ window.Set = window.Set || Set;
   while (length--) {
     method = methods[length];
     // define undefined methods as noops to prevent errors
-    if (!console[method])
-      console[method] = noop;
+    if (!console[method]) console[method] = noop;
   }
 })();

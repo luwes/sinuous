@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JS Framework Speed x Size</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="./results.css">
+
+  <script src="https://kit.fontawesome.com/0a4853ec71.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar is-warning" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="./">
+        <i class="navbar-icon fas fa-tachometer-alt"></i>
+        JS Framework Benchmark
+      </a>
+    </div>
+    <div class="navbar-start">
+      <a href="./" class="navbar-item">Benchmarks</a>
+      <a href="./speed-size.html" class="navbar-item">Speed x Size</a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="bd-tw-button button" data-social-network="Twitter" data-social-action="tweet" data-social-target="https://luwes.github.io/sinuous/bench/results/speed-size.html" target="_blank" href="https://twitter.com/intent/tweet?text=JS Framework Benchmark - Speed x Size comparison chart&amp;hashtags=js,jsperf,sinuous&amp;url=https://luwes.github.io/sinuous/bench/results/speed-size.html&amp;via=luwes">
+              <span class="icon">
+                <i class="fab fa-twitter"></i>
+              </span>
+              <span>
+                Tweet
+              </span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-one-fifth">
+          <aside class="menu is-pinned">
+            <p class="menu-label">Filter</p>
+            <ul class="filter-list menu-list">
+              <li><a href="#all">All frameworks</a></li>
+            </ul>
+            <p class="menu-label">
+              <i class="fas fa-tachometer-alt fa-fw"></i>
+              Speed
+            </p>
+            <ul class="filter-list menu-list">
+              <li><a href="#30-fastest">Top 30</a></li>
+              <li><a href="#20-fastest">Top 20</a></li>
+              <li><a href="#10-fastest">Top 10</a></li>
+            </ul>
+            <p class="menu-label">
+              <i class="fas fa-balance-scale-left fa-fw"></i>
+              Size
+            </p>
+            <label class="outlier-check checkbox">
+              <input type="checkbox" checked>
+              Filter outliers
+            </label>
+<!--             <ul class="filter-list menu-list">
+              <li><a href="#30-smallest">Top 30</a></li>
+              <li><a href="#10-smallest">Top 10</a></li>
+            </ul> -->
+          </aside>
+        </div>
+        <div class="column">
+          <div class="results columns is-multiline">
+            <div class="benchmark is-12 column">
+              <div id="speed-size"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong>Data</strong> by <a href="https://github.com/krausest/js-framework-benchmark/" target="_blank">JS Framework Benchmark - Stefan Krause</a>.
+      </p>
+      <p>
+        <strong>Made</strong> by <a href="https://wesleyluyten.com" target="_blank">Wesley Luyten</a> with <a href="https://sinuous.netlify.com/" target="_blank">Sinuous</a>, <a href="https://bulma.io/" target="_blank">Bulma</a>, <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> & <a href="https://plot.ly/" target="_blank">Plotly</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="dist/speed-size.js"></script>
+</body>
+</html>

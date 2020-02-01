@@ -7,15 +7,15 @@
     "build-prod": "rollup -c --environment production"
   },
   "devDependencies": {
-    "@babel/core": "7.4.4",
+    "@babel/core": "7.6.2",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "rollup": "1.11.3",
-    "rollup-plugin-babel": "4.3.2",
-    "rollup-plugin-node-resolve": "4.2.3",
-    "rollup-plugin-terser": "4.0.4"
+    "eslint": "^6.5.1",
+    "rollup": "1.23.1",
+    "rollup-plugin-babel": "4.3.3",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-terser": "5.1.2"
   },
   "dependencies": {
-    "sinuous": "0.12.6"
+    "sinuous": "0.23.1"
   }
 }

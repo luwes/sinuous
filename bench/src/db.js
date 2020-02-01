@@ -8,7 +8,7 @@ let results;
 let runner;
 
 async function run() {
-  db = await low(new FileAsync('results.json'));
+  db = await low(new FileAsync('results/results.json'));
   // Set some defaults (required if your JSON file is empty)
   await db.defaults({ results: [] }).value();
 

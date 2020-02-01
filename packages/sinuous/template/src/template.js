@@ -1,120 +1,174 @@
+import { api } from 'sinuous';
 import { EMPTY_ARR } from './constants.js';
 
 let recordedActions;
 
 /**
- * Template tag.
+ * Observed template tag.
  * @param  {string} key
  * @return {Function}
  */
-export function t(key) {
-  const tag = () => key;
-  tag.$t = (type, fn, el, str) => {
-    const create = type === 1 ? createInsert : createProperty;
-    const action = create(fn, str);
-    action._tag = tag;
+export function o(key) {
+  return t(key, true);
+}
+
+/**
+ * Template tag.
+ * @param  {string} key
+ * @param {boolean} [observed]
+ * @param {boolean} [bind]
+ * @return {Function}
+ */
+export function t(key, observed, bind) {
+  const tag = function() {
+    // eslint-disable-next-line
+    const { el, name, endMark } = this;
+
+    const action = (element, endMark, propName, value) => {
+      if (propName == null) {
+        // Store state on the unique endMark per action.
+        const state = endMark || element;
+        state._current = api.insert(element, value, endMark, state._current);
+      } else {
+        api.property(propName, value, element);
+      }
+    };
+
     action._el = el;
+    action._endMark = endMark;
+    action._propName = name;
+    action._key = key;
+    action._observed = observed;
+    action._bind = bind;
     recordedActions.push(action);
   };
   return tag;
 }
 
 /**
- * Observable template tag.
- * @param  {string} key
- * @return {Function}
+ * Creates a template function.
+ * @param   {Function} elementRef
+ * @param   {boolean} noClone
+ * @return  {Function}
  */
-export function o(key) {
-  const observedTag = t(key);
-  observedTag._observable = 1;
-  return observedTag;
-}
-
-function createInsert(insert, current) {
-  return (element, value) => {
-    insert(element, value, null, current);
-  };
-}
-
-function createProperty(property, name) {
-  return (element, value) => {
-    property(name, value, element);
-  };
-}
-
-/**
- * Creates a template.
- * @param  {Function} fn
- * @return {Function}
- */
-export function template(fn) {
+export function template(elementRef, noClone) {
+  const prevRecordedActions = recordedActions;
   recordedActions = [];
 
-  const fragment = document.createDocumentFragment();
-  fragment.appendChild(fn());
-
-  recordedActions.forEach(action => {
-    action._paths = [];
-    let el = action._el;
-    let parent;
-    while ((parent = el.parentNode)) {
-      action._paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
-      el = parent;
-    }
-  });
+  const tpl = elementRef();
 
   const cloneActions = recordedActions;
-  recordedActions = null;
+  recordedActions = prevRecordedActions;
 
-  return function clone(props) {
+  let fragment = tpl.content || (tpl.parentNode && tpl);
+  if (!fragment) {
+    fragment = document.createDocumentFragment();
+    fragment.appendChild(tpl);
+  }
+
+  let stamp = fragment.cloneNode(true);
+
+  if (!noClone) {
+    cloneActions.forEach(action => {
+      action._paths = createPath(fragment, action._el);
+      action._endMarkPath =
+        action._endMark && createPath(action._el, action._endMark);
+    });
+  }
+
+  function create(props, forceNoClone) {
+    // Explicit check for a boolean here, this fn tends to be used in Array.map.
+    if (forceNoClone === false || forceNoClone === true) noClone = forceNoClone;
+
     const keyedActions = {};
-    const el = fragment.cloneNode(true);
-    el.firstChild.props = props;
-
-    for (let i = 0; i < cloneActions.length; i++) {
-      let action = cloneActions[i];
-      const paths = action._paths;
-
-      let target = el;
-      let j = 0;
-      while (j < paths.length) {
-        target = target.firstChild;
-        const path = paths[j];
-        let k = 0;
-        while (k < path) {
-          target = target.nextSibling;
-          k += 1;
-        }
-        j += 1;
+    let root;
+    if (noClone) {
+      if (fragment._childNodes) {
+        fragment._childNodes.forEach(child => fragment.appendChild(child));
       }
-
-      const tag = action._tag;
-      const key = tag();
-      const value = props[key];
-      if (value != null) {
-        action(target, value);
-      }
-
-      if (tag._observable) {
-        if (!keyedActions[key]) {
-          observeProperty(props, key, value, (keyedActions[key] = []));
-        }
-        keyedActions[key].push(action.bind(null, target));
-      }
+      root = fragment;
+    } else {
+      root = stamp.cloneNode(true);
     }
 
-    return el;
-  };
+    // Set a custom property `props` for easy access to the passed argument.
+    if (root.firstChild) {
+      root.firstChild.props = props;
+    }
+
+    // These paths have to be resolved before any elements are inserted.
+    cloneActions.forEach(action => {
+      action._target = noClone ? action._el : getPath(root, action._paths);
+      action._endMarkTarget = noClone
+        ? action._endMark
+        : action._endMarkPath && getPath(action._target, action._endMarkPath);
+    });
+
+    cloneActions.forEach(action => {
+      api.action(action, props, keyedActions)(action._key, action._propName);
+    });
+
+    // Copy the childNodes after inserting the values. This is needed for
+    // fills with primitive values that stay the same between renders.
+    fragment._childNodes = EMPTY_ARR.slice.call(fragment.childNodes);
+
+    return root;
+  }
+
+  // Tiny indicator that this is a template create function.
+  create.$t = true;
+
+  return create;
 }
 
-function observeProperty(props, key, value, actions) {
-  Object.defineProperty(props, key, {
-    get() {
-      return value;
-    },
-    set(newValue) {
-      value = newValue;
-      actions.forEach(action => action(newValue));
+api.action = (action, props, keyedActions) => {
+  const target = action._target;
+
+  // In the `data` module `key` and `propName` are transformed for special cases.
+  return (key, propName) => {
+    let value = props[key];
+    if (value != null) {
+      action(target, action._endMarkTarget, propName, value);
     }
-  });
+
+    if (action._observed) {
+      if (!keyedActions[key]) {
+        keyedActions[key] = [];
+
+        Object.defineProperty(props, key, {
+          get() {
+            if (action._bind) {
+              if (propName in target) {
+                return target[propName];
+              }
+              return target;
+            }
+            return value;
+          },
+          set(newValue) {
+            value = newValue;
+            keyedActions[key].forEach(action => action(newValue));
+          }
+        });
+      }
+      keyedActions[key].push(
+        action.bind(null, target, action._endMarkTarget, propName)
+      );
+    }
+  };
+};
+
+function createPath(root, el) {
+  let paths = [];
+  let parent;
+  while ((parent = el.parentNode) !== root.parentNode) {
+    paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
+    el = parent;
+  }
+  return paths;
+}
+
+function getPath(target, paths) {
+  paths.forEach(depth => (target = target.childNodes[depth]));
+  return target;
 }

@@ -55,7 +55,15 @@ function shouldSkipBundle(bundleName, bundleType) {
 }
 
 function getConfig(options) {
-  const { name, input, dest, format, external = [], sourcemap } = options;
+  const {
+    name,
+    input,
+    dest,
+    format,
+    external = [],
+    sourcemap = true,
+    extend = false
+  } = options;
   const output = dest
     ? `${dest(format)}/${name}${formatOptions[format].ext}`
     : path.join(
@@ -64,10 +72,14 @@ function getConfig(options) {
       );
 
   const replacePeersForESM = external.map((name, i) => {
-    return ESM === format && i % 2 == 0 && replace({
-      delimiters: ['', ''],
-      [`from '${name}'`]: `from '${external[i+1]}'`
-    });
+    return (
+      ESM === format &&
+      i % 2 == 0 &&
+      replace({
+        delimiters: ['', ''],
+        [`from '${name}'`]: `from '${external[i + 1]}'`
+      })
+    );
   });
 
   return {
@@ -79,6 +91,7 @@ function getConfig(options) {
     output: {
       format,
       sourcemap,
+      extend,
       file: output,
       name: options.global,
       exports: options.exports,
@@ -98,7 +111,7 @@ function getConfig(options) {
           sourcemap: true,
           warnings: true,
           compress: {
-            passes: 10
+            passes: 2
           },
           mangle: {
             properties: {
@@ -109,10 +122,9 @@ function getConfig(options) {
             props: {
               cname: 6,
               props: {
-                // $_observable: '__o',
-                // $_observables: '__o',
-                // $_children: '__c',
-                // $_update: '__u'
+                $_tag: '__t',
+                $_props: '__p',
+                $_children: '__c'
               }
             }
           }

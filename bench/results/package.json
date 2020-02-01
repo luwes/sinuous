@@ -1,0 +1,23 @@
+{
+  "name": "sinuous-bench-results",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build-prod": "rollup -c --environment production",
+    "build-dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "color-hash": "^1.0.3",
+    "plotly.js-dist": "^1.49.0",
+    "sinuous": "^0.23.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.6.2",
+    "rollup": "1.23.1",
+    "rollup-plugin-babel": "4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-size": "^0.2.1",
+    "rollup-plugin-terser": "5.1.2"
+  }
+}

@@ -13,12 +13,8 @@ parserOptions:
   ecmaVersion: 9
   sourceType: module
 
-globals:
-  html: readonly
-  svg: readonly
-
 rules:
   semi: error
   no-unused-vars:
     - error
-    - varsIgnorePattern: ^hs?$
+    - varsIgnorePattern: ^hs?|ds?$

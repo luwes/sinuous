@@ -1,56 +1,48 @@
 import { api } from './api.js';
-import { EMPTY_ARR, GROUPING } from './constants.js';
-import { clearAll } from './utils.js';
+import { add } from './add.js';
+import { clear } from './clear.js';
 
-let groupCounter = 0;
+export function insert(el, value, endMark, current, startNode) {
+  // This is needed if the el is a DocumentFragment initially.
+  el = (endMark && endMark.parentNode) || el;
 
-export function insert(parent, value, marker, current) {
-  // This is needed if the parent is a DocumentFragment initially.
-  parent = (marker && marker.parentNode) || parent;
+  // Save startNode of current. In clear() endMark.previousSibling
+  // is not always accurate if content gets pulled before clearing.
+  startNode = startNode || current instanceof Node && current;
 
-  const t = typeof value;
   if (value === current);
-  else if ((!value && value !== 0) || value === true) {
-    clearAll(parent, current, marker);
-    current = null;
-  } else if (
+  else if (
     (!current || typeof current === 'string') &&
-    (t === 'string' || (t === 'number' && (value += '')))
+    (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
-    if (current == null || !parent.firstChild) {
-      if (marker) {
-        parent.insertBefore(document.createTextNode(value), marker);
+    if (current == null || !el.firstChild) {
+      if (endMark) {
+        add(el, value, endMark);
       } else {
-        parent.textContent = value;
+        // textContent is a lot faster than append -> createTextNode.
+        el.textContent = value;
       }
     } else {
-      if (marker) {
-        (marker.previousSibling || parent.lastChild).data = value;
+      if (endMark) {
+        (endMark.previousSibling || el.lastChild).data = value;
       } else {
-        parent.firstChild.data = value;
+        el.firstChild.data = value;
       }
     }
     current = value;
-  } else if (t === 'function') {
-    api.subscribe(function() {
-      current = insert(parent, value(), marker, current);
+  } else if (typeof value === 'function') {
+    api.subscribe(function insertContent() {
+      current = api.insert(el, value.call({ el, endMark }), endMark, current, startNode);
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
-    clearAll(parent, current, marker);
+    clear(el, current, endMark, startNode);
+    current = null;
 
-    if (!(value instanceof Node)) {
-      // Passing an empty array creates a DocumentFragment.
-      value = api.h(EMPTY_ARR, value);
+    if (value && value !== true) {
+      current = add(el, value, endMark);
     }
-    if (value.nodeType === 11 && value.firstChild !== value.lastChild) {
-      value.firstChild[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
-    }
-    // If marker is `null`, value will be added to the end of the list.
-    // IE9 requires an explicit `null` as second argument.
-    parent.insertBefore(value, marker || null);
-    current = value;
   }
 
   return current;

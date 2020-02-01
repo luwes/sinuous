@@ -6,9 +6,20 @@ import * as observable from 'sinuous/observable';
 import { api, context } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
-export const h = context(observable);
-export const hs = context(observable, true);
+api.h = context(observable);
+api.hs = context(observable, true);
+
 export const o = observable.o;
+
+// Makes it possible to intercept `h` calls and customize.
+export function h() {
+  return api.h.apply(api.h, arguments);
+}
+
+// Makes it possible to intercept `hs` calls and customize.
+export function hs() {
+  return api.hs.apply(api.hs, arguments);
+}
 
 // `export const html = htm.bind(h)` is not tree-shakeable!
 export function html() {

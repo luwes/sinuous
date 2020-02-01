@@ -3,19 +3,21 @@
   "private": true,
   "scripts": {
     "start": "http-server -c-1 -p 8000 . ",
-    "bench": "node bench.js",
-    "build-prod": "lerna run --parallel build-prod",
-    "build-dev": "lerna run --parallel build-dev"
+    "bench": "node src/bench.js",
+    "build-prod": "yarn workspace sinuous-bench-results build-prod && lerna run --parallel build-prod",
+    "build-dev": "yarn workspace sinuous-bench-results build-dev & lerna run --parallel build-dev"
   },
   "workspaces": {
     "packages": [
-      "libs/*"
+      "libs/*",
+      "results"
     ]
   },
   "dependencies": {
     "fs-extra": "^8.1.0",
     "gzip-size": "^5.1.1",
     "http-server": "^0.11.1",
+    "jstat": "^1.9.0",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "minimist": "^1.2.0",
@@ -25,7 +27,6 @@
     "semver": "^6.3.0"
   },
   "devDependencies": {
-    "jstat": "^1.9.0",
     "lerna": "^3.16.4"
   }
 }

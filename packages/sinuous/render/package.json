@@ -1,0 +1,17 @@
+{
+  "name": "sinuous-render",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Sinuous render",
+  "module": "../module/render.js",
+  "main": "../dist/render.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

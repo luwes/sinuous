@@ -15,7 +15,14 @@ let dispose;
 const Component = () =>
   root(d => {
     dispose = d;
-    div = h('div', h('b'), h('i'), map(list, item => item), h('b'), h('i'));
+    div = h(
+      'div',
+      h('b'),
+      h('i'),
+      map(list, item => item),
+      h('b'),
+      h('i')
+    );
   });
 
 function apply(t, array) {

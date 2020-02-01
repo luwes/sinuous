@@ -5,6 +5,7 @@
   "description": "Sinuous observable",
   "module": "../module/observable.js",
   "main": "../dist/observable.js",
+  "types": "src/index.d.ts",
   "files": [
     "dist",
     "src"

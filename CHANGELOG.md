@@ -2,6 +2,214 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.23.1 - 2020-01-31
+
+### Fixed
+
+- Fixed false positive for clone flag in template.
+
+## 0.23.0 - 2020-01-31
+
+### Added
+
+- Added auto-import pragma option to `sinuous/babel-plugin-htm`. For example:
+
+```js
+      plugins: [
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }],
+        ['sinuous/babel-plugin-htm', {
+          pragma: 'hs',
+          tag: 'svg',
+          import: 'sinuous'
+        }, 'svg']
+      ]
+```
+
+## 0.22.0 - 2020-01-30 - BREAKING CHANGES
+
+### Changed
+
+- Renamed `html` and `svg` to `dhtml` and `dsvg` in `sinuous/hydrate`.
+
+### Added
+
+- Added `sinuous/render` module for top down render functions.
+
+
+## 0.21.4 - 2020-01-24
+
+### Fixed
+
+- Fixed an issue where the clearing of a DOM node that was previously pulled out or moved in the DOM cleared siblings before the content.
+- Fixed memoizing by adding support for Arrays and DOM nodes to be serialized.
+
+## 0.21.3 - 2020-01-17
+## 0.21.2 - 2020-01-17
+## 0.21.1 - 2020-01-17
+
+### Fixed
+
+- Fixed `memo` issue.
+
+## 0.21.0 - 2020-01-17
+
+### Added
+
+- Added `sinuous/memo` module.
+
+## 0.20.1 - 2020-01-15
+
+### Fixed
+
+- Fixed some issues with the new `data` module.
+
+## 0.20.0 - 2020-01-10
+
+### Added
+
+- Added `sinuous/data` module [#53](https://github.com/luwes/sinuous/pull/53)
+- Improved `sinuous/template`, accepts objects and functions as data.
+
+## 0.19.3 - 2020-01-04
+
+### Fixed
+
+- Fixed hydrate root props handling.
+
+### Added
+
+- Hydrate components support.
+
+## 0.19.2 - 2020-01-02
+
+# Added
+
+- Added element context to accessor calls in `property` and `insert` api.
+
+## 0.19.1 - 2020-01-01
+
+### Fixed
+
+- Fixed CSS selector escaping in `hydrate`.
+
+### Added
+
+- Added types for `context()` and internal `api` methods.
+- Added tag name selecting in `hydrate`, for example:
+
+```js
+hydrate(html`<body onclick="${blur}">`);
+```
+
+## 0.19.0 - 2019-12-25
+
+### Added 
+
+- Added type declarations [#52](https://github.com/luwes/sinuous/pull/52)
+
+## 0.18.5 - 2019-12-15
+
+### Added 
+
+- Added special bundle to display bundle size of Sinuous w/ observable included.
+
+## 0.18.4 - 2019-12-13
+
+### Changed
+
+- Use Sinuous api instead of template hooks and golf some bytes 🏌️‍♂️
+
+## 0.18.3 - 2019-12-13
+
+### Removed
+
+- Golf down some bytes in `map` (-68 B) ⛳️
+
+## 0.18.2 - 2019-12-07
+
+### Fixed
+
+- Fixed memory leak in observable [#51](https://github.com/luwes/sinuous/pull/51)
+
+## 0.18.1 - 2019-12-03
+
+### Added
+
+- Add `S` alias for the `all` package which is meant to include in your webpage with a script tag.
+
+## 0.18.0 - 2019-12-03
+
+### Added
+
+- Added `all` package for easy use with a script tag.
+
+## 0.17.2 - 2019-11-28
+
+## 0.17.1 - 2019-11-28
+
+### Fixed
+
+- Fixed `hydrate` content function that returns a stringable.
+
+## 0.17.0 - 2019-11-24
+
+### Added
+
+- Added implicit root selector to `hydrate`.
+
+## 0.16.3 - 2019-11-03
+
+### Added
+
+- Added sourcemaps to all bundles
+
+## 0.16.2 - 2019-11-02
+
+## 0.16.1 - 2019-11-02
+
+### Fixed
+
+- Fixed a minifying error caused by a Terser bug.
+  See [`scripts/rollup/config.js`](scripts/rollup/config.js)
+
+## 0.16.0 - 2019-10-06
+
+### Added
+
+- Added partial attribute support [#40](https://github.com/luwes/sinuous/pull/40)
+
+## 0.15.3 - 2019-10-03
+
+### Fixed
+
+- Added better support for adjacent text nodes in `hydrate`.
+
+## 0.15.2 - 2019-09-28
+
+### Fixed
+
+- Fixed babel-plugin-htm `TypeError: Cannot read property '0' of null`.
+
+### Changed
+
+- Made `property` api accept plain objects.
+
+## 0.15.1 - 2019-09-25
+
+### Changed
+
+- Changed map mini import to be `import { map } from 'sinuous/map/mini'` instead of `import { mini } from 'sinuous/map'`.
+- Re-named variables in `map` and golfed down the bundle from 1.45kB to 1.19kB, also by removing the fast path for swap backward and swap forward.
+
+## 0.15.0 - 2019-09-13
+
+### Added
+
+- Added basic `hydrate` feature [#36](https://github.com/luwes/sinuous/pull/36)
+- Disable `observable` cleaning by default in `map` for repeated `template`'s.
+
 ## 0.14.2 - 2019-09-04
 
 ### Fixed

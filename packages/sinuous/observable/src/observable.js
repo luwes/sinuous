@@ -1,15 +1,15 @@
 import { getChildrenDeep } from './utils.js';
 
 const EMPTY_ARR = [];
-let currentUpdate;
+let tracking;
 let queue;
 
 /**
- * Returns true if there is an active listener.
+ * Returns true if there is an active observer.
  * @return {boolean}
  */
 export function isListening() {
-  return !!currentUpdate;
+  return !!tracking;
 }
 
 /**
@@ -21,15 +21,15 @@ export function isListening() {
  * @return {*}
  */
 export function root(fn) {
-  const update = currentUpdate;
+  const prevTracking = tracking;
   const rootUpdate = () => {};
-  currentUpdate = rootUpdate;
+  tracking = rootUpdate;
   resetUpdate(rootUpdate);
   const result = fn(() => {
     _unsubscribe(rootUpdate);
-    currentUpdate = undefined;
+    tracking = undefined;
   });
-  currentUpdate = update;
+  tracking = prevTracking;
   return result;
 }
 
@@ -43,10 +43,10 @@ export function root(fn) {
  * @return {*}
  */
 export function sample(fn) {
-  const update = currentUpdate;
-  currentUpdate = undefined;
+  const prevTracking = tracking;
+  tracking = undefined;
   const value = fn();
-  currentUpdate = update;
+  tracking = prevTracking;
   return value;
 }
 
@@ -81,16 +81,16 @@ export function transaction(fn) {
  */
 function observable(value) {
   // Tiny indicator that this is an observable function.
-  data.$o = 1;
-  data._listeners = new Set();
+  data.$o = true;
+  data._observers = new Set();
   // The 'not set' value must be unique, so `nullish` can be set in a transaction.
   data._pending = EMPTY_ARR;
 
   function data(nextValue) {
     if (arguments.length === 0) {
-      if (currentUpdate && !data._listeners.has(currentUpdate)) {
-        data._listeners.add(currentUpdate);
-        currentUpdate._observables.push(data);
+      if (tracking && !data._observers.has(tracking)) {
+        data._observers.add(tracking);
+        tracking._observables.push(data);
       }
       return value;
     }
@@ -105,19 +105,19 @@ function observable(value) {
 
     value = nextValue;
 
-    // Clear `currentUpdate` otherwise a computed triggered by a set
+    // Clear `tracking` otherwise a computed triggered by a set
     // in another computed is seen as a child of that other computed.
-    const clearedUpdate = currentUpdate;
-    currentUpdate = undefined;
+    const clearedUpdate = tracking;
+    tracking = undefined;
 
-    // Update can alter data._listeners, make a copy before running.
-    data._runListeners = new Set(data._listeners);
-    data._runListeners.forEach(update => (update._fresh = false));
-    data._runListeners.forEach(update => {
-      if (!update._fresh) update();
+    // Update can alter data._observers, make a copy before running.
+    data._runObservers = new Set(data._observers);
+    data._runObservers.forEach(observer => (observer._fresh = false));
+    data._runObservers.forEach(observer => {
+      if (!observer._fresh) observer();
     });
 
-    currentUpdate = clearedUpdate;
+    tracking = clearedUpdate;
     return value;
   }
 
@@ -134,28 +134,32 @@ export { observable, observable as o };
  * Creates a new computation which runs when defined and automatically re-runs
  * when any of the used observable's values are set.
  *
- * @param {Function} listener
+ * @param {Function} observer
  * @param {*} value - Seed value.
  * @return {Function} Computation which can be used in other computations.
  */
-function computed(listener, value) {
-  listener._update = update;
+function computed(observer, value) {
+  observer._update = update;
+
+  // if (tracking == null) {
+  //   console.warn("computations created without a root or parent will never be disposed");
+  // }
 
   resetUpdate(update);
   update();
 
   function update() {
-    const prevUpdate = currentUpdate;
-    if (currentUpdate) {
-      currentUpdate._children.push(update);
+    const prevTracking = tracking;
+    if (tracking) {
+      tracking._children.push(update);
     }
 
     const prevChildren = update._children;
 
     _unsubscribe(update);
     update._fresh = true;
-    currentUpdate = update;
-    value = listener(value);
+    tracking = update;
+    value = observer(value);
 
     // If any children computations were removed mark them as fresh.
     // Check the diff of the children list between pre and post update.
@@ -167,19 +171,14 @@ function computed(listener, value) {
 
     // If any children were marked as fresh remove them from the run lists.
     const allChildren = getChildrenDeep(update._children);
-    allChildren.forEach(u => {
-      if (u._fresh) {
-        u._observables.forEach(o => {
-          if (o._runListeners) {
-            o._runListeners.delete(u);
-          }
-        });
-      }
-    });
+    allChildren.forEach(removeFreshChildren);
 
-    currentUpdate = prevUpdate;
+    tracking = prevTracking;
     return value;
   }
+
+  // Tiny indicator that this is an observable function.
+  data.$o = true;
 
   function data() {
     if (update._fresh) {
@@ -191,6 +190,16 @@ function computed(listener, value) {
   }
 
   return data;
+}
+
+function removeFreshChildren(u) {
+  if (u._fresh) {
+    u._observables.forEach(o => {
+      if (o._runObservers) {
+        o._runObservers.delete(u);
+      }
+    });
+  }
 }
 
 /**
@@ -206,34 +215,37 @@ export { computed, computed as S };
  * @return {Function}
  */
 export function cleanup(fn) {
-  if (currentUpdate) {
-    currentUpdate._cleanups.push(fn);
+  if (tracking) {
+    tracking._cleanups.push(fn);
   }
   return fn;
 }
 
 /**
  * Subscribe to updates of an observable.
- * @param  {Function} listener
+ * @param  {Function} observer
  * @return {Function}
  */
-export function subscribe(listener) {
-  computed(listener);
-  return () => _unsubscribe(listener._update);
+export function subscribe(observer) {
+  computed(observer);
+  return () => _unsubscribe(observer._update);
 }
 
 /**
- * Unsubscribe from a listener.
- * @param  {Function} listener
+ * Unsubscribe from an observer.
+ * @param  {Function} observer
  */
-export function unsubscribe(listener) {
-  _unsubscribe(listener._update);
+export function unsubscribe(observer) {
+  _unsubscribe(observer._update);
 }
 
 function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
   update._observables.forEach(o => {
-    o._listeners.delete(update);
+    o._observers.delete(update);
+    if (o._runObservers) {
+      o._runObservers.delete(update);
+    }
   });
   update._cleanups.forEach(c => c());
   resetUpdate(update);
