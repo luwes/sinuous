@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.23.1 - 2020-01-31
+
+### Fixed
+
+- Fixed false positive for clone flag in template.
+
 ## 0.23.0 - 2020-01-31
 
 ### Added
