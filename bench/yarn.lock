@@ -6886,15 +6886,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
-sinuous@0.18.4:
-  version "0.18.4"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.18.4.tgz#89fc2f80da14a1a0e318cfb8cbd43b77cdb741d9"
-  integrity sha512-DYqsAMuI/5nX27DKvr8ylvo3XeB388kB74Ympi8ItPCk86tspgt8eTXq3MHD6twGMPh5FqAdkOc76Lty5I+3JA==
-
-sinuous@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.23.0.tgz#817c96cf6ef72c4b60058c95ed4cf8cca6cfd52d"
-  integrity sha512-OZWO9bZ3QhWUVJONqQ7B1GGUINWek2M/bCRF9twKEVi/xux0VFAYyVW/5hOADDMoSHheA7Ya+fBM1vtFpKMlKA==
+sinuous@0.23.1, sinuous@^0.23.0:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.23.1.tgz#6935d62c4f2f91c683d08b9cb3faaa0d911d5832"
+  integrity sha512-yNVGNL5VOV+Vr08dCP1TTrbNRniA8TVpCeKwcmC2459ToHtYLBAQ6urUURHbaRg92LiRo3nMCv3O3FVIZjFDXw==
 
 size-plugin-core@^0.0.7:
   version "0.0.7"

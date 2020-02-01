@@ -77,7 +77,8 @@ export function template(elementRef, noClone) {
   }
 
   function create(props, forceNoClone) {
-    if (forceNoClone != null) noClone = forceNoClone;
+    // Explicit check for a boolean here, this fn tends to be used in Array.map.
+    if (forceNoClone === false || forceNoClone === true) noClone = forceNoClone;
 
     const keyedActions = {};
     let root;
