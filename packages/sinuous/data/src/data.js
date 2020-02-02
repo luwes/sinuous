@@ -4,8 +4,7 @@ import { EMPTY_ARR } from './constants.js';
 
 const createAction = api.action;
 api.action = (action, props, keyedActions) => {
-
-  const handleAction = (runAction) => {
+  const handleAction = runAction => {
     return (key, i, keys) => {
       let propName = action._propName || (keys && key);
       // If the field is a plain object, the `_` key is the element content.
@@ -16,7 +15,7 @@ api.action = (action, props, keyedActions) => {
     };
   };
 
-  return (key) => {
+  return key => {
     let elProps = props[key];
     if (
       elProps &&
@@ -24,10 +23,14 @@ api.action = (action, props, keyedActions) => {
       !elProps.nodeType && // not a Node
       !elProps.length // not an Array
     ) {
-      const execAction = handleAction(createAction(action, elProps, keyedActions));
+      const execAction = handleAction(
+        createAction(action, elProps, keyedActions)
+      );
       Object.keys(elProps).forEach(execAction);
     } else {
-      const execAction = handleAction(createAction(action, props, keyedActions));
+      const execAction = handleAction(
+        createAction(action, props, keyedActions)
+      );
       handleAction(execAction)(key);
     }
   };
