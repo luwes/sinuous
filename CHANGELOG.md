@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.23.2 - 2020-02-02
+
+### Fixed
+
+- Fixed minify bug `._propName
+- Fixed observable types [#65](https://github.com/luwes/sinuous/issues/65)
+
 ## 0.23.1 - 2020-01-31
 
 ### Fixed
