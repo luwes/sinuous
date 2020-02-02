@@ -8,7 +8,7 @@ import gzip from 'rollup-plugin-gzip';
 import replace from 'rollup-plugin-replace';
 import minimist from 'minimist';
 
-import { CJS, ESM, IIFE, UMD, bundles, fixtures } from '../bundles.js';
+import { CJS, ESM, IIFE, UMD, bundles, fixtures } from './bundles.js';
 
 const formatOptions = {
   [CJS]: { ext: '.js' },
