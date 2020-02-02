@@ -77,3 +77,19 @@ test('fill adds event listeners & top level attribute', function(t) {
   btn.parentNode.parentNode.removeChild(btn.parentNode);
   t.end();
 });
+
+test('fill adds event listeners w/ alias ', function(t) {
+  document.body.innerHTML = `
+    <div>
+      <button data-t="onclick:handleClick">something</button>
+    </div>
+  `;
+
+  const click = spy();
+  const btn = fill('button')({ handleClick: click });
+  btn.click();
+  t.equal(click.callCount, 1, 'click called');
+
+  btn.parentNode.parentNode.removeChild(btn.parentNode);
+  t.end();
+});
