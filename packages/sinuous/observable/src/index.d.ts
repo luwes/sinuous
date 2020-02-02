@@ -5,8 +5,8 @@ export interface Observable<T> {
   (): T;
   (nextValue: T): T;
 }
-export const observable: ObservableCreator<Observable<any>>;
-export const o: ObservableCreator<Observable<any>>;
+export const observable: ObservableCreator<any>;
+export const o: ObservableCreator<any>;
 
 export interface Computed<T> {
   (): T;
@@ -15,8 +15,8 @@ export interface ComputedCreator<T> {
   (observer: (v: T) => T, seed: T): Computed<T>;
   (observer: () => T): Computed<T>;
 }
-export const computed: ComputedCreator<Computed<any>>;
-export const S: ComputedCreator<Computed<any>>;
+export const computed: ComputedCreator<any>;
+export const S: ComputedCreator<any>;
 
 export function subscribe<T>(observer: () => T): () => void;
 export function unsubscribe<T>(observer: () => T): void;

@@ -28,8 +28,8 @@ declare namespace sinuous {
     (...children: ElementChildren[]): any
   }
 
-  const observable: ObservableCreator<Observable<any>>;
-  const o: ObservableCreator<Observable<any>>;
+  const observable: ObservableCreator<any>;
+  const o: ObservableCreator<any>;
 
   const html: (strings: TemplateStringsArray, ...values: any[]) => HTMLElement | DocumentFragment;
   const svg: (strings: TemplateStringsArray, ...values: any[]) => SVGElement | DocumentFragment;
