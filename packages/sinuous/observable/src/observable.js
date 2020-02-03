@@ -57,10 +57,11 @@ export function sample(fn) {
  * @return {*}
  */
 export function transaction(fn) {
+  let prevQueue = queue;
   queue = [];
   const result = fn();
   let q = queue;
-  queue = undefined;
+  queue = prevQueue;
   q.forEach(data => {
     if (data._pending !== EMPTY_ARR) {
       const pending = data._pending;

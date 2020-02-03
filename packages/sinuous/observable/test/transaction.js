@@ -29,3 +29,25 @@ test('halts propagation within its scope', function(t) {
     t.end();
   });
 });
+
+test('nested transaction', function(t) {
+  var d = o(1);
+
+  transaction(function() {
+    d(2);
+    t.equal(d(), 1);
+
+    transaction(function() {
+      d(3);
+
+      transaction(function() {
+        d(4);
+      });
+    });
+
+    d(2);
+  });
+
+  t.equal(d(), 2);
+  t.end();
+});
