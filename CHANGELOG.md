@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.23.3 - 2020-02-02
+
+### Fixed
+
+- Fixed nested transactions [#66](https://github.com/luwes/sinuous/issues/66)
+
 ## 0.23.2 - 2020-02-02
 
 ### Fixed
