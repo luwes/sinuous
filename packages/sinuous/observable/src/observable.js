@@ -155,10 +155,12 @@ function computed(observer, value) {
     }
 
     const prevChildren = update._children;
-
     _unsubscribe(update);
     update._fresh = true;
+    const context = tracking && tracking._context;
     tracking = update;
+    // Pass context on
+    tracking._context = context;
     value = observer(value);
 
     // If any children computations were removed mark them as fresh.
@@ -256,4 +258,69 @@ function resetUpdate(update) {
   update._observables = [];
   update._children = [];
   update._cleanups = [];
+  update._context = {};
+}
+
+export function getContext(key) {
+  if (tracking && tracking._context) {
+    if (arguments.length === 0) {
+      return tracking._context;
+    }
+    return tracking._context[key];
+  }
+}
+
+export function createContext(context, observer) {
+  observer._update = updateContext;
+  let value;
+  let oldContext = tracking._context;
+
+  resetUpdate(updateContext);
+  updateContext();
+
+  function updateContext() {
+    const prevTracking = tracking;
+    if (tracking) {
+      tracking._children.push(updateContext);
+    }
+
+    const prevChildren = updateContext._children;
+    _unsubscribe(updateContext);
+    updateContext._fresh = true;
+    // Merge contexts
+    let trackingContext = tracking && tracking._context;
+    oldContext = { ...oldContext, ...trackingContext };
+    updateContext._context = { ...oldContext, ...context };
+    tracking = updateContext;
+    value = observer(value);
+
+    // If any children computations were removed mark them as fresh.
+    // Check the diff of the children list between pre and post updateContext.
+    prevChildren.forEach(u => {
+      if (updateContext._children.indexOf(u) === -1) {
+        u._fresh = true;
+      }
+    });
+
+    // If any children were marked as fresh remove them from the run lists.
+    const allChildren = getChildrenDeep(updateContext._children);
+    allChildren.forEach(removeFreshChildren);
+
+    tracking = prevTracking;
+    return value;
+  }
+
+  // Tiny indicator that this is an observable function.
+  data.$o = true;
+
+  function data() {
+    if (updateContext._fresh) {
+      updateContext._observables.forEach(o => o());
+    } else {
+      value = updateContext();
+    }
+    return value;
+  }
+
+  return data;
 }
