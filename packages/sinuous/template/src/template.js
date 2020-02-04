@@ -30,7 +30,7 @@ export function t(key, observed, bind) {
         const state = endMark || element;
         state._current = api.insert(element, value, endMark, state._current);
       } else {
-        api.property(propName, value, element);
+        api.property(element, value, propName);
       }
     };
 

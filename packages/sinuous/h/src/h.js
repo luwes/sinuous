@@ -40,7 +40,7 @@ export function context(options, isSvg) {
           el = arg;
         }
       } else if (typeof arg === 'object') {
-        api.property(null, arg, el, isSvg);
+        api.property(el, arg, null, isSvg);
       } else if (typeof arg === 'function') {
         if (el) {
           const endMark = add(el, '');
