@@ -195,7 +195,12 @@ export const fixtures = [
     input: 'site/content/examples/hello-jsx/src/hello.js',
     gzip: true,
     babel: {
-      plugins: ['@babel/plugin-transform-react-jsx']
+      plugins: [
+        ['babel-plugin-transform-jsx-to-htm'],
+        ['sinuous/babel-plugin-htm', {
+          import: 'sinuous'
+        }]
+      ]
     }
   },
   {

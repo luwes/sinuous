@@ -72,7 +72,7 @@ A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
-**JSX** needs to be transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx) or TypeScript.
+**JSX** needs to be transformed at build time first with [`babel-plugin-transform-jsx-to-htm`](https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm) and after with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
@@ -109,8 +109,7 @@ setInterval(() => counter(counter() + 1), 1000);
 #### JSX
 
 ```jsx
-/** @jsx h */
-import { observable, h } from 'sinuous';
+import { observable } from 'sinuous';
 
 const counter = observable(0);
 const view = () => <div>Counter {counter}</div>;
