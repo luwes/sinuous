@@ -6,7 +6,7 @@
     "sinuous": "0.23.3"
   },
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.8.3",
+    "babel-plugin-transform-jsx-to-htm": "^2.0.0",
     "eslint-plugin-react": "^7.18.0"
   }
 }

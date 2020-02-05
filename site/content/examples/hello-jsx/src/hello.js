@@ -1,6 +1,3 @@
-/** @jsx h */
-/** @jsxFrag h */
-import { h } from 'sinuous';
 
 const HelloMessage = ({ name }) => (
   <>
