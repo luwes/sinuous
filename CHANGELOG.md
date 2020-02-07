@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.24.0 - 2020-02-06
+
+### Added
+
+- Reordered arguments of api.property() [#69](https://github.com/luwes/sinuous/issues/69)
+- Added lazy executed component children [#68](https://github.com/luwes/sinuous/issues/68)
+
 ## 0.23.3 - 2020-02-02
 
 ### Fixed

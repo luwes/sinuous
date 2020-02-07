@@ -5,3 +5,4 @@ env:
 rules:
   fp/no-mutating-methods: off
   fp/no-loops: off
+  fp/no-rest-parameters: off

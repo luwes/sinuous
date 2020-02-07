@@ -72,7 +72,7 @@ A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
-**JSX** needs to be transformed at build time with [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx) or TypeScript.
+**JSX** needs to be transformed at build time first with [`babel-plugin-transform-jsx-to-htm`](https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm) and after with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
@@ -94,6 +94,18 @@ document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
 
+#### JSX
+
+```jsx
+import { observable } from 'sinuous';
+
+const counter = observable(0);
+const view = () => <div>Counter {counter}</div>;
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
 #### Hyperscript
 
 ```js
@@ -101,19 +113,6 @@ import { observable, h } from 'sinuous';
 
 const counter = observable(0);
 const view = () => h('div', 'Counter ', counter);
-
-document.body.append(view());
-setInterval(() => counter(counter() + 1), 1000);
-```
-
-#### JSX
-
-```jsx
-/** @jsx h */
-import { observable, h } from 'sinuous';
-
-const counter = observable(0);
-const view = () => <div>Counter {counter}</div>;
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
@@ -135,6 +134,11 @@ const squared = computed(() => Math.pow(length(), 2));
 subscribe(() => console.log(squared()));
 length(4); // => logs 16
 ```
+
+#### Use a custom reactive library
+
+Sinuous can work with different observable libraries; S.js, MobX, hyperactiv.
+See the [wiki for more info](https://github.com/luwes/sinuous/wiki/Choose-your-own-reactive-library).
 
 
 ## Hydration
@@ -184,9 +188,6 @@ Sinuous supports modern browsers and IE9+ but keep in mind that IE9 and IE10 do 
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
-## Use your own reactive library
-
-Sinuous can work with different observable libraries. See the [wiki for more info](https://github.com/luwes/sinuous/wiki/Choose-your-own-reactive-library).
 
 ## Contributors
 

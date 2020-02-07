@@ -94,18 +94,6 @@ document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
 ```
 
-#### Hyperscript
-
-```js
-import { observable, h } from 'sinuous';
-
-const counter = observable(0);
-const view = () => h('div', 'Counter ', counter);
-
-document.body.append(view());
-setInterval(() => counter(counter() + 1), 1000);
-```
-
 #### JSX
 
 ```jsx
@@ -113,6 +101,18 @@ import { observable } from 'sinuous';
 
 const counter = observable(0);
 const view = () => <div>Counter {counter}</div>;
+
+document.body.append(view());
+setInterval(() => counter(counter() + 1), 1000);
+```
+
+#### Hyperscript
+
+```js
+import { observable, h } from 'sinuous';
+
+const counter = observable(0);
+const view = () => h('div', 'Counter ', counter);
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
@@ -134,6 +134,11 @@ const squared = computed(() => Math.pow(length(), 2));
 subscribe(() => console.log(squared()));
 length(4); // => logs 16
 ```
+
+#### Use a custom reactive library
+
+Sinuous can work with different observable libraries; S.js, MobX, hyperactiv.
+See the [wiki for more info](https://github.com/luwes/sinuous/wiki/Choose-your-own-reactive-library).
 
 
 ## Hydration
@@ -183,9 +188,6 @@ Sinuous supports modern browsers and IE9+ but keep in mind that IE9 and IE10 do 
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
-## Use your own reactive library
-
-Sinuous can work with different observable libraries. See the [wiki for more info](https://github.com/luwes/sinuous/wiki/Choose-your-own-reactive-library).
 
 ## Contributors
 
