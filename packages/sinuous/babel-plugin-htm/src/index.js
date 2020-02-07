@@ -132,9 +132,12 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     if (node === undefined) return t.identifier('undefined');
 
     const { tag, props, children } = node;
-    const newTag = typeof tag === 'string' ? t.stringLiteral(tag) : tag;
+    const isComponent = typeof tag !== 'string';
+    const newTag = isComponent ? tag : t.stringLiteral(tag);
     const newProps = spreadNode(props, state);
-    const newChildren = t.arrayExpression((children || []).map(child => transform(child, state)));
+    const newChildren = t.arrayExpression((children || [])
+      .map(child => transform(child, state))
+      .map(child => isComponent ? t.arrowFunctionExpression([], child) : child));
     return createVNode(newTag, newProps, newChildren);
   }
 

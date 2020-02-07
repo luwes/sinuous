@@ -1,5 +1,6 @@
 import test from 'tape';
 import { o, html } from 'sinuous';
+import { fragInnerHTML } from './_utils.js';
 
 test('simple', function(t) {
   t.equal(
@@ -62,5 +63,27 @@ test('returns a simple observable string', t => {
   t.assert(frag instanceof DocumentFragment);
   t.assert(frag.childNodes[0] instanceof Text);
   t.equal(frag.childNodes[0].textContent, 'Banana');
+  t.end();
+});
+
+test('component children order', t => {
+  let order = '';
+  const Comp = (props, ...children) => {
+    order += 'a';
+    return children;
+  };
+  const Child = () => {
+    order += 'b';
+    return html`<b />`;
+  };
+
+  const result = html`
+    <${Comp}>
+      <${Child} />
+    <//>
+  `;
+
+  t.equal(order, 'ab');
+  t.equal(fragInnerHTML(result), '<b></b>');
   t.end();
 });

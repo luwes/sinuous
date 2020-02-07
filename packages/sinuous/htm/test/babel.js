@@ -326,6 +326,69 @@ describe('htm/babel', () => {
     t.end();
   });
 
+  test('should add children without closure', t => {
+    t.equal(
+      transform('html`<div><b /></div>`;', {
+        ...options,
+        plugins: [
+          [
+            htmBabelPlugin
+          ]
+        ]
+      }).code,
+      `h("div",null,h("b",null));`
+    );
+    t.equal(
+      transform('html`<div><b /><i /></div>`;', {
+        ...options,
+        plugins: [
+          [
+            htmBabelPlugin
+          ]
+        ]
+      }).code,
+      `h("div",null,h("b",null),h("i",null));`
+    );
+    t.end();
+  });
+
+  test('should wrap children of component in closure', t => {
+    t.equal(
+      transform('html`<${Component}><div></div><//>`;', {
+        ...options,
+        plugins: [
+          [
+            htmBabelPlugin
+          ]
+        ]
+      }).code,
+      `h(Component,null,()=>h("div",null));`
+    );
+    t.equal(
+      transform('html`<${Component}><div /><b /><//>`;', {
+        ...options,
+        plugins: [
+          [
+            htmBabelPlugin
+          ]
+        ]
+      }).code,
+      `h(Component,null,()=>h("div",null),()=>h("b",null));`
+    );
+    t.equal(
+      transform('html`<${Component}><div><${Component}><b /><//></div><//>`;', {
+        ...options,
+        plugins: [
+          [
+            htmBabelPlugin
+          ]
+        ]
+      }).code,
+      `h(Component,null,()=>h("div",null,h(Component,null,()=>h("b",null))));`
+    );
+    t.end();
+  });
+
   describe('{variableArity:false}', () => {
     test('should pass no children as an empty Array', t => {
       t.equal(
