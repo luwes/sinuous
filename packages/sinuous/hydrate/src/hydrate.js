@@ -150,57 +150,57 @@ export function hydrate(delta, root) {
             hydrate(arg, target);
             el._index++;
           }
-        } else if (typeof arg === 'function') {
-          let hydrated;
-          let current = target.data;
-          let prefix = '';
-          let marker;
-          let startNode;
-          api.subscribe(function() {
-            isHydrated = hydrated;
-
-            let result = arg();
-            const isStringable =
-              typeof result === 'string' || typeof result === 'number';
-            result = isStringable ? prefix + result : result;
-            if (hydrated) {
-              current = api.insert(el, result, marker, current, startNode);
-            } else {
-              if (isStringable) {
-                el._index++;
-
-                if (
-                  arg._parent._children.length !== filterChildNodes(el).length
-                ) {
-                  // If the parent's virtual children length don't match the DOM's,
-                  // it's probably adjacent text nodes stuck together. Split them.
-                  target.splitText(target.data.indexOf(result) + result.length);
-                  // Leave prefix whitespace intact.
-                  prefix = current.match(/^\s*/)[0];
-                }
-                // Leave whitespace alone.
-                if (target.data.trim() !== result.trim()) {
-                  target.data = result;
-                }
-              } else {
-                if (Array.isArray(result)) {
-                  startNode = target;
-                  target = el;
-                }
-                hydrate(result, target);
-                current = [];
-              }
-
-              marker = api.add(el, '', filterChildNodes(el)[el._index]);
-            }
-
-            isHydrated = false;
-            hydrated = true;
-          });
         }
       }
 
-      if (typeof arg === 'object') {
+      if (typeof arg === 'function') {
+        let hydrated;
+        let current = target ? target.data : undefined;
+        let prefix = '';
+        let marker;
+        let startNode;
+        api.subscribe(function() {
+          isHydrated = hydrated;
+
+          let result = arg();
+          const isStringable =
+            typeof result === 'string' || typeof result === 'number';
+          result = isStringable ? prefix + result : result;
+          if (hydrated || !target) {
+            current = api.insert(el, result, marker, current, startNode);
+          } else {
+            if (isStringable) {
+              el._index++;
+
+              if (
+                arg._parent._children.length !== filterChildNodes(el).length
+              ) {
+                // If the parent's virtual children length don't match the DOM's,
+                // it's probably adjacent text nodes stuck together. Split them.
+                target.splitText(target.data.indexOf(result) + result.length);
+                // Leave prefix whitespace intact.
+                prefix = current.match(/^\s*/)[0];
+              }
+              // Leave whitespace alone.
+              if (target.data.trim() !== result.trim()) {
+                target.data = result;
+              }
+            } else {
+              if (Array.isArray(result)) {
+                startNode = target;
+                target = el;
+              }
+              hydrate(result, target);
+              current = [];
+            }
+
+            marker = api.add(el, '', filterChildNodes(el)[el._index]);
+          }
+
+          isHydrated = false;
+          hydrated = true;
+        });
+      } else if (typeof arg === 'object') {
         if (!arg._children && !arg._props) {
           api.property(el, arg, null, delta._isSvg);
         }

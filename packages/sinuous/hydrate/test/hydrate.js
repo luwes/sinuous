@@ -50,6 +50,23 @@ test('hydrate function bug', function(t) {
   t.end();
 });
 
+test('add insert into empty node feature', function(t) {
+  document.body.innerHTML = `
+    <div class="navbar-item">
+      <a></a>
+    </div>
+  `;
+
+  const div = hydrate(dhtml`
+    <div class="navbar-item">
+      <a>${() => 'Wesley'}</a>
+    </div>
+  `);
+
+  t.equal(div.querySelector('a').textContent, 'Wesley');
+  t.end();
+});
+
 test('hydrate w/ observables bug', function(t) {
   document.body.innerHTML = `
     <div class="box level">
