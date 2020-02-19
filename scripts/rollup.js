@@ -124,7 +124,10 @@ function getConfig(options) {
               props: {
                 $_tag: '__t',
                 $_props: '__p',
-                $_children: '__c'
+                $_children: '__c',
+
+                // Fixes a weird issue with mangling. `r.o.has` is not a function.
+                $_observers: '__o',
               }
             }
           }

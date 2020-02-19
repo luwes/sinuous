@@ -81,12 +81,6 @@ export function transaction(fn) {
  * @return {Function}
  */
 function observable(value) {
-  // Tiny indicator that this is an observable function.
-  data.$o = true;
-  data._observers = new Set();
-  // The 'not set' value must be unique, so `nullish` can be set in a transaction.
-  data._pending = EMPTY_ARR;
-
   function data(nextValue) {
     if (arguments.length === 0) {
       if (tracking && !data._observers.has(tracking)) {
@@ -121,6 +115,12 @@ function observable(value) {
     tracking = clearedUpdate;
     return value;
   }
+
+  // Tiny indicator that this is an observable function.
+  data.$o = true;
+  data._observers = new Set();
+  // The 'not set' value must be unique, so `nullish` can be set in a transaction.
+  data._pending = EMPTY_ARR;
 
   return data;
 }
