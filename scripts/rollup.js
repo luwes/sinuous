@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
 import replace from 'rollup-plugin-replace';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import minimist from 'minimist';
 
 import { CJS, ESM, IIFE, UMD, bundles, fixtures } from './bundles.js';
@@ -98,12 +99,13 @@ function getConfig(options) {
       strict: false, // Remove `use strict;`
       interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
       freeze: false, // Remove `Object.freeze()`
-      esModule: false // Remove `esModule` property
+      esModule: false, // Remove `esModule` property
     },
     plugins: [
       bundleSize({
         columnWidth: 25
       }),
+      sourcemaps(),
       nodeResolve(),
       [UMD, IIFE].includes(format) && babel(options.babel),
       [ESM, UMD, IIFE].includes(format) &&

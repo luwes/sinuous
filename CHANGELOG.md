@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.24.2 - 2020-02-19
+
+### Fixed
+
+- Fixed sourcemaps by adding `rollup-plugin-sourcemaps`.
+
 ## 0.24.1 - 2020-02-18
 
 ### Added
