@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.24.1 - 2020-02-18
+
+### Added
+
+- Added insert into empty node support for `hydrate`.
+
 ## 0.24.0 - 2020-02-06
 
 ### Added
