@@ -18,34 +18,36 @@ export function context(isSvg) {
     }
 
     const args = EMPTY_ARR.slice.call(arguments);
-    const tree = { _children: [] };
+    let vnode;
 
-    function item(arg, i) {
-      if (isSvg) tree._isSvg = isSvg;
+    function item(arg) {
       if (arg == null);
       else if (arg === _ || typeof arg === 'function') {
         // Components can only be the first argument.
-        if (tree.type || i > 0) {
-          addChild(tree, arg);
+        if (vnode) {
+          addChild(vnode, arg);
         } else {
-          tree.type = arg;
+          vnode = { type: arg, _children: [] };
         }
       } else if (Array.isArray(arg)) {
+        vnode = { _children: [] };
         arg.forEach(item);
       } else if (typeof arg === 'object') {
-        if (arg.type) {
-          addChild(tree, arg);
+        if (arg._children) {
+          addChild(vnode, arg);
         } else {
-          tree._props = arg;
+          vnode._props = arg;
         }
       } else {
         // The rest is made into a string.
-        if (tree.type) {
-          addChild(tree, { type: null, _props: arg });
+        if (vnode) {
+          addChild(vnode, { type: null, _props: arg });
         } else {
-          tree.type = arg;
+          vnode = { type: arg, _children: [] };
         }
       }
+
+      if (isSvg) vnode._isSvg = isSvg;
     }
 
     function addChild(parent, child) {
@@ -55,11 +57,7 @@ export function context(isSvg) {
 
     args.forEach(item);
 
-    return tree.type
-      ? tree
-      : tree._children.length > 1
-      ? tree._children
-      : tree._children[0];
+    return vnode;
   }
 
   return treeify;
@@ -90,24 +88,11 @@ export function hydrate(delta, root) {
   }
 
   if (!root) {
-    let selector = '';
-    let prop;
-    if ((prop = delta._props.id)) {
-      selector = '#';
-    } else if ((prop = delta._props.class) || (prop = delta._props.className)) {
-      selector = '.';
-    } else {
-      prop = delta.type;
-    }
-    selector += (typeof prop === 'function' ? prop() : prop)
-      .split(' ')
-      // Escape CSS selector https://bit.ly/36h9I83
-      .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
-      .join('.');
-    root = document.querySelector(selector);
+    root = document.querySelector(findRootSelector(delta));
   }
 
   const args = [root, delta._props, delta._children || delta];
+  const isFragment = delta.type === undefined;
   let el;
 
   function item(arg) {
@@ -124,7 +109,7 @@ export function hydrate(delta, root) {
         if (arg === _) {
           el._index++;
         } else if (typeof arg === 'object') {
-          if (arg.type === null) {
+          if (arg.type === null && target.nodeType === 3) {
             el._index++;
 
             // This is a text vnode, add noskip so spaces don't get skipped.
@@ -159,14 +144,19 @@ export function hydrate(delta, root) {
         let prefix = '';
         let marker;
         let startNode;
-        api.subscribe(function() {
+        api.subscribe(() => {
           isHydrated = hydrated;
 
           let result = arg();
+          if (result && result._children) {
+            result = normalizeVNode(result);
+          }
+
           const isStringable =
             typeof result === 'string' || typeof result === 'number';
           result = isStringable ? prefix + result : result;
-          if (hydrated || !target) {
+
+          if (hydrated || (!target && !isFragment)) {
             current = api.insert(el, result, marker, current, startNode);
           } else {
             if (isStringable) {
@@ -190,11 +180,16 @@ export function hydrate(delta, root) {
                 startNode = target;
                 target = el;
               }
+
               hydrate(result, target);
               current = [];
             }
 
-            marker = api.add(el, '', filterChildNodes(el)[el._index]);
+            if (target) {
+              marker = api.add(el, '', filterChildNodes(el)[el._index]);
+            } else {
+              marker = api.add(el.parentNode, '', el.nextSibling);
+            }
           }
 
           isHydrated = false;
@@ -211,6 +206,41 @@ export function hydrate(delta, root) {
   args.forEach(item);
 
   return el;
+}
+
+function normalizeVNode(vnode) {
+  return vnode.type
+    ? vnode
+    : vnode._children.length > 1
+    ? vnode._children
+    : vnode._children[0];
+}
+
+function findRootSelector(delta) {
+  let selector = '';
+  let prop;
+
+  if (delta._props && (prop = delta._props.id)) {
+    selector = '#';
+  } else if (
+    delta._props &&
+    ((prop = delta._props.class) || (prop = delta._props.className))
+  ) {
+    selector = '.';
+  } else if (delta.type) {
+    prop = delta.type;
+  } else {
+    return findRootSelector(normalizeVNode(delta)());
+  }
+
+  return (
+    selector +
+    (typeof prop === 'function' ? prop() : prop)
+      .split(' ')
+      // Escape CSS selector https://bit.ly/36h9I83
+      .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
+      .join('.')
+  );
 }
 
 /**
