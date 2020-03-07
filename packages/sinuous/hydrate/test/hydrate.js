@@ -67,6 +67,28 @@ test('add insert into empty node feature', function(t) {
   t.end();
 });
 
+test('hydrate conditional root element', function(t) {
+  document.body.innerHTML = `
+    <player-x></player-x>
+  `;
+
+  const showing = observable(true);
+
+  var player = hydrate(dhtml`
+    ${() => (player = showing() ? dhtml`<player-x />` : '')}
+  `);
+
+  t.equal(player.tagName, 'PLAYER-X');
+
+  showing(false);
+  t.equal(player, '');
+
+  showing(true);
+  t.equal(player.tagName, 'PLAYER-X');
+
+  t.end();
+});
+
 test('hydrate w/ observables bug', function(t) {
   document.body.innerHTML = `
     <div class="box level">

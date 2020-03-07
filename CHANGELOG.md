@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.24.3 - 2020-03-06
+
+### Added
+
+- Added support for hydrating conditional root elements.
+
 ## 0.24.2 - 2020-02-19
 
 ### Fixed
