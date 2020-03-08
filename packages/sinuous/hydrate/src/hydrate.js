@@ -104,33 +104,43 @@ export function hydrate(delta, root) {
       arg.forEach(item);
     } else if (el) {
       let target = filterChildNodes(el)[el._index];
+      let current;
+      let prefix;
+
+      const updateText = (text) => {
+        el._index++;
+
+        // Leave whitespace alone.
+        if (target.data.trim() !== text.trim()) {
+          if (
+            arg._parent._children.length !== filterChildNodes(el).length
+          ) {
+            // If the parent's virtual children length don't match the DOM's,
+            // it's probably adjacent text nodes stuck together. Split them.
+            target.splitText(
+              target.data.indexOf(text) + text.length
+            );
+            if (current) {
+              // Leave prefix whitespace intact.
+              prefix = current.match(/^\s*/)[0];
+            }
+          }
+          // Leave whitespace alone.
+          if (target.data.trim() !== text.trim()) {
+            target.data = text;
+          }
+        }
+      };
+
       if (target) {
         // Skip placeholder underscore.
         if (arg === _) {
           el._index++;
         } else if (typeof arg === 'object') {
           if (arg.type === null && target.nodeType === 3) {
-            el._index++;
-
             // This is a text vnode, add noskip so spaces don't get skipped.
             target._noskip = true;
-
-            // Leave whitespace alone.
-            if (target.data.trim() !== arg._props.trim()) {
-              if (
-                arg._parent._children.length !== filterChildNodes(el).length
-              ) {
-                // If the parent's virtual children length don't match the DOM's,
-                // it's probably adjacent text nodes stuck together. Split them.
-                target.splitText(
-                  target.data.indexOf(arg._props) + arg._props.length
-                );
-              }
-              // Leave whitespace alone.
-              if (target.data.trim() !== arg._props.trim()) {
-                target.data = arg._props;
-              }
-            }
+            updateText(arg._props);
           } else if (arg.type) {
             hydrate(arg, target);
             el._index++;
@@ -139,9 +149,9 @@ export function hydrate(delta, root) {
       }
 
       if (typeof arg === 'function') {
+        current = target ? target.data : undefined;
+        prefix = '';
         let hydrated;
-        let current = target ? target.data : undefined;
-        let prefix = '';
         let marker;
         let startNode;
         api.subscribe(() => {
@@ -160,21 +170,7 @@ export function hydrate(delta, root) {
             current = api.insert(el, result, marker, current, startNode);
           } else {
             if (isStringable) {
-              el._index++;
-
-              if (
-                arg._parent._children.length !== filterChildNodes(el).length
-              ) {
-                // If the parent's virtual children length don't match the DOM's,
-                // it's probably adjacent text nodes stuck together. Split them.
-                target.splitText(target.data.indexOf(result) + result.length);
-                // Leave prefix whitespace intact.
-                prefix = current.match(/^\s*/)[0];
-              }
-              // Leave whitespace alone.
-              if (target.data.trim() !== result.trim()) {
-                target.data = result;
-              }
+              updateText(result);
             } else {
               if (Array.isArray(result)) {
                 startNode = target;
