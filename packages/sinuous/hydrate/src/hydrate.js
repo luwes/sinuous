@@ -242,20 +242,10 @@ function findRootSelector(delta) {
 /**
  * Filter out whitespace text nodes unless it has a noskip indicator.
  *
- * Don't use `parent.childNodes` here to keep support for IE9, it has a
- * bug where `childNodes` returns incorrectly after `child.splitText()`.
- *
  * @param  {Node} parent
  * @return {Array}
  */
 function filterChildNodes(parent) {
-  let el = parent.firstChild;
-  let arr = [];
-  while (el) {
-    if (el.nodeType !== 3 || el.data.trim() || el._noskip) {
-      arr.push(el);
-    }
-    el = el.nextSibling;
-  }
-  return arr;
+  return EMPTY_ARR.slice.call(parent.childNodes)
+    .filter(el => el.nodeType !== 3 || el.data.trim() || el._noskip);
 }
