@@ -18,8 +18,33 @@
 - **Truly reactive.** automatically derived from the app state.
 - **DevEx.** no compile step needed, choose your [view syntax](#view-syntax).
 
-
 ---
+
+
+### Add-ons
+
+| Size                                                                                                                                   | Name                                                  | Description           |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable *(included by default)*      |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/memo.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/memo`](./packages/sinuous/memo)     | Memoize components and functions |
+
+
+### All-in-one
+
+| Size                                                                                                                            | Name                                    | Description                                              |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------- |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules [²] in one bundle for easy use with a `<script>` tag |
+
+**cdn**: https://unpkg.com/sinuous/dist/all  
+**module**: https://unpkg.com/sinuous/module/all
+
+### Community
+
+- [**sinuous-context**](https://github.com/theSherwood/sinuous-context) ([@theSherwood](https://github.com/theSherwood)): A light-weight, fast, and easy to use context api for Sinuous.
 
 ### Examples
 
@@ -33,30 +58,8 @@
 - [**JSX Typescript**](https://luwes.github.io/sinuous-typescript-jsx/) _([GitHub Project](https://github.com/luwes/sinuous-typescript-jsx))_
 - [**Data - Github Users**](https://luwes.github.io/sinuous-data-github-users/) _([GitHub Project](https://github.com/luwes/sinuous-data-github-users))_
 - [**Dynamic Components**](https://codesandbox.io/s/github/luwes/sinuous-dynamic-components) _([GitHub Project](https://github.com/luwes/sinuous-dynamic-components))_
+- [**Simple routing**](https://codesandbox.io/s/sinuous-router-g2eud) ([@mindplay-dk](https://github.com/mindplay-dk)) 🌏 
 
-
-
-### Add-ons
-
-| Size                                                                                                                                   | Name                                                  | Description           |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable *(included by default)*      |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer    |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/memo.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/memo`](./packages/sinuous/memo)     | Memoize components and functions |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/render.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/render`](./packages/sinuous/render)     | Top/down rendering *(experimental)* |
-
-
-### All-in-one
-
-| Size                                                                                                                            | Name                                    | Description                                              |
-| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules [²] in one bundle for easy use with a `<script>` tag |
-
-**cdn**: https://unpkg.com/sinuous/dist/all  
-**module**: https://unpkg.com/sinuous/module/all
 
 ---
 
@@ -184,7 +187,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 
 ## Browser Support
 
-Sinuous supports modern browsers and IE9+ but keep in mind that IE9 and IE10 do require a polyfill for the `Map` and `Set` collection type.
+Sinuous supports modern browsers and IE11+.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 

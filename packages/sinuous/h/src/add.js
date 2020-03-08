@@ -22,8 +22,7 @@ export function add(parent, value, endMark) {
   }
 
   // If endMark is `null`, value will be added to the end of the list.
-  // IE9 requires an explicit `null` as second argument.
-  parent.insertBefore(value, endMark || null);
+  parent.insertBefore(value, endMark);
 
   // Explicit undefined to store if frag.firstChild is null.
   return mark === undefined ? value : mark;
