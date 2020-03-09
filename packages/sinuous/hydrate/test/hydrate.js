@@ -75,10 +75,11 @@ test('hydrate conditional root element', function(t) {
   const showing = observable(true);
 
   var player = hydrate(dhtml`
-    ${() => (player = showing() ? dhtml`<player-x />` : '')}
+    ${() => (player = showing() ? dhtml`<player-x autoplay />` : '')}
   `);
 
   t.equal(player.tagName, 'PLAYER-X');
+  t.equal(player.autoplay, true);
 
   showing(false);
   t.equal(player, '');

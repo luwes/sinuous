@@ -10,13 +10,12 @@ let isHydrated;
  * @return {Function}
  */
 export function context(isSvg) {
-  function treeify() {
+  return function() {
     if (isHydrated) {
       // Hydrate on first pass, create on the rest.
       return (isSvg ? hs : h).apply(null, arguments);
     }
 
-    const args = Array.from(arguments);
     let vnode;
 
     function item(arg) {
@@ -31,6 +30,7 @@ export function context(isSvg) {
       } else if (Array.isArray(arg)) {
         vnode = { _children: [] };
         arg.forEach(item);
+
       } else if (typeof arg === 'object') {
         if (arg._children) {
           addChild(vnode, arg);
@@ -54,12 +54,10 @@ export function context(isSvg) {
       child._parent = parent;
     }
 
-    args.forEach(item);
+    Array.from(arguments).forEach(item);
 
     return vnode;
-  }
-
-  return treeify;
+  };
 }
 
 /**
@@ -90,7 +88,6 @@ export function hydrate(delta, root) {
     root = document.querySelector(findRootSelector(delta));
   }
 
-  const args = [root, delta._props, delta._children || delta];
   const isFragment = delta.type === undefined;
   let el;
 
@@ -106,19 +103,15 @@ export function hydrate(delta, root) {
       let current;
       let prefix;
 
-      const updateText = (text) => {
+      const updateText = text => {
         el._index++;
 
         // Leave whitespace alone.
         if (target.data.trim() !== text.trim()) {
-          if (
-            arg._parent._children.length !== filterChildNodes(el).length
-          ) {
+          if (arg._parent._children.length !== filterChildNodes(el).length) {
             // If the parent's virtual children length don't match the DOM's,
             // it's probably adjacent text nodes stuck together. Split them.
-            target.splitText(
-              target.data.indexOf(text) + text.length
-            );
+            target.splitText(target.data.indexOf(text) + text.length);
             if (current) {
               // Leave prefix whitespace intact.
               prefix = current.match(/^\s*/)[0];
@@ -158,7 +151,11 @@ export function hydrate(delta, root) {
 
           let result = arg();
           if (result && result._children) {
-            result = normalizeVNode(result);
+            result = result.type
+              ? result
+              : result._children.length > 1
+              ? result._children
+              : result._children;
           }
 
           const isStringable =
@@ -183,7 +180,7 @@ export function hydrate(delta, root) {
             if (target) {
               marker = api.add(el, '', filterChildNodes(el)[el._index]);
             } else {
-              marker = api.add(el.parentNode, '', el.nextSibling);
+              marker = api.add(el.parentNode, '');
             }
           }
 
@@ -191,41 +188,28 @@ export function hydrate(delta, root) {
           hydrated = true;
         });
       } else if (typeof arg === 'object') {
-        if (!arg._children && !arg._props) {
+        if (!arg._children) {
           api.property(el, arg, null, delta._isSvg);
         }
       }
     }
   }
 
-  args.forEach(item);
+  [root, delta._props, delta._children || delta].forEach(item);
 
   return el;
-}
-
-function normalizeVNode(vnode) {
-  return vnode.type
-    ? vnode
-    : vnode._children.length > 1
-    ? vnode._children
-    : vnode._children[0];
 }
 
 function findRootSelector(delta) {
   let selector = '';
   let prop;
-
   if (delta._props && (prop = delta._props.id)) {
     selector = '#';
-  } else if (
-    delta._props &&
-    ((prop = delta._props.class) || (prop = delta._props.className))
-  ) {
+  } else if (delta._props && (prop = delta._props.class)) {
     selector = '.';
-  } else if (delta.type) {
-    prop = delta.type;
-  } else {
-    return findRootSelector(normalizeVNode(delta)());
+  } else if ((prop = delta.type));
+  else {
+    return findRootSelector(delta._children[0]());
   }
 
   return (
@@ -245,6 +229,7 @@ function findRootSelector(delta) {
  * @return {Array}
  */
 function filterChildNodes(parent) {
-  return Array.from(parent.childNodes)
-    .filter(el => el.nodeType !== 3 || el.data.trim() || el._noskip);
+  return Array.from(parent.childNodes).filter(
+    el => el.nodeType !== 3 || el.data.trim() || el._noskip
+  );
 }
