@@ -3,9 +3,9 @@ import { template as tpl, t } from 'sinuous/template';
 
 const createAction = api.action;
 api.action = (action, props, keyedActions) => {
-  const handleAction = (propName, runAction) => {
+  const handleAction = (propNameArg, runAction) => {
     return (key, i, keys) => {
-      propName = propName || (keys && key);
+      let propName = propNameArg || (keys && key);
       // If the field is a plain object, the `_` key is the element content.
       // For `sinuous/data` e.g. data-bind="this:my" refers to the current element.
       if (propName === '_' || propName === 'this') propName = null;
