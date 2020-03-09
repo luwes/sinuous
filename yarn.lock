@@ -2782,7 +2782,7 @@ eslint-plugin-jsdoc@^22.0.0:
     semver "^6.3.0"
     spdx-expression-parse "^3.0.0"
 
-eslint-plugin-react@^7.18.3:
+eslint-plugin-react@^7.19.0:
   version "7.19.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.19.0.tgz#6d08f9673628aa69c5559d33489e855d83551666"
   integrity sha512-SPT8j72CGuAP+JFbT0sJHOB80TX/pu44gQ4vXH/cq+hQTiY2PuZ6IHkqXJV6x1b28GDdo1lbInjKUrrdUf0LOQ==
@@ -5731,11 +5731,6 @@ simple-concat@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
   integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
-
-sinuous@0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.24.1.tgz#c03affe1dd9a1e187f524f54cecaa2355b2fb214"
-  integrity sha512-15zudpRg+FXEtca1MaynFK0FxhcnI0PdCteRZO0+n0A+BKZ5awLd7pUUsfi92ntlR8jPd/1fQW5lAINQbxFQ0g==
 
 size-plugin-core@^0.0.7:
   version "0.0.7"

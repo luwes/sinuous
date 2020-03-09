@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.25.0 - 2020-03-09
+
+### Changed
+
+- Removed support for IE9 and IE10.
+- Use of `Array.from()` in the library (requires a polyfill in IE11)
+  If you need IE11 support it's almost implied you'll need an `Array.from()` polyfill. It's used enough in Sinuous to replace the hacky `[].slice.call(arrayLike)`.
+- Golf down bytes in hydrate going from `1.07kB` to `989B` ⛳️ 
+
 ## 0.24.3 - 2020-03-06
 
 ### Added

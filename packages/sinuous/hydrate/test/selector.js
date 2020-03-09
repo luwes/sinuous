@@ -42,6 +42,21 @@ test('hydrate selects root node via class selector', function(t) {
   t.end();
 });
 
+test('hydrate selects root node via tag selector', function(t) {
+  document.body.innerHTML = `
+    <button>something</button>
+  `;
+
+  const btn = hydrate(dhtml`
+    <button title="Apply pressure">something</button>
+  `);
+
+  t.equal(btn, document.querySelector('button'));
+
+  btn.parentNode.removeChild(btn);
+  t.end();
+});
+
 test('hydrate selects root node via partial class selector', function(t) {
   document.body.innerHTML = `
     <div class="root pure">

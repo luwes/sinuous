@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "sinuous": "0.24.1"
+    "sinuous": "0.25.0"
   },
   "devDependencies": {
     "babel-plugin-transform-jsx-to-htm": "^2.0.0",
-    "eslint-plugin-react": "^7.18.3"
+    "eslint-plugin-react": "^7.19.0"
   }
 }
