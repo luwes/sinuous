@@ -1,8 +1,8 @@
 const path = require('path');
-const nodeResolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const alias = require('@rollup/plugin-alias');
+const nodeResolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
-const alias = require('rollup-plugin-alias');
 const babel = require('rollup-plugin-babel');
 const minimist = require('minimist');
 const c = require('ansi-colors');
@@ -148,18 +148,20 @@ module.exports = function(config) {
       preserveSymlinks: true,
       plugins: [
         alias({
-          'sinuous/map/mini': __dirname + '/packages/sinuous/map/mini/src/mini.js',
-          'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
-          'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
-          'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
-          'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
-          'sinuous/data': __dirname + '/packages/sinuous/data/src/data.js',
-          'sinuous/memo': __dirname + '/packages/sinuous/memo/src/memo.js',
-          'sinuous/render': __dirname + '/packages/sinuous/render/src/index.js',
-          'sinuous/hydrate': __dirname + '/packages/sinuous/hydrate/src/index.js',
-          'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
-          'sinuous': __dirname + '/packages/sinuous/src/index.js',
-          'tape': __dirname + '/scripts/tape/dist.js'
+          entries: {
+            tape: 'tape-browser',
+            'sinuous/map/mini': __dirname + '/packages/sinuous/map/mini/src/mini.js',
+            'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
+            'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
+            'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
+            'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
+            'sinuous/data': __dirname + '/packages/sinuous/data/src/data.js',
+            'sinuous/memo': __dirname + '/packages/sinuous/memo/src/memo.js',
+            'sinuous/render': __dirname + '/packages/sinuous/render/src/index.js',
+            'sinuous/hydrate': __dirname + '/packages/sinuous/hydrate/src/index.js',
+            'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
+            'sinuous': __dirname + '/packages/sinuous/src/index.js'
+          }
         }),
         nodeResolve(),
         commonjs(),

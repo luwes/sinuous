@@ -1,11 +1,11 @@
 import path from 'path';
 import * as R from 'ramda';
+import replace from '@rollup/plugin-replace';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
-import nodeResolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
-import replace from 'rollup-plugin-replace';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import minimist from 'minimist';
 
