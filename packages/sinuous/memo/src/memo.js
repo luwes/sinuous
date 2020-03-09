@@ -1,10 +1,8 @@
 // Adapted from https://github.com/caiogondim/fast-memoize.js - MIT License
-import { EMPTY_ARR } from './constants.js';
-
 export function memo(func) {
   let cache = {};
   return function() {
-    const args = EMPTY_ARR.slice.call(arguments);
+    const args = Array.from(arguments);
 
     const argsWithFuncIds = args.map(x => {
       if (isPlainObject(x) || Array.isArray(x)) {
@@ -28,7 +26,7 @@ export function memo(func) {
       // shell, on next render the comp would just be cleared.
       // Store the child refs in an array and memo and return this.
       if (computedValue && computedValue.nodeType === 11) {
-        computedValue = EMPTY_ARR.slice.call(computedValue.childNodes);
+        computedValue = Array.from(computedValue.childNodes);
       }
 
       cache[cacheKey] = computedValue;

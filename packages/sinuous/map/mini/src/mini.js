@@ -1,8 +1,6 @@
 /* Adapted from List Difference - The MIT License - Simon Friis Vindum */
 import { api } from 'sinuous';
 
-const EMPTY_ARR = [];
-
 export function map(items, expr) {
   const { subscribe, root, cleanup } = api;
 
@@ -34,9 +32,9 @@ export function map(items, expr) {
     // When parent was a DocumentFragment, then items got appended to the DOM.
     parent = afterNode.parentNode;
 
-    const childNodes = EMPTY_ARR.slice.call(parent.childNodes);
-    const beforeNodeIndex = EMPTY_ARR.indexOf.call(childNodes, beforeNode);
-    const afterNodeIndex = EMPTY_ARR.indexOf.call(childNodes, afterNode);
+    const childNodes = Array.from(parent.childNodes);
+    const beforeNodeIndex = childNodes.indexOf(beforeNode);
+    const afterNodeIndex = childNodes.indexOf(afterNode);
 
     // Optimization
     // const afterNodeIndex =

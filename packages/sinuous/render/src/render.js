@@ -1,6 +1,5 @@
 import { api } from 'sinuous';
 import { template, t } from 'sinuous/template';
-import { EMPTY_ARR } from './constants.js';
 
 const cache = {};
 
@@ -14,7 +13,7 @@ export function context(isSvg) {
 
   h.wrap = function() {
     const createElement = this;
-    const args = EMPTY_ARR.slice.call(arguments);
+    const args = Array.from(arguments);
     const statics = args[0];
     const fields = args.slice(1);
 

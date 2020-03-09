@@ -1,5 +1,4 @@
 import { api } from 'sinuous';
-import { EMPTY_ARR } from './constants.js';
 
 let recordedActions;
 
@@ -110,7 +109,7 @@ export function template(elementRef, noClone) {
 
     // Copy the childNodes after inserting the values. This is needed for
     // fills with primitive values that stay the same between renders.
-    fragment._childNodes = EMPTY_ARR.slice.call(fragment.childNodes);
+    fragment._childNodes = Array.from(fragment.childNodes);
 
     return root;
   }
@@ -162,7 +161,7 @@ function createPath(root, el) {
   let paths = [];
   let parent;
   while ((parent = el.parentNode) !== root.parentNode) {
-    paths.unshift(EMPTY_ARR.indexOf.call(parent.childNodes, el));
+    paths.unshift(Array.from(parent.childNodes).indexOf(el));
     el = parent;
   }
   return paths;

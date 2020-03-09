@@ -1,6 +1,5 @@
 import { api } from 'sinuous';
 import { template as tpl, t } from 'sinuous/template';
-import { EMPTY_ARR } from './constants.js';
 
 const createAction = api.action;
 api.action = (action, props, keyedActions) => {
@@ -61,11 +60,7 @@ function recordDataAttributes(fragment) {
   const root = fragment.content || fragment;
   let index = 0;
   [fragment]
-    .concat(
-      EMPTY_ARR.slice.call(
-        root.querySelectorAll('[data-t],[data-o],[data-bind]')
-      )
-    )
+    .concat(Array.from(root.querySelectorAll('[data-t],[data-o],[data-bind]')))
     .forEach(el => {
       tags.forEach((tag, i) => {
         const dataset = el.dataset[tag];

@@ -189,7 +189,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 
 ## Browser Support
 
-Sinuous supports modern browsers and IE11+.
+Sinuous supports modern browsers and IE11+ (requires `Array.from` polyfill).
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
