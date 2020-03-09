@@ -30,7 +30,6 @@
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML   |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/data`](./packages/sinuous/data)     | Enrich plain HTML with data in JS |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/memo.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/memo`](./packages/sinuous/memo)     | Memoize components and functions |
 
 
 ### All-in-one
@@ -42,9 +41,12 @@
 **cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
 
+
 ### Community
 
 - [**sinuous-context**](https://github.com/theSherwood/sinuous-context) ([@theSherwood](https://github.com/theSherwood)): A light-weight, fast, and easy to use context api for Sinuous.
+- [**memo**](https://github.com/luwes/memo) ([@luwes](https://github.com/luwes)): Memoize components and functions.
+
 
 ### Examples
 
@@ -187,7 +189,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 
 ## Browser Support
 
-Sinuous supports modern browsers and IE11+.
+Sinuous supports modern browsers and IE11+ (requires `Array.from` polyfill).
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 

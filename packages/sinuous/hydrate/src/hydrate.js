@@ -1,6 +1,5 @@
 import { h, hs, api } from 'sinuous';
 
-export const EMPTY_ARR = [];
 export const _ = {};
 
 let isHydrated;
@@ -17,7 +16,7 @@ export function context(isSvg) {
       return (isSvg ? hs : h).apply(null, arguments);
     }
 
-    const args = EMPTY_ARR.slice.call(arguments);
+    const args = Array.from(arguments);
     let vnode;
 
     function item(arg) {
@@ -246,6 +245,6 @@ function findRootSelector(delta) {
  * @return {Array}
  */
 function filterChildNodes(parent) {
-  return EMPTY_ARR.slice.call(parent.childNodes)
+  return Array.from(parent.childNodes)
     .filter(el => el.nodeType !== 3 || el.data.trim() || el._noskip);
 }

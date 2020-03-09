@@ -1,7 +1,6 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
 import { api } from './api.js';
 import { add } from './add.js';
-import { EMPTY_ARR } from './constants.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
@@ -13,7 +12,7 @@ export function context(options, isSvg) {
   for (let i in options) api[i] = options[i];
 
   function h() {
-    const args = EMPTY_ARR.slice.call(arguments);
+    const args = Array.from(arguments);
     let el;
 
     function item(arg) {
