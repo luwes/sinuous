@@ -13,7 +13,7 @@
 
 ---
 
-- **Small.** hello world at `~1.6kB` gzip. [¹]
+- **Small.** hello world at `~1.4kB` gzip. [¹]
 - **Fast.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
 - **Truly reactive.** automatically derived from the app state.
 - **DevEx.** no compile step needed, choose your [view syntax](#view-syntax).

@@ -2,14 +2,19 @@
  * Sinuous by Wesley Luyten (@luwes).
  * Really ties all the packages together.
  */
-import * as observable from 'sinuous/observable';
+import {
+  o,
+  observable,
+  subscribe,
+  cleanup,
+  root,
+  sample
+} from 'sinuous/observable';
 import { api, context } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
-api.h = context(observable);
-api.hs = context(observable, true);
-
-export const o = observable.o;
+api.h = context({ subscribe, cleanup, root, sample });
+api.hs = context({ subscribe, cleanup, root, sample }, true);
 
 // Makes it possible to intercept `h` calls and customize.
 export function h() {
@@ -31,4 +36,4 @@ export function svg() {
   return htm.apply(hs, arguments);
 }
 
-export { api, context, o as observable };
+export { api, context, o, observable };

@@ -115,13 +115,14 @@ export const bundles = [
   {
     // order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous/htm', './htm.js'],
-    formats: [IIFE],
+    formats: [ESM],
     global: 'so',
     // only used to display bundle size, `observable` is a peer dependency to
     // avoid issues with the global `tracking` variable.
     name: 'sinuous-observable',
     input: 'packages/sinuous/src/index.js',
-    dest: dest()
+    dest: dest(),
+    sourcemap: false
   },
   {
     external: [],
