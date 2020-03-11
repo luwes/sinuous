@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.25.1 - 2020-03-11
+
+### Changed
+
+- Fixed a treeshake issue [#76](https://github.com/luwes/sinuous/issues/76).
+- Fixed data propName scope issue.
+
 ## 0.25.0 - 2020-03-09
 
 ### Changed
