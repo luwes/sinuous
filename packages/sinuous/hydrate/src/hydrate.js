@@ -180,7 +180,7 @@ export function hydrate(delta, root) {
             if (target) {
               marker = api.add(el, '', filterChildNodes(el)[el._index]);
             } else {
-              marker = api.add(el.parentNode, '');
+              marker = api.add(el.parentNode, '', el.nextSibling);
             }
           }
 
