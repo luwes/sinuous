@@ -28,7 +28,7 @@ export function context(isSvg) {
           vnode = { type: arg, _children: [] };
         }
       } else if (Array.isArray(arg)) {
-        vnode = { _children: [] };
+        vnode = vnode || { _children: [] };
         arg.forEach(item);
 
       } else if (typeof arg === 'object') {
