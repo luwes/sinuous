@@ -214,7 +214,9 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
           node = t.binaryExpression('+', node, concatFunctionNode(value));
         });
         if (values.some(isFunctionLike)) {
-          node = t.arrowFunctionExpression([], node);
+          node = t.functionExpression(null, [], t.blockStatement([
+            t.returnStatement(node)
+          ]));
         }
       }
 
@@ -234,7 +236,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     if (isFunctionLike(node)) {
       const typeofNode = t.unaryExpression('typeof', node);
       const isNodeFunction = t.binaryExpression('===', typeofNode, t.stringLiteral('function'));
-      return t.conditionalExpression(isNodeFunction, t.callExpression(node, []), node);
+      return t.conditionalExpression(isNodeFunction, t.callExpression(dottedIdentifier(`${node.name}.call`), [t.identifier('this')]), node);
     }
     return node;
   }
