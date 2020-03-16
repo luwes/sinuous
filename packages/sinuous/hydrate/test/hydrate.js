@@ -3,6 +3,18 @@ import spy from 'ispy';
 import { d, dhtml, hydrate, _ } from 'sinuous/hydrate';
 import { observable, html } from 'sinuous';
 
+test('hydrates div with children', function(t) {
+  const delta = dhtml`<div>${[dhtml`<b />`]}</div>`;
+  delete delta._children[0]._parent; // eslint-disable-line
+
+  t.deepEqual(
+    delta,
+    { type: 'div', _children: [ { type: 'b', _children: [] } ] }
+  );
+
+  t.end();
+});
+
 test('hydrates root bug', function(t) {
   document.body.innerHTML = `
     <img class="hidden" />

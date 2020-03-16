@@ -98,7 +98,7 @@ export const evaluate = (h, built, fields, args) => {
         args[1][key] = function() {
           let prop = '';
           for (var j = 0; j < parts.length; j++) {
-            prop += typeof parts[j] === 'function' ? parts[j]() : parts[j];
+            prop += typeof parts[j] === 'function' ? parts[j].call(this) : parts[j];
           }
           return prop;
         };
