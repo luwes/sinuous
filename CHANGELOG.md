@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.25.2 - 2020-03-16
+
+### Changed
+
+- Added call context to partial attributes
+- Fixed hydrate element w/ children bug
+- Fixed hydrate regression
+
 ## 0.25.1 - 2020-03-11
 
 ### Changed
