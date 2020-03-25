@@ -46,6 +46,7 @@
 
 - [**sinuous-context**](https://github.com/theSherwood/sinuous-context) ([@theSherwood](https://github.com/theSherwood)): A light-weight, fast, and easy to use context api for Sinuous.
 - [**memo**](https://github.com/luwes/memo) ([@luwes](https://github.com/luwes)): Memoize components and functions.
+- [**disco**](https://github.com/luwes/disco) ([@luwes](https://github.com/luwes)): Universal `connected` and `disconnected` lifecycle events.
 
 
 ### Examples
@@ -61,6 +62,7 @@
 - [**Data - Github Users**](https://luwes.github.io/sinuous-data-github-users/) _([GitHub Project](https://github.com/luwes/sinuous-data-github-users))_
 - [**Dynamic Components**](https://codesandbox.io/s/github/luwes/sinuous-dynamic-components) _([GitHub Project](https://github.com/luwes/sinuous-dynamic-components))_
 - [**Simple routing**](https://codesandbox.io/s/sinuous-router-g2eud) ([@mindplay-dk](https://github.com/mindplay-dk)) 🌏 
+- [**Datepicker**](https://codesandbox.io/s/sinuous-date-picker-ye0oe) ([@mindplay-dk](https://github.com/mindplay-dk)) 
 
 
 ---
