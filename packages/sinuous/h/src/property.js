@@ -37,14 +37,10 @@ export function property(el, value, name, isAttr, isCss) {
 function handleEvent(el, name, value) {
   name = name.slice(2).toLowerCase();
 
-  const removeListener = api.cleanup(() =>
-    el.removeEventListener(name, eventProxy)
-  );
-
   if (value) {
     el.addEventListener(name, eventProxy);
   } else {
-    removeListener();
+    el.removeEventListener(name, eventProxy);
   }
 
   (el._listeners || (el._listeners = {}))[name] = value;
