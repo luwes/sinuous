@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 0.26.0 - 2020-03-25
 
+### Removed
+
+- Removed explicit cleanup of dom element listeners [0791cf9](https://github.com/luwes/sinuous/commit/0791cf98eda1ed2c9f2aae193ab2db7efb9e804d)
+
 ### Added
 
 - Added observable `on` function [#82](https://github.com/luwes/sinuous/issues/82).
