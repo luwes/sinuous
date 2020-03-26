@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.26.1 - 2020-03-25
+
+### Fixed
+
+- Fixed sample argument issue when `fn` would be an observable.
+
 ## 0.26.0 - 2020-03-25
 
 ### Removed

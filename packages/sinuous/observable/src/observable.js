@@ -40,13 +40,12 @@ export function root(fn) {
  * computed(() => { if (foo()) bar(sample(bar) + 1); });
  *
  * @param  {Function} fn
- * @param {*} [arg] - Optional argument.
  * @return {*}
  */
-export function sample(fn, arg) {
+export function sample(fn) {
   const prevTracking = tracking;
   tracking = undefined;
-  const value = fn(arg);
+  const value = fn();
   tracking = prevTracking;
   return value;
 }
@@ -249,7 +248,7 @@ export function on(obs, fn, seed, onchanges) {
 
     let result = value;
     if (!onchanges) {
-      result = sample(fn, value);
+      result = sample(() => fn(value));
     }
 
     onchanges = false;
