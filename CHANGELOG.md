@@ -24,7 +24,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Removed support for IE9 and IE10.
 - Use of `Array.from()` in the library (requires a polyfill in IE11)
   If you need IE11 support it's almost implied you'll need an `Array.from()` polyfill. It's used enough in Sinuous to replace the hacky `[].slice.call(arrayLike)`.
-- Golf down bytes in hydrate going from `1.07kB` to `989B` ⛳️ 
+- Golf down bytes in hydrate going from `1.07kB` to `989B` ⛳️
 
 ## 0.24.3 - 2020-03-06
 
@@ -61,7 +61,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Fixed minify bug `._propName
+- Fixed minify bug `.\_propName
 - Fixed observable types [#65](https://github.com/luwes/sinuous/issues/65)
 
 ## 0.23.1 - 2020-01-31
@@ -77,16 +77,23 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added auto-import pragma option to `sinuous/babel-plugin-htm`. For example:
 
 ```js
-      plugins: [
-        ['sinuous/babel-plugin-htm', {
-          import: 'sinuous'
-        }],
-        ['sinuous/babel-plugin-htm', {
-          pragma: 'hs',
-          tag: 'svg',
-          import: 'sinuous'
-        }, 'svg']
-      ]
+plugins: [
+  [
+    'sinuous/babel-plugin-htm',
+    {
+      import: 'sinuous'
+    }
+  ],
+  [
+    'sinuous/babel-plugin-htm',
+    {
+      pragma: 'hs',
+      tag: 'svg',
+      import: 'sinuous'
+    },
+    'svg'
+  ]
+];
 ```
 
 ## 0.22.0 - 2020-01-30 - BREAKING CHANGES
@@ -99,7 +106,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Added `sinuous/render` module for top down render functions.
 
-
 ## 0.21.4 - 2020-01-24
 
 ### Fixed
@@ -108,7 +114,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed memoizing by adding support for Arrays and DOM nodes to be serialized.
 
 ## 0.21.3 - 2020-01-17
+
 ## 0.21.2 - 2020-01-17
+
 ## 0.21.1 - 2020-01-17
 
 ### Fixed
@@ -162,18 +170,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added tag name selecting in `hydrate`, for example:
 
 ```js
-hydrate(html`<body onclick="${blur}">`);
+hydrate(
+  html`
+    <body onclick="${blur}"></body>
+  `
+);
 ```
 
 ## 0.19.0 - 2019-12-25
 
-### Added 
+### Added
 
 - Added type declarations [#52](https://github.com/luwes/sinuous/pull/52)
 
 ## 0.18.5 - 2019-12-15
 
-### Added 
+### Added
 
 - Added special bundle to display bundle size of Sinuous w/ observable included.
 

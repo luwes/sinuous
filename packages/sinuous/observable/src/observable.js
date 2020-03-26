@@ -37,15 +37,16 @@ export function root(fn) {
  * Sample the current value of an observable but don't create a dependency on it.
  *
  * @example
- * S(() => { if (foo()) bar(sample(bar) + 1); });
+ * computed(() => { if (foo()) bar(sample(bar) + 1); });
  *
  * @param  {Function} fn
+ * @param {*} [arg] - Optional argument.
  * @return {*}
  */
-export function sample(fn) {
+export function sample(fn, arg) {
   const prevTracking = tracking;
   tracking = undefined;
-  const value = fn();
+  const value = fn(arg);
   tracking = prevTracking;
   return value;
 }
@@ -230,6 +231,30 @@ export function cleanup(fn) {
 export function subscribe(observer) {
   computed(observer);
   return () => _unsubscribe(observer._update);
+}
+
+/**
+ * Statically declare a computation's dependencies.
+ *
+ * @param  {Function|Array}   obs
+ * @param  {Function} fn - Callback function.
+ * @param  {*} [seed] - Seed value.
+ * @param  {boolean} [onchanges] - If true the initial run is skipped.
+ * @return {Function} Computation which can be used in other computations.
+ */
+export function on(obs, fn, seed, onchanges) {
+  obs = [].concat(obs);
+  return computed((value) => {
+    obs.forEach((o) => o());
+
+    let result = value;
+    if (!onchanges) {
+      result = sample(fn, value);
+    }
+
+    onchanges = false;
+    return result;
+  }, seed);
 }
 
 /**

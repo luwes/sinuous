@@ -15,6 +15,7 @@ import '../observable/test/root.js';
 import '../observable/test/dispose.js';
 import '../observable/test/transaction.js';
 import '../observable/test/utils.js';
+import '../observable/test/on.js';
 import '../map/test/map.js';
 import '../map/test/map-basic.js';
 import '../map/test/map-fragments.js';
