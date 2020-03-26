@@ -16,7 +16,7 @@ Sinuous Observable is a tiny reactive library. It shares the core features of [S
 
 - [isListening()](#isListening) ⇒ <code>boolean</code>
 - [root(fn)](#root) ⇒ <code>\*</code>
-- [sample(fn, [arg])](#sample) ⇒ <code>\*</code>
+- [sample(fn)](#sample) ⇒ <code>\*</code>
 - [transaction(fn)](#transaction) ⇒ <code>\*</code>
 - [observable(value)](#observable) ⇒ <code>function</code>
 - [computed(observer, value)](#computed) ⇒ <code>function</code>
@@ -53,16 +53,15 @@ unsubscribe all inner computations.
 
 <a name="sample"></a>
 
-### sample(fn, [arg]) ⇒ <code>\*</code>
+### sample(fn) ⇒ <code>\*</code>
 
 Sample the current value of an observable but don't create a dependency on it.
 
 **Kind**: global function
 
-| Param | Type                  | Description        |
-| ----- | --------------------- | ------------------ |
-| fn    | <code>function</code> |                    |
-| [arg] | <code>\*</code>       | Optional argument. |
+| Param | Type                  |
+| ----- | --------------------- |
+| fn    | <code>function</code> |
 
 **Example**
 
