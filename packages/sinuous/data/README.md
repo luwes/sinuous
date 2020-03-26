@@ -47,24 +47,26 @@ Each tag accepts three mapping variants:
 1. A plain `data-t` without a value maps to an array item:
 
 ```js
-  template('#id')(['My content']); // or
-  template('#id')([{ _: 'My content', class: 'my-class' }]);
+template('#id')(['My content']); // or
+template('#id')([{ _: 'My content', class: 'my-class' }]);
 ```
 
 2. An attribute with a value `data-o="mykey"` maps to a property:
 
 ```js
-  template('#id')({ mykey: 'My content' }); // or
-  template('#id')({ mykey: { _: 'My content', class: 'my-class', onclick }});
+template('#id')({ mykey: 'My content' }); // or
+template('#id')({ mykey: { _: 'My content', class: 'my-class', onclick } });
 ```
 
 3. An attribute with multiple key value pairs `data-o="mycontent src:imageUrl alt:caption onclick:pet"` map to top level properties:
 
 ```js
-  template('#id')({
-    mycontent: 'My content',
-    imageUrl: 'https://placekitten.com/200/300',
-    caption: 'Place for a kitten',
-    pet() { console.log('Watch my fur son'); }
-  });
+template('#id')({
+  mycontent: 'My content',
+  imageUrl: 'https://placekitten.com/200/300',
+  caption: 'Place for a kitten',
+  pet() {
+    console.log('Watch my fur son');
+  }
+});
 ```
