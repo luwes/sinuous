@@ -25,7 +25,6 @@ temperatureInCelsius(-4);
 console.log(temperatureInCelsius()); // logs -4
 ```
 
-
 ## Run the observable in a tracking context
 
 There are 2 functions available that can create a reactive function, `subscribe` and `computed`. The provided function is run immediately when defined and then each time when one of its dependencies changes.
@@ -49,12 +48,14 @@ temperatureInCelsius(31); // logs 31
 import { observable, computed } from 'sinuous/observable';
 
 const temperatureInCelsius = observable(27);
-const temperatureInFahrenheit = computed(() => temperatureInCelsius() * 1.8 + 32);
+const temperatureInFahrenheit = computed(
+  () => temperatureInCelsius() * 1.8 + 32
+);
 const unsubscribe = subscribe(() => {
   console.log(temperatureInFahrenheit());
 });
 
-temperatureInCelsius(31); // logs 87.8 
+temperatureInCelsius(31); // logs 87.8
 ```
 
 Try it on [Codesandbox](https://codesandbox.io/s/sinuous-observable-35eut)
