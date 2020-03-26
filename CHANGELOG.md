@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.26.0 - 2020-03-25
+
+### Added
+
+- Added observable `on` function [#82](https://github.com/luwes/sinuous/issues/82).
+
 ## 0.25.2 - 2020-03-16
 
 ### Changed
