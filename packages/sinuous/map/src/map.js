@@ -6,11 +6,12 @@ import {
   longestPositiveIncreasingSubsequence,
   insertNodes,
   removeNodes,
-  step
+  step,
+  add
 } from './utils.js';
 
 export function map(items, expr, cleaning) {
-  const { subscribe, root, sample, cleanup, add } = api;
+  const { subscribe, root, sample, cleanup } = api;
 
   // Disable cleaning for templates by default.
   if (cleaning == null) cleaning = !expr.$t;
