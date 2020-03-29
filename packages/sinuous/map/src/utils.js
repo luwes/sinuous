@@ -1,4 +1,36 @@
+import { api } from 'sinuous';
 import { GROUPING } from './constants.js';
+
+let groupCounter = 0;
+
+export function add(parent, value, endMark) {
+  let mark;
+
+  if (typeof value === 'string') {
+    value = document.createTextNode(value);
+  } else if (!(value instanceof Node)) {
+    // Passing an empty array creates a DocumentFragment.
+    value = api.h([], value);
+  }
+
+  if (
+    value.nodeType === 11 &&
+    (mark = value.firstChild) &&
+    mark !== value.lastChild
+  ) {
+    // If there is a fragment grouping id on this element prepend a new
+    // fragment marker. This can happen with multiple nested fragments.
+    mark = add(value, '', mark);
+
+    mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
+  }
+
+  // If endMark is `null`, value will be added to the end of the list.
+  parent.insertBefore(value, endMark && endMark.parentNode && endMark);
+
+  // Explicit undefined to store if frag.firstChild is null.
+  return mark === undefined ? value : mark;
+}
 
 export function step(node, direction, inner) {
   const key = node[GROUPING];

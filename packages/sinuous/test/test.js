@@ -1,5 +1,4 @@
 import './_polyfills.js';
-import './sinuous.js';
 import '../h/test/add-node.js';
 import '../h/test/hyperscript.js';
 import '../h/test/svg.js';
@@ -36,3 +35,4 @@ import '../template/test/template.js';
 import '../render/test/render.js';
 import '../render/test/lit-html.js';
 import '../render/test/observable.js';
+import './sinuous.js';

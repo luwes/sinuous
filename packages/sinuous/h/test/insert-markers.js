@@ -55,14 +55,14 @@ test('inserts nothing for true', t => {
 test('inserts nothing for null in array', t => {
   const res = insertValue(['a', null, 'b']);
   t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
+  t.equal(res.childNodes.length, 6);
   t.end();
 });
 
 test('inserts nothing for undefined in array', t => {
   const res = insertValue(['a', undefined, 'b']);
   t.equal(res.innerHTML, 'beforeabafter');
-  t.equal(res.childNodes.length, 5);
+  t.equal(res.childNodes.length, 6);
   t.end();
 });
 
