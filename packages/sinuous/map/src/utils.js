@@ -18,18 +18,14 @@ export function add(parent, value, endMark) {
     (mark = value.firstChild) &&
     mark !== value.lastChild
   ) {
-    // If there is a fragment grouping id on this element prepend a new
-    // fragment marker. This can happen with multiple nested fragments.
-    mark = add(value, '', mark);
-
     mark[GROUPING] = value.lastChild[GROUPING] = ++groupCounter;
   }
 
   // If endMark is `null`, value will be added to the end of the list.
-  parent.insertBefore(value, endMark && endMark.parentNode && endMark);
+  parent.insertBefore(value, endMark);
 
   // Explicit undefined to store if frag.firstChild is null.
-  return mark === undefined ? value : mark;
+  return mark || value;
 }
 
 export function step(node, direction, inner) {
