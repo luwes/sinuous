@@ -57,6 +57,7 @@
 - [**Dynamic Components**](https://codesandbox.io/s/github/luwes/sinuous-dynamic-components) _([GitHub Project](https://github.com/luwes/sinuous-dynamic-components))_
 - [**Simple routing**](https://codesandbox.io/s/sinuous-router-g2eud) ([@mindplay-dk](https://github.com/mindplay-dk)) 🌏
 - [**Datepicker**](https://codesandbox.io/s/sinuous-date-picker-thxdt) ([@mindplay-dk](https://github.com/mindplay-dk))
+- [**7 GUIs**](https://codesandbox.io/s/github/theSherwood/7_GUIs/tree/master/sinuous) ([@theSherwood](https://github.com/theSherwood))
 
 ---
 
