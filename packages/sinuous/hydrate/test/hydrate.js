@@ -542,7 +542,7 @@ test('hydrate can create dom after hydration', function(t) {
     <img class="hidden" src="https://sinuous.io/" />
   `);
 
-  t.equal(button.childNodes[1].src, 'https://sinuous.io/');
+  t.equal(button.childNodes[2].src, 'https://sinuous.io/');
 
   t.end();
 });

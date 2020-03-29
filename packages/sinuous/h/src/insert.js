@@ -1,6 +1,6 @@
 import { api } from './api.js';
 import { add } from './add.js';
-import { clear } from './clear.js';
+import { removeNodes } from './remove-nodes.js';
 
 export function insert(el, value, endMark, current, startNode) {
   // This is needed if the el is a DocumentFragment initially.
@@ -37,7 +37,19 @@ export function insert(el, value, endMark, current, startNode) {
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
-    clear(el, current, endMark, startNode);
+    if (endMark) {
+      // `current` can't be `0`, it's coerced to a string in insert.
+      if (current) {
+        if (!startNode) {
+          // Support fragments
+          startNode = (current._startMark && current._startMark.nextSibling)
+            || endMark.previousSibling;
+        }
+        removeNodes(el, startNode, endMark);
+      }
+    } else {
+      el.textContent = '';
+    }
     current = null;
 
     if (value && value !== true) {

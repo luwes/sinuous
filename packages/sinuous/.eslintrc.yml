@@ -27,7 +27,7 @@ rules:
   fp/no-this: error
   fp/no-throw: error
   # fp/no-unused-expression: error
-  fp/no-valueof-field: error
+  # fp/no-valueof-field: error
 
   jsdoc/check-alignment: 1
   jsdoc/check-examples: 1

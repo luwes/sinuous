@@ -50,7 +50,7 @@ test('inserts fragments', t => {
 
   frag('make it a string');
   t.equal(res.innerHTML, 'make it a string');
-  t.equal(res.childNodes.length, 2);
+  t.equal(res.childNodes.length, 4);
 
   frag(
     html`
@@ -124,14 +124,14 @@ test('inserts nothing for true', t => {
 test('inserts nothing for null in array', t => {
   const res = insertValue(['a', null, 'b']);
   t.equal(res.innerHTML, 'ab');
-  t.equal(res.childNodes.length, 2);
+  t.equal(res.childNodes.length, 3);
   t.end();
 });
 
 test('inserts nothing for undefined in array', t => {
   const res = insertValue(['a', undefined, 'b']);
   t.equal(res.innerHTML, 'ab');
-  t.equal(res.childNodes.length, 2);
+  t.equal(res.childNodes.length, 3);
   t.end();
 });
 
@@ -178,7 +178,7 @@ test('can insert an array of nodes', t => {
   t.end();
 });
 
-test('can insert a changing array of nodes', t => {
+test('can insert a changing array of nodes 1', t => {
   var parent = document.createElement('div'),
     current = '',
     n1 = document.createElement('span'),
@@ -283,7 +283,7 @@ test('can update content with text and observable with marker', t => {
   const reactive = o('reactive');
   const dynamic = o(99);
 
-  let current = insert(parent, h('h1', reactive, '⛄️', dynamic), marker);
+  insert(parent, h('h1', reactive, '⛄️', dynamic), marker);
   t.equal(parent.innerHTML, '<h1>reactive⛄️99</h1>');
 
   dynamic(77);
@@ -298,7 +298,7 @@ test('can update content with text and observable with marker', t => {
   reactive('');
   t.equal(parent.innerHTML, '<h1>⛄️</h1>');
 
-  insert(parent, '⛄️', marker, current);
+  insert(parent, '⛄️', marker, parent.children[0]);
   t.equal(parent.innerHTML, '⛄️');
   t.end();
 });
