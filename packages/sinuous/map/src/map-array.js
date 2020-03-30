@@ -78,7 +78,7 @@ export function mapArray(list, mapFn) {
             mapped.splice(start, rLen);
             disposers.splice(start, rLen);
           }
-          items = newItems.slice(0);
+          items = newItems.slice();
           len = newLen;
           return mapped;
         }
@@ -89,7 +89,7 @@ export function mapArray(list, mapFn) {
             mapped[j] = temp[j];
             disposers[j] = tempdisposers[j];
           }
-          items = newItems.slice(0);
+          items = newItems.slice();
           len = newLen;
           return mapped;
         }
@@ -123,7 +123,7 @@ export function mapArray(list, mapFn) {
         // 3) in case the new set is shorter than the old, set the length of the mapped array
         len = mapped.length = newLen;
         // 4) save a copy of the mapped items for the next update
-        items = newItems.slice(0);
+        items = newItems.slice();
       }
       return mapped;
     });
