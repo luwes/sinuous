@@ -48,5 +48,8 @@
   "bugs": {
     "url": "https://github.com/luwes/sinuous/issues"
   },
-  "homepage": "https://github.com/luwes/sinuous#readme"
+  "homepage": "https://github.com/luwes/sinuous#readme",
+  "dependencies": {
+    "udomdiff": "^1.0.11"
+  }
 }
