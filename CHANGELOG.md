@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.26.2 - 2020-03-29
+
+### Fixed
+
+- Fixed nested fragment issue [#88](https://github.com/luwes/sinuous/issues/88).
+
 ## 0.26.1 - 2020-03-25
 
 ### Fixed

@@ -6976,10 +6976,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
 
-sinuous@0.23.1:
-  version "0.23.1"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.23.1.tgz#6935d62c4f2f91c683d08b9cb3faaa0d911d5832"
-  integrity sha512-yNVGNL5VOV+Vr08dCP1TTrbNRniA8TVpCeKwcmC2459ToHtYLBAQ6urUURHbaRg92LiRo3nMCv3O3FVIZjFDXw==
+sinuous@0.27.0-beta.0:
+  version "0.27.0-beta.0"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.27.0-beta.0.tgz#e7208522f949f37d769da66fce60214dcb12fbe8"
+  integrity sha512-7yhoiOu90GU5p9lqeUq7aEfLA0wMBXy/TdUO3fp+fGK7F1LThT0931xUzIUaB3y6obLnxSgD89tQcZ0ApGBhmQ==
 
 sinuous@^0.23.0:
   version "0.23.3"
