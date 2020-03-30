@@ -20,7 +20,6 @@ import '../map/test/map-basic.js';
 import '../map/test/map-fragments.js';
 import '../map/test/map-objects.js';
 import '../map/test/dispose.js';
-import '../map/test/utils.js';
 import '../map/mini/test/mini.js';
 import '../map/mini/test/mini-basic.js';
 import '../hydrate/test/hydrate.js';
