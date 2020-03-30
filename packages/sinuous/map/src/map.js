@@ -1,6 +1,6 @@
 import { api } from 'sinuous';
 import { mapArray } from './map-array.js';
-import { reconcileArrays } from './reconcile.js';
+import { udomdiff } from './udomdiff.js';
 import { normalizeArray } from './normalize-array.js';
 
 export function map(items, expr) {
@@ -11,7 +11,7 @@ export function map(items, expr) {
   const b = mapArray(items, mapFn);
 
   const unsubscribe = subscribe(a => {
-    return reconcileArrays(afterNode, a || [], normalizeArray([], b()));
+    return udomdiff(afterNode, a || [], normalizeArray([], b()));
   });
 
   cleanup(unsubscribe);

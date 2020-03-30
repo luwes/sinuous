@@ -1,7 +1,7 @@
 /* Adapted from µdomdiff (https://github.com/WebReflection/udomdiff)
   ISC License - Andrea Giammarchi */
 
-export function reconcileArrays(before, a, b) {
+export function udomdiff(before, a, b) {
   let parentNode = before.parentNode,
     bLength = b.length,
     aEnd = a.length,
