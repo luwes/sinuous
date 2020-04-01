@@ -1,33 +1,75 @@
-import { api } from 'sinuous';
-import { mapArray } from './map-array.js';
 import { udomdiff } from './udomdiff.js';
-import { normalizeArray } from './normalize-array.js';
+import { diffable, persistent } from './uwire.js';
+import { api } from 'sinuous';
 
-export function map(items, expr) {
-  const { subscribe, cleanup } = api;
+/**
+ * Map over a list of unique items that create DOM nodes.
+ *
+ * No duplicates in the list of items is a hard requirement, the diffing
+ * algorithm will not work with duplicate values. See `./unique.js`.
+ *
+ * @param  {Function} items - Function or observable that creates a list.
+ * @param  {Function} expr
+ * @param {boolean} [cleaning]
+ * @return {DocumentFragment}
+ */
+export function map(items, expr, cleaning) {
+  const { root, subscribe, sample, cleanup } = api;
 
-  const parent = document.createDocumentFragment();
-  const afterNode = parent.appendChild(document.createTextNode(''));
-  const b = mapArray(items, mapFn);
+  // Disable cleaning for templates by default.
+  if (cleaning == null) cleaning = !expr.$t;
+
+  let parent = api.h([]);
+  const endMark = api.add(parent, '');
+
+  const disposers = new Map();
+  const nodes = new Map();
 
   const unsubscribe = subscribe(a => {
-    return udomdiff(afterNode, a || [], normalizeArray([], b()));
+    const b = items();
+    return sample(() => {
+      return Array.from(
+        udomdiff(endMark.parentNode, a || [], b, node, endMark)
+      );
+    });
   });
 
   cleanup(unsubscribe);
+  cleanup(disposeAll);
 
-  function mapFn(item, i, data) {
-    const value = expr(item, i, data);
+  function node(item, i) {
+    let n = nodes.get(item);
+    if (i === 1 && !n) {
+      n = cleaning
+        ? root(dispose => {
+            disposers.set(item, dispose);
+            return expr(item.$v || item);
+          })
+        : expr(item.$v || item);
 
-    if (typeof value === 'string') {
-      return document.createTextNode(value);
+      if (typeof n === 'string') n = document.createTextNode(n);
+      else if (n.nodeType === 11) n = persistent(n) || n;
+
+      nodes.set(item, n);
+    } else if (i === -1) {
+      dispose(item);
     }
 
-    if (value.nodeType === 11) {
-      return Array.from(value.childNodes);
-    }
+    return diffable(n, i);
+  }
 
-    return value;
+  function disposeAll() {
+    disposers.forEach(d => d());
+    disposers.clear();
+    nodes.clear();
+  }
+
+  function dispose(item) {
+    let disposer = disposers.get(item);
+    if (disposer) {
+      disposer();
+      disposers.delete(item);
+    }
   }
 
   return parent;

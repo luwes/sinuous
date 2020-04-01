@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.27.0-beta.0",
+  "version": "0.27.0-beta.1",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
@@ -51,5 +51,9 @@
   "bugs": {
     "url": "https://github.com/luwes/sinuous/issues"
   },
-  "homepage": "https://github.com/luwes/sinuous#readme"
+  "homepage": "https://github.com/luwes/sinuous#readme",
+  "dependencies": {
+    "udomdiff": "^1.0.9",
+    "uwire": "^1.0.1"
+  }
 }

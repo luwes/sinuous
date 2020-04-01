@@ -1,82 +1,160 @@
 /* Adapted from µdomdiff (https://github.com/WebReflection/udomdiff)
   ISC License - Andrea Giammarchi */
 
-export function udomdiff(before, a, b) {
-  let parentNode = before.parentNode,
-    bLength = b.length,
-    aEnd = a.length,
-    bEnd = bLength,
-    aStart = 0,
-    bStart = 0,
-    map;
-
+/**
+ * @param {Node} parentNode - The container where children live.
+ * @param {Node[]} a - The list of current/live children.
+ * @param {Node[]} b - The list of future children.
+ * @param {(entry: Node, action: number) => Node} get - Get node.
+ * The callback invoked per each entry related DOM operation.
+ * @param {Node} [before] - The optional node used as anchor to insert before.
+ * @return {Node[]} The same list of future children.
+ */
+export function udomdiff(parentNode, a, b, get, before) {
+  const bLength = b.length;
+  let aEnd = a.length;
+  let bEnd = bLength;
+  let aStart = 0;
+  let bStart = 0;
+  let map = null;
   while (aStart < aEnd || bStart < bEnd) {
-    // append
+    // append head, tail, or nodes in between: fast path
     if (aEnd === aStart) {
-      const node =
-        bEnd < bLength
-          ? bStart
-            ? b[bStart - 1].nextSibling
-            : b[bEnd - bStart]
-          : before;
-
-      while (bStart < bEnd) parentNode.insertBefore(b[bStart++], node);
-    // remove
-    } else if (bEnd === bStart) {
+      // we could be in a situation where the rest of nodes that
+      // need to be added are not at the end, and in such case
+      // the node to `insertBefore`, if the index is more than 0
+      // must be retrieved, otherwise it's gonna be the first item.
+      const node = bEnd < bLength ?
+        (bStart ?
+          (get(b[bStart - 1], -0).nextSibling) :
+          get(b[bEnd - bStart], 0)) :
+        before;
+      while (bStart < bEnd)
+        parentNode.insertBefore(get(b[bStart++], 1), node);
+    }
+    // remove head or tail: fast path
+    else if (bEnd === bStart) {
       while (aStart < aEnd) {
-        if (!map || !map.has(a[aStart])) parentNode.removeChild(a[aStart]);
+        // remove the node only if it's unknown or not live
+        if (!map || !map.has(a[aStart]))
+          parentNode.removeChild(get(a[aStart], -1));
         aStart++;
       }
-    // common prefix
-    } else if (a[aStart] === b[bStart]) {
+    }
+    // same node: fast path
+    else if (a[aStart] === b[bStart]) {
       aStart++;
       bStart++;
-    // common suffix
-    } else if (a[aEnd - 1] === b[bEnd - 1]) {
+    }
+    // same tail: fast path
+    else if (a[aEnd - 1] === b[bEnd - 1]) {
       aEnd--;
       bEnd--;
-    // swap forward
-    } else if (aEnd - aStart === 1 && bEnd - bStart === 1) {
+    }
+    // single last swap: fast path
+    else if ((aEnd - aStart) === 1 && (bEnd - bStart) === 1) {
+      // we could be in a situation where the node was either unknown,
+      // be at the end of the future nodes list, or be in the middle
       if (map && map.has(a[aStart])) {
-        parentNode.insertBefore(b[bStart], bEnd < bLength ? b[bEnd] : before);
-      } else parentNode.replaceChild(b[bStart], a[aStart]);
-      break;
-    // swap backward
-    } else if (a[aStart] === b[bEnd - 1] && b[bStart] === a[aEnd - 1]) {
-      const node = a[--aEnd].nextSibling;
-      parentNode.insertBefore(b[bStart++], a[aStart++].nextSibling);
-      parentNode.insertBefore(b[--bEnd], node);
-
-      a[aEnd] = b[bEnd];
-    // fallback to map
-    } else {
-      if (!map) {
-        map = new Map();
-        let i = bStart;
-
-        while (i < bEnd) map.set(b[i], i++);
+        // in the end or middle case, find out where to insert it
+        parentNode.insertBefore(
+          get(b[bStart], 1),
+          get(bEnd < bLength ? b[bEnd] : before, 0)
+        );
       }
-
+      // if the node is unknown, just replace it with the new one
+      else
+        parentNode.replaceChild(get(b[bStart], 1), get(a[aStart], -1));
+      // break the loop, as this was the very last operation to perform
+      break;
+    }
+    // reverse swap: also fast path
+    else if (
+      a[aStart] === b[bEnd - 1] &&
+      b[bStart] === a[aEnd - 1]
+    ) {
+      // this is a "shrink" operation that could happen in these cases:
+      // [1, 2, 3, 4, 5]
+      // [1, 4, 3, 2, 5]
+      // or asymmetric too
+      // [1, 2, 3, 4, 5]
+      // [1, 2, 3, 5, 6, 4]
+      const node = get(a[--aEnd], -1).nextSibling;
+      parentNode.insertBefore(
+        get(b[bStart++], 1),
+        get(a[aStart++], -1).nextSibling
+      );
+      parentNode.insertBefore(get(b[--bEnd], 1), node);
+      // mark the future index as identical (yeah, it's dirty, but cheap 👍)
+      // The main reason to do this, is that when a[aEnd] will be reached,
+      // the loop will likely be on the fast path, as identical to b[bEnd].
+      // In the best case scenario, the next loop will skip the tail,
+      // but in the worst one, this node will be considered as already
+      // processed, bailing out pretty quickly from the map index check
+      a[aEnd] = b[bEnd];
+    }
+    // map based fallback, "slow" path
+    else {
+      // the map requires an O(bEnd - bStart) operation once
+      // to store all future nodes indexes for later purposes.
+      // In the worst case scenario, this is a full O(N) cost,
+      // and such scenario happens at least when all nodes are different,
+      // but also if both first and last items of the lists are different
+      if (!map) {
+        map = new Map;
+        let i = bStart;
+        while (i < bEnd)
+          map.set(b[i], i++);
+      }
+      // if it's a future node, hence it needs some handling
       if (map.has(a[aStart])) {
+        // grab the index of such node, 'cause it might have been processed
         const index = map.get(a[aStart]);
-
+        // if it's not already processed, look on demand for the next LCS
         if (bStart < index && index < bEnd) {
-          let i = aStart,
-            sequence = 1;
-
+          let i = aStart;
+          // counts the amount of nodes that are the same in the future
+          let sequence = 1;
           while (++i < aEnd && i < bEnd) {
-            if (!map.has(a[i]) || map.get(a[i]) !== index + sequence) break;
+            if (!map.has(a[i]) || map.get(a[i]) !== (index + sequence))
+              break;
             sequence++;
           }
-
-          if (sequence > index - bStart) {
-            const node = a[aStart];
-            while (bStart < index) parentNode.insertBefore(b[bStart++], node);
-          } else parentNode.replaceChild(b[bStart++], a[aStart++]);
-        } else aStart++;
-      } else parentNode.removeChild(a[aStart++]);
+          // effort decision here: if the sequence is longer than replaces
+          // needed to reach such sequence, which would brings again this loop
+          // to the fast path, prepend the difference before a sequence,
+          // and move only the future list index forward, so that aStart
+          // and bStart will be aligned again, hence on the fast path.
+          // An example considering aStart and bStart are both 0:
+          // a: [1, 2, 3, 4]
+          // b: [7, 1, 2, 3, 6]
+          // this would place 7 before 1 and, from that time on, 1, 2, and 3
+          // will be processed at zero cost
+          if (sequence > (index - bStart)) {
+            const node = get(a[aStart], 0);
+            while (bStart < index)
+              parentNode.insertBefore(get(b[bStart++], 1), node);
+          }
+          // if the effort wasn't good enough, fallback to a replace,
+          // moving both source and target indexes forward, hoping that some
+          // similar node will be found later on, to go back to the fast path
+          else {
+            parentNode.replaceChild(
+              get(b[bStart++], 1),
+              get(a[aStart++], -1)
+            );
+          }
+        }
+        // otherwise move the source forward, 'cause there's nothing to do
+        else
+          aStart++;
+      }
+      // this node has no meaning in the future list, so it's more than safe
+      // to remove it, and check the next live node out instead, meaning
+      // that only the live list index should be forwarded
+      else
+        parentNode.removeChild(get(a[aStart++], -1));
     }
   }
-
   return b;
 }
