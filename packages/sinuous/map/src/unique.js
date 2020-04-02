@@ -5,7 +5,7 @@ const cache = new Map();
  *
  * This helper function ensures the items are unique in case of duplicates.
  * It replaces the duplicate with a plain object with a $v (value) pointer
- * which is gets retrieved in `sinuous/map`.
+ * which gets retrieved in `sinuous/map`.
  *
  * @param  {Array} arr
  * @return {Array}
