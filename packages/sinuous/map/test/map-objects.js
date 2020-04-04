@@ -43,14 +43,14 @@ test('Object reference - update', t => {
 });
 
 test('Object reference - update 2', t => {
-  list([one, three, two, four]);
-  t.equal(div.innerHTML, divs('1,3,2,4'));
+  list([one, one, three, two, one, three, four, three, three, four]);
+  t.equal(div.innerHTML, divs('1,1,3,2,1,3,4,3,3,4'));
   t.end();
 });
 
 test('Object reference - update 3', t => {
-  list([five, three, four]);
-  t.equal(div.innerHTML, divs('5,3,4'));
+  list([five, five, three, three, four]);
+  t.equal(div.innerHTML, divs('5,5,3,3,4'));
   t.end();
 });
 

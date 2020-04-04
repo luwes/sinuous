@@ -5407,11 +5407,6 @@ simple-concat@^1.0.0:
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
   integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
 
-sinuous@0.26.2, sinuous@^0.26.0:
-  version "0.26.2"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.26.2.tgz#91a5719db251aab5780321cc076e9fffb6b00f97"
-  integrity sha512-hvBv9ouy6gxa04nZZT9YUt/d+iBEmAm2i5clovlmwMw3V9zo7/1AGiJst+0J8Whb1e4hAnjshaFhdoGLJ5Pn0Q==
-
 size-plugin-core@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/size-plugin-core/-/size-plugin-core-0.0.7.tgz#f63875902d6ae694d3989b7385286934a78020cd"
@@ -6173,20 +6168,10 @@ typical@^4.0.0:
   resolved "https://registry.yarnpkg.com/typical/-/typical-4.0.0.tgz#cbeaff3b9d7ae1e2bbfaf5a4e6f11eccfde94fc4"
   integrity sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw==
 
-uarray@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/uarray/-/uarray-1.0.0.tgz#e89bf0ea2129596f4bf653b66e53246ed6562b6c"
-  integrity sha512-LHmiAd5QuAv7pU2vbh+Zq9YOnqVK0H764p2Ozinpfy9ka58OID4IsGLiXsitqH7n0NAIDxvax1A/kDXpii/Ckg==
-
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
-
-udomdiff@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/udomdiff/-/udomdiff-1.0.9.tgz#5a681e7963198e95b11f919594417934e031a538"
-  integrity sha512-FzFYZsZ5TyyWcS0Xxw4/vYmhiLFLLBpMWb3X4pV14KHg2RkC5zTNw/OhBjJRkStFMUlNLj7/tkXfoUc1cxgB4Q==
 
 uglify-js@^3.1.4:
   version "3.8.0"
@@ -6338,13 +6323,6 @@ uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
-
-uwire@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/uwire/-/uwire-1.0.1.tgz#e1723aafd3cfc7bb039f6446d549095b72615b0e"
-  integrity sha512-LOFKTfjqUu+DXbOAxj2Jruy6KY2bDx+HT6JrTOHQFD3a7rPew0ZTkzxef2/1hRBn+YM5wRdwDMAqwqpxoEVWtg==
-  dependencies:
-    uarray "^1.0.0"
 
 v8-compile-cache@^2.0.3:
   version "2.1.0"
