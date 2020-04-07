@@ -6977,10 +6977,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
 
-sinuous@0.27.0-beta.2:
-  version "0.27.0-beta.2"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.27.0-beta.2.tgz#d13dd0890786b8ce1dbc9cf9113784807034ecb7"
-  integrity sha512-hmjsR4TPVjLQfXhCWhhyJK4QiKd+GFjG457MwKG3wjaG1Eg/sdcMoccfgcYSdGeDqA2iTA2cqloMiRKywnHt0w==
+sinuous@0.27.0-beta.3:
+  version "0.27.0-beta.3"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.27.0-beta.3.tgz#36b73808dfdbf3fa82ffbb0aa13b20f242c0d173"
+  integrity sha512-kw5Co2ktO663WmEvu9+jWYaykRHZC9bHoikPt8puDPiBrJrTOhPeq/SbGwM8sf4loZ/UYF9rAtzis/Qfigb0CA==
   dependencies:
     udomdiff "^1.0.9"
     uwire "^1.0.1"
