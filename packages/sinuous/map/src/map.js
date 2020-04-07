@@ -19,18 +19,25 @@ export function map(items, expr, cleaning) {
   // Disable cleaning for templates by default.
   if (cleaning == null) cleaning = !expr.$t;
 
-  let parent = api.h([]);
+  const parent = api.h([]);
   const endMark = api.add(parent, '');
 
   const disposers = new Map();
   const nodes = new Map();
+  const toRemove = new Set();
 
   const unsubscribe = subscribe(a => {
     const b = items();
     return sample(() => {
-      return Array.from(
+      toRemove.clear();
+
+      // Array.from to make a copy of the current list.
+      const content = Array.from(
         udomdiff(endMark.parentNode, a || [], b, node, endMark)
       );
+
+      toRemove.forEach(dispose);
+      return content;
     });
   });
 
@@ -39,20 +46,24 @@ export function map(items, expr, cleaning) {
 
   function node(item, i) {
     let n = nodes.get(item);
-    if (i === 1 && !n) {
-      n = cleaning
-        ? root(dispose => {
-            disposers.set(item, dispose);
-            return expr(item.$v || item);
-          })
-        : expr(item.$v || item);
+    if (i === 1) {
+      toRemove.delete(item);
 
-      if (typeof n === 'string') n = document.createTextNode(n);
-      else if (n.nodeType === 11) n = persistent(n) || n;
+      if (!n) {
+        n = cleaning
+          ? root(dispose => {
+              disposers.set(item, dispose);
+              return expr(item.$v || item);
+            })
+          : expr(item.$v || item);
 
-      nodes.set(item, n);
+        if (typeof n === 'string') n = document.createTextNode(n);
+        else if (n.nodeType === 11) n = persistent(n) || n;
+
+        nodes.set(item, n);
+      }
     } else if (i === -1) {
-      dispose(item);
+      toRemove.add(item);
     }
 
     return diffable(n, i);
@@ -62,6 +73,7 @@ export function map(items, expr, cleaning) {
     disposers.forEach(d => d());
     disposers.clear();
     nodes.clear();
+    toRemove.clear();
   }
 
   function dispose(item) {
@@ -70,6 +82,7 @@ export function map(items, expr, cleaning) {
       disposer();
       disposers.delete(item);
     }
+    nodes.delete(item);
   }
 
   return parent;
