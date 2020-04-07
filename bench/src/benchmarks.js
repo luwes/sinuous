@@ -33,6 +33,8 @@ async function benchRun(page, lib) {
   };
 
   async function run() {
+    await page.waitForSelector('#add');
+
     const result = await metrics(page, options, async () => {
       await page.click('#add');
       await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
@@ -49,6 +51,8 @@ async function benchReplaceAll(page, lib) {
     id: '02_replace1k',
     label: 'replace all rows'
   };
+
+  await page.waitForSelector('#run');
 
   for (let i = 0; i < WARMUP_COUNT; i++) {
     await page.click('#run');
@@ -78,6 +82,7 @@ async function benchUpdate(page, lib) {
     throttleCPU: 16
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
   for (let i = 0; i < 3; i++) {
@@ -112,6 +117,7 @@ async function benchSelect(page, lib) {
     throttleCPU: 16
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1]/td[2]/a');
   for (let i = 0; i < WARMUP_COUNT; i++) {
@@ -137,6 +143,7 @@ async function benchSwapRows(page, lib) {
     throttleCPU: 4
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1]/td[2]/a');
   for (let i = 0; i < WARMUP_COUNT; i++) {
@@ -164,6 +171,7 @@ async function benchRemove(page, lib) {
     label: 'remove row'
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath("//tbody/tr[1]/td[2]/a");
   for (let i = 0; i < WARMUP_COUNT; i++) {
@@ -193,6 +201,8 @@ async function benchRunBig(page, lib) {
   };
 
   async function run() {
+    await page.waitForSelector('#runlots');
+
     const result = await metrics(page, options, async () => {
       await page.click('#runlots');
       await page.waitForXPath('//tbody/tr[10000]/td[2]/a');
@@ -211,6 +221,7 @@ async function benchAppendToManyRows(page, lib) {
     throttleCPU: 2
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
 
@@ -233,6 +244,7 @@ async function benchClear(page, lib) {
     throttleCPU: 8
   };
 
+  await page.waitForSelector('#run');
   await page.click('#run');
   await page.waitForXPath('//tbody/tr[1000]/td[2]/a');
 

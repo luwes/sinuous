@@ -1,5 +1,5 @@
 {
-  "name": "sinuous-lib",
+  "name": "sinuous-15",
   "private": true,
   "version": "0.0.1",
   "scripts": {
@@ -16,6 +16,6 @@
     "rollup-plugin-terser": "5.3.0"
   },
   "dependencies": {
-    "sinuous": "0.27.0-beta.3"
+    "sinuous": "0.15.1"
   }
 }

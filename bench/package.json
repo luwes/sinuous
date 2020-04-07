@@ -14,19 +14,19 @@
     ]
   },
   "dependencies": {
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^9.0.0",
     "gzip-size": "^5.1.1",
-    "http-server": "^0.11.1",
-    "jstat": "^1.9.0",
+    "http-server": "^0.12.1",
+    "jstat": "^1.9.2",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
-    "minimist": "^1.2.0",
-    "plotly.js-dist": "^1.49.0",
-    "puppeteer": "^1.19.0",
-    "ramda": "^0.26.1",
-    "semver": "^6.3.0"
+    "minimist": "^1.2.5",
+    "plotly.js-dist": "^1.53.0",
+    "puppeteer": "1.20.0",
+    "ramda": "^0.27.0",
+    "semver": "^7.2.1"
   },
   "devDependencies": {
-    "lerna": "^3.16.4"
+    "lerna": "^3.20.2"
   }
 }
