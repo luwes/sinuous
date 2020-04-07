@@ -1,4 +1,4 @@
-import { observable, html } from 'sinuous';
+import { observable, h } from 'sinuous';
 import { template, t, o } from 'sinuous/template';
 import { map } from 'sinuous/map';
 
