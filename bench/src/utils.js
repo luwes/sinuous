@@ -33,17 +33,20 @@ async function metrics(page, bench, testFunction) {
 
     await page.evaluate(() => console.timeStamp('initBenchmark'));
 
+    let client;
     if (bench.throttleCPU) {
-      await page._client.send('Emulation.setCPUThrottlingRate', {
+      client = await page.target().createCDPSession();
+      await client.send('Emulation.setCPUThrottlingRate', {
         rate: bench.throttleCPU
       });
     }
+
     await page.evaluate(() => console.timeStamp('runBenchmark'));
 
     await testFunction.apply(null, arguments);
 
     if (bench.throttleCPU) {
-      await page._client.send('Emulation.setCPUThrottlingRate', {
+      await client.send('Emulation.setCPUThrottlingRate', {
         rate: 1
       });
     }
