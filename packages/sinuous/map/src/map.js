@@ -25,7 +25,6 @@ export function map(items, expr, cleaning) {
     const b = items();
     return sample(() =>
       reconcile(
-        parent,
         a || [],
         b || [],
         beforeNode,
@@ -75,7 +74,6 @@ export function map(items, expr, cleaning) {
 // https://github.com/Freak613/stage0/blob/master/reconcile.js
 // This implementation is tailored for fine grained change detection and adds support for fragments
 export function reconcile(
-  parent,
   a,
   b,
   beforeNode,
@@ -85,17 +83,24 @@ export function reconcile(
   onRemove
 ) {
   // When parent was a DocumentFragment, then items got appended to the DOM.
-  parent = afterNode.parentNode;
+  const parent = afterNode.parentNode;
 
   let length = b.length;
   let i;
 
   // Fast path for clear
   if (length === 0) {
-    if (beforeNode.previousSibling || afterNode.nextSibling) {
+    let startMark = beforeNode.previousSibling;
+    if (
+      (startMark && startMark.previousSibling)
+      || afterNode.nextSibling
+    ) {
       removeNodes(parent, beforeNode.nextSibling, afterNode);
     } else {
       parent.textContent = '';
+      if (startMark) {
+        parent.appendChild(startMark);
+      }
       parent.appendChild(beforeNode);
       parent.appendChild(afterNode);
     }
@@ -186,8 +191,7 @@ export function reconcile(
   // Fast path for full replace
   if (length === 0) {
     return reconcile(
-      parent,
-      reconcile(parent, a, [], beforeNode, afterNode, createFn, onClear),
+      reconcile(a, [], beforeNode, afterNode, createFn, onClear),
       b,
       beforeNode,
       afterNode,
