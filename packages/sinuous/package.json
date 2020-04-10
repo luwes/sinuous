@@ -33,9 +33,6 @@
     "render/package.json",
     "render/src"
   ],
-  "peerDependencies": {
-    "sinuous": ">=0.6.0"
-  },
   "keywords": [
     "functional",
     "reactive",
