@@ -1,4 +1,4 @@
-import udomdiff from 'udomdiff';
+import { udomdiff } from './udomdiff.js';
 import { diffable, persistent } from './uwire.js';
 import { api } from 'sinuous';
 
