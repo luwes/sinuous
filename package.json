@@ -37,6 +37,9 @@
     "url": "https://github.com/luwes/sinuous/issues"
   },
   "homepage": "https://github.com/luwes/sinuous#readme",
+  "dependencies": {
+    "sinuous": "file:packages/sinuous"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
