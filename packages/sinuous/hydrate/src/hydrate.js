@@ -84,12 +84,36 @@ export function hydrate(delta, root) {
     delta = delta.type.apply(null, [delta._props].concat(delta._children));
   }
 
+  let isFragment = delta.type === undefined;
+  let isRootFragment;
+  let el;
+
   if (!root) {
     root = document.querySelector(findRootSelector(delta));
   }
 
-  const isFragment = delta.type === undefined;
-  let el;
+  function findRootSelector(delta) {
+    let selector = '';
+    let prop;
+    if (delta._props && (prop = delta._props.id)) {
+      selector = '#';
+    } else if (delta._props && (prop = delta._props.class)) {
+      selector = '.';
+    } else if ((prop = delta.type));
+    else {
+      isRootFragment = true;
+      return findRootSelector(delta._children[0]());
+    }
+
+    return (
+      selector +
+      (typeof prop === 'function' ? prop() : prop)
+        .split(' ')
+        // Escape CSS selector https://bit.ly/36h9I83
+        .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
+        .join('.')
+    );
+  }
 
   function item(arg) {
     if (arg instanceof Node) {
@@ -153,8 +177,6 @@ export function hydrate(delta, root) {
           if (result && result._children) {
             result = result.type
               ? result
-              : result._children.length > 1
-              ? result._children
               : result._children;
           }
 
@@ -168,7 +190,7 @@ export function hydrate(delta, root) {
             if (isStringable) {
               updateText(result);
             } else {
-              if (Array.isArray(result)) {
+              if (isRootFragment || Array.isArray(result)) {
                 startNode = target;
                 target = el;
               }
@@ -198,28 +220,6 @@ export function hydrate(delta, root) {
   [root, delta._props, delta._children || delta].forEach(item);
 
   return el;
-}
-
-function findRootSelector(delta) {
-  let selector = '';
-  let prop;
-  if (delta._props && (prop = delta._props.id)) {
-    selector = '#';
-  } else if (delta._props && (prop = delta._props.class)) {
-    selector = '.';
-  } else if ((prop = delta.type));
-  else {
-    return findRootSelector(delta._children[0]());
-  }
-
-  return (
-    selector +
-    (typeof prop === 'function' ? prop() : prop)
-      .split(' ')
-      // Escape CSS selector https://bit.ly/36h9I83
-      .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
-      .join('.')
-  );
 }
 
 /**

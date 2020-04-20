@@ -102,6 +102,33 @@ test('hydrate conditional root element', function(t) {
   t.end();
 });
 
+test('hydrate conditional root element w/ children bug', function(t) {
+  document.body.innerHTML = `
+    <player-x><div></div></player-x>
+  `;
+
+  const showing = observable(true);
+
+  var player = hydrate(dhtml`
+    ${() => (player = showing() ? dhtml`
+      <player-x autoplay>
+        <div />
+      <//>
+    ` : '')}
+  `);
+
+  t.equal(player.tagName, 'PLAYER-X');
+  t.equal(player.autoplay, true);
+
+  showing(false);
+  t.equal(player, '');
+
+  showing(true);
+  t.equal(player.tagName, 'PLAYER-X');
+
+  t.end();
+});
+
 test('hydrate w/ observables bug', function(t) {
   document.body.innerHTML = `
     <div class="box level">
