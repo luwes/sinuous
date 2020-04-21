@@ -1,4 +1,4 @@
-import { udomdiff } from './udomdiff.js';
+import { diff } from './diff.js';
 import { diffable, persistent } from './uwire.js';
 import { api } from 'sinuous';
 
@@ -33,7 +33,7 @@ export function map(items, expr, cleaning) {
 
       // Array.from to make a copy of the current list.
       const content = Array.from(
-        udomdiff(endMark.parentNode, a || [], b, node, endMark)
+        diff(endMark.parentNode, a || [], b, node, endMark)
       );
 
       toRemove.forEach(dispose);
@@ -45,6 +45,8 @@ export function map(items, expr, cleaning) {
   cleanup(disposeAll);
 
   function node(item, i) {
+    if (item == null) return;
+
     let n = nodes.get(item);
     if (i === 1) {
       toRemove.delete(item);
@@ -57,8 +59,7 @@ export function map(items, expr, cleaning) {
             })
           : expr(item.$v || item);
 
-        if (typeof n === 'string') n = document.createTextNode(n);
-        else if (n.nodeType === 11) n = persistent(n) || n;
+        if (n.nodeType === 11) n = persistent(n) || n;
 
         nodes.set(item, n);
       }
