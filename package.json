@@ -19,7 +19,7 @@
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup.js --silent",
     "watch": "rollup -wc scripts/rollup.js --silent",
-    "serve": "(cd site && hugo serve --ignoreCache)",
+    "serve": "(cd site && yarn dev)",
     "start": "run-p watch serve",
     "http": "http-server -c-1 -p 8000 . ",
     "docs": "node scripts/docs.js && yarn format:docs",
