@@ -1,0 +1,15 @@
+<aside class="menu">
+  {% set navPages = collections.all | eleventyNavigation %}
+  {%- for parent in navPages -%}
+    <p class="menu-label">
+      {{ parent.key }}
+    </p>
+    <ul class="menu-list">
+      {%- for child in parent.children -%}
+        <li>
+          <a class="{% if child.url == page.url %}is-active{% endif %}" href="{{ child.url }}">{{ child.key }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endfor -%}
+</aside>

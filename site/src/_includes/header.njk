@@ -1,0 +1,39 @@
+<nav class="flex-shrink-0 px-6 md:px-12 py-3 lg:py-0 lg:h-16 flex relative z-20 border-b-2 border-gray-200 bg-white" role="navigation" aria-label="main navigation">
+  <div class="container mx-auto flex items-center justify-between flex-wrap">
+    <div class="flex items-center flex-shrink-0 text-white mr-10">
+      <a href="/">
+        <img class="logo h-8" src="/images/sinuous-logo.svg" alt="Sinuous">
+      </a>
+    </div>
+
+    <div class="block lg:hidden">
+      <button id="burger" class="flex items-center justify-center w-10 h-8">
+        <svg class="fill-current h-3" viewBox="0 0 22 11"><path d="M0 0h22v1H0zm0 10h22v1H0z"></path></svg>
+        <svg class="fill-current h-4 hidden" viewBox="0 0 18 17"><g><path d="M1 16.218L16.627.59l.778.778L1.778 16.995z"></path><path d="M1.778.59l15.627 15.628-.778.777L1 1.368z"></path></g></svg>
+      </button>
+    </div>
+    <div id="main-menu" class="w-full flex-grow hidden lg:flex lg:items-center lg:w-auto">
+      <div class="w-1/2 lg:w-auto lg:flex-grow mt-2 py-1 lg:mt-0">
+        {%- for post in collections.main -%}
+          <a href="{{ post.url }}" class="block py-1 lg:inline-block lg:mt-0 mr-3 text-lg text-gray-700 hover:text-black hover:bg-gray-100 px-3 py-2 rounded">{{ post.data.menu }}</a>
+        {%- endfor -%}
+      </div>
+      <div id="navbar-end" class="lg:flex lg:flex-row lg:items-center mt-2 py-1 lg:mt-0">
+        <div class="block py-1 lg:inline-block lg:mt-0 text-gray-700">
+          <a href="{{ site.github }}/blob/master/CHANGELOG.md">
+            v{{ sinuous.version }}
+          </a>
+        </div>
+        <div class="block py-1 lg:flex lg:mt-0 lg:ml-8 flex-row">
+          <a class="login-btn bg-black text-white inline-block px-2 py-2 rounded mt-1 lg:mt-0 lg:mr-1 flex items-center leading-none" href="{{ site.github }}">
+            <svg class="icon icon-github w-4 h-4 fill-current"><use xlink:href="/images/symbol-defs.svg#icon-github"></use></svg>
+            <div class="ml-2">GitHub</div>
+          </a>
+          <a class="border border-gray-400 text-gray-500 inline-block px-2 py-2 rounded mt-1 lg:mt-0 leading-none text-sm" href="{{ site.github }}">
+            {{ github.stargazers }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

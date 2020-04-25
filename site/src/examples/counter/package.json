@@ -1,0 +1,8 @@
+{
+  "name": "sinuous-counter",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "sinuous": "0.27.0-beta.4"
+  }
+}

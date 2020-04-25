@@ -1,0 +1,21 @@
+{% extends "layouts/root.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="/css/styles.css">
+{% endblock %}
+
+{% block main %}
+  {% include "header.njk" %}
+
+  {% block content %}
+    <main class="flex-grow">
+      {{ content | safe }}
+    </main>
+  {% endblock %}
+
+  {% include "footer.njk" %}
+{% endblock %}
+
+{% block foot %}
+  <script src="/js/site.min.js"></script>
+{% endblock %}

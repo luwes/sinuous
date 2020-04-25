@@ -1,0 +1,14 @@
+---
+title: "FAQ"
+menu: FAQ
+permalink: faq/
+tags: main
+layout: layouts/docs.njk
+---
+
+{%- for post in collections.faq | reverse -%}
+  <article class="markdown mt-2 mb-8">
+    <h2>{{ post.data.title }}</h2>
+    {{ post.templateContent | safe }}
+  </article>
+{%- endfor -%}

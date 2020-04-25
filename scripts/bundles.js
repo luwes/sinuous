@@ -160,26 +160,9 @@ export const fixtures = [
   // },
   {
     formats: [IIFE],
-    global: 'sinuousSite',
-    name: 'site',
-    input: 'site/assets/src/site.js',
-    dest: () => 'site/assets/js',
-    sourcemap: true,
-    babel: {
-      plugins: [
-        ['sinuous/babel-plugin-htm', {
-          pragma: 'd',
-          tag: 'dhtml',
-          import: 'sinuous/hydrate'
-        }]
-      ]
-    }
-  },
-  {
-    formats: [IIFE],
     global: 'sinuousHello',
     name: 'hello',
-    input: 'site/content/examples/hello/src/hello.js',
+    input: 'site/src/examples/hello/src/hello.js',
     gzip: true,
     babel: {
       plugins: [
@@ -193,7 +176,7 @@ export const fixtures = [
     formats: [IIFE],
     global: 'sinuousHelloJsx',
     name: 'hello',
-    input: 'site/content/examples/hello-jsx/src/hello.js',
+    input: 'site/src/examples/hello-jsx/src/hello.js',
     gzip: true,
     babel: {
       plugins: [
@@ -208,7 +191,7 @@ export const fixtures = [
     formats: [IIFE],
     global: 'sinuousCounter',
     name: 'counter',
-    input: 'site/content/examples/counter/src/counter.js',
+    input: 'site/src/examples/counter/src/counter.js',
     gzip: true,
     babel: {
       plugins: [
@@ -222,7 +205,7 @@ export const fixtures = [
     formats: [IIFE],
     global: 'sinuousTodos',
     name: 'todos',
-    input: 'site/content/examples/todos/src/todos.js',
+    input: 'site/src/examples/todos/src/todos.js',
     gzip: true,
     babel: {
       plugins: [
@@ -236,7 +219,7 @@ export const fixtures = [
     formats: [IIFE],
     global: 'sinuousClock',
     name: 'clock',
-    input: 'site/content/examples/clock/src/clock.js',
+    input: 'site/src/examples/clock/src/clock.js',
     gzip: true,
     babel: {
       plugins: [

@@ -1,8 +1,16 @@
-.DS_Store
-node_modules
+# dependencies installed by npm
+node_modules/
+
+# build artefacts
+public/
+src/_includes/css/
+.cache/
+
+# secrets and errors
+.env
 yarn-error.log
 
-public
-dist
-
-resources/
+# macOS related files
+.DS_Store
+.AppleDouble
+.LSOverride

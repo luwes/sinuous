@@ -1,0 +1,38 @@
+{% extends "layouts/base.njk" %}
+
+{% set srcFile = source[0] | replaceRE('src/(.*).js', 'dist/$1.min.js') %}
+
+{% block content %}
+  <main class="flex-grow px-6">
+
+    <article class="markdown max-w-screen-sm mx-auto py-20">
+
+      <h1 class="text-3xl mb-10 text-center text-gray-900">
+        <span>{{ title }}</span>
+        <span class="text-xs rounded align-middle  ml-2 inline-flex">
+          <span class="rounded-l inline-block text-white bg-gray-700 px-2 py-1">gzip</span>
+          <span class="rounded-r inline-block text-white bg-green-500 px-2 py-1">{{ ('src/' + srcFile) | gzipSize }}</span>
+        </span>
+      </h1>
+
+      {{ content | safe }}
+
+      <div class="mt-10 mb-20 text-center text-2xl">
+        <div class="{{ class }}"></div>
+        <script src="../../{{ srcFile }}"></script>
+      </div>
+
+      <div class="">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl">Source code</h2>
+          <a class="inline-block text-blue-600 text-sm bg-gray-200 px-2 py-1 rounded hover:text-blue-700 hover:bg-gray-400" href="{{ site.githubSite }}/tree/master/content/{{ source[0] }}">{{ source[0] }}</a>
+        </div>
+        {%- highlight "js" -%}
+          {{- ('src/' + source[0]) | inline | safe -}}
+        {%- endhighlight -%}
+      </div>
+
+    </article>
+
+  </main>
+{% endblock %}

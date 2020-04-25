@@ -1,8 +1,0 @@
-{{$file := .Get "file"}}
-{{- if eq (.Get "code") "true" -}}
-{{- $file  | readFile -}}
-{{- else if eq (.Get "markdown") "true" -}}
-{{- $file  | readFile | markdownify -}}
-{{- else -}}
-{{ $file  | readFile | safeHTML }}
-{{- end -}}

@@ -1,0 +1,26 @@
+env:
+  browser: true
+  es6: true
+  node: true
+
+extends:
+  - eslint:recommended
+  - plugin:import/warnings
+
+parser: babel-eslint
+
+parserOptions:
+  ecmaVersion: 2019
+  sourceType: module
+
+globals:
+  html: readonly
+  svg: readonly
+  tree: readonly
+
+rules:
+  semi: error
+  no-console: off
+  no-unused-vars:
+    - error
+    - varsIgnorePattern: ^hs?y?$

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body class="flex flex-col min-h-screen{% if bodyClass %} {{ bodyClass }}{% endif %}">
+    {% block main %}
+    {% endblock %}
+
+    {% block foot %}
+    {% endblock %}
+  </body>
+</html>
