@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.0 - 2020-04-25
+
+### Added
+
+- Add lighter but equaly fast `map`. [#102](https://github.com/luwes/sinuous/issues/102)
+  Minimal Todo app is just 2.2kB instead of 2.62kB 🏌️‍♂️
+
 ## 0.26.2 - 2020-03-29
 
 ### Fixed
