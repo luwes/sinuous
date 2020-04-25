@@ -1,6 +1,6 @@
 import test from 'tape';
 import * as api from 'sinuous/observable';
-import { o, h } from 'sinuous';
+import { o, h, html } from 'sinuous';
 import { map } from 'sinuous/map';
 
 const root = api.root;
@@ -17,7 +17,7 @@ const Component = () =>
     dispose = d;
     div = h(
       'div',
-      map(list, item => item)
+      map(list, item => html`${item}`)
     );
   });
 
