@@ -3,6 +3,7 @@ node_modules/
 
 # build artefacts
 public/
+dist/
 src/_includes/css/
 .cache/
 

@@ -2610,9 +2610,9 @@ camelcase@^5.0.0:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001043:
-  version "1.0.30001046"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001046.tgz#7a06d3e8fd8aa7f4d21c9a2e313f35f2d06b013e"
-  integrity sha512-CsGjBRYWG6FvgbyGy+hBbaezpwiqIOLkxQPY4A4Ea49g1eNsnQuESB+n4QM0BKii1j80MyJ26Ir5ywTQkbRE4g==
+  version "1.0.30001048"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001048.tgz#4bb4f1bc2eb304e5e1154da80b93dee3f1cf447e"
+  integrity sha512-g1iSHKVxornw0K8LG9LLdf+Fxnv7T1Z+mMsf0/YYLclQX4Cd522Ap0Lrw6NFqHgezit78dtyWxzlV2Xfc7vgRg==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4756,9 +4756,9 @@ is-plain-object@^3.0.0:
     isobject "^4.0.0"
 
 is-promise@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"
-  integrity sha1-eaKp7OfwlugPNtKy87wWwf9L8/o=
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.2.2.tgz#39ab959ccbf9a774cf079f7b40c7a26f763135f1"
+  integrity sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==
 
 is-reference@^1.1.2:
   version "1.1.4"
@@ -7142,13 +7142,10 @@ sinuous@0.26.2:
   resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.26.2.tgz#91a5719db251aab5780321cc076e9fffb6b00f97"
   integrity sha512-hvBv9ouy6gxa04nZZT9YUt/d+iBEmAm2i5clovlmwMw3V9zo7/1AGiJst+0J8Whb1e4hAnjshaFhdoGLJ5Pn0Q==
 
-sinuous@0.27.0-beta.3:
-  version "0.27.0-beta.3"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.27.0-beta.3.tgz#36b73808dfdbf3fa82ffbb0aa13b20f242c0d173"
-  integrity sha512-kw5Co2ktO663WmEvu9+jWYaykRHZC9bHoikPt8puDPiBrJrTOhPeq/SbGwM8sf4loZ/UYF9rAtzis/Qfigb0CA==
-  dependencies:
-    udomdiff "^1.0.9"
-    uwire "^1.0.1"
+sinuous@0.27.0-beta.5:
+  version "0.27.0-beta.5"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.27.0-beta.5.tgz#3ab5ffc893f18119e4ca4520fef2ec35d2ef404c"
+  integrity sha512-vcRpMLOUw68ZS5gMYdqQsjy/UFn9ZwyRk6gRrd8mDpm9WfSJbAodr5zu5qymYeKryIzrjw8n/EMmEMT/gcLdog==
 
 sinuous@^0.23.0:
   version "0.23.3"
@@ -7864,16 +7861,6 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-uarray@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/uarray/-/uarray-1.0.0.tgz#e89bf0ea2129596f4bf653b66e53246ed6562b6c"
-  integrity sha512-LHmiAd5QuAv7pU2vbh+Zq9YOnqVK0H764p2Ozinpfy9ka58OID4IsGLiXsitqH7n0NAIDxvax1A/kDXpii/Ckg==
-
-udomdiff@^1.0.9:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/udomdiff/-/udomdiff-1.1.0.tgz#1d0c4741b93a2ffd10728ca4cea15b277cc3082f"
-  integrity sha512-aqjTs5x/wsShZBkVagdafJkP8S3UMGhkHKszsu1cszjjZ7iOp86+Qb3QOFYh01oWjPMy5ZTuxD6hw5uTKxd+VA==
-
 uglify-js@^3.1.4:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.9.1.tgz#a56a71c8caa2d36b5556cc1fd57df01ae3491539"
@@ -8052,13 +8039,6 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
-
-uwire@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/uwire/-/uwire-1.0.1.tgz#e1723aafd3cfc7bb039f6446d549095b72615b0e"
-  integrity sha512-LOFKTfjqUu+DXbOAxj2Jruy6KY2bDx+HT6JrTOHQFD3a7rPew0ZTkzxef2/1hRBn+YM5wRdwDMAqwqpxoEVWtg==
-  dependencies:
-    uarray "^1.0.0"
 
 v8-compile-cache@2.0.3:
   version "2.0.3"
