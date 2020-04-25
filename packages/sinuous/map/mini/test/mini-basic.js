@@ -1,6 +1,6 @@
 import test from 'tape';
 import * as api from 'sinuous/observable';
-import { o, h } from 'sinuous';
+import { o, h, html } from 'sinuous';
 import { map } from 'sinuous/map/mini';
 
 const root = api.root;
@@ -13,7 +13,7 @@ div.appendChild(document.createElement('b'));
 let dispose;
 root(d => {
   dispose = d;
-  div.appendChild(map(list, item => item));
+  div.appendChild(map(list, item => html`${item}`));
 });
 
 test('Basic map - create', t => {

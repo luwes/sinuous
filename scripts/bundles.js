@@ -91,7 +91,7 @@ export const bundles = [
   },
   {
     // order is important, every even pkg name is replaced w/ next uneven file in ESM
-    external: ['sinuous', './sinuous.js', 'sinuous/map/mini', './map/mini.js'],
+    external: ['sinuous', './sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'map',
     name: 'map',
@@ -163,7 +163,6 @@ export const fixtures = [
     global: 'sinuousHello',
     name: 'hello',
     input: 'site/src/examples/hello/src/hello.js',
-    gzip: true,
     babel: {
       plugins: [
         ['sinuous/babel-plugin-htm', {
@@ -177,7 +176,6 @@ export const fixtures = [
     global: 'sinuousHelloJsx',
     name: 'hello',
     input: 'site/src/examples/hello-jsx/src/hello.js',
-    gzip: true,
     babel: {
       plugins: [
         ['babel-plugin-transform-jsx-to-htm'],
@@ -192,7 +190,6 @@ export const fixtures = [
     global: 'sinuousCounter',
     name: 'counter',
     input: 'site/src/examples/counter/src/counter.js',
-    gzip: true,
     babel: {
       plugins: [
         ['sinuous/babel-plugin-htm', {
@@ -206,7 +203,6 @@ export const fixtures = [
     global: 'sinuousTodos',
     name: 'todos',
     input: 'site/src/examples/todos/src/todos.js',
-    gzip: true,
     babel: {
       plugins: [
         ['sinuous/babel-plugin-htm', {
@@ -220,7 +216,6 @@ export const fixtures = [
     global: 'sinuousClock',
     name: 'clock',
     input: 'site/src/examples/clock/src/clock.js',
-    gzip: true,
     babel: {
       plugins: [
         ['sinuous/babel-plugin-htm', {
