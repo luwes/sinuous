@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.27.0-beta.4",
+  "version": "0.27.0-beta.5",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
