@@ -1,11 +1,9 @@
 [build]
-  base    = ""
   publish = "site/public"
-  command = "yarn build --all && (cd site && hugo --gc --minify --ignoreCache)"
+  command = "yarn build --all && (cd site && yarn build)"
 
 [build.environment]
   YARN_VERSION = "1.12.3"
-  HUGO_VERSION = "0.53"
 
 [[redirects]]
   from = "/*"
