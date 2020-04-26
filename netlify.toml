@@ -1,6 +1,6 @@
 [build]
   publish = "site/public"
-  command = "yarn build --all && (cd site && yarn install --frozen-lockfile && yarn build)"
+  command = "yarn build --all && (cd site && yarn build)"
 
 [build.environment]
   YARN_VERSION = "1.12.3"

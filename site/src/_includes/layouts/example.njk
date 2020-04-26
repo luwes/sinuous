@@ -11,7 +11,7 @@
         <span>{{ title }}</span>
         <span class="text-xs rounded align-middle  ml-2 inline-flex">
           <span class="rounded-l inline-block text-white bg-gray-700 px-2 py-1">gzip</span>
-          <span class="rounded-r inline-block text-white bg-green-500 px-2 py-1">{{ ('src/' + srcFile) | gzipSize }}</span>
+          <span class="rounded-r inline-block text-white bg-green-500 px-2 py-1">{{ ('public/' + srcFile) | gzipSize }}</span>
         </span>
       </h1>
 

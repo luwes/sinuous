@@ -70,7 +70,7 @@ layout: layouts/base.njk
           {% set source = post.data.source[0] | replaceRE('src/(.*).js', 'dist/$1.min.js') %}
           <div class="snippet flex">
             <div class="snippet-tag">
-              {{ ('src/' + source) | gzipSize }}
+              {{ ('public/' + source) | gzipSize }}
             </div>
             <div class="snippet-code w-2/3">
               {%- highlight "js" -%}
