@@ -64,7 +64,7 @@
 
 ---
 
-_See [complete docs](https://sinuous.dev/introduction/getting-started/), or in a nutshell..._
+_See [complete docs](https://sinuous.dev/docs/getting-started/), or in a nutshell..._
 
 ## View syntax
 
