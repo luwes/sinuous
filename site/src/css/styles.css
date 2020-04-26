@@ -12,10 +12,23 @@ body:not(.showfocus) input {
   background: #78FFB9
 }
 
-/* purgecss ignore */
+/* purgecss start ignore */
 :not(pre) > code {
   @apply text-sm text-red-600 bg-gray-100 p-1 rounded
 }
+
+#main-menu.active {
+  @apply flex
+}
+
+#burger.active svg:first-child {
+  display: none
+}
+
+#burger.active svg:last-child {
+  display: block
+}
+/* purgecss end ignore */
 
 .markdown {
   @apply leading-relaxed
@@ -133,18 +146,6 @@ a.markdown:hover {
 
 .hero-icon svg path:last-child {
   fill: rgba(120, 255, 185, 0.15)
-}
-
-#main-menu.active {
-  @apply flex
-}
-
-#burger.active svg:first-child {
-  display: none
-}
-
-#burger.active svg:last-child {
-  display: block
 }
 
 .menu-label {
