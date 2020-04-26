@@ -47,7 +47,7 @@
 ### Examples
 
 - [**Counter**](https://codesandbox.io/s/sinuous-counter-z6k71) (@ CodeSandbox)
-- [**Analog SVG Clock**](https://sinuous.netlify.com/examples/clock/) ⏰
+- [**Analog SVG Clock**](https://sinuous.dev/examples/clock/) ⏰
 - [**Classic TodoMVC**](https://luwes.github.io/sinuous-todomvc/) _([GitHub Project](https://github.com/luwes/sinuous-todomvc))_
 - [**JS Framework Benchmark**](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) (@ GitHub)
 - [**Sierpinski Triangle**](https://luwes.github.io/sinuous-sierpinski-triangle-demo/) _([GitHub Project](https://github.com/luwes/sinuous-sierpinski-triangle-demo))_
@@ -64,7 +64,7 @@
 
 ---
 
-_See [complete docs](https://sinuous.netlify.com/introduction/getting-started/), or in a nutshell..._
+_See [complete docs](https://sinuous.dev/introduction/getting-started/), or in a nutshell..._
 
 ## View syntax
 

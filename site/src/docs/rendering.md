@@ -70,7 +70,7 @@ Attributes such as `colspan` are camel cased to `colSpan`, and `for` on the
 label element is `htmlFor` to avoid collision with the language keyword.
 
 ```js
-html`<a href=https://sinuous.netlify.com></a>`;
+html`<a href=https://sinuous.dev></a>`;
 ```
 
 ### events
