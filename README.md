@@ -11,7 +11,7 @@
 
 ---
 
-- **Small.** hello world at `~1.4kB` gzip. [¹]
+- **Small.** hello world at `~1.4kB` gzip.
 - **Fast.** [top ranked](https://rawgit.com/krausest/js-framework-benchmark/master/webdriver-ts-results/table.html) of 80+ UI libs.
 - **Truly reactive.** automatically derived from the app state.
 - **DevEx.** no compile step needed, choose your [view syntax](#view-syntax).
@@ -32,7 +32,7 @@
 
 | Size                                                                                                                                | Name                                    | Description                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules [²] in one bundle for easy use with a `<script>` tag |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a `<script>` tag |
 
 **cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
@@ -223,16 +223,3 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homep
 
 [homepage]: https://saucelabs.com
 
-## Footnotes
-
-#### ¹ Smaller
-
-Sinuous [TodoMVC](https://github.com/luwes/sinuous-todomvc/) 2.9kB < Svelte [TodoMVC](https://github.com/sveltejs/svelte-todomvc) 3.5kB
-
-[¹]: #-smaller
-
-#### ² All modules
-
-Includes `sinuous`, `sinuous/observable`, `sinuous/map/mini` and `sinuous/hydrate`.
-
-[²]: #-all-modules
