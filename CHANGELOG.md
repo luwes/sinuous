@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.1 - 2020-05-04
+
+### Fixed
+
+- Fixed hydrate conditional root element for real
+- Fixed JSX observable types [#105](https://github.com/luwes/sinuous/issues/105).
+
 ## 0.27.0 - 2020-04-25
 
 ### Added
