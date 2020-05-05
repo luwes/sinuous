@@ -80,9 +80,7 @@ test('add insert into empty node feature', function(t) {
 });
 
 test('hydrate conditional root element', function(t) {
-  document.body.innerHTML = `
-    <player-x></player-x>
-  `;
+  document.body.innerHTML = `<player-x></player-x>`;
 
   const showing = observable(true);
 
@@ -95,17 +93,40 @@ test('hydrate conditional root element', function(t) {
 
   showing(false);
   t.equal(player, '');
+  t.equal(document.body.innerHTML, '');
 
   showing(true);
   t.equal(player.tagName, 'PLAYER-X');
+  t.equal(document.body.innerHTML, '<player-x></player-x>');
+
+  t.end();
+});
+
+test('hydrate conditional root element w/ explicit selector', function(t) {
+  document.body.innerHTML = `<player-x></player-x>`;
+
+  const showing = observable(true);
+
+  var player = hydrate(dhtml`
+    ${() => (player = showing() ? dhtml`<player-x autoplay />` : '')}
+  `, document.querySelector('player-x'));
+
+  t.equal(player.tagName, 'PLAYER-X');
+  t.equal(player.autoplay, true);
+
+  showing(false);
+  t.equal(player, '');
+  t.equal(document.body.innerHTML, '');
+
+  showing(true);
+  t.equal(player.tagName, 'PLAYER-X');
+  t.equal(document.body.innerHTML, '<player-x></player-x>');
 
   t.end();
 });
 
 test('hydrate conditional root element w/ children bug', function(t) {
-  document.body.innerHTML = `
-    <player-x><div></div></player-x>
-  `;
+  document.body.innerHTML = `<player-x><div></div></player-x>`;
 
   const showing = observable(true);
 
@@ -122,9 +143,11 @@ test('hydrate conditional root element w/ children bug', function(t) {
 
   showing(false);
   t.equal(player, '');
+  t.equal(document.body.innerHTML, '');
 
   showing(true);
   t.equal(player.tagName, 'PLAYER-X');
+  t.equal(document.body.innerHTML, '<player-x><div></div></player-x>');
 
   t.end();
 });

@@ -190,8 +190,12 @@ export function hydrate(delta, root) {
             if (isStringable) {
               updateText(result);
             } else {
-              if (isRootFragment || Array.isArray(result)) {
+              if (Array.isArray(result)) {
                 startNode = target;
+                target = el;
+              }
+
+              if (isRootFragment) {
                 target = el;
               }
 
@@ -199,7 +203,7 @@ export function hydrate(delta, root) {
               current = [];
             }
 
-            if (target) {
+            if (!isRootFragment && target) {
               marker = api.add(el, '', filterChildNodes(el)[el._index]);
             } else {
               marker = api.add(el.parentNode, '', el.nextSibling);

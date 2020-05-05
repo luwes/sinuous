@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add lighter but equaly fast `map`. [#102](https://github.com/luwes/sinuous/issues/102)
   Minimal Todo app is just 2.2kB instead of 2.62kB 🏌️‍♂️
+- Fix hydrate conditional root element w/ children [81cb57c](https://github.com/luwes/sinuous/commit/81cb57c00babb4cca036dc96966d792c0398fb6a)
 
 ## 0.26.2 - 2020-03-29
 
