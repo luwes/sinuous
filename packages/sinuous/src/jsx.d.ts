@@ -1,25 +1,9 @@
-type Defaultize<Props, Defaults> =
-  // Distribute over unions
-  Props extends any // Make any properties included in Default optional
-    ? Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &
-        // Include the remaining properties from Props
-        Pick<Props, Exclude<keyof Props, keyof Defaults>>
-    : never;
+import { Observable } from '../observable/src';
 
 export namespace JSXInternal {
-  type LibraryManagedAttributes<Component, Props> = Component extends {
-    defaultProps: infer Defaults;
-  }
-    ? Defaultize<Props, Defaults>
-    : Props;
+  type AllowObservable<Props> = { [K in keyof Props]: Props[K] | Observable<Props[K]> }
 
-  // interface IntrinsicAttributes {
-  // 	key?: any;
-  // }
-
-  // interface Element extends preact.VNode<any> {}
-
-  // interface ElementClass extends preact.Component<any, any> {}
+  interface Element extends HTMLElement { }
 
   interface ElementAttributesProperty {
     props: any;
@@ -29,7 +13,10 @@ export namespace JSXInternal {
     children: any;
   }
 
-  interface SVGAttributes<Target extends EventTarget = SVGElement>
+  type SVGAttributes<Target extends EventTarget = SVGElement>
+    = AllowObservable<_SVGAttributes<Target>>
+
+  interface _SVGAttributes<Target extends EventTarget = SVGElement>
     extends HTMLAttributes<Target> {
     accentHeight?: number | string;
     accumulate?: 'none' | 'sum';
@@ -583,7 +570,10 @@ export namespace JSXInternal {
     onTransitionEndCapture?: TransitionEventHandler<Target>;
   }
 
-  interface HTMLAttributes<RefType extends EventTarget = EventTarget>
+  type HTMLAttributes<RefType extends EventTarget = EventTarget>
+    = AllowObservable<_HTMLAttributes<RefType>>
+
+  interface _HTMLAttributes<RefType extends EventTarget = EventTarget>
     extends DOMAttributes<RefType> {
     // Standard HTML Attributes
     accept?: string;
