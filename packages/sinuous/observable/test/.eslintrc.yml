@@ -7,3 +7,6 @@ globals:
   should: false
   expect: false
   sinon: false
+
+rules:
+  fp/no-rest-parameters: off
