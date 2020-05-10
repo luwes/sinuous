@@ -99,10 +99,11 @@ export function hydrate(delta, root) {
       selector = '#';
     } else if (delta._props && (prop = delta._props.class)) {
       selector = '.';
-    } else if ((prop = delta.type));
-    else {
+    } else if ((prop = delta.type)){
+      // delta.type is truthy
+    } else {
       isRootFragment = true;
-      return findRootSelector(delta._children[0]());
+      return delta._children && findRootSelector(delta._children[0]());
     }
 
     return (
