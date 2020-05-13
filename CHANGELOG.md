@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.2 - 2020-05-12
+
+### Fixed
+
+- Fixed hydrate empty child bug [0d66864](https://github.com/luwes/sinuous/commit/0d66864820fe51e689b43aaabe93af2f90c89730)
+
 ## 0.27.1 - 2020-05-04
 
 ### Fixed
