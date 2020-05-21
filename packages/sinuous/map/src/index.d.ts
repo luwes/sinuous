@@ -1,16 +1,7 @@
 import { Observable } from '../../observable/src';
 
-type Item =
-  | string
-  | object;
-type Items = Item[];
-
-type ItemsCreator = (() => Items) | Observable<Items>;
-
-type NodeCreator = (item: Item, i: number, items: Items) => Node;
-
-export function map(
-  items: ItemsCreator,
-  expr: NodeCreator,
+export function map<T>(
+  items: ((...args: unknown[]) => T[]) | Observable<T[]>,
+  expr: (item: T, i: number, items: T[]) => Node,
   cleaning?: boolean
 ): DocumentFragment;
