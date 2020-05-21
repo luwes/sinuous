@@ -3,12 +3,12 @@ import { api } from './api.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
- * @param {object} options
- * @param  {boolean} isSvg
- * @return {Function} `h` tag.
+ * @param {object} apiOverloads - Written into the API object.
+ * @param {{ svgMode: boolean }} state - For inflight changes; `hs` is fixed to `{ svgMode: true }`.
+ * @return {(tag: string | Function, attrs?: object, children?: *) => Node} `h` tag.
  */
-export function context(options, isSvg) {
-  for (let i in options) api[i] = options[i];
+export function context(apiOverloads, state) {
+  for (let i in apiOverloads) api[i] = apiOverloads[i];
 
   function h() {
     const args = Array.from(arguments);
@@ -20,7 +20,7 @@ export function context(options, isSvg) {
         if (el) {
           api.add(el, arg);
         } else {
-          if (isSvg) {
+          if (state.svgMode) {
             el = document.createElementNS('http://www.w3.org/2000/svg', arg);
           } else {
             el = document.createElement(arg);
@@ -38,7 +38,7 @@ export function context(options, isSvg) {
           el = arg;
         }
       } else if (typeof arg === 'object') {
-        api.property(el, arg, null, isSvg);
+        api.property(el, arg, null, state.svgMode);
       } else if (typeof arg === 'function') {
         if (el) {
           const endMark = api.add(el, '');

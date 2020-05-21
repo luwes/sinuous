@@ -10,7 +10,7 @@ declare namespace sinuous {
   type ElementChild =
     | Node
     | Function
-    | Observable<any>
+    | Observable<unknown>
     | object
     | string
     | number
@@ -23,22 +23,24 @@ declare namespace sinuous {
     children?: ElementChildren;
   }
 
-  interface FunctionComponent<P = {}> {
-    (props: object, ...children: ElementChildren[]): any
-    (...children: ElementChildren[]): any
+  interface FunctionComponent {
+    (props: object, ...children: ElementChildren[]): Node
+    (...children: ElementChildren[]): Node
   }
 
   function observable<T>(value: T): Observable<T>;
   function o<T>(value: T): Observable<T>;
 
-  const html: (strings: TemplateStringsArray, ...values: any[]) => HTMLElement | DocumentFragment;
-  const svg: (strings: TemplateStringsArray, ...values: any[]) => SVGElement | DocumentFragment;
+  const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
+  const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
+
+  const svgJSX: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
   function h(
     type: string,
     props:
       | JSXInternal.HTMLAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): HTMLElement;
@@ -46,7 +48,7 @@ declare namespace sinuous {
     type: FunctionComponent,
     props:
       | JSXInternal.HTMLAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): HTMLElement;
@@ -61,7 +63,7 @@ declare namespace sinuous {
     type: string,
     props:
       | JSXInternal.SVGAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): SVGElement;
@@ -69,7 +71,7 @@ declare namespace sinuous {
     type: FunctionComponent,
     props:
       | JSXInternal.SVGAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): SVGElement;
@@ -92,10 +94,10 @@ declare namespace sinuous {
 
   /**
    * Creates a new hyperscript function with the passed reactive API.
-   * @param options
-   * @param isSvg
+   * @param apiOverloads Written into the API object
+   * @param state For inflight changes; `hs` is fixed to `{ svgMode: true }`
    */
-  function context(options: Options, isSvg?: boolean): typeof h | typeof hs;
+  function context(options: Options, state?: { svgMode: boolean }): typeof h | typeof hs;
 
   /**
    * Sinuous internal API.
@@ -104,7 +106,7 @@ declare namespace sinuous {
     h: typeof h;
     hs: typeof hs;
     insert<T>(el: Node, value: T, endMark?: Node, current?: T, startNode?: Node): T;
-    property(el: Node, value: any, name: string, isAttr?: boolean, isCss?: boolean): void;
+    property(el: Node, value: unknown, name: string, isAttr?: boolean, isCss?: boolean): void;
     add(parent: Node, value: Node | string, endMark?: Node): Node;
     rm(parent: Node, startNode: Node, endMark: Node): void;
   }
