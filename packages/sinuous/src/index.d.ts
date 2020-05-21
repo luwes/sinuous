@@ -2,7 +2,7 @@ export = sinuous;
 export as namespace sinuous;
 
 import { JSXInternal } from './jsx';
-import { Observable, ObservableCreator, subscribe, cleanup, root, sample } from '../observable/src';
+import { Observable, subscribe, cleanup, root, sample } from '../observable/src';
 
 declare namespace sinuous {
   export import JSX = JSXInternal;
@@ -28,8 +28,8 @@ declare namespace sinuous {
     (...children: ElementChildren[]): any
   }
 
-  const observable: ObservableCreator<any>;
-  const o: ObservableCreator<any>;
+  function observable<T>(value: T): Observable<T>;
+  function o<T>(value: T): Observable<T>;
 
   const html: (strings: TemplateStringsArray, ...values: any[]) => HTMLElement | DocumentFragment;
   const svg: (strings: TemplateStringsArray, ...values: any[]) => SVGElement | DocumentFragment;
@@ -101,8 +101,12 @@ declare namespace sinuous {
    * Sinuous internal API.
    */
   interface Api extends Options {
-    insert<T>(el: Node, value: T, marker?: Node, current?: T, startNode?: Node): T;
+    h: typeof h;
+    hs: typeof hs;
+    insert<T>(el: Node, value: T, endMark?: Node, current?: T, startNode?: Node): T;
     property(el: Node, value: any, name: string, isAttr?: boolean, isCss?: boolean): void;
+    add(parent: Node, value: Node | string, endMark?: Node): Node;
+    rm(parent: Node, startNode: Node, endMark: Node): void;
   }
 
   const api: Api;
