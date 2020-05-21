@@ -20,7 +20,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
   const inlineVNodes = options.monomorphic || pragma === false;
   const importDeclaration = pragmaImport(options.import || false);
   const wrapExpression = options.wrapExpression;
-  const fields = new Map();
+  let fields;
 
   function pragmaImport(imp) {
     if (pragmaString === false || imp === false) {
@@ -229,6 +229,8 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         },
       },
       TaggedTemplateExpression(path, state) {
+        fields = new Map();
+
         const tag = path.node.tag.name;
         if (htmlName[0] === '/' ? patternStringToRegExp(htmlName).test(tag) : tag === htmlName) {
           const statics = path.node.quasi.quasis.map(e => e.value.raw);
