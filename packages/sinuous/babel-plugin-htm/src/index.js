@@ -1,9 +1,9 @@
 import { build, treeify } from '../../htm/src/build.js';
 
 /**
- * @param {Babel} babel
+ * @param {{ types: import('@babel/types') }} babel
  * @param {object} options
- * @param {string} [options.pragma=h]  JSX/hyperscript pragma.
+ * @param {string | false} [options.pragma=h]  JSX/hyperscript pragma.
  * @param {string} [options.tag=html]  The tagged template "tag" function name to process.
  * @param {string | boolean | object} [options.import=false]  Import the tag automatically
  * @param {boolean} [options.monomorphic=false]  Output monomorphic inline objects instead of using String literals.
@@ -51,9 +51,9 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
     for (let i = 0; i < path.length; i++) {
       const ident = propertyName(path[i]);
       out = i === 0 ? ident : t.memberExpression(out, ident);
-      }
-    return out;
     }
+    return out;
+  }
 
   function patternStringToRegExp(str) {
     const parts = str.split('/').slice(1);
@@ -87,7 +87,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
             t.returnStatement(node)
           ]));
         }
-  }
+      }
 
       return t.objectProperty(propertyName(key), node);
     });
@@ -188,14 +188,14 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       .map(child => transform(child, state))
       .map(child => isComponent ? t.arrowFunctionExpression([], child) : child));
     return createVNode(newTag, newProps, newChildren);
-        }
+  }
 
   function maybeField(node) {
     if (fields.has(node)) {
       return fields.get(node);
-        }
+    }
     return node;
-      }
+  }
 
   function isFunctionLike(node) {
     return (
@@ -225,7 +225,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
         exit(path, state) {
           if (state.get('hasHtm') && importDeclaration) {
             path.unshiftContainer('body', importDeclaration);
-    }
+          }
         },
       },
       TaggedTemplateExpression(path, state) {
@@ -240,13 +240,13 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
           // to a pragma call expression for fragments.
           if (t.isArrayExpression(tree)) {
             tree = tree.elements;
-    }
+          }
 
           if (wrapExpression) {
             exprs.forEach(expr => {
               fields.set(expr, path.scope.generateUidIdentifier("field"));
             });
-    }
+          }
 
           let node = Array.isArray(tree)
             ? t.callExpression(pragma, [
@@ -269,11 +269,11 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
                 ...exprs
               ])
             ]);
-  }
+          }
           path.replaceWith(node);
           state.set('hasHtm', true);
-    }
-  }
+        }
+      }
     }
   };
 }
