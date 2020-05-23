@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.3 - 2020-05-23
+
+### Added
+
+- Update babel-plugin-htm to 3.0.0 and simplify upstream diff [#110](https://github.com/luwes/sinuous/pull/110) thanks @heyheyhello
+- Improve typings in observable, computed, and map [#111](https://github.com/luwes/sinuous/pull/111) thanks @heyheyhello
+
 ## 0.27.2 - 2020-05-12
 
 ### Fixed
