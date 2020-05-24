@@ -34,7 +34,7 @@ declare namespace sinuous {
   const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
   const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
 
-  const svgJSX: <T extends () => unknown>(closure: T) => ReturnType<T>;
+  const svgWrap: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
   function h(
     type: string,
@@ -82,33 +82,23 @@ declare namespace sinuous {
     export import JSX = JSXInternal;
   }
 
-  /**
-   * Options required for reactive state, defaults to the Sinuous observable API.
-   */
-  interface Options {
-    subscribe: typeof subscribe;
-    cleanup: typeof cleanup;
-    root: typeof root;
-    sample: typeof sample;
-  }
-
-  /**
-   * Creates a new hyperscript function with the passed reactive API.
-   * @param apiOverloads Written into the API object
-   * @param state For inflight changes; `hs` is fixed to `{ svgMode: true }`
-   */
-  function context(options: Options, state?: { svgMode: boolean }): typeof h | typeof hs;
-
-  /**
-   * Sinuous internal API.
-   */
-  interface Api extends Options {
+  /** Sinuous API */
+  interface Api {
+    // Hyperscript
     h: typeof h;
     hs: typeof hs;
+
+    // Internal API
     insert<T>(el: Node, value: T, endMark?: Node, current?: T, startNode?: Node): T;
     property(el: Node, value: unknown, name: string, isAttr?: boolean, isCss?: boolean): void;
     add(parent: Node, value: Node | string, endMark?: Node): Node;
     rm(parent: Node, startNode: Node, endMark: Node): void;
+
+    // Observables
+    subscribe: typeof subscribe;
+    cleanup: typeof cleanup;
+    root: typeof root;
+    sample: typeof sample;
   }
 
   const api: Api;
