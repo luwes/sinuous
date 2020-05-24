@@ -28,7 +28,7 @@ const requestedBundleTypes =
   argv.type
     ? argv.type
         .split(',')
-        .map(type => type.trim().toUpperCase())
+        .map(type => type.trim())
     : [];
 
 // For every type in bundle.types creates a new bundle obj.
