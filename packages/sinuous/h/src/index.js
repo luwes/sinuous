@@ -10,5 +10,4 @@ api.property = property;
 api.add = add;
 api.rm = removeNodes;
 
-export { context } from './h.js';
 export { api };
