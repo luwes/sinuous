@@ -1,6 +1,6 @@
 import { api } from './api.js';
 
-export function insert(el, value, endMark, current, startNode) {
+export const insert = (el, value, endMark, current, startNode) => {
   // This is needed if the el is a DocumentFragment initially.
   el = (endMark && endMark.parentNode) || el;
 
@@ -30,7 +30,7 @@ export function insert(el, value, endMark, current, startNode) {
     }
     current = value;
   } else if (typeof value === 'function') {
-    api.subscribe(function insertContent() {
+    api.subscribe(() => {
       current = api.insert(el, value.call({ el, endMark }), endMark, current, startNode);
     });
   } else {
@@ -56,4 +56,4 @@ export function insert(el, value, endMark, current, startNode) {
   }
 
   return current;
-}
+};

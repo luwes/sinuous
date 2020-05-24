@@ -1,6 +1,20 @@
 import { api } from './api.js';
 
-export function property(el, value, name, isAttr, isCss) {
+const eventProxy = (e) => this._listeners[e.type](e);
+
+const handleEvent = (el, name, value) => {
+  name = name.slice(2).toLowerCase();
+
+  if (value) {
+    el.addEventListener(name, eventProxy);
+  } else {
+    el.removeEventListener(name, eventProxy);
+  }
+
+  (el._listeners || (el._listeners = {}))[name] = value;
+};
+
+export const property = (el, value, name, isAttr, isCss) => {
   if (value == null) return;
   if (!name || (name === 'attrs' && (isAttr = true))) {
     for (name in value) {
@@ -11,7 +25,7 @@ export function property(el, value, name, isAttr, isCss) {
     // on render unless they have an observable indicator.
     handleEvent(el, name, value);
   } else if (typeof value === 'function') {
-    api.subscribe(function setProperty() {
+    api.subscribe(() => {
       api.property(el, value.call({ el, name }), name, isAttr, isCss);
     });
   } else if (isCss) {
@@ -32,26 +46,4 @@ export function property(el, value, name, isAttr, isCss) {
     if (name === 'class') name += 'Name';
     el[name] = value;
   }
-}
-
-function handleEvent(el, name, value) {
-  name = name.slice(2).toLowerCase();
-
-  if (value) {
-    el.addEventListener(name, eventProxy);
-  } else {
-    el.removeEventListener(name, eventProxy);
-  }
-
-  (el._listeners || (el._listeners = {}))[name] = value;
-}
-
-/**
- * Proxy an event to hooked event handlers.
- * @param {Event} e - The event object from the browser.
- * @return {Function}
- */
-function eventProxy(e) {
-  // eslint-disable-next-line
-  return this._listeners[e.type](e);
-}
+};

@@ -7,7 +7,7 @@ import { api } from './api.js';
  */
 export const h = (...args) => {
   let el;
-  function item(arg) {
+  const item = (arg) => {
     // @ts-ignore
     if (arg == null);
     else if (typeof arg === 'string') {
