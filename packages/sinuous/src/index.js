@@ -1,7 +1,7 @@
 /*
- * Sinuous by Wesley Luyten (@luwes).
- * Really ties all the packages together.
- */
+* Sinuous by Wesley Luyten (@luwes).
+* Really ties all the packages together.
+*/
 import {
   o,
   observable,
@@ -13,8 +13,9 @@ import {
 import { api } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
-// Maintain object reference outside of context()
-Object.assign(api, { subscribe, cleanup, root, sample, s: 0 });
+/* eslint-disable fp/no-rest-parameters,@typescript-eslint/no-use-before-define */
+
+Object.assign(api, { subscribe, cleanup, root, sample });
 
 // Makes it possible to intercept `h` calls and customize.
 export const h = (...args) =>
@@ -35,6 +36,6 @@ export const svg = (...args) =>
 // Set `h` to work with an SVG namespace for the duration of the closure
 export const svgJSX = (closure) => {
   return api.s++, closure = closure(), api.s--, closure;
-}
+};
 
 export { api, o, observable };

@@ -1,24 +1,30 @@
 import { api } from './api.js';
 
+/**
+ * @typedef {(el: Node, value: *, endMark?: Node, current?: Node, startNode?: Node) => Node} hInsert
+ * @type {hInsert}
+ */
 export const insert = (el, value, endMark, current, startNode) => {
   // This is needed if the el is a DocumentFragment initially.
   el = (endMark && endMark.parentNode) || el;
 
-  // Save startNode of current. In clear() endMark.previousSibling
-  // is not always accurate if content gets pulled before clearing.
+  // Save startNode of current. In clear() endMark.previousSibling is not always
+  // accurate if content gets pulled before clearing.
   startNode = startNode || current instanceof Node && current;
 
   if (value === current);
   else if (
-    (!current || typeof current === 'string') &&
-    (typeof value === 'string' || (typeof value === 'number' && (value += '')))
+    (!current || typeof current === 'string')
+    // eslint-disable-next-line no-implicit-coercion
+    && (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
+    // eslint-disable-next-line eqeqeq
     if (current == null || !el.firstChild) {
       if (endMark) {
         api.add(el, value, endMark);
       } else {
-        // textContent is a lot faster than append -> createTextNode.
+        // Using textContent is a lot faster than append -> createTextNode.
         el.textContent = value;
       }
     } else {

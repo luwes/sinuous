@@ -8,6 +8,7 @@ import { property } from './property.js';
 import { removeNodes } from './remove-nodes.js';
 
 api.h = h;
+api.s = 0;
 api.insert = insert;
 api.property = property;
 api.add = add;

@@ -3,12 +3,15 @@ import { api } from './api.js';
 
 /**
  * Sinuous `h` tag aka hyperscript.
- * @return {Function} `h` tag.
+ * @typedef {HTMLElement | SVGElement | DocumentFragment} DOM
+ * @typedef {(tag?: string, props?: object, ...children: Node | *) => DOM} hTag
+ * @type {hTag}
  */
+// eslint-disable-next-line fp/no-rest-parameters
 export const h = (...args) => {
   let el;
   const item = (arg) => {
-    // @ts-ignore
+    // eslint-disable-next-line eqeqeq
     if (arg == null);
     else if (typeof arg === 'string') {
       if (el) {
@@ -37,12 +40,14 @@ export const h = (...args) => {
         api.insert(el, arg, endMark);
       } else {
         // Support Components
+        // eslint-disable-next-line prefer-spread
         el = arg.apply(null, args.splice(1));
       }
     } else {
+      // eslint-disable-next-line no-implicit-coercion,prefer-template
       api.add(el, '' + arg);
     }
-  }
+  };
   args.forEach(item);
   return el;
-}
+};

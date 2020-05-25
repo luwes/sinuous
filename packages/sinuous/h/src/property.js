@@ -1,7 +1,18 @@
 import { api } from './api.js';
 
-const eventProxy = (e) => this._listeners[e.type](e);
+/**
+ * Proxy an event to hooked event handlers.
+ * @this {Node & { _listeners: { [name: string]: (ev: Event) => * } }}
+ * @type {(e: Event) => *}
+ */
+function eventProxy(e) {
+  // eslint-disable-next-line fp/no-this
+  return this._listeners[e.type](e);
+}
 
+/**
+ * @type {(el: Node, name: string, value: (ev: Event?) => *) => void}
+ */
 const handleEvent = (el, name, value) => {
   name = name.slice(2).toLowerCase();
 
@@ -14,7 +25,12 @@ const handleEvent = (el, name, value) => {
   (el._listeners || (el._listeners = {}))[name] = value;
 };
 
+/**
+ * @typedef {(el: Node, value: *, name: string, isAttr?: boolean, isCss?: boolean) => void} hProperty
+ * @type {hProperty}
+ */
 export const property = (el, value, name, isAttr, isCss) => {
+  // eslint-disable-next-line eqeqeq
   if (value == null) return;
   if (!name || (name === 'attrs' && (isAttr = true))) {
     for (name in value) {
@@ -31,9 +47,9 @@ export const property = (el, value, name, isAttr, isCss) => {
   } else if (isCss) {
     el.style.setProperty(name, value);
   } else if (
-    isAttr ||
-    name.slice(0, 5) === 'data-' ||
-    name.slice(0, 5) === 'aria-'
+    isAttr
+    || name.slice(0, 5) === 'data-'
+    || name.slice(0, 5) === 'aria-'
   ) {
     el.setAttribute(name, value);
   } else if (name === 'style') {
