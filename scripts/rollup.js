@@ -1,14 +1,16 @@
+import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
-import { terser } from 'rollup-plugin-terser';
+
 import bundleSize from 'rollup-plugin-size';
 import gzip from 'rollup-plugin-gzip';
-import sourcemaps from 'rollup-plugin-sourcemaps';
+import { terser } from 'rollup-plugin-terser';
+
 import minimist from 'minimist';
 
-import { CJS, ESM, IIFE, UMD, bundles } from './bundles.js';
+import { bundleFormats, bundles } from './bundles.js';
 
+const { CJS, ESM, IIFE, UMD } = bundleFormats;
 const formatExtensions = {
   [CJS ]: '.js',
   [ESM ]: '.js',
@@ -48,12 +50,12 @@ const allBundles
 
 function getConfig(options) {
   const {
-    name,
+    filename,
     input,
     dest,
     format,
     external = [],
-    sourcemap = true,
+    sourcemap = false,
     extend = false,
   } = options;
   const replacePeersForESM = external.map((name, i) => {
@@ -77,7 +79,7 @@ function getConfig(options) {
       format,
       sourcemap,
       extend,
-      file: `${dest(format)}/${name}${formatExtensions[format]}`,
+      file: `${dest(format)}/${filename}${formatExtensions[format]}`,
       name: options.global,
       exports: options.exports,
       strict:   false, // Remove `use strict;`
@@ -86,12 +88,18 @@ function getConfig(options) {
       esModule: false, // Remove `esModule` property
     },
     plugins: [
+      // Unfortunately this package wasn't properly typed or documented, see
+      // package `size-plugin-core` for all available options
       bundleSize({
         columnWidth: 25,
+        decorateItem: (item) =>
+          item.replace('.js', `.js ${format.toUpperCase().padEnd(4)}`),
       }),
-      sourcemaps(),
       nodeResolve(),
-      [UMD, IIFE].includes(format) && babel(options.babel),
+      [UMD, IIFE].includes(format)
+        && babel({
+          babelHelpers: 'bundled',
+        }),
       [ESM, UMD, IIFE].includes(format)
         && terser({
           sourcemap: true,
@@ -122,15 +130,10 @@ function getConfig(options) {
       ...replacePeersForESM,
       options.gzip && gzip(),
     ].filter(Boolean),
-    onwarn: function(warning) {
+    onwarn(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-      if (
-        ['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION', 'MISSING_GLOBAL_NAME', 'CIRCULAR_DEPENDENCY'].includes(
-          warning.code
-        )
-      )
-        return;
-
+      const skip = ['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION', 'MISSING_GLOBAL_NAME', 'CIRCULAR_DEPENDENCY'];
+      if (skip.includes(warning.code)) return;
       console.error(warning.message);
     },
   };
