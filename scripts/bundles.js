@@ -5,7 +5,7 @@ export const UMD = 'umd';
 
 export const bundleFormats = {
   ESM,
-  UMD
+  UMD,
 };
 
 const dest = (path = '') => format => {
@@ -20,16 +20,16 @@ export const bundles = [
     global: 'htm',
     name: 'htm',
     input: 'packages/sinuous/htm/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', './sinuous.js', 'sinuous/htm', './htm.js'],
     formats: [ESM, UMD, IIFE],
     global: 'hydrate',
     name: 'hydrate',
     input: 'packages/sinuous/hydrate/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: [],
@@ -37,7 +37,7 @@ export const bundles = [
     global: 'observable',
     name: 'observable',
     input: 'packages/sinuous/observable/src/observable.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: [],
@@ -45,7 +45,7 @@ export const bundles = [
     global: 'h',
     name: 'h',
     input: 'packages/sinuous/h/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: ['sinuous', './sinuous.js'],
@@ -53,7 +53,7 @@ export const bundles = [
     global: 'template',
     name: 'template',
     input: 'packages/sinuous/template/src/template.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: ['sinuous', './sinuous.js', 'sinuous/template', './template.js'],
@@ -61,7 +61,7 @@ export const bundles = [
     global: 'data',
     name: 'data',
     input: 'packages/sinuous/data/src/data.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: [],
@@ -69,78 +69,78 @@ export const bundles = [
     global: 'memo',
     name: 'memo',
     input: 'packages/sinuous/memo/src/memo.js',
-    dest: dest()
+    dest: dest(),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', './sinuous.js', 'sinuous/template', './template.js', 'sinuous/htm', './htm.js'],
     formats: [ESM, UMD, IIFE],
     global: 'render',
     name: 'render',
     input: 'packages/sinuous/render/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', '../sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'mini',
     name: 'mini',
     input: 'packages/sinuous/map/mini/src/mini.js',
-    dest: dest('/map')
+    dest: dest('/map'),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous', './sinuous.js'],
     formats: [ESM, UMD, IIFE],
     global: 'map',
     name: 'map',
     input: 'packages/sinuous/map/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: [
       'sinuous/observable',
       './observable.js',
       'sinuous/htm',
-      './htm.js'
+      './htm.js',
     ],
     formats: [ESM, UMD, IIFE],
     global: 'sinuous',
     name: 'sinuous',
     input: 'packages/sinuous/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
-    // order is important, every even pkg name is replaced w/ next uneven file in ESM
+    // Order is important, every even pkg name is replaced w/ next uneven file in ESM
     external: ['sinuous/htm', './htm.js'],
     formats: [ESM],
     global: 'so',
-    // only used to display bundle size, `observable` is a peer dependency to
+    // Only used to display bundle size, `observable` is a peer dependency to
     // avoid issues with the global `tracking` variable.
     name: 'sinuous-observable',
     input: 'packages/sinuous/src/index.js',
     dest: dest(),
-    sourcemap: false
+    sourcemap: false,
   },
   {
     external: [],
     formats: [ESM, CJS],
     name: 'babel-plugin-htm',
     input: 'packages/sinuous/babel-plugin-htm/src/index.js',
-    dest: dest()
+    dest: dest(),
   },
   {
     external: [],
     formats: [ESM, UMD, IIFE],
-    // multiple globals - @see https://github.com/rollup/rollup/issues/494
+    // Multiple globals - @see https://github.com/rollup/rollup/issues/494
     global: 'window',
     extend: true,
     name: 'all',
     input: 'packages/sinuous/all/src/index.js',
-    dest: dest()
-  }
+    dest: dest(),
+  },
 ];
 
 export const fixtures = [

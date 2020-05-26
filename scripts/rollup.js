@@ -18,22 +18,22 @@ const formatExtensions = {
 
 const argv = minimist(process.argv.slice(2));
 
-const requestedBundleNames =
-  argv.name
+const requestedBundleNames
+  = argv.name
     ? argv.name
-        .split(',')
-        .map(name => name.trim())
+      .split(',')
+      .map(name => name.trim())
     : [];
-const requestedBundleTypes =
-  argv.type
+const requestedBundleTypes
+  = argv.type
     ? argv.type
-        .split(',')
-        .map(type => type.trim())
+      .split(',')
+      .map(type => type.trim())
     : [];
 
 // For every type in bundle.types creates a new bundle obj.
-const allBundles =
-  bundles
+const allBundles
+  = bundles
     .flatMap(({ formats, ...rest }) =>
       formats.map(format => ({ ...rest, format }))
     )
@@ -54,15 +54,15 @@ function getConfig(options) {
     format,
     external = [],
     sourcemap = true,
-    extend = false
+    extend = false,
   } = options;
   const replacePeersForESM = external.map((name, i) => {
     return (
-      ESM === format &&
-      i % 2 == 0 &&
-      replace({
+      ESM === format
+      && i % 2 === 0
+      && replace({
         delimiters: ['', ''],
-        [`from '${name}'`]: `from '${external[i + 1]}'`
+        [`from '${name}'`]: `from '${external[i + 1]}'`,
       })
     );
   });
@@ -71,7 +71,7 @@ function getConfig(options) {
     input,
     external,
     watch: {
-      clearScreen: false
+      clearScreen: false,
     },
     output: {
       format,
@@ -87,23 +87,23 @@ function getConfig(options) {
     },
     plugins: [
       bundleSize({
-        columnWidth: 25
+        columnWidth: 25,
       }),
       sourcemaps(),
       nodeResolve(),
       [UMD, IIFE].includes(format) && babel(options.babel),
-      [ESM, UMD, IIFE].includes(format) &&
-        terser({
+      [ESM, UMD, IIFE].includes(format)
+        && terser({
           sourcemap: true,
           ecma: '2017',
           warnings: true,
           compress: {
-            passes: 2
+            passes: 2,
           },
           mangle: {
             properties: {
-              regex: /^_/
-            }
+              regex: /^_/,
+            },
           },
           nameCache: {
             props: {
@@ -115,12 +115,12 @@ function getConfig(options) {
 
                 // Fixes a weird issue with mangling. `r.o.has` is not a function.
                 $_observers: '__o',
-              }
-            }
-          }
+              },
+            },
+          },
         }),
       ...replacePeersForESM,
-      options.gzip && gzip()
+      options.gzip && gzip(),
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
@@ -132,7 +132,7 @@ function getConfig(options) {
         return;
 
       console.error(warning.message);
-    }
+    },
   };
 }
 
