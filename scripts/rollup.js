@@ -1,4 +1,6 @@
+import path from 'path';
 import babel from '@rollup/plugin-babel';
+// TODO: Replace this
 import replace from '@rollup/plugin-replace';
 import nodeResolve from '@rollup/plugin-node-resolve';
 
@@ -9,15 +11,9 @@ import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 
 import { bundleFormats, bundles } from './bundles.js';
+// TODO: import { replace } from './rollup-replace.js';
 
 const { CJS, ESM, IIFE, UMD } = bundleFormats;
-const formatExtensions = {
-  [CJS ]: '.js',
-  [ESM ]: '.js',
-  [IIFE]: '.min.js',
-  [UMD ]: '.js',
-};
-
 const argv = minimist(process.argv.slice(2));
 
 const requestedBundleNames
@@ -34,42 +30,26 @@ const requestedBundleTypes
     : [];
 
 // For every type in bundle.types creates a new bundle obj.
-const allBundles
-  = bundles
-    .flatMap(({ formats, ...rest }) =>
-      formats.map(format => ({ ...rest, format }))
-    )
-    .filter(({ name, format }) => {
-      if (requestedBundleNames.length > 0 && !requestedBundleNames.includes(name))
-        return false;
-      if (requestedBundleTypes.length > 0 && !requestedBundleTypes.includes(format))
-        return false;
-
-      return true;
-    });
+const allBundles = bundles.filter(({ name, format }) => {
+  if (requestedBundleNames.length > 0 && !requestedBundleNames.includes(name))
+    return false;
+  if (requestedBundleTypes.length > 0 && !requestedBundleTypes.includes(format))
+    return false;
+  return true;
+});
 
 function getConfig(options) {
   const {
-    filename,
+    file,
     input,
-    dest,
+    exports,
     format,
-    external = [],
-    sourcemap = false,
-    extend = false,
+    external,
+    sourcemap,
+    extend,
   } = options;
-  const replacePeersForESM = external.map((name, i) => {
-    return (
-      ESM === format
-      && i % 2 === 0
-      && replace({
-        delimiters: ['', ''],
-        [`from '${name}'`]: `from '${external[i + 1]}'`,
-      })
-    );
-  });
 
-  return {
+  const config = {
     input,
     external,
     watch: {
@@ -79,9 +59,9 @@ function getConfig(options) {
       format,
       sourcemap,
       extend,
-      file: `${dest(format)}/${filename}${formatExtensions[format]}`,
-      name: options.global,
-      exports: options.exports,
+      file,
+      name,
+      exports,
       strict:   false, // Remove `use strict;`
       interop:  false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
       freeze:   false, // Remove `Object.freeze()`
@@ -103,7 +83,7 @@ function getConfig(options) {
       [ESM, UMD, IIFE].includes(format)
         && terser({
           sourcemap: true,
-          ecma: '2017',
+          ecma: 2017,
           warnings: true,
           compress: {
             passes: 2,
@@ -127,7 +107,7 @@ function getConfig(options) {
             },
           },
         }),
-      ...replacePeersForESM,
+      // TODO: options.replace && replace(options.replace),
       options.gzip && gzip(),
     ].filter(Boolean),
     onwarn(warning) {
@@ -137,6 +117,23 @@ function getConfig(options) {
       console.error(warning.message);
     },
   };
+
+  // Fix import paths
+  if (format === ESM && external.length > 0) {
+    const distFile = config.output.file;
+    for (const dep of external) {
+      const depFile = path.relative(`dist/${format}/${dep}.js`, distFile);
+      console.log(`Replacing ${dep} to ${depFile}`);
+      // TODO: config.replace.push(replaceImport(dep, ''));
+      config.plugins.push(
+        replace({
+          delimiters: ['', ''],
+          [`from '${dep}'`]: `from '${depFile}'`,
+        }));
+    }
+  }
+
+  return config;
 }
 
 export default allBundles.map(getConfig);

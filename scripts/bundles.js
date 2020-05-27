@@ -1,4 +1,4 @@
-export const bundleFormats = {
+const bundleFormats = {
   CJS:  'cjs',
   ESM:  'esm',
   IIFE: 'iife',
@@ -7,150 +7,161 @@ export const bundleFormats = {
 
 const { CJS, ESM, IIFE, UMD } = bundleFormats;
 
-const dest = (path = '') =>
-  format => `packages/sinuous/${format === ESM ? 'module' : 'dist'}${path}`;
+// Format extensions, see bundles#file
+const ext = {
+  [CJS ]: 'js',
+  [ESM ]: 'js',
+  [IIFE]: 'min.js',
+  [UMD ]: 'js',
+};
 
-export const bundles = [
+/**
+ * @typedef {(code: string) => string} Replacer
+ * @type {(from: string, to: string) => Replacer}
+ */
+// const replaceImport = (from, to) =>
+//   (code) => code.replace(`from '${from}'`, `from '${to}'`);
+
+/**
+ * @typedef Bundle
+ * Required
+ * @property {string} input  Rollup's input
+ * @property {string} file   Rollup's output.file
+ * @property {string} format Rollup's output.format (ESM/UDM/IIFE)
+ * Optional
+ * @property {string}     [name]      Rollup's output.name
+ * @property {boolean}    [extend]    Extend rather than replace global [name]
+ * @property {boolean}    [sourcemap] Emit sourcemaps
+ * @property {string[]}   [external]  Skipped dependencies
+ * @property {Replacer[]} [replace]   Bundle string replacement functions
+ */
+
+/** @type {Bundle[]} */
+const bundleConfig = [
   // `htm` has to come before `babel-plugin-htm`
-  {
-    external: [],
-    formats:  [ESM, UMD, IIFE],
-    global:   'htm',
-    filename: 'htm',
-    input:    'packages/sinuous/htm/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: ['sinuous', './sinuous.js', 'sinuous/htm', './htm.js'],
-    formats:  [ESM, UMD, IIFE],
-    global:   'hydrate',
-    filename: 'hydrate',
-    input:    'packages/sinuous/hydrate/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: [],
-    formats:  [ESM, UMD, IIFE],
-    global:   'observable',
-    filename: 'observable',
-    input:    'packages/sinuous/observable/src/observable.js',
-    dest:     dest(),
-  },
-  {
-    external: [],
-    formats:  [ESM, UMD, IIFE],
-    global:   'h',
-    filename: 'h',
-    input:    'packages/sinuous/h/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: ['sinuous', './sinuous.js'],
-    formats:  [ESM, UMD, IIFE],
-    global:   'template',
-    filename: 'template',
-    input:    'packages/sinuous/template/src/template.js',
-    dest:     dest(),
-  },
-  {
-    external: ['sinuous', './sinuous.js', 'sinuous/template', './template.js'],
-    formats:  [ESM, UMD, IIFE],
-    global:   'data',
-    filename: 'data',
-    input:    'packages/sinuous/data/src/data.js',
-    dest:     dest(),
-  },
-  {
-    external: [],
-    formats:  [ESM, UMD, IIFE],
-    global:   'memo',
-    filename: 'memo',
-    input:    'packages/sinuous/memo/src/memo.js',
-    dest:     dest(),
-  },
-  {
-    external: ['sinuous', './sinuous.js', 'sinuous/template', './template.js', 'sinuous/htm', './htm.js'],
-    formats:  [ESM, UMD, IIFE],
-    global:   'render',
-    filename: 'render',
-    input:    'packages/sinuous/render/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: ['sinuous', '../sinuous.js'],
-    formats:  [ESM, UMD, IIFE],
-    global:   'mini',
-    filename: 'mini',
-    input:    'packages/sinuous/map/mini/src/mini.js',
-    dest:     dest('/map'),
-  },
-  {
-    external: ['sinuous', './sinuous.js'],
-    replace:  [
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/htm/src/index.js',
+    file: `dist/${format}/htm.${ext[format]}`,
+    format,
+    name: 'htm',
+  })),
 
-    ],
-    formats:  [ESM, UMD, IIFE],
-    global:   'map',
-    filename: 'map',
-    input:    'packages/sinuous/map/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: [
-      'sinuous/observable',
-      './observable.js',
-      'sinuous/htm',
-      './htm.js',
-    ],
-    formats:  [ESM, UMD, IIFE],
-    global:   'sinuous',
-    filename: 'sinuous',
-    input:    'packages/sinuous/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external:  ['sinuous/htm', './htm.js'],
-    formats:   [ESM],
-    global:    'so',
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/hydrate/src/index.js',
+    file: `dist/${format}/hydrate.${ext[format]}`,
+    format,
+    name: 'hydrate',
+    external: ['sinuous', 'sinuous/htm'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/observable/src/observable.js',
+    file: `dist/${format}/observable.${ext[format]}`,
+    format,
+    name: 'observable',
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/h/src/index.js',
+    file:  `'dist/${format}/h.${ext[format]}`,
+    format,
+    name: 'h',
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/template/src/template.js',
+    file: `dist/${format}/template.${ext[format]}`,
+    format,
+    name: 'template',
+    external: ['sinuous'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/data/src/data.js',
+    file: `dist/${format}/data.${ext[format]}`,
+    format,
+    name: 'data',
+    external: ['sinuous', 'sinuous/template'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/memo/src/memo.js',
+    file: `dist/${format}/memo.${ext[format]}`,
+    format,
+    name: 'memo',
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/render/src/index.js',
+    file: `dist/${format}/render.${ext[format]}`,
+    format,
+    name: 'render',
+    external: ['sinuous', 'sinuous/template', 'sinuous/htm'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/map/mini/src/mini.js',
+    file: `dist/${format}/map/mini.${ext[format]}`,
+    format,
+    name: 'mini',
+    external: ['sinuous'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/map/src/index.js',
+    file: `dist/${format}/map.${ext[format]}`,
+    format,
+    name: 'map',
+    external: ['sinuous'],
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
+    input: 'packages/sinuous/src/index.js',
+    file: `dist/${format}/sinuous.${ext[format]}`,
+    format,
+    name: 'sinuous',
+    external: ['sinuous/observable', 'sinuous/htm' ],
+  })),
+
+  ...[ESM].map(format => ({
+    input:  'packages/sinuous/src/index.js',
+    file: `dist/${format}/sinuous-observable.${ext[format]}`,
+    format,
     // Only used to display bundle size, `observable` is a peer dependency to
     // avoid issues with the global `tracking` variable.
-    filename:  'sinuous-observable',
-    input:     'packages/sinuous/src/index.js',
-    dest:      dest(),
+    name: 'so',
+    external: ['sinuous/htm'],
     sourcemap: false,
-  },
-  {
-    external: [],
-    formats:  [ESM, CJS],
-    filename: 'babel-plugin-htm',
-    input:    'packages/sinuous/babel-plugin-htm/src/index.js',
-    dest:     dest(),
-  },
-  {
-    external: [],
-    formats:  [ESM, UMD, IIFE],
+  })),
+
+  ...[ESM, CJS].map(format => ({
+    input: 'packages/sinuous/babel-plugin-htm/src/index.js',
+    file: `dist/${format}/babel-plugin-htm.${ext[format]}`,
+    format,
+  })),
+
+  ...[ESM, UMD, IIFE].map(format => ({
     // Multiple globals - @see https://github.com/rollup/rollup/issues/494
-    global:   'window',
-    extend:   true,
-    filename: 'all',
-    input:    'packages/sinuous/all/src/index.js',
-    dest:     dest(),
-  },
+    input: 'packages/sinuous/all/src/index.js',
+    file: `dist/${format}/all.${ext[format]}`,
+    format,
+    name: 'window',
+    extend: true,
+  })),
 ];
 
-export const fixtures = [
-  // {
-  //   formats: [UMD],
-  //   global: 'sinuousS',
-  //   name: 'sinuous-s',
-  //   input: 'fixtures/S/src/index.js',
-  //   sourcemap: true
-  // },
-  // {
-  //   formats: [UMD],
-  //   global: 'sinuousHyperactiv',
-  //   name: 'sinuous-hyperactiv',
-  //   input: 'fixtures/hyperactiv/src/index.js',
-  //   sourcemap: true
-  // },
-];
+// Quick tune ups
+const bundles = bundleConfig.map(config => {
+  const defaults = {
+    extend: false,
+    sourcemap: false,
+    external: [],
+    replace: [],
+  };
+  // Set all optional properties
+  config = Object.assign(defaults, config);
+
+  return config;
+});
+
+export { bundles, bundleFormats };
