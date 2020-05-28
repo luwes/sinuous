@@ -25,8 +25,8 @@ const ext = {
 /**
  * @typedef Bundle
  * Required
- * @property {string} input  Rollup's input
- * @property {string} file   Rollup's output.file
+ * @property {string} input  Rollup's input - modified later
+ * @property {string} file   Rollup's output.file - modified later
  * @property {string} format Rollup's output.format (ESM/UDM/IIFE)
  * Optional
  * @property {string}     [name]      Rollup's output.name
@@ -40,92 +40,92 @@ const ext = {
 const bundleConfig = [
   // `htm` has to come before `babel-plugin-htm`
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/htm/src/index.js',
-    file: `dist/${format}/htm.${ext[format]}`,
+    input: 'htm/src/index.js',
+    file: 'htm',
     format,
     name: 'htm',
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/hydrate/src/index.js',
-    file: `dist/${format}/hydrate.${ext[format]}`,
+    input: 'hydrate/src/index.js',
+    file: 'hydrate',
     format,
     name: 'hydrate',
     external: ['sinuous', 'sinuous/htm'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/observable/src/observable.js',
-    file: `dist/${format}/observable.${ext[format]}`,
+    input: 'observable/src/observable.js',
+    file: 'observable',
     format,
     name: 'observable',
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/h/src/index.js',
-    file:  `'dist/${format}/h.${ext[format]}`,
+    input: 'h/src/index.js',
+    file: 'h',
     format,
     name: 'h',
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/template/src/template.js',
-    file: `dist/${format}/template.${ext[format]}`,
+    input: 'template/src/template.js',
+    file: 'template',
     format,
     name: 'template',
     external: ['sinuous'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/data/src/data.js',
-    file: `dist/${format}/data.${ext[format]}`,
+    input: 'data/src/data.js',
+    file: 'data',
     format,
     name: 'data',
     external: ['sinuous', 'sinuous/template'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/memo/src/memo.js',
-    file: `dist/${format}/memo.${ext[format]}`,
+    input: 'memo/src/memo.js',
+    file: 'memo',
     format,
     name: 'memo',
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/render/src/index.js',
-    file: `dist/${format}/render.${ext[format]}`,
+    input: 'render/src/index.js',
+    file: 'render',
     format,
     name: 'render',
     external: ['sinuous', 'sinuous/template', 'sinuous/htm'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/map/mini/src/mini.js',
-    file: `dist/${format}/map/mini.${ext[format]}`,
+    input: 'map/mini/src/mini.js',
+    file: 'map/mini',
     format,
     name: 'mini',
     external: ['sinuous'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/map/src/index.js',
-    file: `dist/${format}/map.${ext[format]}`,
+    input: 'map/src/index.js',
+    file: 'map',
     format,
     name: 'map',
     external: ['sinuous'],
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
-    input: 'packages/sinuous/src/index.js',
-    file: `dist/${format}/sinuous.${ext[format]}`,
+    input: 'src/index.js',
+    file: 'sinuous',
     format,
     name: 'sinuous',
     external: ['sinuous/observable', 'sinuous/htm' ],
   })),
 
   ...[ESM].map(format => ({
-    input:  'packages/sinuous/src/index.js',
-    file: `dist/${format}/sinuous-observable.${ext[format]}`,
+    input: 'src/index.js',
+    file: 'sinuous-observable',
     format,
     // Only used to display bundle size, `observable` is a peer dependency to
     // avoid issues with the global `tracking` variable.
@@ -135,15 +135,15 @@ const bundleConfig = [
   })),
 
   ...[ESM, CJS].map(format => ({
-    input: 'packages/sinuous/babel-plugin-htm/src/index.js',
-    file: `dist/${format}/babel-plugin-htm.${ext[format]}`,
+    input: 'babel-plugin-htm/src/index.js',
+    file: 'babel-plugin-htm',
     format,
   })),
 
   ...[ESM, UMD, IIFE].map(format => ({
     // Multiple globals - @see https://github.com/rollup/rollup/issues/494
-    input: 'packages/sinuous/all/src/index.js',
-    file: `dist/${format}/all.${ext[format]}`,
+    input: 'all/src/index.js',
+    file: 'all',
     format,
     name: 'window',
     extend: true,
@@ -153,6 +153,7 @@ const bundleConfig = [
 // Quick tune ups
 const bundles = bundleConfig.map(config => {
   const defaults = {
+    name: undefined,
     extend: false,
     sourcemap: false,
     external: [],
@@ -160,6 +161,14 @@ const bundles = bundleConfig.map(config => {
   };
   // Set all optional properties
   config = Object.assign(defaults, config);
+
+  // Prefix all input and output paths
+  const { format } = config;
+  config.input = `packages/sinuous/${config.input}`;
+  config.file = `dist/${format}/${config.file}.${ext[format]}`;
+
+  // Patch all bundle replacements
+  // TODO: config.output[ESM].plugins.push(replace())
 
   return config;
 });

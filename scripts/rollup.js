@@ -40,6 +40,7 @@ const allBundles = bundles.filter(({ name, format }) => {
 
 function getConfig(options) {
   const {
+    name,
     file,
     input,
     exports,
@@ -120,17 +121,23 @@ function getConfig(options) {
 
   // Fix import paths
   if (format === ESM && external.length > 0) {
-    const distFile = config.output.file;
+    const externalGenerated = [];
     for (const dep of external) {
-      const depFile = path.relative(`dist/${format}/${dep}.js`, distFile);
-      console.log(`Replacing ${dep} to ${depFile}`);
+      const depFile = `dist/${format}/${path.basename(dep)}.js`;
+      const depPath = path.relative(config.output.file, depFile)
+        .replace('..', '.')
+        .replace('./..', '..');
       // TODO: config.replace.push(replaceImport(dep, ''));
       config.plugins.push(
         replace({
           delimiters: ['', ''],
-          [`from '${dep}'`]: `from '${depFile}'`,
-        }));
+          [`from '${dep}'`]: `from '${depPath}'`,
+        })
+      );
+      // Also mark itself as a dependency
+      externalGenerated.push(depPath);
     }
+    config.external.push(...externalGenerated);
   }
 
   return config;
