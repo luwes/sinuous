@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous map mini",
-  "module": "../../module/map/mini.js",
+  "module": "../../dist/esm/map/mini.js",
   "main": "../../dist/map/mini.js",
   "files": [
     "dist",

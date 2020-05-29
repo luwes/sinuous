@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous template",
-  "module": "../module/template.js",
-  "main": "../dist/template.js",
+  "module": "../dist/esm/template.js",
+  "main": "../dist/umd/template.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",

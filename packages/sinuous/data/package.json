@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous data",
-  "module": "../module/data.js",
-  "main": "../dist/data.js",
+  "module": "../dist/esm/data.js",
+  "main": "../dist/umd/data.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",

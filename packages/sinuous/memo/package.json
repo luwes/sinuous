@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous memo",
-  "module": "../module/memo.js",
-  "main": "../dist/memo.js",
+  "module": "../dist/esm/memo.js",
+  "main": "../dist/umd/memo.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",

@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous observable",
-  "module": "../module/observable.js",
-  "main": "../dist/observable.js",
+  "module": "../dist/esm/observable.js",
+  "main": "../dist/umd/observable.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",
