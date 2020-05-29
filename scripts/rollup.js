@@ -15,18 +15,14 @@ const requestedBundleTypes
       .map(type => type.trim())
     : [];
 
-// For every type in bundle.types creates a new bundle obj.
-const allBundles = bundles.filter((bundle, index) => {
+const allBundles = bundles.filter(({ output: { format } }, index) => {
   const name = bundleNames[index];
   if (requestedBundleNames.length > 0 && !requestedBundleNames.includes(name))
     return false;
-  if (requestedBundleTypes.length === 0)
-    return true;
+  if (requestedBundleTypes.length > 0 && !requestedBundleTypes.includes(format))
+    return false;
 
-  bundle.output = bundle.output.filter(
-    ({ format }) => requestedBundleTypes.includes(format));
-  // Are any left after filtering?
-  return bundle.output.length > 0;
+  return true;
 });
 
 export default allBundles;

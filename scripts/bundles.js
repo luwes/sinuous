@@ -1,28 +1,28 @@
 import path from 'path';
-import replace from '@rollup/plugin-replace'; // TODO: Replace this
+import replace from './rollup-plugin-replace.js';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import bundleSize from 'rollup-plugin-size';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 
 /**
  * @typedef {import("rollup").ModuleFormat} ModuleFormat
- * @typedef {import("rollup").MergedRollupOptions} MergedRollupOptions
+ * @typedef {import("rollup").InputOptions} InputOptions
  * @typedef {import("rollup").OutputOptions} OutputOptions
  * @typedef {import("rollup").Plugin} Plugin
+ * @typedef {InputOptions & { output: OutputOptions }} RollupOptions
  */
 
 /** @type {{ [key: string]: ModuleFormat }} */
-const bundleFormats = {
+const bundleFormatVariables = {
   CJS:  'cjs',
   ESM:  'esm',
   IIFE: 'iife',
   UMD:  'umd',
 };
 
-const { CJS, ESM, IIFE, UMD } = bundleFormats;
-const src = 'packages/sinuous';
-const dest = (name, format) => `dist/${format}/${name}.${ext[format]}`;
+const { CJS, ESM, IIFE, UMD } = bundleFormatVariables;
+const bundleFormats = Object.values(bundleFormatVariables);
 
 // Format extensions
 const ext = {
@@ -32,208 +32,204 @@ const ext = {
   [UMD ]: 'js',
 };
 
-// Store these for filtering by CLI
-/** @type {string[]} */
-const bundleNames = [];
-
-/** @type {MergedRollupOptions[]} */
-const bundles = [
-  // `htm` has to come before `babel-plugin-htm`
-  {
-    input: `${src}/htm/src/index.js`,
-    output: out('htm', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'htm' },
-    }),
-  },
-  {
-    input: `${src}/hydrate/src/index.js`,
-    external: ['sinuous', 'sinuous/htm'],
-    output: out('hydrate', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'hydrate' },
-    }),
-  },
-  {
-    input: `${src}/observable/src/observable.js`,
-    output: out('observable', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'observable' },
-    }),
-  },
-  {
-    input: `${src}/h/src/index.js`,
-    output: out('sinuous', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'h' },
-    }),
-  },
-  {
-    input: `${src}/template/src/template.js`,
-    external: ['sinuous'],
-    output: out('template', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'template' },
-    }),
-  },
-  {
-    input: `${src}/data/src/data.js`,
-    external: ['sinuous', 'sinuous/template'],
-    output: out('data', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'data' },
-    }),
-  },
-  {
-    input: `${src}/memo/src/memo.js`,
-    output: out('memo', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'memo' },
-    }),
-  },
-  {
-    input: `${src}/render/src/index.js`,
-    external: ['sinuous', 'sinuous/template', 'sinuous/htm'],
-    output: out('render', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'render' },
-    }),
-  },
-  {
-    input: `${src}/map/mini/src/mini.js`,
-    external: ['sinuous'],
-    output: out('map/mini', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'mini' },
-    }),
-  },
-  {
-    input: `${src}/map/src/index.js`,
-    external: ['sinuous'],
-    output: out('map', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'map' },
-    }),
-  },
-  {
-    input: `${src}/src/index.js`,
-    external: ['sinuous/observable', 'sinuous/htm' ],
-    output: out('sinuous', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'sinuous' },
-    }),
-  },
-  {
-    input: `${src}/src/index.js`,
-    external: ['sinuous/htm'],
-    output: out('sinuous-observable', {
-      sourcemap: false,
-      [ESM]: {},
-    }),
-  },
-  {
-    input: `${src}/babel-plugin-htm/src/index.js`,
-    output: out('babel-plugin-htm', {
-      [ESM + CJS]: {},
-    }),
-  },
-  {
-    // Multiple globals - @see https://github.com/rollup/rollup/issues/494
-    input: `${src}/all/src/index.js`,
-    output: out('all', {
-      [ESM]: {},
-      [UMD + IIFE]: { name: 'window', extend: true },
-    }),
-  },
-];
+const src = 'packages/sinuous';
+const dest = (name, format) => `${src}/dist/${format}/${name}.${ext[format]}`;
 
 /**
- * @typedef { OutputOptions & { [maybeFormat: string]: (OutputOptions | {}) }} PerFormat
- * @type {(name: string, perFormat: PerFormat) => OutputOptions[]}
+ * For filtering by CLI, as names are dissolved into the config
+ * @type {string[]}
  */
-function out(name, perFormat) {
-  // Unfortunately this is the only reference to name...
+const bundleNames = [];
+
+/** @type {RollupOptions[]} */
+const bundleSnippets = [
+  // `htm` has to come before `babel-plugin-htm`
+  mk('htm', {
+    input: `${src}/htm/src/index.js`,
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'htm' } },
+  }),
+  mk('hydrate', {
+    input: `${src}/hydrate/src/index.js`,
+    external: ['sinuous', 'sinuous/htm'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'hydrate' } },
+  }),
+  mk('observable', {
+    input: `${src}/observable/src/observable.js`,
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'observable' } },
+  }),
+  mk('h', {
+    input: `${src}/h/src/index.js`,
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'h' } },
+  }),
+  mk('template', {
+    input: `${src}/template/src/template.js`,
+    external: ['sinuous'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'template' } },
+  }),
+  mk('data', {
+    input: `${src}/data/src/data.js`,
+    external: ['sinuous', 'sinuous/template'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'data' } },
+  }),
+  mk('memo', {
+    input: `${src}/memo/src/memo.js`,
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'memo' } },
+  }),
+  mk('render', {
+    input: `${src}/render/src/index.js`,
+    external: ['sinuous', 'sinuous/template', 'sinuous/htm'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'render' } },
+  }),
+  mk('map/mini', {
+    input: `${src}/map/mini/src/mini.js`,
+    external: ['sinuous'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'mini' } },
+  }),
+  mk('map', {
+    input: `${src}/map/src/index.js`,
+    external: ['sinuous'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'map' } },
+  }),
+  mk('sinuous', {
+    input: `${src}/src/index.js`,
+    external: ['sinuous/observable', 'sinuous/htm' ],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'sinuous' } },
+  }),
+  mk('sinuous-observable', {
+    input: `${src}/src/index.js`,
+    external: ['sinuous/htm'],
+    output: {
+      sourcemap: false,
+    },
+    [ESM]: {},
+  }),
+  mk('babel-plugin-htm', {
+    input: `${src}/babel-plugin-htm/src/index.js`,
+    [ESM + CJS]: {},
+  }),
+  mk('all', {
+    // Multiple globals - @see https://github.com/rollup/rollup/issues/494
+    input: `${src}/all/src/index.js`,
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'window', extend: true } },
+  }),
+]
+  .flat(); // Config snippets are split into their own full configs as an array
+
+/**
+ * Expand a multi-format snippet into an array of single-format configs
+ * @typedef {InputOptions & { output?: OutputOptions }} PerFormatConfig
+ * @typedef {PerFormatConfig & { [maybeFormat: string]: PerFormatConfig | {} }} ConfigSnippet
+ * @type {(name: string, configSnippet: ConfigSnippet) => RollupOptions[]}
+ */
+function mk(name, configSnippet) {
+  // For CLI later
   bundleNames.push(name);
 
-  const globalOptions = {};
-  const outputConfigs = [];
-  for (const key in perFormat) {
-    let keyIsFormat = false;
-    for (const format of Object.values(bundleFormats)) {
-      if (key.includes(format)) {
-        outputConfigs.push({
+  const all = {};
+  /** @type {RollupOptions[]} */
+  const perFormatConfigs = [];
+
+  for (const key in configSnippet) {
+    const matchedFormats = bundleFormats.filter(format => key.includes(format));
+    for (const format of matchedFormats) {
+      // @ts-ignore '{}' doesn't include 'output'
+      const { output = {}, ...rest } = configSnippet[key];
+      perFormatConfigs.push({
+        output: {
           file: dest(name, format),
           format,
-          ...perFormat[key],
-        });
-        keyIsFormat = true;
-      }
+          ...output,
+        },
+        // TODO: For plugins or other object/array merging consider deepmerge
+        ...rest,
+      });
     }
-    if (keyIsFormat === false) {
-      globalOptions[key] = perFormat[key];
+    if (matchedFormats.length === 0) {
+      all[key] = configSnippet[key];
     }
   }
-  return outputConfigs.map(o => Object.assign({}, globalOptions, o));
+  // TODO: This is yet another reason to delegate to deepemerge
+  return perFormatConfigs.map(({ output, ...o }) =>
+    Object.assign({}, all, { output: { ...all.output, ...output }, ...o }));
 }
 
-// Tweaks and global changes. This finalizes the configs
-bundles.forEach(bundle => {
-  bundle.watch = {
-    clearScreen: false,
-  };
-  // Global plugins not per format
-  bundle.plugins = [
-    nodeResolve(),
-  ];
-  bundle.output.forEach(o => {
-    o.plugins = [
-      bundleSize({
-        // Unfortunately this package wasn't properly typed or documented, see
-        // package `size-plugin-core` for all available options
-        // @ts-ignore
-        columnWidth: 25,
-        decorateItem: (item) =>
-          item.replace('.js', `.js ${o.format.toUpperCase().padEnd(4)}`),
-      }),
-
-      [ESM, UMD, IIFE].includes(o.format)
-        && pluginTerser(),
-      // TODO: Brutal
-      // [UMD, IIFE].includes(o.format)
-      //   && pluginBabel(),
-      // [ESM].includes(o.format)
-      //   && pluginReplaceESM(bundle),
-
-      ...(o.plugins || []),
+/**
+ * Generate a full self contained bundle config from a single-format config
+ * @type {(rollupConfig: RollupOptions) => RollupOptions}
+ */
+const makeBundleConfigs = (rollupConfig) => {
+  const { input, external = [], output, ...rest } = rollupConfig;
+  const { format, plugins = [], ...restOutput } = output;
+  return {
+    input,
+    external,
+    plugins: [
+      nodeResolve(),
+      [UMD, IIFE].includes(format)
+        && pluginBabel(),
     ]
-      // Allow plugins to return an array
-      .flat()
-      .filter(Boolean);
+      .filter(Boolean),
+    output: {
+      sourcemap: true,
+      plugins: [
+        bundleSize({
+          // Unfortunately this package wasn't properly typed or documented, see
+          // package `size-plugin-core` for all available options
+          // @ts-ignore
+          columnWidth: 25,
+          decorateItem: (item) =>
+            item.replace('.js', `.js ${format.toUpperCase().padEnd(4)}`),
+        }),
+        [ESM, UMD, IIFE].includes(format)
+          && pluginTerser(),
+        [ESM].includes(format)
+          && pluginReplaceESM(rollupConfig),
 
-    o.strict = false;   // Remove `use strict;`
-    o.interop = false;  // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
-    o.freeze = false;   // Remove `Object.freeze()`
-    o.esModule = false; // Remove `esModule` property
-  });
-  bundle.onwarn = (warning) => {
+        ...plugins,
+      ]
+        .filter(Boolean),
+      strict:   false, // Remove `use strict;`
+      interop:  false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
+      freeze:   false, // Remove `Object.freeze()`
+      esModule: false, // Remove `esModule` property
+      ...restOutput,
+    },
+    watch: {
+      clearScreen: false,
+    },
+    onwarn(warning) {
     // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-    const skip = [
-      'THIS_IS_UNDEFINED',
-      'UNKNOWN_OPTION',
-      'MISSING_GLOBAL_NAME',
-      'CIRCULAR_DEPENDENCY',
-    ];
-    if (skip.includes(warning.code)) {
-      return;
-    }
-    console.error(warning.message);
+      const skip = [
+        'THIS_IS_UNDEFINED',
+        'UNKNOWN_OPTION',
+        'MISSING_GLOBAL_NAME',
+        'CIRCULAR_DEPENDENCY',
+      ];
+      if (skip.includes(warning.code)) return;
+      console.error(warning.message);
+    },
+    ...rest,
   };
-});
+};
+
+// Plugins
+// -----------------------------------------------------------------------------
 
 /** @type {() => Plugin} */
 function pluginBabel() {
-  // TODO: Brutal...
-  return getBabelOutputPlugin({
+  return babel({
     babelHelpers: 'bundled',
   });
 }
@@ -267,34 +263,29 @@ function pluginTerser() {
   });
 }
 
-/** @type {(bundleConfig: MergedRollupOptions) => Plugin[]?} */
+/** @type {(bundleConfig: RollupOptions) => Plugin?} */
 function pluginReplaceESM(bundleConfig) {
   const { external } = bundleConfig;
-  if (!external || !Array.isArray(external) || external.length === 0) {
-    return;
+  if (!external || !Array.isArray(external) || !external.length) {
+    return null;
   }
-  const { format, file } = bundleConfig.output.find(o => o.format === ESM);
-  const newExternals = [];
-  const newPlugins = [];
-
+  const { format, file } = bundleConfig.output;
+  const replacements = [];
   for (const dep of external) {
-    // @ts-ignore Externals can be regular expressions :(
-    const depFile = `dist/${format}/${path.basename(dep)}.js`;
-    const depPath = path.relative(file, depFile)
+    // @ts-ignore Externals can be regular expressions which break basename()
+    const depPath = path.relative(file, dest(path.basename(dep), format))
       .replace('..', '.')
       .replace('./..', '..');
-    // TODO: config.replace.push(replaceImport(dep, ''));
-    newPlugins.push(
-      replace({
-        delimiters: ['', ''],
-        [`from '${dep}'`]: `from '${depPath}'`,
-      })
-    );
-    // Also mark itself as a dependency
-    newExternals.push(depPath);
+    replacements.push({
+      search: new RegExp(`from '${dep}'`, 'g'),
+      eachMatch: () => `from '${depPath}'`,
+    });
   }
-  external.push(...newExternals);
-  return newPlugins;
+  return replace(replacements, {
+    sourcemap: Boolean(bundleConfig.output.sourcemap),
+  });
 }
 
-export { bundles, bundleNames, bundleFormats };
+const bundles = bundleSnippets.map(makeBundleConfigs);
+
+export { bundles, bundleNames };
