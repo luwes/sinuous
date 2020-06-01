@@ -114,6 +114,12 @@ const bundleSnippets = [
     },
     [ESM]: {},
   }),
+  mk('jsx', {
+    input: `${src}/jsx/index.js`,
+    external: ['sinuous/observable'],
+    [ESM]: {},
+    [UMD + IIFE]: { output: { name: 'sinuous' } },
+  }),
   mk('babel-plugin-htm', {
     input: `${src}/babel-plugin-htm/src/index.js`,
     [ESM + CJS]: {},
