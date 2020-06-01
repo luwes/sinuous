@@ -15,7 +15,11 @@ import htm from 'sinuous/htm';
 
 /* eslint-disable fp/no-rest-parameters,@typescript-eslint/no-use-before-define */
 
-Object.assign(api, { subscribe, cleanup, root, sample });
+// Minified this is actually smaller than Object.assign(api, { ... })
+api.subscribe = subscribe;
+api.cleanup = cleanup;
+api.root = root;
+api.sample = sample;
 
 // Makes it possible to intercept `h` calls and customize.
 export const h = (...args) =>
