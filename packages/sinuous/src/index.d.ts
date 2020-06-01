@@ -34,7 +34,7 @@ declare namespace sinuous {
   const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
   const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
 
-  const svgWrap: <T extends () => unknown>(closure: T) => ReturnType<T>;
+  const svgJSX: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
   function h(
     type: string,

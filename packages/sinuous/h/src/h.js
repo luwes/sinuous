@@ -5,10 +5,8 @@ import { api } from './api.js';
  * Sinuous `h` tag aka hyperscript.
  * @return {Function} `h` tag.
  */
-export function h() {
-  const args = Array.from(arguments);
+export const h = (...args) => {
   let el;
-
   function item(arg) {
     // @ts-ignore
     if (arg == null);
