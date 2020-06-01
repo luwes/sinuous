@@ -1,5 +1,4 @@
 import { api } from './api.js';
-import { removeNodes } from './remove-nodes.js';
 
 export function insert(el, value, endMark, current, startNode) {
   // This is needed if the el is a DocumentFragment initially.
@@ -44,7 +43,7 @@ export function insert(el, value, endMark, current, startNode) {
           startNode = (current._startMark && current._startMark.nextSibling)
             || endMark.previousSibling;
         }
-        removeNodes(el, startNode, endMark);
+        api.rm(el, startNode, endMark);
       }
     } else {
       el.textContent = '';
