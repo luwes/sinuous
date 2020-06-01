@@ -1,0 +1,16 @@
+{
+  "name": "sinuous-jsx",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Sinuous for JSX",
+  "module": "../dist/esm/jsx.js",
+  "main": "../dist/umd/jsx.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}
