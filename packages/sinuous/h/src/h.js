@@ -1,6 +1,5 @@
 /* Adapted from Hyper DOM Expressions - The MIT License - Ryan Carniato */
 import { api } from './api.js';
-import { add } from './add.js';
 
 /**
  * Create a sinuous `h` tag aka hyperscript.
@@ -19,7 +18,7 @@ export function context(options, isSvg) {
       if (arg == null);
       else if (typeof arg === 'string') {
         if (el) {
-          add(el, arg);
+          api.add(el, arg);
         } else {
           if (isSvg) {
             el = document.createElementNS('http://www.w3.org/2000/svg', arg);
@@ -33,7 +32,7 @@ export function context(options, isSvg) {
         arg.forEach(item);
       } else if (arg instanceof Node) {
         if (el) {
-          add(el, arg);
+          api.add(el, arg);
         } else {
           // Support updates
           el = arg;
@@ -42,14 +41,14 @@ export function context(options, isSvg) {
         api.property(el, arg, null, isSvg);
       } else if (typeof arg === 'function') {
         if (el) {
-          const endMark = add(el, '');
+          const endMark = api.add(el, '');
           api.insert(el, arg, endMark);
         } else {
           // Support Components
           el = arg.apply(null, args.splice(1));
         }
       } else {
-        add(el, '' + arg);
+        api.add(el, '' + arg);
       }
     }
 

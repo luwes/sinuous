@@ -1,4 +1,4 @@
-import { add } from './add.js';
+import { api } from './api.js';
 
 export function frag(value) {
   const { childNodes } = value;
@@ -10,7 +10,7 @@ export function frag(value) {
 
   // For a fragment of 2 elements or more add a startMark. This is required
   // for multiple nested conditional computeds that return fragments.
-  const _startMark = add(value, '', childNodes[0]);
+  const _startMark = api.add(value, '', childNodes[0]);
 
   return {
     _startMark

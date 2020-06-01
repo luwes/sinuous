@@ -1,5 +1,4 @@
 import { api } from './api.js';
-import { add } from './add.js';
 import { removeNodes } from './remove-nodes.js';
 
 export function insert(el, value, endMark, current, startNode) {
@@ -18,7 +17,7 @@ export function insert(el, value, endMark, current, startNode) {
     // Block optimized for string insertion.
     if (current == null || !el.firstChild) {
       if (endMark) {
-        add(el, value, endMark);
+        api.add(el, value, endMark);
       } else {
         // textContent is a lot faster than append -> createTextNode.
         el.textContent = value;
@@ -53,7 +52,7 @@ export function insert(el, value, endMark, current, startNode) {
     current = null;
 
     if (value && value !== true) {
-      current = add(el, value, endMark);
+      current = api.add(el, value, endMark);
     }
   }
 
