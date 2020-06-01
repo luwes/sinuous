@@ -1,5 +1,3 @@
-import path from 'path';
-import * as R from 'ramda';
 import replace from '@rollup/plugin-replace';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
@@ -9,51 +7,44 @@ import gzip from 'rollup-plugin-gzip';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import minimist from 'minimist';
 
-import { CJS, ESM, IIFE, UMD, bundles, fixtures } from './bundles.js';
+import { CJS, ESM, IIFE, UMD, bundles } from './bundles.js';
 
-const formatOptions = {
-  [CJS]: { ext: '.js' },
-  [ESM]: { ext: '.js' },
-  [IIFE]: { ext: '.min.js' },
-  [UMD]: { ext: '.js' }
+const formatExtensions = {
+  [CJS ]: '.js',
+  [ESM ]: '.js',
+  [IIFE]: '.min.js',
+  [UMD ]: '.js',
 };
 
 const argv = minimist(process.argv.slice(2));
 
-const requestedBundleTypes = (argv.type || '')
-  .split(',')
-  .map(type => type.toUpperCase());
-const requestedBundleNames = (argv.name || '').split(',');
-
-let bs = argv.fixtures ? fixtures : bundles;
-bs = argv.all ? bundles.concat(fixtures) : bs;
+const requestedBundleNames =
+  argv.name
+    ? argv.name
+        .split(',')
+        .map(name => name.trim())
+    : [];
+const requestedBundleTypes =
+  argv.type
+    ? argv.type
+        .split(',')
+        .map(type => type.trim().toUpperCase())
+    : [];
 
 // For every type in bundle.types creates a new bundle obj.
-const unbundle = ({ formats, ...rest }) =>
-  formats.map(format => ({ ...rest, format }));
-const allBundles = R.chain(unbundle, bs).filter(
-  ({ name, format }) => !shouldSkipBundle(name, format)
-);
+const allBundles =
+  bundles
+    .flatMap(({ formats, ...rest }) =>
+      formats.map(format => ({ ...rest, format }))
+    )
+    .filter(({ name, format }) => {
+      if (requestedBundleNames.length > 0 && !requestedBundleNames.includes(name))
+        return false;
+      if (requestedBundleTypes.length > 0 && !requestedBundleTypes.includes(format))
+        return false;
 
-function shouldSkipBundle(bundleName, bundleType) {
-  if (requestedBundleTypes.length > 0) {
-    const isAskingForDifferentType = requestedBundleTypes.every(
-      requestedType => bundleType.indexOf(requestedType) === -1
-    );
-    if (isAskingForDifferentType) {
       return true;
-    }
-  }
-  if (requestedBundleNames.length > 0) {
-    const isAskingForDifferentNames = requestedBundleNames.every(
-      requestedName => bundleName.indexOf(requestedName) === -1
-    );
-    if (isAskingForDifferentNames) {
-      return true;
-    }
-  }
-  return false;
-}
+    });
 
 function getConfig(options) {
   const {
@@ -65,13 +56,6 @@ function getConfig(options) {
     sourcemap = true,
     extend = false
   } = options;
-  const output = dest
-    ? `${dest(format)}/${name}${formatOptions[format].ext}`
-    : path.join(
-        path.dirname(input),
-        `../dist/${name}${formatOptions[format].ext}`
-      );
-
   const replacePeersForESM = external.map((name, i) => {
     return (
       ESM === format &&
@@ -93,12 +77,12 @@ function getConfig(options) {
       format,
       sourcemap,
       extend,
-      file: output,
+      file: `${dest(format)}/${name}${formatExtensions[format]}`,
       name: options.global,
       exports: options.exports,
-      strict: false, // Remove `use strict;`
-      interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
-      freeze: false, // Remove `Object.freeze()`
+      strict:   false, // Remove `use strict;`
+      interop:  false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
+      freeze:   false, // Remove `Object.freeze()`
       esModule: false, // Remove `esModule` property
     },
     plugins: [
@@ -111,6 +95,7 @@ function getConfig(options) {
       [ESM, UMD, IIFE].includes(format) &&
         terser({
           sourcemap: true,
+          ecma: '2017',
           warnings: true,
           compress: {
             passes: 2
