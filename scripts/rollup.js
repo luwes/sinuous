@@ -3,14 +3,14 @@ import { bundles, bundleNames } from './bundles.js';
 const argv = minimist(process.argv.slice(2));
 
 const requestedBundleNames
-  = argv.name
-    ? argv.name
+  = argv.filterName
+    ? argv.filterName
       .split(',')
       .map(name => name.trim())
     : [];
 const requestedBundleTypes
-  = argv.type
-    ? argv.type
+  = argv.filterType
+    ? argv.filterType
       .split(',')
       .map(type => type.trim())
     : [];

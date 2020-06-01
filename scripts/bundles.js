@@ -134,9 +134,6 @@ const bundleSnippets = [
  * @type {(name: string, configSnippet: ConfigSnippet) => RollupOptions[]}
  */
 function mk(name, configSnippet) {
-  // For CLI later
-  bundleNames.push(name);
-
   const all = {};
   /** @type {RollupOptions[]} */
   const perFormatConfigs = [];
@@ -146,6 +143,8 @@ function mk(name, configSnippet) {
     for (const format of matchedFormats) {
       // @ts-ignore '{}' doesn't include 'output'
       const { output = {}, ...rest } = configSnippet[key];
+      // For CLI later
+      bundleNames.push(name);
       perFormatConfigs.push({
         output: {
           file: dest(name, format),
@@ -182,6 +181,7 @@ const makeBundleConfigs = (rollupConfig) => {
     ]
       .filter(Boolean),
     output: {
+      format,
       sourcemap: true,
       plugins: [
         bundleSize({
