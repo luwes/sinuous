@@ -3,32 +3,34 @@ import { ElementChildren, FunctionComponent } from "../../shared";
 
 import { subscribe } from "../../observable/src";
 
-export function h(
-  type: string,
-  props:
-    | (JSXInternal.HTMLAttributes | JSXInternal.SVGAttributes) &
-      Record<string, unknown>
-    | null,
-  ...children: ElementChildren[]
-): HTMLElement;
-export  function h(
-  type: FunctionComponent,
-  props:
-    | (JSXInternal.HTMLAttributes | JSXInternal.SVGAttributes) &
-      Record<string, unknown>
-    | null,
-  ...children: ElementChildren[]
-): HTMLElement;
-export  function h(
-  children: ElementChildren[]
-): DocumentFragment;
-export namespace h {
-  export import JSX = JSXInternal;
+declare namespace _h {
+  function h(
+    type: string,
+    props:
+      | (JSXInternal.HTMLAttributes | JSXInternal.SVGAttributes) &
+        Record<string, unknown>
+      | null,
+    ...children: ElementChildren[]
+  ): HTMLElement;
+  function h(
+    type: FunctionComponent,
+    props:
+      | (JSXInternal.HTMLAttributes | JSXInternal.SVGAttributes) &
+        Record<string, unknown>
+      | null,
+    ...children: ElementChildren[]
+  ): HTMLElement;
+  function h(
+    children: ElementChildren[]
+  ): DocumentFragment;
+  namespace h {
+    export import JSX = JSXInternal;
+  }
 }
 
 export interface HyperscriptApi {
   // Hyperscript
-  h: typeof h;
+  h: typeof _h.h;
 
   // Internal API
   insert<T>(el: Node, value: T, endMark?: Node, current?: T, startNode?: Node): T;
