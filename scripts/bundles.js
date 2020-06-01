@@ -198,10 +198,36 @@ const makeBundleConfigs = (rollupConfig) => {
           decorateItem: (item) =>
             item.replace('.js', `.js ${format.toUpperCase().padEnd(4)}`),
         }),
+
         [ESM, UMD, IIFE].includes(format)
           && pluginTerser(),
+
         [ESM].includes(format)
-          && pluginReplaceESM(rollupConfig),
+          && pluginReplaceImportsESM(rollupConfig),
+
+        // These must be seperate replace calls to be different magic-strings
+        [ESM].includes(format)
+          && replace(/const ([a-z])=/g, ([, x]) => `let ${x}=`),
+
+        [ESM].includes(format)
+          && replace(/let ([a-z]);let /g, ([, x]) => `let ${x},`),
+
+        [UMD].includes(format)
+          && replace([
+            { search: /for\(var [a-z]=arguments.length,([a-z])=new Array.+?arguments\[[a-z]\]/g,
+              eachMatch: ([, x]) => `var ${x}=Array.from(arguments)`,
+            },
+            { search: /Object.defineProperty\(([a-z]),"([a-z]+)".+?return ([a-z.]+)}}\)/g,
+              eachMatch: ([, on, key, value]) => `${on}.${key}=${value}`,
+            },
+          ]),
+
+        // Simplify the apply() wrapper functions in files like sinuous/src
+        [UMD].includes(format)
+          && replace(
+            /var [a-z]=Array.from\(arguments\);return ([a-z.]+.apply\(.+?)[a-z]\)/g,
+            ([, partialApplyCall]) => `return ${partialApplyCall}arguments)`
+          ),
 
         ...plugins,
       ]
@@ -270,7 +296,7 @@ function pluginTerser() {
 }
 
 /** @type {(bundleConfig: RollupOptions) => Plugin?} */
-function pluginReplaceESM(bundleConfig) {
+function pluginReplaceImportsESM(bundleConfig) {
   const { external } = bundleConfig;
   if (!external || !Array.isArray(external) || !external.length) {
     return null;
@@ -283,8 +309,9 @@ function pluginReplaceESM(bundleConfig) {
       .replace('..', '.')
       .replace('./..', '..');
     replacements.push({
-      search: new RegExp(`from '${dep}'`, 'g'),
-      eachMatch: () => `from '${depPath}'`,
+      // Note that this is replacin from inside a minified bundle (no spaces)
+      search: new RegExp(`from"${dep}"`, 'g'),
+      eachMatch: () => `from"${depPath}"`,
     });
   }
   return replace(replacements, {

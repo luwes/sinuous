@@ -7,36 +7,64 @@ import MagicString from 'magic-string';
  * @typedef {{ sourcemap?: boolean }} Options
  */
 
-/** @type {(replacements: Replacer[], options: Options) => Plugin} */
-export default (replacements, options = {}) => ({
-  name: 'replace-output-plugin',
-  renderChunk(code, chunk) {
-    const magicString = new MagicString(code);
-    const id = chunk.fileName;
+/**
+ * Replace with regular expressions
+ *
+ * Supports short or long form parameters:
+ *  (search, eachMatch, options) =>
+ *  ([{ search, eachMatch }, ...], options) =>
+ *
+ * @type {(
+    searchOrList: RegExp | Replacer[],
+    eachMatch?: MatchFn | Options,
+    options?: Options
+   ) => Plugin}
+ */
+export default function replace(searchOrList, eachMatch, options = {}) {
+  const replacements
+    = Array.isArray(searchOrList)
+      ? searchOrList
+      : [{
+        search: searchOrList,
+        eachMatch,
+      }];
 
-    let matched = false;
-    let match;
-    for (const { search, eachMatch } of replacements) {
-      const pattern = search instanceof RegExp
-        ? search
-        : new RegExp(search);
+  // Support `options` as the second parameter for `(list, options) =>` form
+  if (replacements === searchOrList && typeof options === 'undefined')
+    options = eachMatch;
 
-      while ((match = pattern.exec(code))) {
-        matched = true;
-        const start = match.index;
-        const end = start + match[0].length;
-        const replacement = eachMatch(match);
-        console.log(id, match, replacement);
-        magicString.overwrite(start, end, replacement);
+  if (options.sourcemap !== false)
+    options.sourcemap = true;
+
+  return {
+    name: 'replace-output-plugin',
+    renderChunk(code, chunk) {
+      const magicString = new MagicString(code);
+      const id = chunk.fileName;
+
+      let matched = false;
+      let match;
+      for (const { search, eachMatch } of replacements) {
+        // Must assign a new object with global flag to avoid an infinite loop
+        const pattern = new RegExp(search, 'g');
+        console.log(`RPL: ${id} "${search.toString()}"`);
+        while ((match = pattern.exec(code))) {
+          matched = true;
+          const start = match.index;
+          const end = start + match[0].length;
+          const replacement = eachMatch(match);
+          console.log('\t', id, match[0], replacement);
+          magicString.overwrite(start, end, replacement);
+        }
       }
-    }
-    if (!matched) {
-      return null;
-    }
-    const result = { code: magicString.toString() };
-    if (options.sourcemap) {
-      result.map = magicString.generateMap({ hires: true });
-    }
-    return result;
-  },
-});
+      if (!matched) {
+        return null;
+      }
+      const result = { code: magicString.toString() };
+      if (options.sourcemap) {
+        result.map = magicString.generateMap({ hires: true });
+      }
+      return result;
+    },
+  };
+}
