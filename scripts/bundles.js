@@ -212,7 +212,7 @@ const makeBundleConfigs = (rollupConfig) => {
         [ESM].includes(format)
           && replace(/let ([a-z]);let /g, ([, x]) => `let ${x},`),
 
-        [UMD].includes(format)
+        [UMD, IIFE].includes(format)
           && replace([
             { search: /for\(var [a-z]=arguments.length,([a-z])=new Array.+?arguments\[[a-z]\]/g,
               eachMatch: ([, x]) => `var ${x}=Array.from(arguments)`,
@@ -223,7 +223,7 @@ const makeBundleConfigs = (rollupConfig) => {
           ]),
 
         // Simplify the apply() wrapper functions in files like sinuous/src
-        [UMD].includes(format)
+        [UMD, IIFE].includes(format)
           && replace(
             /var [a-z]=Array.from\(arguments\);return ([a-z.]+.apply\(.+?)[a-z]\)/g,
             ([, partialApplyCall]) => `return ${partialApplyCall}arguments)`

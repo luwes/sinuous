@@ -47,13 +47,13 @@ export default function replace(searchOrList, eachMatch, options = {}) {
       for (const { search, eachMatch } of replacements) {
         // Must assign a new object with global flag to avoid an infinite loop
         const pattern = new RegExp(search, 'g');
-        console.log(`RPL: ${id} "${search.toString()}"`);
+        // Debug: console.log(`RPL: ${id} "${search.toString()}"`);
         while ((match = pattern.exec(code))) {
           matched = true;
           const start = match.index;
           const end = start + match[0].length;
           const replacement = eachMatch(match);
-          console.log('\t', id, match[0], replacement);
+          // Debug: console.log('\t', id, match[0], replacement);
           magicString.overwrite(start, end, replacement);
         }
       }
