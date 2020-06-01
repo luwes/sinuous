@@ -1,28 +1,11 @@
-import { JSXInternal } from '../../src/jsx';
-import { Observable } from '../../observable/src';
+import { JSXInternal } from '../../jsx-internal';
+import { ElementChildren, FunctionComponent } from '../../shared';
 
 interface VNode<P = {}> {
   type: string
   _props: object
   _children: VNode[]
   _isSvg: boolean
-}
-
-type ElementChild =
-  | VNode
-  | Function
-  | Observable<any>
-  | object
-  | string
-  | number
-  | boolean
-  | null
-  | undefined;
-type ElementChildren = ElementChild[] | ElementChild;
-
-interface FunctionComponent<P = {}> {
-  (props: object, ...children: ElementChildren[]): any
-  (...children: ElementChildren[]): any
 }
 
 export function hydrate(delta: VNode, root?: Node): Node;

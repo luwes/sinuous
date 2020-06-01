@@ -5,6 +5,7 @@
   "description": "Sinuous h",
   "module": "../dist/esm/h.js",
   "main": "../dist/umd/h.js",
+  "types": "src/index.d.ts",
   "files": [
     "dist",
     "src"

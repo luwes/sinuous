@@ -1,5 +1,6 @@
 /**
  * Internal API.
+ * Consumer must provide an observable at api.subscribe<T>(observer: () => T).
  *
  * @typedef {0 | 1} hSVG Determines if `h` will build HTML or SVG elements
  * @type {{

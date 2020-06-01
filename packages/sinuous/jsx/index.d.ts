@@ -20,12 +20,9 @@ declare namespace sinuous {
   export import observable = _o.observable;
   export import o = _o.o;
 
-  const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
-  const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
-
   const svgJSX: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
-  // Split HyperscriptApi's h() tag into functions with more narrow typings
+  // Narrow the typing of HyperscriptApi's h() tag
   function h(
     type: string,
     props:
@@ -49,34 +46,10 @@ declare namespace sinuous {
     export import JSX = JSXInternal;
   }
 
-  function hs(
-    type: string,
-    props:
-      | JSXInternal.SVGAttributes &
-        Record<string, unknown>
-      | null,
-    ...children: ElementChildren[]
-  ): SVGElement;
-  function hs(
-    type: FunctionComponent,
-    props:
-      | JSXInternal.SVGAttributes &
-        Record<string, unknown>
-      | null,
-    ...children: ElementChildren[]
-  ): SVGElement;
-  function hs(
-    children: ElementChildren[]
-  ): DocumentFragment;
-  namespace hs {
-    export import JSX = JSXInternal;
-  }
-
   /** Sinuous API */
   interface SinuousApi extends HyperscriptApi {
     // Hyperscript
     h: typeof h;
-    hs: typeof hs;
 
     // Observable
     subscribe: typeof _o.subscribe;
