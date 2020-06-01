@@ -14,7 +14,7 @@ import { api } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
 // Maintain object reference outside of context()
-Object.assign(api, { subscribe, cleanup, root, sample, svgMode: 0 });
+Object.assign(api, { subscribe, cleanup, root, sample, s: 0 });
 
 // Set `h` to work with an SVG namespace for the duration of the closure
 export function svgWrap(closure) {

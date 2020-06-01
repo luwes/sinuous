@@ -16,11 +16,9 @@ export function h() {
       if (el) {
         api.add(el, arg);
       } else {
-        if (api.svgMode) {
-          el = document.createElementNS('http://www.w3.org/2000/svg', arg);
-        } else {
-          el = document.createElement(arg);
-        }
+        el = api.s
+          ? document.createElementNS('http://www.w3.org/2000/svg', arg)
+          : document.createElement(arg);
       }
     } else if (Array.isArray(arg)) {
       // Support Fragments
@@ -34,7 +32,7 @@ export function h() {
         el = arg;
       }
     } else if (typeof arg === 'object') {
-      api.property(el, arg, null, api.svgMode);
+      api.property(el, arg, null, api.s);
     } else if (typeof arg === 'function') {
       if (el) {
         const endMark = api.add(el, '');
@@ -47,7 +45,6 @@ export function h() {
       api.add(el, '' + arg);
     }
   }
-
   args.forEach(item);
   return el;
 }
