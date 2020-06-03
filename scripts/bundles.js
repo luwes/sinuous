@@ -33,7 +33,12 @@ const ext = {
 };
 
 const src = 'packages/sinuous';
-const dest = (name, format) => `${src}/dist/${format}/${name}.${ext[format]}`;
+const dest = (name, format) => {
+  const folder = format === ESM
+    ? 'module'
+    : 'dist';
+  return `${src}/${folder}/${name}.${ext[format]}`;
+};
 
 /**
  * For filtering by CLI, as names are dissolved into the config
