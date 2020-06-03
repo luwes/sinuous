@@ -2,8 +2,8 @@
   "name": "htm",
   "version": "2.1.1",
   "description": "The Tagged Template syntax for Virtual DOM. Only browser-compatible syntax.",
-  "main": "../dist/umd/htm.js",
-  "module": "../dist/esm/htm.js",
+  "main": "../dist/htm.js",
+  "module": "../module/htm.js",
   "scripts": {
     "lint": "eslint src",
     "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"

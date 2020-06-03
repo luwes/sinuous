@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous hydrate",
-  "module": "../dist/esm/hydrate.js",
-  "main": "../dist/umd/hydrate.js",
+  "module": "../module/hydrate.js",
+  "main": "../dist/hydrate.js",
   "types": "src/index.d.ts",
   "files": [
     "src"

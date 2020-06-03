@@ -2,10 +2,11 @@
   "name": "sinuous",
   "version": "0.27.3",
   "description": "🧬 Small, fast, reactive render engine",
-  "module": "dist/esm/sinuous.js",
-  "main": "dist/umd/sinuous.js",
+  "module": "module/sinuous.js",
+  "main": "dist/sinuous.js",
   "types": "src/index.d.ts",
   "files": [
+    "module",
     "dist",
     "src",
     "h/src",

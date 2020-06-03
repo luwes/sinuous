@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous map",
-  "module": "../dist/esm/map.js",
-  "main": "../dist/umd/map.js",
+  "module": "../module/map.js",
+  "main": "../dist/map.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",

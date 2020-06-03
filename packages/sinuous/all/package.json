@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous all",
-  "module": "../dist/esm/all.js",
-  "main": "../dist/umd/all.js",
+  "module": "../module/all.js",
+  "main": "../dist/all.js",
   "files": [
     "src"
   ],

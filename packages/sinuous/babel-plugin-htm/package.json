@@ -2,8 +2,8 @@
 	"name": "babel-plugin-htm",
 	"version": "3.0.0",
 	"description": "Babel plugin to compile htm's Tagged Template syntax to hyperscript or inline VNodes.",
-	"main": "../dist/umd/babel-plugin-htm.js",
-	"module": "../dist/esm/babel-plugin-htm.js",
+	"main": "../dist/babel-plugin-htm.js",
+	"module": "../module/babel-plugin-htm.js",
 	"files": [
 		"dist"
 	],
