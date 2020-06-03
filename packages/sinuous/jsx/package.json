@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "description": "Sinuous for JSX",
-  "module": "../dist/esm/jsx.js",
-  "main": "../dist/umd/jsx.js",
+  "module": "../module/jsx.js",
+  "main": "../dist/jsx.js",
   "types": "src/index.d.ts",
   "files": [
     "src"
