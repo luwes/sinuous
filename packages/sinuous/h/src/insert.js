@@ -1,7 +1,8 @@
 import { api } from './api.js';
 
 /**
- * @typedef {(el: Node, value: *, endMark?: Node, current?: Node, startNode?: Node) => Node} hInsert
+ * @typedef {import('./add.js').Frag} Frag
+ * @typedef {(el: Node, value: *, endMark?: Node, current?: Node | Frag, startNode?: Node) => Node} hInsert
  * @type {hInsert}
  */
 export const insert = (el, value, endMark, current, startNode) => {
@@ -12,9 +13,11 @@ export const insert = (el, value, endMark, current, startNode) => {
   // accurate if content gets pulled before clearing.
   startNode = startNode || current instanceof Node && current;
 
+  // @ts-ignore Allow empty if statement
   if (value === current);
   else if (
     (!current || typeof current === 'string')
+    // @ts-ignore Doesn't like `value += ''`
     // eslint-disable-next-line no-implicit-coercion
     && (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
@@ -25,7 +28,7 @@ export const insert = (el, value, endMark, current, startNode) => {
         api.add(el, value, endMark);
       } else {
         // Using textContent is a lot faster than append -> createTextNode.
-        el.textContent = value;
+        el.textContent = /** @type {string} See `value += '' */ (value);
       }
     } else {
       if (endMark) {
@@ -61,5 +64,5 @@ export const insert = (el, value, endMark, current, startNode) => {
     }
   }
 
-  return current;
+  return /** @type {Node} */ (current);
 };

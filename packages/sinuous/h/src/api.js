@@ -10,6 +10,8 @@
  * property:  import('./property.js').hProperty
  * add:       import('./add.js').hAdd
  * rm:        import('./remove-nodes.js').hRemoveNodes
+ * subscribe: (observer: () => *) => void
  * }}
  */
+// @ts-ignore Object is populated in index.js
 export const api = {};

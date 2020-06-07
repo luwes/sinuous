@@ -4,13 +4,14 @@ import { api } from './api.js';
 /**
  * Sinuous `h` tag aka hyperscript.
  * @typedef {HTMLElement | SVGElement | DocumentFragment} DOM
- * @typedef {(tag?: string, props?: object, ...children: Node | *) => DOM} hTag
+ * @typedef {(tag?: string | [], props?: object, ...children: Node | *) => DOM} hTag
  * @type {hTag}
  */
 // eslint-disable-next-line fp/no-rest-parameters
 export const h = (...args) => {
   let el;
-  const item = (arg) => {
+  const item = (/** @type {unknown} */ arg) => {
+    // @ts-ignore Allow empty if
     // eslint-disable-next-line eqeqeq
     if (arg == null);
     else if (typeof arg === 'string') {
@@ -33,14 +34,15 @@ export const h = (...args) => {
         el = arg;
       }
     } else if (typeof arg === 'object') {
+      // @ts-ignore 0 | 1 is a boolean but can't type cast; they don't overlap
       api.property(el, arg, null, api.s);
     } else if (typeof arg === 'function') {
       if (el) {
-        const endMark = api.add(el, '');
+        // See note in add.js#frag() - This is a Text('') node
+        const endMark = /** @type {Text} */ (api.add(el, ''));
         api.insert(el, arg, endMark);
       } else {
         // Support Components
-        // eslint-disable-next-line prefer-spread
         el = arg.apply(null, args.splice(1));
       }
     } else {
