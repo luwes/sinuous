@@ -23,8 +23,6 @@ declare namespace sinuous {
   const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
   const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
 
-  const svgJSX: <T extends () => unknown>(closure: T) => ReturnType<T>;
-
   // Split HyperscriptApi's h() tag into functions with more narrow typings
   function h(
     type: string,
