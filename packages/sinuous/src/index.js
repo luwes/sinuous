@@ -13,8 +13,6 @@ import {
 import { api } from 'sinuous/h';
 import htm from 'sinuous/htm';
 
-/* eslint-disable fp/no-rest-parameters */
-
 // Minified this is actually smaller than Object.assign(api, { ... })
 api.subscribe = subscribe;
 api.cleanup = cleanup;
