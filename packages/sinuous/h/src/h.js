@@ -4,13 +4,13 @@ import { api } from './api.js';
 /**
  * Sinuous `h` tag aka hyperscript.
  * @typedef {HTMLElement | SVGElement | DocumentFragment} DOM
- * @typedef {(tag?: string | [], props?: object, ...children: Node | *) => DOM} hTag
+ * @typedef {(tag: string? | [], props: object?, ...children: Node | *) => DOM} hTag
  * @type {hTag}
  */
 // eslint-disable-next-line fp/no-rest-parameters
 export const h = (...args) => {
   let el;
-  const item = (/** @type {unknown} */ arg) => {
+  const item = (/** @type {*} */ arg) => {
     // @ts-ignore Allow empty if
     // eslint-disable-next-line eqeqeq
     if (arg == null);

@@ -17,7 +17,7 @@ const castNode = (value) => {
 
 /**
  * @typedef {{ _startMark: Text }} Frag
- * @type {(value: Text | Node | DocumentFragment) => (ChildNode | Frag)?}
+ * @type {(value: Text | Node | DocumentFragment) => (Node | Frag)?}
  */
 const frag = (value) => {
   const { childNodes } = value;
@@ -32,7 +32,7 @@ const frag = (value) => {
 
 /**
  * Add a string or node before a reference node or at the end.
- * @typedef {(parent: Node, value: Node | string | number, endMark?: Node) => Node | Frag} hAdd
+ * @typedef {(parent: Node, value: Node | string | number, endMark: Node?) => Node | Frag} hAdd
  * @type {hAdd}
  */
 export const add = (parent, value, endMark) => {

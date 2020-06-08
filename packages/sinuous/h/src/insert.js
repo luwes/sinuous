@@ -2,7 +2,7 @@ import { api } from './api.js';
 
 /**
  * @typedef {import('./add.js').Frag} Frag
- * @typedef {(el: Node, value: *, endMark?: Node, current?: Node | Frag, startNode?: Node) => Node} hInsert
+ * @typedef {(el: Node, value: *, endMark: Node?, current: (Node | Frag)?, startNode: Node?) => Node} hInsert
  * @type {hInsert}
  */
 export const insert = (el, value, endMark, current, startNode) => {

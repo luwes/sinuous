@@ -2,7 +2,7 @@ import { api } from './api.js';
 
 /**
  * Proxy an event to hooked event handlers.
- * @this {Node & { _listeners: { [name: string]: (ev: Event) => * } }}
+ * @this Node & { _listeners: { [name: string]: (ev: Event) => * } }
  * @type {(e: Event) => *}
  */
 function eventProxy(e) {
@@ -26,7 +26,7 @@ const handleEvent = (el, name, value) => {
 };
 
 /**
- * @typedef {(el: Node, value: *, name: string, isAttr?: boolean, isCss?: boolean) => void} hProperty
+ * @typedef {(el: Node, value: *, name: string, isAttr: boolean?, isCss: boolean?) => void} hProperty
  * @type {hProperty}
  */
 export const property = (el, value, name, isAttr, isCss) => {
