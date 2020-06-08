@@ -19,8 +19,9 @@ declare namespace _h {
         Record<string, unknown>
       | null,
     ...children: ElementChildren[]
-  ): HTMLElement | SVGElement;
+  ): HTMLElement | SVGElement | DocumentFragment;
   function h(
+    tag: ElementChildren[] | [],
     ...children: ElementChildren[]
   ): DocumentFragment;
   namespace h {

@@ -41,6 +41,7 @@ declare namespace sinuous {
     ...children: ElementChildren[]
   ): HTMLElement;
   function h(
+    tag: ElementChildren[] | [],
     ...children: ElementChildren[]
   ): DocumentFragment;
   namespace h {
@@ -64,6 +65,7 @@ declare namespace sinuous {
     ...children: ElementChildren[]
   ): SVGElement;
   function hs(
+    tag: ElementChildren[] | [],
     ...children: ElementChildren[]
   ): DocumentFragment;
   namespace hs {
@@ -73,7 +75,6 @@ declare namespace sinuous {
   /** Sinuous API */
   interface SinuousApi extends HyperscriptApi {
     // Hyperscript
-    h: typeof h;
     hs: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
     // Observable
