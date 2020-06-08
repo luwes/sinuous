@@ -1,7 +1,7 @@
 /*
-* Sinuous by Wesley Luyten (@luwes).
-* Really ties all the packages together.
-*/
+ * Sinuous by Wesley Luyten (@luwes).
+ * Really ties all the packages together.
+ */
 import {
   o,
   observable,
