@@ -40,7 +40,23 @@ declare namespace sinuous {
     ...children: ElementChildren[]
   ): HTMLElement;
   function h(
-    children: ElementChildren[]
+    type: string,
+    props:
+      | JSXInternal.SVGAttributes &
+        Record<string, unknown>
+      | null,
+    ...children: ElementChildren[]
+  ): SVGElement;
+  function h(
+    type: FunctionComponent,
+    props:
+      | JSXInternal.SVGAttributes &
+        Record<string, unknown>
+      | null,
+    ...children: ElementChildren[]
+  ): SVGElement;
+  function h(
+    ...children: ElementChildren[]
   ): DocumentFragment;
   namespace h {
     export import JSX = JSXInternal;

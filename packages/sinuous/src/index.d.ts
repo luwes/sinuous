@@ -43,7 +43,7 @@ declare namespace sinuous {
     ...children: ElementChildren[]
   ): HTMLElement;
   function h(
-    children: ElementChildren[]
+    ...children: ElementChildren[]
   ): DocumentFragment;
   namespace h {
     export import JSX = JSXInternal;
@@ -66,7 +66,7 @@ declare namespace sinuous {
     ...children: ElementChildren[]
   ): SVGElement;
   function hs(
-    children: ElementChildren[]
+    ...children: ElementChildren[]
   ): DocumentFragment;
   namespace hs {
     export import JSX = JSXInternal;

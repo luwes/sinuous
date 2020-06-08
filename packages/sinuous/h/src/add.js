@@ -5,9 +5,11 @@ const EMPTY_ARR = [];
 
 /** @type {(value: *) => Text | Node | DocumentFragment} */
 const castNode = (value) => {
+  // TODO: Number hotpath? In api.h it's converted to a string via `'' + value`
   if (typeof value === 'string') {
     return document.createTextNode(value);
   }
+  // Note that a DocumentFragment is an instance of Node
   if (!(value instanceof Node)) {
     // Passing an empty array creates a DocumentFragment.
     return api.h(EMPTY_ARR, value);
@@ -32,7 +34,8 @@ const frag = (value) => {
 
 /**
  * Add a string or node before a reference node or at the end.
- * @typedef {(parent: Node, value: Node | string | number, endMark?: Node) => Node | Frag} hAdd
+ * @typedef {Node | string | number} Value
+ * @typedef {(parent: Node, value: Value | Value[], endMark?: Node) => Node | Frag} hAdd
  * @type {hAdd}
  */
 export const add = (parent, value, endMark) => {
