@@ -74,7 +74,7 @@ declare namespace sinuous {
   interface SinuousApi extends HyperscriptApi {
     // Hyperscript
     h: typeof h;
-    hs: typeof hs;
+    hs: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
     // Observable
     subscribe: typeof _o.subscribe;
