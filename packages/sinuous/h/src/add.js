@@ -10,7 +10,8 @@ const castNode = (value) => {
   }
   // Note that a DocumentFragment is an instance of Node
   if (!(value instanceof Node)) {
-    // Passing an empty array creates a DocumentFragment.
+    // Passing an empty array creates a DocumentFragment
+    // Note this means api.add is not purely a subcall of api.h; it can nest
     return api.h(EMPTY_ARR, value);
   }
   return value;

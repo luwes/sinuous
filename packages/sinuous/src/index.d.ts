@@ -39,7 +39,7 @@ declare namespace sinuous {
         Record<string, unknown>
       | null,
     ...children: ElementChildren[]
-  ): HTMLElement;
+  ): HTMLElement | DocumentFragment;
   function h(
     tag: ElementChildren[] | [],
     ...children: ElementChildren[]
@@ -63,7 +63,7 @@ declare namespace sinuous {
         Record<string, unknown>
       | null,
     ...children: ElementChildren[]
-  ): SVGElement;
+  ): SVGElement | DocumentFragment;
   function hs(
     tag: ElementChildren[] | [],
     ...children: ElementChildren[]
