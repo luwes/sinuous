@@ -7,7 +7,7 @@ import { api } from './api.js';
  * @typedef {(tag: string? | [], props: object?, ...children: Node | *) => DOM} hTag
  * @type {hTag}
  */
-// eslint-disable-next-line fp/no-rest-parameters
+
 export const h = (...args) => {
   let el;
   const item = (/** @type {*} */ arg) => {
