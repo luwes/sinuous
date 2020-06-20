@@ -33,7 +33,7 @@ jobs:
   include:
     - stage: tests
       name: "Unit tests"
-      script: COVERAGE=true yarn test --single-run
+      script: COVERAGE=true yarn test --single-run --console --stack --log-level debug
     - script:
       - git fetch && git checkout origin/gh-pages -- bench/results/results.json
       - echo '!/bench/results/dist/' >> .gitignore
