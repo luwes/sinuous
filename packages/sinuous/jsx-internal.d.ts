@@ -1,4 +1,4 @@
-import { Observable } from '../observable/src';
+import { Observable } from './observable/src';
 
 export namespace JSXInternal {
   type AllowObservable<Props> = { [K in keyof Props]: Props[K] | Observable<Props[K]> }

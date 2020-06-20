@@ -8,7 +8,6 @@ test('test functions exist on namespace S', function(t) {
   t.equal(typeof S.h, 'function', 'no h fun');
   t.equal(typeof S.hs, 'function', 'no hs fun');
   t.equal(typeof S.api, 'object', 'no api object');
-  t.equal(typeof S.context, 'function', 'no context fun');
 
   t.equal(typeof S.map, 'function', 'no map fun');
 

@@ -1,6 +1,6 @@
 import * as hydrate from 'sinuous/hydrate';
 export { hydrate };
-export { html, svg, h, hs, api, context } from 'sinuous';
+export { html, svg, h, hs, api } from 'sinuous';
 export { map } from 'sinuous/map/mini';
 export * from 'sinuous/observable';
 

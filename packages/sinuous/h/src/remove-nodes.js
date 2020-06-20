@@ -1,11 +1,9 @@
 /**
  * Removes nodes, starting from `startNode` (inclusive) to `endMark` (exclusive).
- *
- * @param  {Node} parent
- * @param  {Node} startNode - This is the start node.
- * @param  {Node} endMark - This is the ending marker node.
+ * @typedef {(parent: Node, startNode: Node, endMark: Node) => void} hRemoveNodes
+ * @type {hRemoveNodes}
  */
-export function removeNodes(parent, startNode, endMark) {
+export const removeNodes = (parent, startNode, endMark) => {
   while (startNode && startNode !== endMark) {
     const n = startNode.nextSibling;
     // Is needed in case the child was pulled out the parent before clearing.
@@ -14,4 +12,4 @@ export function removeNodes(parent, startNode, endMark) {
     }
     startNode = n;
   }
-}
+};
