@@ -20,9 +20,10 @@ api.root = root;
 api.sample = sample;
 
 api.hs = (...args) => {
+  const prevIsSvg = api.s;
   api.s = true;
   const el = h(...args);
-  api.s = false;
+  api.s = prevIsSvg;
   return el;
 };
 
