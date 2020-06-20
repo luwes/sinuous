@@ -39,9 +39,10 @@ declare namespace sinuous {
         Record<string, unknown>
       | null,
     ...children: ElementChildren[]
-  ): HTMLElement;
+  ): HTMLElement | DocumentFragment;
   function h(
-    children: ElementChildren[]
+    tag: ElementChildren[] | [],
+    ...children: ElementChildren[]
   ): DocumentFragment;
   namespace h {
     export import JSX = JSXInternal;
@@ -62,9 +63,10 @@ declare namespace sinuous {
         Record<string, unknown>
       | null,
     ...children: ElementChildren[]
-  ): SVGElement;
+  ): SVGElement | DocumentFragment;
   function hs(
-    children: ElementChildren[]
+    tag: ElementChildren[] | [],
+    ...children: ElementChildren[]
   ): DocumentFragment;
   namespace hs {
     export import JSX = JSXInternal;
@@ -73,8 +75,7 @@ declare namespace sinuous {
   /** Sinuous API */
   interface SinuousApi extends HyperscriptApi {
     // Hyperscript
-    h: typeof h;
-    hs: typeof hs;
+    hs: <T extends () => unknown>(closure: T) => ReturnType<T>;
 
     // Observable
     subscribe: typeof _o.subscribe;
