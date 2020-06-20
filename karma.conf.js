@@ -28,7 +28,7 @@ var sauceLabsLaunchers = {
   sl_safari: {
     base: 'SauceLabs',
     browserName: 'safari',
-    platform: 'OS X 10.11'
+    platform: 'macOS 10.13'
   },
   sl_edge: {
     base: 'SauceLabs',
