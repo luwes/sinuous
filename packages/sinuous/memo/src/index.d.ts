@@ -1,4 +1,4 @@
-import { JSXInternal } from '../../src/jsx';
+import { JSXInternal } from '../../jsx-internal';
 
 type Props =
   | JSXInternal.HTMLAttributes &

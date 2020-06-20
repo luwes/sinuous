@@ -1,25 +1,8 @@
-import { JSXInternal } from '../../src/jsx';
-import { Observable } from '../../observable/src';
+import { JSXInternal } from '../../jsx-internal';
+import { FunctionComponent, ElementChildren } from '../../shared';
 
 interface TemplateResult<P = {}> {
   (): Node
-}
-
-type ElementChild =
-  | TemplateResult
-  | Function
-  | Observable<any>
-  | object
-  | string
-  | number
-  | boolean
-  | null
-  | undefined;
-type ElementChildren = ElementChild[] | ElementChild;
-
-interface FunctionComponent<P = {}> {
-  (props: object, ...children: ElementChildren[]): any
-  (...children: ElementChildren[]): any
 }
 
 export function render(delta: TemplateResult, root?: Node): Node;

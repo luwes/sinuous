@@ -1,6 +1,17 @@
-/*
- * @param {object} api
- * @param {Function} [api.subscribe] - Function that listens to state changes.
- * @param {Function} [api.cleanup] - Add the given function to the cleanup stack.
+/**
+ * Internal API.
+ * Consumer must provide an observable at api.subscribe<T>(observer: () => T).
+ *
+ * @typedef {0 | 1} hSVG Determines if `h` will build HTML or SVG elements
+ * @type {{
+ * h:         import('./h.js').hTag
+ * s:         hSVG
+ * insert:    import('./insert.js').hInsert
+ * property:  import('./property.js').hProperty
+ * add:       import('./add.js').hAdd
+ * rm:        import('./remove-nodes.js').hRemoveNodes
+ * subscribe: (observer: () => *) => void
+ * }}
  */
+// @ts-ignore Object is populated in index.js
 export const api = {};

@@ -9,8 +9,8 @@ coverage
 
 /site/public/
 dist
+module
 !/bench/css/bootstrap/dist/
-packages/sinuous/module/
 
 /bench/results/results.json
 /bench/yarn.lock

@@ -1,27 +1,34 @@
 import { api } from './api.js';
-import { add } from './add.js';
-import { removeNodes } from './remove-nodes.js';
 
-export function insert(el, value, endMark, current, startNode) {
+/**
+ * @typedef {import('./add.js').Frag} Frag
+ * @typedef {(el: Node, value: *, endMark: Node?, current: (Node | Frag)?, startNode: Node?) => Node} hInsert
+ * @type {hInsert}
+ */
+export const insert = (el, value, endMark, current, startNode) => {
   // This is needed if the el is a DocumentFragment initially.
   el = (endMark && endMark.parentNode) || el;
 
-  // Save startNode of current. In clear() endMark.previousSibling
-  // is not always accurate if content gets pulled before clearing.
+  // Save startNode of current. In clear() endMark.previousSibling is not always
+  // accurate if content gets pulled before clearing.
   startNode = startNode || current instanceof Node && current;
 
+  // @ts-ignore Allow empty if statement
   if (value === current);
   else if (
-    (!current || typeof current === 'string') &&
-    (typeof value === 'string' || (typeof value === 'number' && (value += '')))
+    (!current || typeof current === 'string')
+    // @ts-ignore Doesn't like `value += ''`
+    // eslint-disable-next-line no-implicit-coercion
+    && (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
+    // eslint-disable-next-line eqeqeq
     if (current == null || !el.firstChild) {
       if (endMark) {
-        add(el, value, endMark);
+        api.add(el, value, endMark);
       } else {
-        // textContent is a lot faster than append -> createTextNode.
-        el.textContent = value;
+        // Using textContent is a lot faster than append -> createTextNode.
+        el.textContent = /** @type {string} See `value += '' */ (value);
       }
     } else {
       if (endMark) {
@@ -32,7 +39,7 @@ export function insert(el, value, endMark, current, startNode) {
     }
     current = value;
   } else if (typeof value === 'function') {
-    api.subscribe(function insertContent() {
+    api.subscribe(() => {
       current = api.insert(el, value.call({ el, endMark }), endMark, current, startNode);
     });
   } else {
@@ -45,7 +52,7 @@ export function insert(el, value, endMark, current, startNode) {
           startNode = (current._startMark && current._startMark.nextSibling)
             || endMark.previousSibling;
         }
-        removeNodes(el, startNode, endMark);
+        api.rm(el, startNode, endMark);
       }
     } else {
       el.textContent = '';
@@ -53,9 +60,9 @@ export function insert(el, value, endMark, current, startNode) {
     current = null;
 
     if (value && value !== true) {
-      current = add(el, value, endMark);
+      current = api.add(el, value, endMark);
     }
   }
 
-  return current;
-}
+  return /** @type {Node} */ (current);
+};

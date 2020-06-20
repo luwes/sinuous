@@ -1,6 +1,36 @@
 import { api } from './api.js';
 
-export function property(el, value, name, isAttr, isCss) {
+/**
+ * Proxy an event to hooked event handlers.
+ * @this Node & { _listeners: { [name: string]: (ev: Event) => * } }
+ * @type {(e: Event) => *}
+ */
+function eventProxy(e) {
+  // eslint-disable-next-line fp/no-this
+  return this._listeners[e.type](e);
+}
+
+/**
+ * @type {(el: Node, name: string, value: (ev: Event?) => *) => void}
+ */
+const handleEvent = (el, name, value) => {
+  name = name.slice(2).toLowerCase();
+
+  if (value) {
+    el.addEventListener(name, eventProxy);
+  } else {
+    el.removeEventListener(name, eventProxy);
+  }
+
+  (el._listeners || (el._listeners = {}))[name] = value;
+};
+
+/**
+ * @typedef {(el: Node, value: *, name: string, isAttr: boolean?, isCss: boolean?) => void} hProperty
+ * @type {hProperty}
+ */
+export const property = (el, value, name, isAttr, isCss) => {
+  // eslint-disable-next-line eqeqeq
   if (value == null) return;
   if (!name || (name === 'attrs' && (isAttr = true))) {
     for (name in value) {
@@ -11,15 +41,15 @@ export function property(el, value, name, isAttr, isCss) {
     // on render unless they have an observable indicator.
     handleEvent(el, name, value);
   } else if (typeof value === 'function') {
-    api.subscribe(function setProperty() {
+    api.subscribe(() => {
       api.property(el, value.call({ el, name }), name, isAttr, isCss);
     });
   } else if (isCss) {
     el.style.setProperty(name, value);
   } else if (
-    isAttr ||
-    name.slice(0, 5) === 'data-' ||
-    name.slice(0, 5) === 'aria-'
+    isAttr
+    || name.slice(0, 5) === 'data-'
+    || name.slice(0, 5) === 'aria-'
   ) {
     el.setAttribute(name, value);
   } else if (name === 'style') {
@@ -32,26 +62,4 @@ export function property(el, value, name, isAttr, isCss) {
     if (name === 'class') name += 'Name';
     el[name] = value;
   }
-}
-
-function handleEvent(el, name, value) {
-  name = name.slice(2).toLowerCase();
-
-  if (value) {
-    el.addEventListener(name, eventProxy);
-  } else {
-    el.removeEventListener(name, eventProxy);
-  }
-
-  (el._listeners || (el._listeners = {}))[name] = value;
-}
-
-/**
- * Proxy an event to hooked event handlers.
- * @param {Event} e - The event object from the browser.
- * @return {Function}
- */
-function eventProxy(e) {
-  // eslint-disable-next-line
-  return this._listeners[e.type](e);
-}
+};

@@ -1,44 +1,34 @@
 export = sinuous;
 export as namespace sinuous;
 
-import { JSXInternal } from './jsx';
-import { Observable, subscribe, cleanup, root, sample } from '../observable/src';
+import { JSXInternal } from '../jsx-internal';
+import { HyperscriptApi } from '../h/src';
+import * as _shared from '../shared'
+import * as _o from '../observable/src';
 
+// Adapted from Preact's index.d.ts
+// Namespace prevents conflict with React typings
 declare namespace sinuous {
   export import JSX = JSXInternal;
-
-  type ElementChild =
-    | Node
-    | Function
-    | Observable<any>
-    | object
-    | string
-    | number
-    | boolean
-    | null
-    | undefined;
-  type ElementChildren = ElementChild[] | ElementChild;
+  import FunctionComponent = _shared.FunctionComponent;
+  import ElementChildren = _shared.ElementChildren;
 
   interface SinuousDOMAttributes {
     children?: ElementChildren;
   }
 
-  interface FunctionComponent<P = {}> {
-    (props: object, ...children: ElementChildren[]): any
-    (...children: ElementChildren[]): any
-  }
+  export import observable = _o.observable;
+  export import o = _o.o;
 
-  function observable<T>(value: T): Observable<T>;
-  function o<T>(value: T): Observable<T>;
+  const html: (strings: TemplateStringsArray, ...values: unknown[]) => HTMLElement | DocumentFragment;
+  const svg: (strings: TemplateStringsArray, ...values: unknown[]) => SVGElement | DocumentFragment;
 
-  const html: (strings: TemplateStringsArray, ...values: any[]) => HTMLElement | DocumentFragment;
-  const svg: (strings: TemplateStringsArray, ...values: any[]) => SVGElement | DocumentFragment;
-
+  // Split HyperscriptApi's h() tag into functions with more narrow typings
   function h(
     type: string,
     props:
       | JSXInternal.HTMLAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): HTMLElement;
@@ -46,7 +36,7 @@ declare namespace sinuous {
     type: FunctionComponent,
     props:
       | JSXInternal.HTMLAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): HTMLElement;
@@ -61,7 +51,7 @@ declare namespace sinuous {
     type: string,
     props:
       | JSXInternal.SVGAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): SVGElement;
@@ -69,7 +59,7 @@ declare namespace sinuous {
     type: FunctionComponent,
     props:
       | JSXInternal.SVGAttributes &
-        Record<string, any>
+        Record<string, unknown>
       | null,
     ...children: ElementChildren[]
   ): SVGElement;
@@ -80,35 +70,19 @@ declare namespace sinuous {
     export import JSX = JSXInternal;
   }
 
-  /**
-   * Options required for reactive state, defaults to the Sinuous observable API.
-   */
-  interface Options {
-    subscribe: typeof subscribe;
-    cleanup: typeof cleanup;
-    root: typeof root;
-    sample: typeof sample;
-  }
-
-  /**
-   * Creates a new hyperscript function with the passed reactive API.
-   * @param options
-   * @param isSvg
-   */
-  function context(options: Options, isSvg?: boolean): typeof h | typeof hs;
-
-  /**
-   * Sinuous internal API.
-   */
-  interface Api extends Options {
+  /** Sinuous API */
+  interface SinuousApi extends HyperscriptApi {
+    // Hyperscript
     h: typeof h;
     hs: typeof hs;
-    insert<T>(el: Node, value: T, endMark?: Node, current?: T, startNode?: Node): T;
-    property(el: Node, value: any, name: string, isAttr?: boolean, isCss?: boolean): void;
-    add(parent: Node, value: Node | string, endMark?: Node): Node;
-    rm(parent: Node, startNode: Node, endMark: Node): void;
+
+    // Observable
+    subscribe: typeof _o.subscribe;
+    cleanup: typeof _o.cleanup;
+    root: typeof _o.root;
+    sample: typeof _o.sample;
   }
 
-  const api: Api;
+  const api: SinuousApi;
 
 }
