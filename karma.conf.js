@@ -106,7 +106,7 @@ module.exports = function(config) {
       sauceLabs ? 'saucelabs' : []
     ),
 
-    tapReporter: {
+    tapReporter: !sauceLabs && {
       prettify: require('faucet') // require('tap-spec')
     },
 
