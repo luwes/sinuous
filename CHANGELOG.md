@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.4 - 2020-06-20
+
+### Added
+
+- Typescript definition changes and explaining Sinuous internals [#114](https://github.com/luwes/sinuous/pull/114) thanks @heyheyhello
+
 ## 0.27.3 - 2020-05-23
 
 ### Added
