@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "sinuous": "0.27.0"
+    "sinuous": "0.27.5"
   },
   "devDependencies": {
     "babel-plugin-transform-jsx-to-htm": "^2.0.0",
