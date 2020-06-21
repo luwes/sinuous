@@ -28,8 +28,6 @@
     "all/src",
     "data/package.json",
     "data/src",
-    "memo/package.json",
-    "memo/src",
     "render/package.json",
     "render/src"
   ],
