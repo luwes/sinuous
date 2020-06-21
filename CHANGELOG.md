@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.5 - 2020-06-20
+
+### Removed
+
+- Removed `sinuous/memo` module. This is available as a standalone module at [luwes/memo](https://github.com/luwes/memo).
+
 ## 0.27.4 - 2020-06-20
 
 ### Added
