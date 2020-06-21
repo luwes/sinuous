@@ -164,6 +164,39 @@ hydrate(
 hydrate(dhtml`<a class="navbar-menu${isActive}" />`);
 ```
 
+## Internal API
+
+Sinuous exposes an internal API which can be overridden for fun and profit.
+For example [sinuous-context](https://github.com/theSherwood/sinuous-context) uses it to implement a React like context API.
+
+As of `0.27.4` the internal API should be used to make Sinuous work with a 3rd party reactive library like [Mobx](https://mobx.js.org). This can be done by overriding `subscribe`, `root`, `sample` and `cleanup`.
+
+### Example
+
+```js
+import { api } from 'sinuous';
+
+const oldH = api.h;
+api.h = (...args) => {
+  console.log(args);
+  return oldH(...args);
+}
+```
+
+### Methods
+
+- `h(type: string, props: object, ...children)`
+- `hs(type: string, props: object, ...children)`
+- `insert<T>(el: Node, value: T, endMark?: Node, current?: T | Frag, startNode?: Node): T | Frag;`
+- `property(el: Node, value: unknown, name: string, isAttr?: boolean, isCss?: boolean): void;`
+- `add(parent: Node, value: Value | Value[], endMark?: Node): Node | Frag;`
+- `rm(parent: Node, startNode: Node, endMark: Node): void;`
+- `subscribe<T>(observer: () => T): () => void;`
+- `root<T>(fn: () => T): T;`
+- `sample<T>(fn: () => T): T;`
+- `cleanup<T extends () => unknown>(fn: T): T;`
+
+
 ## Motivation
 
 The motivation for Sinuous was to create a very lightweight UI library to use in our video player at Vimeo. The view layer in the player is rendered by innerHTML and native DOM operations which is probably the best in terms of performance and bundle size. However the need for a more declarative way of doing things is starting to creep up. Even if it's just for ergonomics.
