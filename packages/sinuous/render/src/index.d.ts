@@ -1,4 +1,4 @@
-import { JSXInternal } from '../../jsx-internal';
+import { JSXInternal } from '../../jsx';
 import { FunctionComponent, ElementChildren } from '../../shared';
 
 interface TemplateResult<P = {}> {
