@@ -6,16 +6,21 @@ import { HyperscriptApi } from '../h/src';
 import * as _shared from '../shared'
 import * as _o from '../observable/src';
 
+import FunctionComponent = _shared.FunctionComponent;
+import ElementChildren = _shared.ElementChildren;
+
+declare module 'sinuous/jsx' {
+  namespace JSXInternal {
+    interface DOMAttributes<Target extends EventTarget> {
+      children?: ElementChildren;
+    }
+  }
+}
+
 // Adapted from Preact's index.d.ts
 // Namespace prevents conflict with React typings
 declare namespace sinuous {
   export import JSX = JSXInternal;
-  import FunctionComponent = _shared.FunctionComponent;
-  import ElementChildren = _shared.ElementChildren;
-
-  interface SinuousDOMAttributes {
-    children?: ElementChildren;
-  }
 
   export import observable = _o.observable;
   export import o = _o.o;
