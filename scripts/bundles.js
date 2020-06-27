@@ -263,7 +263,6 @@ function pluginBabel() {
 /** @type {() => Plugin} */
 function pluginTerser() {
   return terser({
-    sourcemap: true,
     ecma: 2017,
     warnings: true,
     compress: {

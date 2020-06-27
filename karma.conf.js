@@ -1,6 +1,6 @@
 const path = require('path');
 const alias = require('@rollup/plugin-alias');
-const nodeResolve = require('@rollup/plugin-node-resolve');
+const { default: nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const babel = require('rollup-plugin-babel');

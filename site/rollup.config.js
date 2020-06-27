@@ -4,7 +4,6 @@ import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-size';
 
 const terserPlugin = terser({
-  sourcemap: true,
   warnings: true,
   compress: {
     passes: 2
