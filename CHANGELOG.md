@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.6 - 2020-06-27
+
+### Fixed
+
+- Fix typings in api.s and npm package. Revert JSX's d.ts rename [#119](https://github.com/luwes/sinuous/pull/119)
+
 ## 0.27.5 - 2020-06-20
 
 ### Removed
