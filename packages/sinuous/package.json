@@ -29,7 +29,9 @@
     "data/package.json",
     "data/src",
     "render/package.json",
-    "render/src"
+    "render/src",
+    "jsx.d.ts",
+    "shared.d.ts"
   ],
   "keywords": [
     "functional",

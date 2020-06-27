@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "noEmit": true
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "noEmit": true,
+    "strict": true,
+    "allowJs": true
   }
 }

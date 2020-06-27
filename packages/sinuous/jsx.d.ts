@@ -376,8 +376,7 @@ export namespace JSXInternal {
     TargetedWheelEvent<Target>
   >;
 
-  interface DOMAttributes<Target extends EventTarget>
-    extends sinuous.SinuousDOMAttributes {
+  interface DOMAttributes<Target extends EventTarget> {
     // Image Events
     onLoad?: GenericEventHandler<Target>;
     onLoadCapture?: GenericEventHandler<Target>;

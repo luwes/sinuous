@@ -1,4 +1,4 @@
-import { JSXInternal } from "../../jsx-internal";
+import { JSXInternal } from "../../jsx";
 import { ElementChildren, FunctionComponent } from "../../shared";
 
 import { subscribe } from "../../observable/src";
@@ -37,6 +37,7 @@ export interface HyperscriptApi {
   h: typeof _h.h;
 
   // Internal API
+  s: Boolean;
   insert<T>(el: Node, value: T, endMark?: Node, current?: T | Frag, startNode?: Node): T | Frag;
   property(el: Node, value: unknown, name: string, isAttr?: boolean, isCss?: boolean): void;
   add(parent: Node, value: Value | Value[], endMark?: Node): Node | Frag;
