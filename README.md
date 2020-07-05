@@ -43,6 +43,9 @@
 - [**memo**](https://github.com/luwes/memo) ([@luwes](https://github.com/luwes)): Memoize components and functions.
 - [**disco**](https://github.com/luwes/disco) ([@luwes](https://github.com/luwes)): Universal `connected` and `disconnected` lifecycle events.
 - [**sinuous-style**](https://github.com/theSherwood/sinuous-style) ([@theSherwood](https://github.com/theSherwood)): Scoped styles for Sinuous à la styled-jsx.
+- [**sinuous-lifecycle**](https://www.npmjs.com/package/sinuous-lifecycle) ([@heyheyhello](https://github.com/heyheyhello)): onAttach/onDetach DOM lifecycles.
+- [**sinuous-trace**](https://www.npmjs.com/package/sinuous-trace) ([@heyheyhello](https://github.com/heyheyhello)): Traces the internal API to record component creation, adoption, and removal.
+
 
 ### Examples
 
