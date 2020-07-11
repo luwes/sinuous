@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.7 - 2020-07-11
+
+### Removed
+
+- Removed `sinuous/map/mini` module.
+
+### Fixed
+
+- Permit observables as values in style objects in Typescript + JSX [#123](https://github.com/luwes/sinuous/pull/123) thanks [@lynlevenick](https://github.com/lynlevenick) 💛
+
 ## 0.27.6 - 2020-06-27
 
 ### Fixed
@@ -18,14 +28,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Typescript definition changes and explaining Sinuous internals [#114](https://github.com/luwes/sinuous/pull/114) thanks @heyheyhello
+- Typescript definition changes and explaining Sinuous internals [#114](https://github.com/luwes/sinuous/pull/114) thanks [@heyheyhello](https://github.com/heyheyhello) 💛
 
 ## 0.27.3 - 2020-05-23
 
 ### Added
 
 - Update babel-plugin-htm to 3.0.0 and simplify upstream diff [#110](https://github.com/luwes/sinuous/pull/110) thanks @heyheyhello
-- Improve typings in observable, computed, and map [#111](https://github.com/luwes/sinuous/pull/111) thanks @heyheyhello
+- Improve typings in observable, computed, and map [#111](https://github.com/luwes/sinuous/pull/111) thanks [@heyheyhello](https://github.com/heyheyhello) 💛
 
 ## 0.27.2 - 2020-05-12
 

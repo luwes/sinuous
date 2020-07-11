@@ -18,7 +18,6 @@
     "observable/src",
     "observable/package.json",
     "map/src",
-    "map/mini",
     "map/package.json",
     "template/src",
     "template/package.json",

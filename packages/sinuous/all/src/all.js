@@ -1,7 +1,7 @@
 import * as hydrate from 'sinuous/hydrate';
 export { hydrate };
 export { html, svg, h, hs, api } from 'sinuous';
-export { map } from 'sinuous/map/mini';
+export { map } from 'sinuous/map';
 export * from 'sinuous/observable';
 
 const oldS = self.S;
