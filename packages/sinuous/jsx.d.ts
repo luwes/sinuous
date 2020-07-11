@@ -1,7 +1,8 @@
 import { Observable } from './observable/src';
 
 export namespace JSXInternal {
-  type AllowObservable<Props> = { [K in keyof Props]: Props[K] | Observable<Props[K]> }
+  type OrObservable<T> = T | Observable<T>
+  type AllowObservable<Props> = { [K in keyof Props]: OrObservable<Props[K]> }
 
   interface Element extends HTMLElement { }
 
@@ -695,7 +696,9 @@ export namespace JSXInternal {
     srcSet?: string;
     start?: number;
     step?: number | string;
-    style?: string | { [key: string]: string | number };
+    style?:
+      | string
+      | { [key: string]: OrObservable<string | number> };
     summary?: string;
     tabIndex?: number;
     target?: string;
