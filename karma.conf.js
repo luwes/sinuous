@@ -150,7 +150,6 @@ module.exports = function(config) {
         alias({
           entries: {
             tape: 'tape-browser',
-            'sinuous/map/mini': __dirname + '/packages/sinuous/map/mini/src/mini.js',
             'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
             'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
             'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
