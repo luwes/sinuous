@@ -51,7 +51,7 @@
     "babel-eslint": "^10.1.0",
     "babel-plugin-transform-jsx-to-htm": "^2.0.0",
     "browserify": "^16.5.1",
-    "codecov": "^3.7.0",
+    "codecov": "^3.7.1",
     "cross-env": "^7.0.2",
     "eslint": "^7.4.0",
     "eslint-plugin-fp": "^2.3.0",
