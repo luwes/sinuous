@@ -21,8 +21,6 @@ import '../map/test/map-basic.js';
 import '../map/test/map-fragments.js';
 import '../map/test/map-objects.js';
 import '../map/test/dispose.js';
-import '../map/mini/test/mini.js';
-import '../map/mini/test/mini-basic.js';
 import '../hydrate/test/hydrate.js';
 import '../hydrate/test/svg.js';
 import '../hydrate/test/selector.js';

@@ -88,12 +88,6 @@ const bundleSnippets = [
     [ESM]: {},
     [UMD + IIFE]: { output: { name: 'render' } },
   }),
-  mk('map/mini', {
-    input: `${src}/map/mini/src/mini.js`,
-    external: ['sinuous'],
-    [ESM]: {},
-    [UMD + IIFE]: { output: { name: 'mini' } },
-  }),
   mk('map', {
     input: `${src}/map/src/index.js`,
     external: ['sinuous'],
