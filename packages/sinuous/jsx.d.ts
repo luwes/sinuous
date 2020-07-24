@@ -17,7 +17,7 @@ export namespace JSXInternal {
     = AllowObservable<_SVGAttributes<Target>>
 
   interface _SVGAttributes<Target extends EventTarget = SVGElement>
-    extends HTMLAttributes<Target> {
+    extends _HTMLAttributes<Target> {
     accentHeight?: number | string;
     accumulate?: 'none' | 'sum';
     additive?: 'replace' | 'sum';
