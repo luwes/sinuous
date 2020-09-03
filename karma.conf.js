@@ -3,7 +3,7 @@ const alias = require('@rollup/plugin-alias');
 const { default: nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
-const babel = require('rollup-plugin-babel');
+const { default: babel } = require('@rollup/plugin-babel');
 const minimist = require('minimist');
 const c = require('ansi-colors');
 const argv = minimist(process.argv.slice(2));
@@ -169,6 +169,9 @@ module.exports = function(config) {
             'packages/*/!(htm)/**/src/**/*.js'
         }),
         sauceLabs && babel({
+          babelHelpers: 'bundled',
+          inputSourceMap: false,
+          compact: false,
           include: [
             'packages/sinuous/**'
           ]
