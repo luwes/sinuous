@@ -1,4 +1,5 @@
 import test from 'tape';
+import spy from 'ispy';
 import { h, html } from 'sinuous';
 import { template, o, t } from 'sinuous/template';
 import { map } from 'sinuous/map';
@@ -25,6 +26,25 @@ test('template result fills tags', function(tt) {
     template(() => h('h1', t('title')))({ title: 'Test' }).firstChild.outerHTML,
     '<h1>Test</h1>'
   );
+  tt.end();
+});
+
+test('template works w/ event listeners', function(tt) {
+  const buttonClick = spy();
+  const obj = { buttonClick };
+  const btn = template(() =>
+    h('button', { onclick: o('buttonClick') }, 'Click me')
+  )(obj).firstChild;
+
+  btn.click();
+  tt.equal(buttonClick.callCount, 1, 'click called');
+
+  obj.buttonClick = spy();
+  btn.click();
+  tt.equal(obj.buttonClick.callCount, 1, 'can change click handler via observable prop');
+
+  tt.equal(buttonClick.callCount, 1, 'first handler is still clicked just once');
+
   tt.end();
 });
 
