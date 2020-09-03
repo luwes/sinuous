@@ -41,6 +41,11 @@ export function t(key, observed, bind) {
     action._bind = bind;
     recordedActions.push(action);
   };
+
+  // Tiny indicator that this is a template tag.
+  // Used in sinuous/h/src/property.js
+  tag.$o = 2;
+
   return tag;
 }
 
