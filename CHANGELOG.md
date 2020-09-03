@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.8 - 2020-09-02
+
+### Fixed 
+
+- Fix template tags for event handlers fix [#130](https://github.com/luwes/sinuous/pull/130)
+
 ## 0.27.7 - 2020-07-11
 
 ### Removed
