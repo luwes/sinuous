@@ -7,7 +7,7 @@ import { api } from './api.js';
  */
 function eventProxy(e) {
   // eslint-disable-next-line fp/no-this
-  return this._listeners[e.type](e);
+  return this._listeners && this._listeners[e.type](e);
 }
 
 /**
