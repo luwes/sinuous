@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.9 - 2020-10-25
+
+### Fixed 
+
+- Fixed an issue with hydrating components with children.
+
 ## 0.27.8 - 2020-09-02
 
 ### Fixed 
