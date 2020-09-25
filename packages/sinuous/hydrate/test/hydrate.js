@@ -3,6 +3,49 @@ import spy from 'ispy';
 import { d, dhtml, hydrate, _ } from 'sinuous/hydrate';
 import { observable, html } from 'sinuous';
 
+test('hydrate component w/ children', function(t) {
+  document.body.innerHTML = `
+    <div id="wrap">
+      <div>34</div>
+      <div class="name">
+        <span>Wes</span>
+      </div>
+    </div>
+  `;
+
+  const Wrap = (props, ...children) => {
+    return dhtml`
+      <div id=${props.id}>
+        ${children}
+      </div>
+    `;
+  };
+
+  const Name = (props, ...children) => {
+    return dhtml`
+      <div class=${props.class}>
+        ${children}
+      </div>
+    `;
+  };
+
+  const div = hydrate(dhtml`
+    <${Wrap} id="wrap">
+      <div class="age hidden">34</div>
+      <${Name} class="name hidden">
+        <span class="green">Wes</span>
+      <//>
+    <//>
+  `);
+
+  t.equal(div.id, 'wrap');
+  t.equal(div.children[0].className, 'age hidden');
+  t.equal(div.children[1].className, 'name hidden');
+  t.equal(div.children[1].children[0].className, 'green');
+
+  t.end();
+});
+
 test('hydrates div with children', function(t) {
   const delta = dhtml`<div>${[dhtml`<b />`]}</div>`;
   delete delta._children[0]._parent; // eslint-disable-line
