@@ -81,7 +81,8 @@ export function hydrate(delta, root) {
 
   if (typeof delta.type === 'function') {
     // Support Components
-    delta = delta.type.apply(null, [delta._props].concat(delta._children));
+    delta = delta.type.apply(null, [delta._props]
+      .concat(delta._children.map(c => c())));
   }
 
   let isFragment = delta.type === undefined;
