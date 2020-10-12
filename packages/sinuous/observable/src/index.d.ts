@@ -13,5 +13,5 @@ export function isListening(): boolean;
 export function root<T>(fn: () => T): T;
 export function sample<T>(fn: () => T): T;
 export function transaction<T>(fn: () => T): T;
-export function on<T extends () => unknown>(observables: Observable<unknown>[], fn: T, seed?: unknown, onlyChanges?: boolean): T;
+export function on<T extends () => unknown>(observables: Observable<unknown>[], fn: T, seed?: unknown, onchanges?: boolean): T;
 export function cleanup<T extends () => unknown>(fn: T): T;
