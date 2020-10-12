@@ -79,7 +79,7 @@ A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
-**JSX** transforms at build time like React does via `@babel/plugin-transform-react-jsx`. See @heyheyhello/sinuous-tsx for JSX and TSX examples.
+**JSX** transforms at build time like React does via `@babel/plugin-transform-react-jsx`. See @heyheyhello/sinuous-tsx-example for JSX and TSX examples.
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
