@@ -575,6 +575,9 @@ export namespace JSXInternal {
 
   interface _HTMLAttributes<RefType extends EventTarget = EventTarget>
     extends DOMAttributes<RefType> {
+    // Sinuous properties
+    attrs?: Record<string, unknown>
+
     // Standard HTML Attributes
     accept?: string;
     acceptCharset?: string;
