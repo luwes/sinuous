@@ -2,7 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.27.9 - 2020-10-25
+## 0.27.10 - 2020-10-13
+
+### Added
+
+- Improved TS definitions thanks [@heyheyhello](https://github.com/heyheyhello) and [@bree](https://github.com/Brecert) 💛
+
+## 0.27.9 - 2020-09-25
 
 ### Fixed 
 

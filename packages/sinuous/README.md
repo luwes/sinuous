@@ -5,8 +5,8 @@
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/sinuous)
 [![Financial Contributors on Open Collective](https://opencollective.com/sinuous/all/badge.svg?label=financial+contributors&style=flat-square)](https://opencollective.com/sinuous)
 
-**npm**: `npm i sinuous`  
-**cdn**: https://unpkg.com/sinuous  
+**npm**: `npm i sinuous`\
+**cdn**: https://unpkg.com/sinuous\
 **module**: https://unpkg.com/sinuous?module
 
 ---
@@ -30,11 +30,11 @@
 
 ### All-in-one
 
-| Size                                                                                                                                | Name                                    | Description                                                      |
-| ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| Size                                                                                                                                | Name                                    | Description                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------ |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a `<script>` tag |
 
-**cdn**: https://unpkg.com/sinuous/dist/all  
+**cdn**: https://unpkg.com/sinuous/dist/all\
 **module**: https://unpkg.com/sinuous/module/all
 
 ### Community
@@ -56,14 +56,15 @@
 - [**Sierpinski Triangle**](https://luwes.github.io/sinuous-sierpinski-triangle-demo/) _([GitHub Project](https://github.com/luwes/sinuous-sierpinski-triangle-demo))_
 - [**60FPS Rainbow Spiral**](https://luwes.github.io/sinuous-rainbow-spiral/) _([GitHub Project](https://github.com/luwes/sinuous-rainbow-spiral))_ 🌈
 - [**Three.js Boxes**](https://luwes.github.io/sinuous-three-boxes/) _([GitHub Project](https://github.com/luwes/sinuous-three-boxes))_ 📦
-- [**JSX Typescript**](https://luwes.github.io/sinuous-typescript-jsx/) _([GitHub Project](https://github.com/luwes/sinuous-typescript-jsx))_
+- [**JSX**](https://github.com/heyheyhello/sinuous-tsx-example/tree/jsx/) _([GitHub Project @heyheyhello](https://github.com/heyheyhello/sinuous-tsx-example/tree/jsx/))_
+- [**TSX**](https://github.com/heyheyhello/sinuous-tsx-example/tree/tsx/) _([GitHub Project @heyheyhello](https://github.com/heyheyhello/sinuous-tsx-example/tree/tsx/))_
 - [**Data - Github Users**](https://luwes.github.io/sinuous-data-github-users/) _([GitHub Project](https://github.com/luwes/sinuous-data-github-users))_
 - [**Dynamic Components**](https://codesandbox.io/s/github/luwes/sinuous-dynamic-components) _([GitHub Project](https://github.com/luwes/sinuous-dynamic-components))_
 - [**Simple routing**](https://codesandbox.io/s/sinuous-router-g2eud) ([@mindplay-dk](https://github.com/mindplay-dk)) 🌏
 - [**Datepicker**](https://codesandbox.io/s/sinuous-date-picker-thxdt) ([@mindplay-dk](https://github.com/mindplay-dk))
 - [**Hacker News**](https://codesandbox.io/s/sinuous-hacker-news-dqtf7) ([@mindplay-dk](https://github.com/mindplay-dk))
-- [**7 GUIs**](https://codesandbox.io/s/github/theSherwood/7_GUIs/tree/master/sinuous) ([@theSherwood](https://github.com/theSherwood)) 
-- [**Plain SPA**](https://github.com/johannschopplich/plain-spa) ([@johannschopplich](https://github.com/johannschopplich)) 
+- [**7 GUIs**](https://codesandbox.io/s/github/theSherwood/7_GUIs/tree/master/sinuous) ([@theSherwood](https://github.com/theSherwood))
+- [**Plain SPA**](https://github.com/johannschopplich/plain-spa) ([@johannschopplich](https://github.com/johannschopplich))
 
 ---
 
@@ -75,10 +76,10 @@ A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM
 
 **Hyperscript** directly call `h(type: string, props: object, ...children)`.
 
-**Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,  
+**Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,
 at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
 
-**JSX** needs to be transformed at build time first with [`babel-plugin-transform-jsx-to-htm`](https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm) and after with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
+**JSX** transforms at build time like React does via `@babel/plugin-transform-react-jsx`. See @heyheyhello/sinuous-tsx-example for JSX and TSX examples.
 
 **Handlebars/Mustache** is possible with [Hyperstache](https://github.com/luwes/hyperstache). See issue [#49](https://github.com/luwes/sinuous/issues/49).
 
@@ -103,7 +104,7 @@ setInterval(() => counter(counter() + 1), 1000);
 #### JSX
 
 ```jsx
-import { observable } from 'sinuous';
+import { h, observable } from 'sinuous';
 
 const counter = observable(0);
 const view = () => <div>Counter {counter}</div>;
@@ -115,7 +116,7 @@ setInterval(() => counter(counter() + 1), 1000);
 #### Hyperscript
 
 ```js
-import { observable, h } from 'sinuous';
+import { h, observable } from 'sinuous';
 
 const counter = observable(0);
 const view = () => h('div', 'Counter ', counter);
@@ -188,6 +189,8 @@ api.h = (...args) => {
 
 ### Methods
 
+These are defined in [sinuous/src](./packages/sinuous/src/index.js) and [sinuous/h](./packages/sinuous/h/index.js).
+
 - `h(type: string, props: object, ...children)`
 - `hs(type: string, props: object, ...children)`
 - `insert<T>(el: Node, value: T, endMark?: Node, current?: T | Frag, startNode?: Node): T | Frag;`
@@ -199,6 +202,7 @@ api.h = (...args) => {
 - `sample<T>(fn: () => T): T;`
 - `cleanup<T extends () => unknown>(fn: T): T;`
 
+Note that _some_ observable methods are imported into the internal API from `sinuous-observable` because they're used in Sinuous' core. To access all observable methods, import from `sinuous/observable` directly.
 
 ## Motivation
 
@@ -219,7 +223,7 @@ Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) functi
 
 ## Browser Support
 
-Sinuous supports modern browsers and IE11+ (requires `Array.from` polyfill).
+Sinuous supports modern browsers and IE11+ (requires `Array.from` polyfill if using `sinuous/map`, `sinuous/render`, `sinuous/template`, or `sinuous/data`).
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
 
@@ -255,7 +259,6 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## Big Thanks
 
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
+Cross-browser Testing Platform and Open Source ❤ Provided by [Sauce Labs][homepage]
 
 [homepage]: https://saucelabs.com
-
