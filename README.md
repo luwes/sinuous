@@ -5,8 +5,8 @@
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/sinuous)
 [![Financial Contributors on Open Collective](https://opencollective.com/sinuous/all/badge.svg?label=financial+contributors&style=flat-square)](https://opencollective.com/sinuous)
 
-**npm**: `npm i sinuous`\
-**cdn**: https://unpkg.com/sinuous\
+**npm**: `npm i sinuous`  
+**cdn**: https://unpkg.com/sinuous  
 **module**: https://unpkg.com/sinuous?module
 
 ---
@@ -34,7 +34,7 @@
 | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------ |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a `<script>` tag |
 
-**cdn**: https://unpkg.com/sinuous/dist/all\
+**cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
 
 ### Community
