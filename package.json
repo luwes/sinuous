@@ -25,6 +25,11 @@
     "docs": "node scripts/docs.js && yarn format:docs",
     "format:docs": "prettier --write '**/*.md'"
   },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": true
+  },
   "eslintConfig": {
     "env": {
       "browser": true,
