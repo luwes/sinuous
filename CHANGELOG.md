@@ -10,13 +10,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 0.27.9 - 2020-09-25
 
-### Fixed 
+### Fixed
 
 - Fixed an issue with hydrating components with children.
 
 ## 0.27.8 - 2020-09-02
 
-### Fixed 
+### Fixed
 
 - Fix template tags for event handlers fix [#130](https://github.com/luwes/sinuous/pull/130)
 
@@ -177,18 +177,18 @@ plugins: [
   [
     'sinuous/babel-plugin-htm',
     {
-      import: 'sinuous'
-    }
+      import: 'sinuous',
+    },
   ],
   [
     'sinuous/babel-plugin-htm',
     {
       pragma: 'hs',
       tag: 'svg',
-      import: 'sinuous'
+      import: 'sinuous',
     },
-    'svg'
-  ]
+    'svg',
+  ],
 ];
 ```
 
@@ -266,11 +266,7 @@ plugins: [
 - Added tag name selecting in `hydrate`, for example:
 
 ```js
-hydrate(
-  html`
-    <body onclick="${blur}"></body>
-  `
-);
+hydrate(html` <body onclick="${blur}"></body> `);
 ```
 
 ## 0.19.0 - 2019-12-25

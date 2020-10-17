@@ -7,7 +7,7 @@ const sources = [
   {
     cwd: '',
     files: 'packages/*/*/src/observable.js',
-    config: 'jsdoc.config.js',
+    config: 'scripts/jsdoc.config.js',
     output: 'packages/sinuous/observable/README.md'
   }
 ];
