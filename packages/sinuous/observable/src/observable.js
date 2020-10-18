@@ -1,5 +1,3 @@
-import { getChildrenDeep } from './utils.js';
-
 const EMPTY_ARR = [];
 let tracking;
 let queue;
@@ -172,9 +170,16 @@ function computed(observer, value) {
     });
 
     // If any children were marked as fresh remove them from the run lists.
-    const allChildren = getChildrenDeep(update._children);
-    allChildren.forEach(removeFreshChildren);
-
+    let curr;
+    const queue = [].concat(update.children);
+    while (curr = queue.pop()) {
+      if (curr._fresh) {
+        curr._observables.forEach(o => {
+          if (o._runObservers) o._runObservers.delete(curr);
+        });
+      }
+      curr.children.forEach(u => queue.push(u));
+    }
     tracking = prevTracking;
     return value;
   }
@@ -193,16 +198,6 @@ function computed(observer, value) {
   }
 
   return data;
-}
-
-function removeFreshChildren(u) {
-  if (u._fresh) {
-    u._observables.forEach(o => {
-      if (o._runObservers) {
-        o._runObservers.delete(u);
-      }
-    });
-  }
 }
 
 /**
