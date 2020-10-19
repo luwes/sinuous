@@ -185,7 +185,10 @@ function computed(observer, value) {
 
   function data() {
     if (update._fresh) {
-      update._observables.forEach(o => o());
+      if (tracking) {
+        // If being read from inside another computed, pass observables to it
+        update._observables.forEach(o => o());
+      }
     } else {
       value = update();
     }
