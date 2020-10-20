@@ -13,7 +13,6 @@ import '../observable/test/sample.js';
 import '../observable/test/root.js';
 import '../observable/test/dispose.js';
 import '../observable/test/transaction.js';
-import '../observable/test/utils.js';
 import '../observable/test/on.js';
 import '../observable/test/value.js';
 import '../map/test/map.js';
