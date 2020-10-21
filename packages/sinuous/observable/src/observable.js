@@ -154,32 +154,11 @@ function computed(observer, value) {
       tracking._children.push(update);
     }
 
-    const prevChildren = update._children;
-
     _unsubscribe(update);
     update._fresh = true;
     tracking = update;
     value = observer(value);
 
-    // If any children computations were removed mark them as fresh.
-    // Check the diff of the children list between pre and post update.
-    prevChildren.forEach(u => {
-      if (update._children.indexOf(u) === -1) {
-        u._fresh = true;
-      }
-    });
-
-    // If any children were marked as fresh remove them from the run lists.
-    let curr;
-    const queue = [].concat(update.children);
-    while (curr = queue.pop()) {
-      if (curr._fresh) {
-        curr._observables.forEach(o => {
-          if (o._runObservers) o._runObservers.delete(curr);
-        });
-      }
-      curr.children.forEach(u => queue.push(u));
-    }
     tracking = prevTracking;
     return value;
   }
