@@ -46,7 +46,6 @@
 - [**sinuous-lifecycle**](https://www.npmjs.com/package/sinuous-lifecycle) ([@heyheyhello](https://github.com/heyheyhello)): onAttach/onDetach DOM lifecycles.
 - [**sinuous-trace**](https://www.npmjs.com/package/sinuous-trace) ([@heyheyhello](https://github.com/heyheyhello)): Traces the internal API to record component creation, adoption, and removal.
 
-
 ### Examples
 
 - [**Counter**](https://codesandbox.io/s/sinuous-counter-z6k71) (@ CodeSandbox)
@@ -93,9 +92,7 @@ at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-
 import { observable, html } from 'sinuous';
 
 const counter = observable(0);
-const view = () => html`
-  <div>Counter ${counter}</div>
-`;
+const view = () => html` <div>Counter ${counter}</div> `;
 
 document.body.append(view());
 setInterval(() => counter(counter() + 1), 1000);
@@ -184,7 +181,7 @@ const oldH = api.h;
 api.h = (...args) => {
   console.log(args);
   return oldH(...args);
-}
+};
 ```
 
 ### Methods

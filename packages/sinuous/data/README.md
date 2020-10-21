@@ -67,6 +67,6 @@ template('#id')({
   caption: 'Place for a kitten',
   pet() {
     console.log('Watch my fur son');
-  }
+  },
 });
 ```

@@ -12,7 +12,7 @@ Sinuous Observable is a tiny reactive library. It shares the core features of [S
 
 # API
 
-###
+### Functions
 
 - [isListening()](#isListening) ⇒ <code>boolean</code>
 - [root(fn)](#root) ⇒ <code>\*</code>
@@ -189,15 +189,15 @@ import observable, { S } from 'sinuous/observable';
 
 var order = '',
   a = observable(0),
-  b = S(function() {
+  b = S(function () {
     order += 'b';
     return a() + 1;
   }),
-  c = S(function() {
+  c = S(function () {
     order += 'c';
     return b() || d();
   }),
-  d = S(function() {
+  d = S(function () {
     order += 'd';
     return a() + 10;
   });
