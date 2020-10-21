@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.11 - 2020-10-20
+
+### Added
+
+- Do less work when reading a computed() [#141](https://github.com/luwes/sinuous/pull/141) thanks [@heyheyhello](https://github.com/heyheyhello) 💛
+
+### Removed
+
+- Remove seemingly unneeded code - 0.27.11-beta.0 [#143](https://github.com/luwes/sinuous/pull/143)
+
 ## 0.27.10 - 2020-10-13
 
 ### Added
