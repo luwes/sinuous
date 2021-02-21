@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.27.12 - 2021-02-20
+
+### Added
+
+- Improved TS JSX definitions thanks [@DrSensor](https://github.com/DrSensor) and [@heyheyhello](https://github.com/heyheyhello) 💛
+
 ## 0.27.11 - 2020-10-20
 
 ### Added
