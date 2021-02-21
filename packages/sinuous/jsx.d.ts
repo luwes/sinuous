@@ -4,7 +4,7 @@ export namespace JSXInternal {
   type OrObservable<T> = T | Observable<T>
   type AllowObservable<Props> = { [K in keyof Props]: OrObservable<Props[K]> }
 
-  interface Element extends HTMLElement { }
+  type Element = HTMLElement | SVGElement | Node
 
   interface ElementAttributesProperty {
     props: any;
