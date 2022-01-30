@@ -30,7 +30,7 @@ rules:
   # fp/no-valueof-field: error
 
   jsdoc/check-alignment: 1
-  jsdoc/check-examples: 1
+  # jsdoc/check-examples: 1
   jsdoc/check-indentation: 1
   jsdoc/check-param-names: 1
   jsdoc/check-syntax: 1
@@ -50,4 +50,4 @@ rules:
   jsdoc/require-returns-check: 1
   # jsdoc/require-returns-description: 1
   jsdoc/require-returns-type: 1
-  jsdoc/valid-types: 1
+  # jsdoc/valid-types: 1
