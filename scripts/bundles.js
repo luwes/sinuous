@@ -110,7 +110,7 @@ const bundleSnippets = [
   }),
   mk('babel-plugin-htm', {
     input: `${src}/babel-plugin-htm/src/index.js`,
-    [ESM + CJS]: {},
+    [ESM + CJS]: { output: { exports: 'default' } },
   }),
   mk('all', {
     // Multiple globals - @see https://github.com/rollup/rollup/issues/494
@@ -164,7 +164,7 @@ function mk(name, configSnippet) {
  */
 const makeBundleConfigs = (rollupConfig) => {
   const { input, external = [], output, ...rest } = rollupConfig;
-  const { format, plugins = [], ...restOutput } = output;
+  const { format, exports, plugins = [], ...restOutput } = output;
   return {
     input,
     external,
@@ -176,6 +176,7 @@ const makeBundleConfigs = (rollupConfig) => {
       .filter(Boolean),
     output: {
       format,
+      exports,
       sourcemap: true,
       plugins: [
         bundleSize({
