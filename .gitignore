@@ -18,3 +18,6 @@ module
 
 /packages/sinuous/observable/test/perf/perf.txt
 .idea
+
+# Local Netlify folder
+.netlify

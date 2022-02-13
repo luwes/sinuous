@@ -11,8 +11,8 @@ const argv = minimist(process.argv.slice(2));
 var coverage = String(process.env.COVERAGE) === 'true',
   ci = String(process.env.CI).match(/^(1|true)$/gi),
   pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
-  masterBranch = String(process.env.TRAVIS_BRANCH).match(/^master$/gi),
-  sauceLabs = ci && !pullRequest && masterBranch;
+  mainBranch = String(process.env.TRAVIS_BRANCH).match(/^main$/gi),
+  sauceLabs = ci && !pullRequest && mainBranch;
 
 var sauceLabsLaunchers = {
   sl_chrome: {
