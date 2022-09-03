@@ -16,7 +16,7 @@ HTMLElement = h(tag|Component|Fragment, [props?, text?, Element?, Observable?,..
 
 Luckily we don't have to worry about that too much because of the fantastic [`htm`](https://github.com/developit/htm) package.
 
-This module converts native JS tagged template literals to `h` function calls. Sinuous supports both runtime and compile time transformation with [`sinuous/htm`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/htm) and [`sinuous/babel-plugin-htm`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/babel-plugin-htm) respectively.
+This module converts native JS tagged template literals to `h` function calls. Sinuous supports both runtime and compile time transformation with [`sinuous/htm`](https://github.com/luwes/sinuous/tree/main/packages/sinuous/htm) and [`sinuous/babel-plugin-htm`](https://github.com/luwes/sinuous/tree/main/packages/sinuous/babel-plugin-htm) respectively.
 
 The compile time version is preferred in production as the HTM runtime (0.5kB) will not be included, improves gzip compression and the performance cost of parsing the HTML will be removed.
 

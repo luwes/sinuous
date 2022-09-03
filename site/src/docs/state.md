@@ -8,7 +8,7 @@ tags: docs
 layout: layouts/docs.njk
 ---
 
-State in Sinuous is handled by observables. It relies on a module called [`sinuous/observable`](https://github.com/luwes/sinuous/tree/master/packages/sinuous/observable) with a powerful API yet small footprint.
+State in Sinuous is handled by observables. It relies on a module called [`sinuous/observable`](https://github.com/luwes/sinuous/tree/main/packages/sinuous/observable) with a powerful API yet small footprint.
 
 ## Reactivity
 

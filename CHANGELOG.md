@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.28.0 - 2022-01-30
+
+### Added
+
+- Added back in the old map diff algorithm [#192](https://github.com/luwes/sinuous/pull/192)
+
 ## 0.27.12 - 2021-02-20
 
 ### Added

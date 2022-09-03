@@ -19,7 +19,7 @@ export function o(key) {
  * @return {Function}
  */
 export function t(key, observed, bind) {
-  const tag = function() {
+  const tag = function () {
     // eslint-disable-next-line
     const { el, name, endMark } = this;
 
@@ -27,6 +27,18 @@ export function t(key, observed, bind) {
       if (propName == null) {
         // Store state on the unique endMark per action.
         const state = endMark || element;
+
+        // Performance optimization for when the tag is the only content child.
+        // Default current value to empty string which makes a text insert faster.
+        if (
+          endMark &&
+          endMark._current === undefined &&
+          element.firstChild === element.lastChild &&
+          element.firstChild === endMark
+        ) {
+          endMark._current = '';
+        }
+
         state._current = api.insert(element, value, endMark, state._current);
       } else {
         api.property(element, value, propName);
@@ -73,7 +85,7 @@ export function template(elementRef, noClone) {
   let stamp = fragment.cloneNode(true);
 
   if (!noClone) {
-    cloneActions.forEach(action => {
+    cloneActions.forEach((action) => {
       action._paths = createPath(fragment, action._el);
       action._endMarkPath =
         action._endMark && createPath(action._el, action._endMark);
@@ -88,7 +100,7 @@ export function template(elementRef, noClone) {
     let root;
     if (noClone) {
       if (fragment._childNodes) {
-        fragment._childNodes.forEach(child => fragment.appendChild(child));
+        fragment._childNodes.forEach((child) => fragment.appendChild(child));
       }
       root = fragment;
     } else {
@@ -101,14 +113,14 @@ export function template(elementRef, noClone) {
     }
 
     // These paths have to be resolved before any elements are inserted.
-    cloneActions.forEach(action => {
+    cloneActions.forEach((action) => {
       action._target = noClone ? action._el : getPath(root, action._paths);
       action._endMarkTarget = noClone
         ? action._endMark
         : action._endMarkPath && getPath(action._target, action._endMarkPath);
     });
 
-    cloneActions.forEach(action => {
+    cloneActions.forEach((action) => {
       api.action(action, props, keyedActions)(action._key, action._propName);
     });
 
@@ -151,8 +163,8 @@ api.action = (action, props, keyedActions) => {
           },
           set(newValue) {
             value = newValue;
-            keyedActions[key].forEach(action => action(newValue));
-          }
+            keyedActions[key].forEach((action) => action(newValue));
+          },
         });
       }
       keyedActions[key].push(
@@ -173,6 +185,6 @@ function createPath(root, el) {
 }
 
 function getPath(target, paths) {
-  paths.forEach(depth => (target = target.childNodes[depth]));
+  paths.forEach((depth) => (target = target.childNodes[depth]));
   return target;
 }

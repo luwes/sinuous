@@ -1,9 +1,52 @@
 {
   "name": "sinuous",
-  "version": "0.27.12",
+  "version": "0.28.1",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./module/sinuous.js",
+      "require": "./dist/sinuous.js"
+    },
+    "./all": {
+      "import": "./module/all.js",
+      "require": "./dist/all.js"
+    },
+    "./data": {
+      "import": "./module/data.js",
+      "require": "./dist/data.js"
+    },
+    "./h": {
+      "import": "./module/h.js",
+      "require": "./dist/h.js"
+    },
+    "./htm": {
+      "import": "./module/htm.js",
+      "require": "./dist/htm.js"
+    },
+    "./hydrate": {
+      "import": "./module/hydrate.js",
+      "require": "./dist/hydrate.js"
+    },
+    "./map": {
+      "import": "./module/map.js",
+      "require": "./dist/map.js"
+    },
+    "./observable": {
+      "import": "./module/observable.js",
+      "require": "./dist/observable.js"
+    },
+    "./render": {
+      "import": "./module/render.js",
+      "require": "./dist/render.js"
+    },
+    "./template": {
+      "import": "./module/template.js",
+      "require": "./dist/template.js"
+    }
+  },
   "types": "src/index.d.ts",
   "files": [
     "module",

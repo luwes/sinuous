@@ -3,7 +3,7 @@ sudo: true
 language: node_js
 
 node_js:
-  - "12"
+  - "14"
 
 cache:
   yarn: true
@@ -39,7 +39,7 @@ jobs:
       - echo '!/bench/results/dist/' >> .gitignore
       - touch .nojekyll
       - (cd bench && yarn && yarn build-prod)
-      - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.13.1,sinuous-0.15.1,sinuous-0.26.2,sinuous-0.27.0))
+      - (cd bench && (yarn start --silent & yarn bench --count 3 --overwrite vanillajs,react-16.13.1,sinuous-0.15.1,sinuous-0.26.2,sinuous-0.27.0,sinuous-0.28.1))
       name: "Benchmark"
       deploy:
         provider: pages
@@ -47,7 +47,7 @@ jobs:
         github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
         keep_history: true
         on:
-          branch: master
+          branch: main
 
 after_success:
   - yarn run coverage

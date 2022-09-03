@@ -11,13 +11,14 @@ const argv = minimist(process.argv.slice(2));
 var coverage = String(process.env.COVERAGE) === 'true',
   ci = String(process.env.CI).match(/^(1|true)$/gi),
   pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
-  masterBranch = String(process.env.TRAVIS_BRANCH).match(/^master$/gi),
-  sauceLabs = ci && !pullRequest && masterBranch;
+  mainBranch = String(process.env.TRAVIS_BRANCH).match(/^main$/gi),
+  sauceLabs = ci && !pullRequest && mainBranch;
 
 var sauceLabsLaunchers = {
   sl_chrome: {
     base: 'SauceLabs',
     browserName: 'chrome',
+    browserVersion: '98',
     platform: 'Windows 10'
   },
   sl_firefox: {
@@ -33,31 +34,8 @@ var sauceLabsLaunchers = {
   sl_edge: {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
+    browserVersion: '98',
     platform: 'Windows 10'
-  },
-  sl_ie_11: {
-    base: 'SauceLabs',
-    browserName: 'internet explorer',
-    version: '11.0',
-    platform: 'Windows 7'
-  }
-};
-
-var localLaunchers = {
-  ChromeNoSandboxHeadless: {
-    base: 'Chrome',
-    flags: [
-      '--no-sandbox',
-      // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
-      '--headless',
-      '--disable-gpu',
-      '--disable-translate',
-      '--disable-extensions',
-      // Without a remote debugging port, Google Chrome exits immediately.
-      '--remote-debugging-port=9333',
-      // Removes that crazy long prefix HeadlessChrome 79.0.3945 (Mac OS X 10.15.2)
-      '--user-agent='
-    ]
   }
 };
 
@@ -65,9 +43,9 @@ module.exports = function(config) {
   config.set({
     browsers: sauceLabs
       ? Object.keys(sauceLabsLaunchers)
-      : Object.keys(localLaunchers),
+      : ['FirefoxHeadless'],
 
-    customLaunchers: sauceLabs ? sauceLabsLaunchers : localLaunchers,
+    customLaunchers: sauceLabs ? sauceLabsLaunchers : undefined,
 
     sauceLabs: {
       build: 'CI #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
@@ -147,6 +125,7 @@ module.exports = function(config) {
       },
       preserveSymlinks: true,
       plugins: [
+        require('karma-firefox-launcher'),
         alias({
           entries: {
             tape: 'tape-browser',
