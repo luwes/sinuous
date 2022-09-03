@@ -2469,9 +2469,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001286:
-  version "1.0.30001304"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001304.tgz#38af55ed3fc8220cb13e35e6e7309c8c65a05559"
-  integrity sha512-bdsfZd6K6ap87AGqSHJP/s1V+U6Z5lyrcbBu3ovbCCf8cSYpwTtGrCBObMpJqwxfTbLW6YTIdbb1jEeTelcpYQ==
+  version "1.0.30001388"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001388.tgz"
+  integrity sha512-znVbq4OUjqgLxMxoNX2ZeeLR0d7lcDiE5uJ4eUiWdml1J1EkxbnQq6opT9jb9SMfJxB0XA16/ziHwni4u1I3GQ==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -6144,13 +6144,6 @@ junk@^1.0.1:
   resolved "https://registry.yarnpkg.com/junk/-/junk-1.0.3.tgz#87be63488649cbdca6f53ab39bec9ccd2347f592"
   integrity sha1-h75jSIZJy9ym9Tqzm+yczSNH9ZI=
 
-karma-chrome-launcher@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/karma-chrome-launcher/-/karma-chrome-launcher-3.1.0.tgz#805a586799a4d05f4e54f72a204979f3f3066738"
-  integrity sha512-3dPs/n7vgz1rxxtynpzZTvb9y/GIaW8xjAwcIGttLbycqoFtI7yo1NGnQi6oFTherRE+GIhCAHZC4vEqWGhNvg==
-  dependencies:
-    which "^1.2.1"
-
 karma-coverage@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/karma-coverage/-/karma-coverage-2.1.0.tgz#843564578d9e1fb889ec141a582c019bb6db14db"
@@ -6162,6 +6155,14 @@ karma-coverage@^2.1.0:
     istanbul-lib-source-maps "^4.0.1"
     istanbul-reports "^3.0.5"
     minimatch "^3.0.4"
+
+karma-firefox-launcher@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/karma-firefox-launcher/-/karma-firefox-launcher-2.1.2.tgz#9a38cc783c579a50f3ed2a82b7386186385cfc2d"
+  integrity sha512-VV9xDQU1QIboTrjtGVD4NCfzIH7n01ZXqy/qpBhnOeGVOkG5JYPEm8kuSd7psHE6WouZaQ9Ool92g8LFweSNMA==
+  dependencies:
+    is-wsl "^2.2.0"
+    which "^2.0.1"
 
 karma-rollup-preprocessor@^7.0.7:
   version "7.0.7"
@@ -10443,7 +10444,7 @@ which-typed-array@^1.1.2:
     has-tostringtag "^1.0.0"
     is-typed-array "^1.1.7"
 
-which@^1.2.1, which@^1.2.9:
+which@^1.2.9:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
   integrity sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==

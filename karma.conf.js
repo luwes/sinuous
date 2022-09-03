@@ -43,31 +43,13 @@ var sauceLabsLaunchers = {
   }
 };
 
-var localLaunchers = {
-  ChromeNoSandboxHeadless: {
-    base: 'Chrome',
-    flags: [
-      '--no-sandbox',
-      // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
-      '--headless',
-      '--disable-gpu',
-      '--disable-translate',
-      '--disable-extensions',
-      // Without a remote debugging port, Google Chrome exits immediately.
-      '--remote-debugging-port=9333',
-      // Removes that crazy long prefix HeadlessChrome 79.0.3945 (Mac OS X 10.15.2)
-      '--user-agent='
-    ]
-  }
-};
-
 module.exports = function(config) {
   config.set({
     browsers: sauceLabs
       ? Object.keys(sauceLabsLaunchers)
-      : Object.keys(localLaunchers),
+      : ['FirefoxHeadless'],
 
-    customLaunchers: sauceLabs ? sauceLabsLaunchers : localLaunchers,
+    customLaunchers: sauceLabs ? sauceLabsLaunchers : undefined,
 
     sauceLabs: {
       build: 'CI #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
@@ -147,6 +129,7 @@ module.exports = function(config) {
       },
       preserveSymlinks: true,
       plugins: [
+        require('karma-firefox-launcher'),
         alias({
           entries: {
             tape: 'tape-browser',

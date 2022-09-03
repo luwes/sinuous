@@ -92,8 +92,8 @@
     "ispy": "^0.1.2",
     "jsdoc-to-markdown": "^7.1.1",
     "karma": "^6.3.12",
-    "karma-chrome-launcher": "^3.0.0",
     "karma-coverage": "^2.1.0",
+    "karma-firefox-launcher": "^2.1.2",
     "karma-rollup-preprocessor": "^7.0.7",
     "karma-sauce-launcher": "^4.1.5",
     "karma-tap": "^4.2.0",
@@ -113,5 +113,6 @@
     "tape": "^5.5.0",
     "tape-browser": "^4.13.0",
     "typescript": "^4.5.5"
-  }
+  },
+  "dependencies": {}
 }
