@@ -18,6 +18,7 @@ var sauceLabsLaunchers = {
   sl_chrome: {
     base: 'SauceLabs',
     browserName: 'chrome',
+    browserVersion: '103',
     platform: 'Windows 10'
   },
   sl_firefox: {
@@ -33,6 +34,7 @@ var sauceLabsLaunchers = {
   sl_edge: {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
+    browserVersion: '103',
     platform: 'Windows 10'
   },
   sl_ie_11: {
