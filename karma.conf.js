@@ -3,7 +3,6 @@ const alias = require('@rollup/plugin-alias');
 const { default: nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
-const { default: babel } = require('@rollup/plugin-babel');
 const minimist = require('minimist');
 const c = require('ansi-colors');
 const argv = minimist(process.argv.slice(2));
@@ -106,15 +105,14 @@ module.exports = function(config) {
     frameworks: ['tap'],
 
     files: [
-      'https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.dataset%2CArray.from',
       {
-        pattern: config.grep || 'src*/**/test.js',
+        pattern: config.grep || 'src/test/test.js',
         watched: false
       },
     ],
 
     preprocessors: {
-      'src*/**/test.js': ['rollup']
+      'src/test/test.js': ['rollup']
     },
 
     rollupPreprocessor: {
@@ -125,7 +123,6 @@ module.exports = function(config) {
       },
       preserveSymlinks: true,
       plugins: [
-        require('karma-firefox-launcher'),
         alias({
           entries: {
             tape: 'tape-browser',
@@ -145,14 +142,6 @@ module.exports = function(config) {
             config.grep.replace('/test/', '/src/') :
             '*/!(htm)/**/src/**/*.js'
         }),
-        sauceLabs && babel({
-          babelHelpers: 'bundled',
-          inputSourceMap: false,
-          compact: false,
-          include: [
-            'src/**'
-          ]
-        })
       ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
     }

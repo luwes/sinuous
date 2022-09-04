@@ -2,7 +2,6 @@ import path from 'path';
 import replace from './rollup-plugin-replace.js';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import bundleSize from 'rollup-plugin-size';
-import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 
 /**
@@ -152,8 +151,6 @@ const makeBundleConfigs = (rollupConfig) => {
     external,
     plugins: [
       nodeResolve(),
-      [UMD, IIFE].includes(format)
-        && pluginBabel(),
     ]
       .filter(Boolean),
     output: {
@@ -229,13 +226,6 @@ const makeBundleConfigs = (rollupConfig) => {
 
 // Plugins
 // -----------------------------------------------------------------------------
-
-/** @type {() => Plugin} */
-function pluginBabel() {
-  return babel({
-    babelHelpers: 'bundled',
-  });
-}
 
 /** @type {() => Plugin} */
 function pluginTerser() {
