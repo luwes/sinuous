@@ -82,12 +82,6 @@ const bundleSnippets = [
     [ESM]: {},
     [UMD + IIFE]: { output: { name: 'data' } },
   }),
-  mk('render', {
-    input: `${src}/render/src/index.js`,
-    external: ['sinuous', 'sinuous/template', 'sinuous/htm'],
-    [ESM]: {},
-    [UMD + IIFE]: { output: { name: 'render' } },
-  }),
   mk('map', {
     input: `${src}/map/src/index.js`,
     external: ['sinuous'],
