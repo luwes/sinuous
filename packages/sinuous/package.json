@@ -1,10 +1,9 @@
 {
   "name": "sinuous",
-  "version": "0.28.2",
+  "version": "0.28.3",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "module/sinuous.js",
   "main": "dist/sinuous.js",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./module/sinuous.js",
@@ -21,6 +20,10 @@
     "./h": {
       "import": "./module/h.js",
       "require": "./dist/h.js"
+    },
+    "./babel-plugin-htm": {
+      "import": "./module/babel-plugin-htm.js",
+      "require": "./dist/babel-plugin-htm.js"
     },
     "./htm": {
       "import": "./module/htm.js",

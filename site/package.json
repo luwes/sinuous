@@ -17,7 +17,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "sinuous": "0.28.2",
+    "sinuous": "0.28.3",
     "tailwindcss": "1.4.6"
   },
   "devDependencies": {
