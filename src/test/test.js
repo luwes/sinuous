@@ -24,8 +24,5 @@ import '../hydrate/test/hydrate.js';
 import '../hydrate/test/svg.js';
 import '../hydrate/test/selector.js';
 import '../all/test/all.js';
-import '../data/test/fill.js';
-import '../data/test/template.js';
-import '../data/test/data.js';
 import '../template/test/template.js';
 import './sinuous.js';

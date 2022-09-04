@@ -1,9 +1,0 @@
----
-env:
-  mocha: true
-
-globals:
-  assert: false
-  should: false
-  expect: false
-  sinon: false

@@ -15,10 +15,6 @@
       "import": "./module/all.js",
       "require": "./dist/all.js"
     },
-    "./data": {
-      "import": "./module/data.js",
-      "require": "./dist/data.js"
-    },
     "./h": {
       "import": "./module/h.js",
       "require": "./dist/h.js"
