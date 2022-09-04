@@ -3,8 +3,8 @@
   command = "yarn build --all && (cd site && yarn build)"
 
 [build.environment]
-  NODE_VERSION = "12.18.0"
-  YARN_VERSION = "1.12.3"
+  NODE_VERSION = "16.17.0"
+  YARN_VERSION = "1.22.19"
 
 [[redirects]]
   from = "/*"
