@@ -1,10 +1,10 @@
 export = sinuous;
 export as namespace sinuous;
 
-import { JSXInternal } from '../jsx';
-import { HyperscriptApi } from '../h/src';
-import * as _shared from '../shared'
-import * as _o from '../observable/src';
+import { JSXInternal } from './jsx';
+import { HyperscriptApi } from './h/src';
+import * as _shared from './shared'
+import * as _o from './observable/src';
 
 import FunctionComponent = _shared.FunctionComponent;
 import ElementChildren = _shared.ElementChildren;
