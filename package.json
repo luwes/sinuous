@@ -1,21 +1,77 @@
 {
-  "name": "sinuous",
   "private": true,
-  "version": "0.0.0",
+  "name": "sinuous",
+  "version": "0.28.3",
   "description": "🧬 Small, fast, reactive render engine",
+  "module": "module/sinuous.js",
+  "main": "dist/sinuous.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./module/sinuous.js",
+      "require": "./dist/sinuous.js"
+    },
+    "./all": {
+      "import": "./module/all.js",
+      "require": "./dist/all.js"
+    },
+    "./data": {
+      "import": "./module/data.js",
+      "require": "./dist/data.js"
+    },
+    "./h": {
+      "import": "./module/h.js",
+      "require": "./dist/h.js"
+    },
+    "./babel-plugin-htm": {
+      "import": "./module/babel-plugin-htm.js",
+      "require": "./dist/babel-plugin-htm.js"
+    },
+    "./htm": {
+      "import": "./module/htm.js",
+      "require": "./dist/htm.js"
+    },
+    "./hydrate": {
+      "import": "./module/hydrate.js",
+      "require": "./dist/hydrate.js"
+    },
+    "./map": {
+      "import": "./module/map.js",
+      "require": "./dist/map.js"
+    },
+    "./observable": {
+      "import": "./module/observable.js",
+      "require": "./dist/observable.js"
+    },
+    "./render": {
+      "import": "./module/render.js",
+      "require": "./dist/render.js"
+    },
+    "./template": {
+      "import": "./module/template.js",
+      "require": "./dist/template.js"
+    }
+  },
+  "files": [
+    "module",
+    "dist",
+    "src",
+    "src/jsx.d.ts",
+    "src/shared.d.ts"
+  ],
   "workspaces": {
     "packages": [
-      "packages/*",
+      "./",
       "site",
       "site/src/**/*"
     ]
   },
   "scripts": {
-    "lint": "eslint 'packages/{*,*/*,}/src/**/*.js'",
-    "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
+    "lint": "eslint 'src/{*,*/*,}/src/**/*.js'",
+    "format": "prettier --write '**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
     "test": "cross-env COVERAGE=true yarn test:htm && karma start",
-    "test:htm": "tape -r esm packages/sinuous/htm/test/*.js | faucet",
-    "test:performance": "PERSIST=true time node --expose-gc packages/sinuous/observable/test/perf/index.js",
+    "test:htm": "tape -r esm src/htm/test/*.js | faucet",
+    "test:performance": "PERSIST=true time node --expose-gc src/observable/test/perf/index.js",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup.js --silent",
     "watch": "rollup -wc scripts/rollup.js --silent",
@@ -23,7 +79,8 @@
     "dev": "run-p watch serve",
     "http": "http-server -c-1 -p 8000 . ",
     "docs": "node scripts/docs.js && yarn format:docs",
-    "format:docs": "prettier --write '**/*.md'"
+    "format:docs": "prettier --write '**/*.md'",
+    "prepublishOnly": "yarn lint && yarn build"
   },
   "prettier": {
     "tabWidth": 2,

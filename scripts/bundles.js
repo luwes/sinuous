@@ -32,12 +32,12 @@ const ext = {
   [UMD ]: 'js',
 };
 
-const src = 'packages/sinuous';
+const src = 'src';
 const dest = (name, format) => {
   const folder = format === ESM
     ? 'module'
     : 'dist';
-  return `${src}/${folder}/${name}.${ext[format]}`;
+  return `${folder}/${name}.${ext[format]}`;
 };
 
 /**

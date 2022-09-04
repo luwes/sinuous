@@ -8,7 +8,7 @@ tags: docs
 layout: layouts/docs.njk
 ---
 
-Sinuous provides a submodule called [`map`](https://github.com/luwes/sinuous/tree/main/packages/sinuous/map) to make rendering large lists as snappy as possible.
+Sinuous provides a submodule called [`map`](https://github.com/luwes/sinuous/tree/main/src/map) to make rendering large lists as snappy as possible.
 
 ## Without `map`
 
