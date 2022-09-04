@@ -43,10 +43,6 @@
       "import": "./module/observable.js",
       "require": "./dist/observable.js"
     },
-    "./render": {
-      "import": "./module/render.js",
-      "require": "./dist/render.js"
-    },
     "./template": {
       "import": "./module/template.js",
       "require": "./dist/template.js"
