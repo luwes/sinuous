@@ -7,7 +7,7 @@ import {
   insertNodes,
   removeNodes,
   step,
-  add
+  add,
 } from './utils.js';
 
 /**
@@ -29,7 +29,7 @@ export function map(items, expr, cleaning) {
   const afterNode = add(parent, '');
   const disposers = new Map();
 
-  const unsubscribe = subscribe(a => {
+  const unsubscribe = subscribe((a) => {
     const b = items();
     return sample(() =>
       reconcile(
@@ -48,7 +48,7 @@ export function map(items, expr, cleaning) {
   cleanup(disposeAll);
 
   function disposeAll() {
-    disposers.forEach(d => d());
+    disposers.forEach((d) => d());
     disposers.clear();
   }
 
@@ -62,7 +62,7 @@ export function map(items, expr, cleaning) {
     // The root call makes it possible the child's computations outlive
     // their parents' update cycle.
     return cleaning
-      ? root(disposeFn => {
+      ? root((disposeFn) => {
           const node = add(parent, expr(item, i, data), afterNode);
           disposers.set(node, disposeFn);
           return node;
@@ -99,10 +99,7 @@ export function reconcile(
   // Fast path for clear
   if (length === 0) {
     let startMark = beforeNode.previousSibling;
-    if (
-      (startMark && startMark.previousSibling)
-      || afterNode.nextSibling
-    ) {
+    if ((startMark && startMark.previousSibling) || afterNode.nextSibling) {
       removeNodes(parent, beforeNode.nextSibling, afterNode);
     } else {
       parent.textContent = '';

@@ -20,7 +20,7 @@ async function deleteMetrics(id) {
 
   results
     .filter({ id })
-    .each(bench => (bench.values = []))
+    .each((bench) => (bench.values = []))
     .value();
 }
 
@@ -31,20 +31,15 @@ async function saveMetrics(id, benchmark, value) {
       .push({
         id,
         benchmark,
-        values: []
+        values: [],
       })
       .value();
   }
 
   result = results.find({ id, benchmark });
-  result
-    .get('values')
-    .push(_.round(value, 3))
-    .value();
+  result.get('values').push(_.round(value, 3)).value();
 
-  const values = result
-    .get('values')
-    .value();
+  const values = result.get('values').value();
 
   const s = jStat(values);
   result
@@ -66,5 +61,5 @@ runner = run();
 module.exports = {
   deleteMetrics,
   saveMetrics,
-  writeMetrics
+  writeMetrics,
 };

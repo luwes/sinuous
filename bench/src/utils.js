@@ -21,7 +21,7 @@ async function performance(page) {
 const extractDataFromPerformanceTiming = (timing, ...dataNames) => {
   const navigationStart = timing.navigationStart;
   const extractedData = {};
-  dataNames.forEach(name => {
+  dataNames.forEach((name) => {
     extractedData[name] = timing[name] - navigationStart;
   });
   return extractedData;
@@ -37,7 +37,7 @@ async function metrics(page, bench, testFunction) {
     if (bench.throttleCPU) {
       client = await page.target().createCDPSession();
       await client.send('Emulation.setCPUThrottlingRate', {
-        rate: bench.throttleCPU
+        rate: bench.throttleCPU,
       });
     }
 
@@ -47,7 +47,7 @@ async function metrics(page, bench, testFunction) {
 
     if (bench.throttleCPU) {
       await client.send('Emulation.setCPUThrottlingRate', {
-        rate: 1
+        rate: 1,
       });
     }
 
@@ -66,7 +66,7 @@ async function metrics(page, bench, testFunction) {
     }
 
     return {
-      time: duration
+      time: duration,
     };
   } catch (err) {
     console.error(err);
@@ -74,11 +74,11 @@ async function metrics(page, bench, testFunction) {
 }
 
 function getBenchEventsWindow(events) {
-  events = splitWhen(x => {
+  events = splitWhen((x) => {
     return x.name === 'TimeStamp' && x.args.data.message === 'runBenchmark';
   }, events);
 
-  events = splitWhen(x => {
+  events = splitWhen((x) => {
     return x.name === 'TimeStamp' && x.args.data.message === 'finishBenchmark';
   }, events[1]);
 
@@ -90,8 +90,8 @@ function getBenchEventsWindow(events) {
 //     return x.name === 'TimeStamp' && x.args.data.message === msg;
 //   }).ts / 1000;
 
-const getFirstClick = events => {
-  const clicks = events.filter(x => {
+const getFirstClick = (events) => {
+  const clicks = events.filter((x) => {
     return x.name === 'EventDispatch' && x.args.data.type === 'click';
   });
   if (clicks.length !== 1) {
@@ -101,10 +101,10 @@ const getFirstClick = events => {
   return clicks[0].ts / 1000;
 };
 
-const getLastPaint = events => {
+const getLastPaint = (events) => {
   const paints = events
-    .filter(x => x.name === 'Paint')
-    .map(x => ({ end: x.ts + x.dur }));
+    .filter((x) => x.name === 'Paint')
+    .map((x) => ({ end: x.ts + x.dur }));
   let lastPaint = paints.reduce(
     (max, elem) => (max.end > elem.end ? max : elem),
     { end: 0 }
@@ -114,7 +114,7 @@ const getLastPaint = events => {
 
 function randomNoRepeats(array) {
   var copy = array.slice(0);
-  return function() {
+  return function () {
     if (copy.length < 1) {
       copy = array.slice(0);
     }
@@ -147,12 +147,12 @@ async function testTextContains(page, path, value) {
 
 async function getTextByXPath(page, path) {
   const elHandle = await page.waitForXPath(path);
-  return page.evaluate(el => el && el.textContent, elHandle);
+  return page.evaluate((el) => el && el.textContent, elHandle);
 }
 
 async function clickElementByXPath(page, path) {
   const elHandle = await page.waitForXPath(path);
-  return page.evaluate(el => el && el.click(), elHandle);
+  return page.evaluate((el) => el && el.click(), elHandle);
 }
 
 async function testClassContains(page, path, value) {
@@ -172,5 +172,5 @@ module.exports = {
   testTextContains,
   getTextByXPath,
   clickElementByXPath,
-  testClassContains
+  testClassContains,
 };

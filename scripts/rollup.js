@@ -2,18 +2,12 @@ import minimist from 'minimist';
 import { bundles, bundleNames } from './bundles.js';
 const argv = minimist(process.argv.slice(2));
 
-const requestedBundleNames
-  = argv.filterName
-    ? argv.filterName
-      .split(',')
-      .map(name => name.trim())
-    : [];
-const requestedBundleTypes
-  = argv.filterType
-    ? argv.filterType
-      .split(',')
-      .map(type => type.trim())
-    : [];
+const requestedBundleNames = argv.filterName
+  ? argv.filterName.split(',').map((name) => name.trim())
+  : [];
+const requestedBundleTypes = argv.filterType
+  ? argv.filterType.split(',').map((type) => type.trim())
+  : [];
 
 const allBundles = bundles.filter(({ output: { format } }, index) => {
   const name = bundleNames[index];

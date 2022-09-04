@@ -54,7 +54,7 @@
   },
   "scripts": {
     "lint": "eslint 'src/{*,*/*,}/src/**/*.js'",
-    "format": "prettier --write '**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/tape/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
+    "format": "prettier --write '**/src/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/test/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
     "test": "cross-env COVERAGE=true yarn test:htm && karma start",
     "test:htm": "tape -r esm src/htm/test/*.js | faucet",
     "test:performance": "PERSIST=true time node --expose-gc src/observable/test/perf/index.js",

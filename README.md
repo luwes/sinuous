@@ -19,8 +19,8 @@
 
 ### Add-ons
 
-| Size                                                                                                                                   | Name                                                  | Description                             |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- |
+| Size                                                                                                                                   | Name                                     | Description                             |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------- |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable) | Tiny observable _(included by default)_ |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map)               | Fast list renderer                      |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |

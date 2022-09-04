@@ -6,7 +6,6 @@ import { api } from './api.js';
  * @type {(e: Event) => *}
  */
 function eventProxy(e) {
-  // eslint-disable-next-line fp/no-this
   return this._listeners && this._listeners[e.type](e);
 }
 
@@ -47,9 +46,9 @@ export const property = (el, value, name, isAttr, isCss) => {
   } else if (isCss) {
     el.style.setProperty(name, value);
   } else if (
-    isAttr
-    || name.slice(0, 5) === 'data-'
-    || name.slice(0, 5) === 'aria-'
+    isAttr ||
+    name.slice(0, 5) === 'data-' ||
+    name.slice(0, 5) === 'aria-'
   ) {
     el.setAttribute(name, value);
   } else if (name === 'style') {

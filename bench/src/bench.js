@@ -12,8 +12,8 @@ const argv = minimist(process.argv.slice(2), {
   default: {
     count: 3,
     lib: null,
-    overwrite: null
-  }
+    overwrite: null,
+  },
 });
 
 async function run() {
@@ -26,27 +26,27 @@ async function run() {
 
   const headless = true;
   const args = [
-      "--js-flags=--expose-gc",
-      "--enable-precise-memory-info",
-      "--no-first-run",
-      "--enable-automation",
-      "--disable-infobars",
-      "--disable-background-networking",
-      "--disable-background-timer-throttling",
-      "--disable-cache",
-      "--disable-translate",
-      "--disable-sync",
-      "--disable-extensions",
-      "--disable-default-apps",
-      // "--remote-debugging-port=" + (benchmarkOptions.remoteDebuggingPort).toFixed(),
-      "--window-size=1200,800"
+    '--js-flags=--expose-gc',
+    '--enable-precise-memory-info',
+    '--no-first-run',
+    '--enable-automation',
+    '--disable-infobars',
+    '--disable-background-networking',
+    '--disable-background-timer-throttling',
+    '--disable-cache',
+    '--disable-translate',
+    '--disable-sync',
+    '--disable-extensions',
+    '--disable-default-apps',
+    // "--remote-debugging-port=" + (benchmarkOptions.remoteDebuggingPort).toFixed(),
+    '--window-size=1200,800',
   ];
 
   if (headless) {
-    args.push("--headless");
+    args.push('--headless');
     // https://bugs.chromium.org/p/chromium/issues/detail?id=737678
-    args.push("--disable-gpu");
-    args.push("--no-sandbox");
+    args.push('--disable-gpu');
+    args.push('--no-sandbox');
   }
 
   const browser = await puppeteer.launch({
@@ -54,14 +54,14 @@ async function run() {
     args,
     defaultViewport: {
       width: 1200,
-      height: 800
-    }
+      height: 800,
+    },
   });
 
   const page = await browser.newPage();
   const libs = (await fs.readdir('./libs'))
-    .filter(name => name !== '.DS_Store')
-    .filter(name => !argv.lib || name === argv.lib);
+    .filter((name) => name !== '.DS_Store')
+    .filter((name) => !argv.lib || name === argv.lib);
 
   const getRandomBench = u.randomNoRepeats(u.pairwise(libs, benchmarks));
 
@@ -69,7 +69,7 @@ async function run() {
   for (let i of new Array(argv.count * libs.length * benchmarks.length)) {
     const [lib, createBench] = getRandomBench();
     await page.goto(`http://localhost:8000/libs/${lib}`, {
-      waitUntil: 'load'
+      waitUntil: 'load',
     });
 
     const bench = await createBench(page, lib);
@@ -86,7 +86,7 @@ async function run() {
   await browser.close();
 }
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   console.error(error);
 });
 
