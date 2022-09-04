@@ -1,5 +1,0 @@
-rules:
-  fp/no-this: off
-  fp/no-rest-parameters: off
-  jsdoc/check-indentation: off
-  jsdoc/require-description-complete-sentence: off

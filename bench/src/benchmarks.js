@@ -6,7 +6,7 @@ const {
   testTextContains,
   getTextByXPath,
   clickElementByXPath,
-  testClassContains
+  testClassContains,
 } = u;
 
 const WARMUP_COUNT = 5;
@@ -15,7 +15,7 @@ async function benchBundleSize(page, lib) {
   const options = {
     lib,
     id: '00_bundlesize',
-    label: 'measure bundle size'
+    label: 'measure bundle size',
   };
 
   async function run() {
@@ -29,7 +29,7 @@ async function benchRun(page, lib) {
   const options = {
     lib,
     id: '01_run1k',
-    label: 'create 1000 rows'
+    label: 'create 1000 rows',
   };
 
   async function run() {
@@ -49,7 +49,7 @@ async function benchReplaceAll(page, lib) {
   const options = {
     lib,
     id: '02_replace1k',
-    label: 'replace all rows'
+    label: 'replace all rows',
   };
 
   await page.waitForSelector('#run');
@@ -79,7 +79,7 @@ async function benchUpdate(page, lib) {
     lib,
     id: '03_update10th1k_x16',
     label: 'partial update',
-    throttleCPU: 16
+    throttleCPU: 16,
   };
 
   await page.waitForSelector('#run');
@@ -114,7 +114,7 @@ async function benchSelect(page, lib) {
     lib,
     id: '04_select1k',
     label: 'select row',
-    throttleCPU: 16
+    throttleCPU: 16,
   };
 
   await page.waitForSelector('#run');
@@ -127,7 +127,7 @@ async function benchSelect(page, lib) {
   async function run() {
     const result = await metrics(page, options, async () => {
       await clickElementByXPath(page, `//tbody/tr[2]/td[2]/a`);
-      await testClassContains(page, "//tbody/tr[2]", "danger");
+      await testClassContains(page, '//tbody/tr[2]', 'danger');
     });
     return result.time;
   }
@@ -140,7 +140,7 @@ async function benchSwapRows(page, lib) {
     lib,
     id: '05_swap1k',
     label: 'swap rows',
-    throttleCPU: 4
+    throttleCPU: 4,
   };
 
   await page.waitForSelector('#run');
@@ -168,23 +168,34 @@ async function benchRemove(page, lib) {
   const options = {
     lib,
     id: '06_remove-one-1k',
-    label: 'remove row'
+    label: 'remove row',
   };
 
   await page.waitForSelector('#run');
   await page.click('#run');
-  await page.waitForXPath("//tbody/tr[1]/td[2]/a");
+  await page.waitForXPath('//tbody/tr[1]/td[2]/a');
   for (let i = 0; i < WARMUP_COUNT; i++) {
-    await testTextContains(page, `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[1]`, (WARMUP_COUNT - i + 4).toString());
-    await clickElementByXPath(page, `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[3]/a/span[1]`);
-    await testTextContains(page, `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[1]`, '10');
+    await testTextContains(
+      page,
+      `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[1]`,
+      (WARMUP_COUNT - i + 4).toString()
+    );
+    await clickElementByXPath(
+      page,
+      `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[3]/a/span[1]`
+    );
+    await testTextContains(
+      page,
+      `//tbody/tr[${WARMUP_COUNT - i + 4}]/td[1]`,
+      '10'
+    );
   }
   await testTextContains(page, '//tbody/tr[5]/td[1]', '10');
   await testTextContains(page, '//tbody/tr[4]/td[1]', '4');
 
   async function run() {
     const result = await metrics(page, options, async () => {
-      await clickElementByXPath(page, "//tbody/tr[4]/td[3]/a/span[1]");
+      await clickElementByXPath(page, '//tbody/tr[4]/td[3]/a/span[1]');
       await testTextContains(page, '//tbody/tr[4]/td[1]', '10');
     });
     return result.time;
@@ -197,7 +208,7 @@ async function benchRunBig(page, lib) {
   const options = {
     lib,
     id: '07_create10k',
-    label: 'create 10,000 rows'
+    label: 'create 10,000 rows',
   };
 
   async function run() {
@@ -218,7 +229,7 @@ async function benchAppendToManyRows(page, lib) {
     lib,
     id: '08_create1k-after1k_x2',
     label: 'append rows to large table',
-    throttleCPU: 2
+    throttleCPU: 2,
   };
 
   await page.waitForSelector('#run');
@@ -241,7 +252,7 @@ async function benchClear(page, lib) {
     lib,
     id: '09_clear1k_x8',
     label: 'clear rows',
-    throttleCPU: 8
+    throttleCPU: 8,
   };
 
   await page.waitForSelector('#run');
@@ -270,6 +281,6 @@ module.exports = {
     benchRemove,
     benchRunBig,
     benchAppendToManyRows,
-    benchClear
-  ]
+    benchClear,
+  ],
 };

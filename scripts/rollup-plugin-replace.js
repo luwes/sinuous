@@ -21,20 +21,20 @@ import MagicString from 'magic-string';
    ) => Plugin}
  */
 export default function replace(searchOrList, eachMatch, options = {}) {
-  const replacements
-    = Array.isArray(searchOrList)
-      ? searchOrList
-      : [{
-        search: searchOrList,
-        eachMatch,
-      }];
+  const replacements = Array.isArray(searchOrList)
+    ? searchOrList
+    : [
+        {
+          search: searchOrList,
+          eachMatch,
+        },
+      ];
 
   // Support `options` as the second parameter for `(list, options) =>` form
   if (replacements === searchOrList && typeof options === 'undefined')
     options = eachMatch;
 
-  if (options.sourcemap !== false)
-    options.sourcemap = true;
+  if (options.sourcemap !== false) options.sourcemap = true;
 
   return {
     name: 'replace-output-plugin',

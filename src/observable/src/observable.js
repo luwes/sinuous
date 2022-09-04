@@ -60,7 +60,7 @@ export function transaction(fn) {
   const result = fn();
   let q = queue;
   queue = prevQueue;
-  q.forEach(data => {
+  q.forEach((data) => {
     if (data._pending !== EMPTY_ARR) {
       const pending = data._pending;
       data._pending = EMPTY_ARR;
@@ -105,8 +105,8 @@ function observable(value) {
 
     // Update can alter data._observers, make a copy before running.
     data._runObservers = new Set(data._observers);
-    data._runObservers.forEach(observer => (observer._fresh = false));
-    data._runObservers.forEach(observer => {
+    data._runObservers.forEach((observer) => (observer._fresh = false));
+    data._runObservers.forEach((observer) => {
       if (!observer._fresh) observer();
     });
 
@@ -171,7 +171,7 @@ function computed(observer, value) {
     if (update._fresh) {
       if (tracking) {
         // If being read from inside another computed, pass observables to it
-        update._observables.forEach(o => o());
+        update._observables.forEach((o) => o());
       }
     } else {
       value = update();
@@ -245,13 +245,13 @@ export function unsubscribe(observer) {
 
 function _unsubscribe(update) {
   update._children.forEach(_unsubscribe);
-  update._observables.forEach(o => {
+  update._observables.forEach((o) => {
     o._observers.delete(update);
     if (o._runObservers) {
       o._runObservers.delete(update);
     }
   });
-  update._cleanups.forEach(c => c());
+  update._cleanups.forEach((c) => c());
   resetUpdate(update);
 }
 

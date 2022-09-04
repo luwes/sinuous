@@ -10,7 +10,7 @@ let isHydrated;
  * @return {Function}
  */
 export function context(isSvg) {
-  return function() {
+  return function () {
     if (isHydrated) {
       // Hydrate on first pass, create on the rest.
       return (isSvg ? hs : h).apply(null, arguments);
@@ -30,7 +30,6 @@ export function context(isSvg) {
       } else if (Array.isArray(arg)) {
         vnode = vnode || { _children: [] };
         arg.forEach(item);
-
       } else if (typeof arg === 'object') {
         if (arg._children) {
           addChild(vnode, arg);
@@ -81,8 +80,10 @@ export function hydrate(delta, root) {
 
   if (typeof delta.type === 'function') {
     // Support Components
-    delta = delta.type.apply(null, [delta._props]
-      .concat(delta._children.map(c => c())));
+    delta = delta.type.apply(
+      null,
+      [delta._props].concat(delta._children.map((c) => c()))
+    );
   }
 
   let isFragment = delta.type === undefined;
@@ -100,7 +101,7 @@ export function hydrate(delta, root) {
       selector = '#';
     } else if (delta._props && (prop = delta._props.class)) {
       selector = '.';
-    } else if ((prop = delta.type)){
+    } else if ((prop = delta.type)) {
       // delta.type is truthy
     } else {
       isRootFragment = true;
@@ -112,7 +113,7 @@ export function hydrate(delta, root) {
       (typeof prop === 'function' ? prop() : prop)
         .split(' ')
         // Escape CSS selector https://bit.ly/36h9I83
-        .map(sel => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
+        .map((sel) => sel.replace(/([^\x80-\uFFFF\w-])/g, '\\$1'))
         .join('.')
     );
   }
@@ -129,7 +130,7 @@ export function hydrate(delta, root) {
       let current;
       let prefix;
 
-      const updateText = text => {
+      const updateText = (text) => {
         el._index++;
 
         // Leave whitespace alone.
@@ -177,9 +178,7 @@ export function hydrate(delta, root) {
 
           let result = arg();
           if (result && result._children) {
-            result = result.type
-              ? result
-              : result._children;
+            result = result.type ? result : result._children;
           }
 
           const isStringable =
@@ -236,6 +235,6 @@ export function hydrate(delta, root) {
  */
 function filterChildNodes(parent) {
   return Array.from(parent.childNodes).filter(
-    el => el.nodeType !== 3 || el.data.trim() || el._noskip
+    (el) => el.nodeType !== 3 || el.data.trim() || el._noskip
   );
 }

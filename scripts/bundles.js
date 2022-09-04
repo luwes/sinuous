@@ -14,10 +14,10 @@ import { terser } from 'rollup-plugin-terser';
 
 /** @type {{ [key: string]: ModuleFormat }} */
 const bundleFormatVariables = {
-  CJS:  'cjs',
-  ESM:  'esm',
+  CJS: 'cjs',
+  ESM: 'esm',
   IIFE: 'iife',
-  UMD:  'umd',
+  UMD: 'umd',
 };
 
 const { CJS, ESM, IIFE, UMD } = bundleFormatVariables;
@@ -25,17 +25,15 @@ const bundleFormats = Object.values(bundleFormatVariables);
 
 // Format extensions
 const ext = {
-  [CJS ]: 'js',
-  [ESM ]: 'js',
+  [CJS]: 'js',
+  [ESM]: 'js',
   [IIFE]: 'min.js',
-  [UMD ]: 'js',
+  [UMD]: 'js',
 };
 
 const src = 'src';
 const dest = (name, format) => {
-  const folder = format === ESM
-    ? 'module'
-    : 'dist';
+  const folder = format === ESM ? 'module' : 'dist';
   return `${folder}/${name}.${ext[format]}`;
 };
 
@@ -83,7 +81,7 @@ const bundleSnippets = [
   }),
   mk('sinuous', {
     input: `${src}/src/index.js`,
-    external: ['sinuous/observable', 'sinuous/htm' ],
+    external: ['sinuous/observable', 'sinuous/htm'],
     [ESM]: {},
     [UMD + IIFE]: { output: { name: 'sinuous' } },
   }),
@@ -99,8 +97,7 @@ const bundleSnippets = [
     input: `${src}/babel-plugin-htm/src/index.js`,
     [ESM + CJS]: { output: { exports: 'default' } },
   }),
-]
-  .flat(); // Config snippets are split into their own full configs as an array
+].flat(); // Config snippets are split into their own full configs as an array
 
 /**
  * Expand a multi-format snippet into an array of single-format configs
@@ -114,7 +111,9 @@ function mk(name, configSnippet) {
   const perFormatConfigs = [];
 
   for (const key in configSnippet) {
-    const matchedFormats = bundleFormats.filter(format => key.includes(format));
+    const matchedFormats = bundleFormats.filter((format) =>
+      key.includes(format)
+    );
     for (const format of matchedFormats) {
       // @ts-ignore '{}' doesn't include 'output'
       const { output = {}, ...rest } = configSnippet[key];
@@ -136,7 +135,8 @@ function mk(name, configSnippet) {
   }
   // TODO: This is yet another reason to delegate to deepemerge
   return perFormatConfigs.map(({ output, ...o }) =>
-    Object.assign({}, all, { output: { ...all.output, ...output }, ...o }));
+    Object.assign({}, all, { output: { ...all.output, ...output }, ...o })
+  );
 }
 
 /**
@@ -149,10 +149,7 @@ const makeBundleConfigs = (rollupConfig) => {
   return {
     input,
     external,
-    plugins: [
-      nodeResolve(),
-    ]
-      .filter(Boolean),
+    plugins: [nodeResolve()].filter(Boolean),
     output: {
       format,
       exports,
@@ -167,42 +164,43 @@ const makeBundleConfigs = (rollupConfig) => {
             item.replace('.js', `.js ${format.toUpperCase().padEnd(4)}`),
         }),
 
-        [ESM, UMD, IIFE].includes(format)
-          && pluginTerser(),
+        [ESM, UMD, IIFE].includes(format) && pluginTerser(),
 
-        [ESM].includes(format)
-          && pluginReplaceImportsESM(rollupConfig),
+        [ESM].includes(format) && pluginReplaceImportsESM(rollupConfig),
 
         // These must be seperate replace calls to be different magic-strings
-        [ESM].includes(format)
-          && replace(/const ([a-z])=/g, ([, x]) => `let ${x}=`),
+        [ESM].includes(format) &&
+          replace(/const ([a-z])=/g, ([, x]) => `let ${x}=`),
 
-        [ESM].includes(format)
-          && replace(/let ([a-z]);let /g, ([, x]) => `let ${x},`),
+        [ESM].includes(format) &&
+          replace(/let ([a-z]);let /g, ([, x]) => `let ${x},`),
 
-        [UMD, IIFE].includes(format)
-          && replace([
-            { search: /for\(var [a-z]=arguments.length,([a-z])=new Array.+?arguments\[[a-z]\]/g,
+        [UMD, IIFE].includes(format) &&
+          replace([
+            {
+              search:
+                /for\(var [a-z]=arguments.length,([a-z])=new Array.+?arguments\[[a-z]\]/g,
               eachMatch: ([, x]) => `var ${x}=Array.from(arguments)`,
             },
-            { search: /Object.defineProperty\(([a-z]),"([a-z]+)".+?return ([a-z.]+)}}\)/g,
+            {
+              search:
+                /Object.defineProperty\(([a-z]),"([a-z]+)".+?return ([a-z.]+)}}\)/g,
               eachMatch: ([, on, key, value]) => `${on}.${key}=${value}`,
             },
           ]),
 
         // Simplify the apply() wrapper functions in files like sinuous/src
-        [UMD, IIFE].includes(format)
-          && replace(
+        [UMD, IIFE].includes(format) &&
+          replace(
             /var [a-z]=Array.from\(arguments\);return ([a-z.]+.apply\(.+?)[a-z]\)/g,
             ([, partialApplyCall]) => `return ${partialApplyCall}arguments)`
           ),
 
         ...plugins,
-      ]
-        .filter(Boolean),
-      strict:   false, // Remove `use strict;`
-      interop:  false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
-      freeze:   false, // Remove `Object.freeze()`
+      ].filter(Boolean),
+      strict: false, // Remove `use strict;`
+      interop: false, // Remove `r=r&&r.hasOwnProperty("default")?r.default:r;`
+      freeze: false, // Remove `Object.freeze()`
       esModule: false, // Remove `esModule` property
       ...restOutput,
     },
@@ -210,7 +208,7 @@ const makeBundleConfigs = (rollupConfig) => {
       clearScreen: false,
     },
     onwarn(warning) {
-    // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+      // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
       const skip = [
         'THIS_IS_UNDEFINED',
         'UNKNOWN_OPTION',
@@ -265,7 +263,8 @@ function pluginReplaceImportsESM(bundleConfig) {
   const replacements = [];
   for (const dep of external) {
     // @ts-ignore Externals can be regular expressions which break basename()
-    const depPath = path.relative(file, dest(path.basename(dep), format))
+    const depPath = path
+      .relative(file, dest(path.basename(dep), format))
       .replace('..', '.')
       .replace('./..', '..');
     replacements.push({

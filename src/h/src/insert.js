@@ -12,15 +12,15 @@ export const insert = (el, value, endMark, current, startNode) => {
 
   // Save startNode of current. In clear() endMark.previousSibling is not always
   // accurate if content gets pulled before clearing.
-  startNode = startNode || current instanceof Node && current;
+  startNode = startNode || (current instanceof Node && current);
 
   // @ts-ignore Allow empty if statement
   if (value === current);
   else if (
-    (!current || typeof current === 'string')
+    (!current || typeof current === 'string') &&
     // @ts-ignore Doesn't like `value += ''`
     // eslint-disable-next-line no-implicit-coercion
-    && (typeof value === 'string' || (typeof value === 'number' && (value += '')))
+    (typeof value === 'string' || (typeof value === 'number' && (value += '')))
   ) {
     // Block optimized for string insertion.
     // eslint-disable-next-line eqeqeq
@@ -41,7 +41,13 @@ export const insert = (el, value, endMark, current, startNode) => {
     current = value;
   } else if (typeof value === 'function') {
     api.subscribe(() => {
-      current = api.insert(el, value.call({ el, endMark }), endMark, current, startNode);
+      current = api.insert(
+        el,
+        value.call({ el, endMark }),
+        endMark,
+        current,
+        startNode
+      );
     });
   } else {
     // Block for nodes, fragments, Arrays, non-stringables and node -> stringable.
@@ -50,8 +56,9 @@ export const insert = (el, value, endMark, current, startNode) => {
       if (current) {
         if (!startNode) {
           // Support fragments
-          startNode = (current._startMark && current._startMark.nextSibling)
-            || endMark.previousSibling;
+          startNode =
+            (current._startMark && current._startMark.nextSibling) ||
+            endMark.previousSibling;
         }
         api.rm(el, startNode, endMark);
       }

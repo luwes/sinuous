@@ -27,6 +27,7 @@ export default function htmBabelPlugin({ types: t }, options = {}) {
       return null;
     }
     const pragmaRoot = t.identifier(pragmaString.split('.')[0]);
+    // eslint-disable-next-line
     const { module, export: export_ } = typeof imp !== 'string' ? imp : {
       module: imp,
       export: null

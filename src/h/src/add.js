@@ -29,7 +29,9 @@ const frag = (value) => {
   // multiple nested conditional computeds that return fragments.
 
   // It looks recursive here but the next call's fragOrNode is only Text('')
-  return { _startMark: /** @type {Text} */ (api.add(value, '', childNodes[0])) };
+  return {
+    _startMark: /** @type {Text} */ (api.add(value, '', childNodes[0])),
+  };
 };
 
 /**
