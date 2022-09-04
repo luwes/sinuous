@@ -6,9 +6,9 @@ const c = require('ansi-colors');
 const sources = [
   {
     cwd: '',
-    files: 'packages/*/*/src/observable.js',
+    files: '*/*/src/observable.js',
     config: 'scripts/jsdoc.config.js',
-    output: 'packages/sinuous/observable/README.md'
+    output: 'src/observable/README.md'
   }
 ];
 

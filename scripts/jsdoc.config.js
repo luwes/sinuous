@@ -4,7 +4,7 @@ module.exports = {
     allowUnknownTags: true,
     dictionaries: ['jsdoc']
   },
-  files: 'packages/*/src/**/*.js',
+  files: '*/src/**/*.js',
   plugins: ['plugins/markdown'],
   templates: {
     cleverLinks: false,

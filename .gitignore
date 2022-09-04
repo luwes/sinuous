@@ -16,7 +16,7 @@ module
 /bench/yarn.lock
 /bench/trace.json
 
-/packages/sinuous/observable/test/perf/perf.txt
+/src/observable/test/perf/perf.txt
 .idea
 
 # Local Netlify folder

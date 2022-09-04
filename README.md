@@ -3,7 +3,6 @@
 [![Version](https://img.shields.io/npm/v/sinuous.svg?color=success&style=flat-square)](https://www.npmjs.com/package/sinuous)
 ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/module/sinuous-observable.js?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/sinuous)
-[![Financial Contributors on Open Collective](https://opencollective.com/sinuous/all/badge.svg?label=financial+contributors&style=flat-square)](https://opencollective.com/sinuous)
 
 **npm**: `npm i sinuous`  
 **cdn**: https://unpkg.com/sinuous  
@@ -22,17 +21,17 @@
 
 | Size                                                                                                                                   | Name                                                  | Description                             |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./packages/sinuous/observable) | Tiny observable _(included by default)_ |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./packages/sinuous/map)               | Fast list renderer                      |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./packages/sinuous/hydrate)       | Hydrate static HTML                     |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./packages/sinuous/template)     | Pre-rendered Template                   |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)       | [`sinuous/data`](./packages/sinuous/data)             | Enrich plain HTML with data in JS       |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable) | Tiny observable _(included by default)_ |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map)               | Fast list renderer                      |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template)     | Pre-rendered Template                   |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/data.min.js?compression=gzip&label=gzip&style=flat-square)       | [`sinuous/data`](./src/data)             | Enrich plain HTML with data in JS       |
 
 ### All-in-one
 
 | Size                                                                                                                                | Name                                    | Description                                                  |
 | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------ |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./packages/sinuous/all) | All modules in one bundle for easy use with a `<script>` tag |
+| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./src/all) | All modules in one bundle for easy use with a `<script>` tag |
 
 **cdn**: https://unpkg.com/sinuous/dist/all  
 **module**: https://unpkg.com/sinuous/module/all
@@ -76,7 +75,7 @@ A goal Sinuous strives for is to have good interoperability. Sinuous creates DOM
 **Hyperscript** directly call `h(type: string, props: object, ...children)`.
 
 **Tagged templates** transform the HTML to `h` calls at runtime w/ the ` html`` ` tag or,
-at build time with [`sinuous/babel-plugin-htm`](./packages/sinuous/babel-plugin-htm).
+at build time with [`sinuous/babel-plugin-htm`](./src/babel-plugin-htm).
 
 **JSX** transforms at build time like React does via `@babel/plugin-transform-react-jsx`. See @heyheyhello/sinuous-tsx-example for JSX and TSX examples.
 
@@ -124,7 +123,7 @@ setInterval(() => counter(counter() + 1), 1000);
 
 ## Reactivity
 
-The Sinuous [`observable`](./packages/sinuous/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality. It works under this philosophy:
+The Sinuous [`observable`](./src/observable) module provides a mechanism to store and update the application state in a reactive way. If you're familiar with [S.js](https://github.com/adamhaile/S) or [Mobx](https://mobx.js.org) some functions will look very familiar, in under `1kB` Sinuous observable is not as extensive but offers a distilled version of the same functionality. It works under this philosophy:
 
 _Anything that can be derived from the application state, should be derived. Automatically._
 
@@ -145,7 +144,7 @@ See the [wiki for more info](https://github.com/luwes/sinuous/wiki/Choose-your-o
 
 ## Hydration
 
-Sinuous [`hydrate`](./packages/sinuous/hydrate) is a small add-on that provides fast hydration of static HTML. It's used for adding event listeners, adding dynamic attributes or content to existing DOM elements.
+Sinuous [`hydrate`](./src/hydrate) is a small add-on that provides fast hydration of static HTML. It's used for adding event listeners, adding dynamic attributes or content to existing DOM elements.
 
 In terms of performance nothing beats statically generated HTML, both in serving and rendering on the client.
 
@@ -186,7 +185,7 @@ api.h = (...args) => {
 
 ### Methods
 
-These are defined in [sinuous/src](./packages/sinuous/src/index.js) and [sinuous/h](./packages/sinuous/h/index.js).
+These are defined in [sinuous/src](./src/src/index.js) and [sinuous/h](./src/h/index.js).
 
 - `h(type: string, props: object, ...children)`
 - `hs(type: string, props: object, ...children)`

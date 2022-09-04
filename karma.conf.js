@@ -108,13 +108,13 @@ module.exports = function(config) {
     files: [
       'https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.dataset%2CArray.from',
       {
-        pattern: config.grep || 'packages/sinuous*/**/test.js',
+        pattern: config.grep || 'src*/**/test.js',
         watched: false
       },
     ],
 
     preprocessors: {
-      'packages/sinuous*/**/test.js': ['rollup']
+      'src*/**/test.js': ['rollup']
     },
 
     rollupPreprocessor: {
@@ -129,15 +129,15 @@ module.exports = function(config) {
         alias({
           entries: {
             tape: 'tape-browser',
-            'sinuous/h': __dirname + '/packages/sinuous/h/src/index.js',
-            'sinuous/htm': __dirname + '/packages/sinuous/htm/src/index.js',
-            'sinuous/observable': __dirname + '/packages/sinuous/observable/src/observable.js',
-            'sinuous/template': __dirname + '/packages/sinuous/template/src/template.js',
-            'sinuous/data': __dirname + '/packages/sinuous/data/src/data.js',
-            'sinuous/render': __dirname + '/packages/sinuous/render/src/index.js',
-            'sinuous/hydrate': __dirname + '/packages/sinuous/hydrate/src/index.js',
-            'sinuous/map': __dirname + '/packages/sinuous/map/src/index.js',
-            'sinuous': __dirname + '/packages/sinuous/src/index.js'
+            'sinuous/h': __dirname + '/src/h/src/index.js',
+            'sinuous/htm': __dirname + '/src/htm/src/index.js',
+            'sinuous/observable': __dirname + '/src/observable/src/observable.js',
+            'sinuous/template': __dirname + '/src/template/src/template.js',
+            'sinuous/data': __dirname + '/src/data/src/data.js',
+            'sinuous/render': __dirname + '/src/render/src/index.js',
+            'sinuous/hydrate': __dirname + '/src/hydrate/src/index.js',
+            'sinuous/map': __dirname + '/src/map/src/index.js',
+            'sinuous': __dirname + '/src/src/index.js'
           }
         }),
         nodeResolve(),
@@ -145,14 +145,14 @@ module.exports = function(config) {
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
-            'packages/*/!(htm)/**/src/**/*.js'
+            '*/!(htm)/**/src/**/*.js'
         }),
         sauceLabs && babel({
           babelHelpers: 'bundled',
           inputSourceMap: false,
           compact: false,
           include: [
-            'packages/sinuous/**'
+            'src/**'
           ]
         })
       ].filter(Boolean),
