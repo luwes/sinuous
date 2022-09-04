@@ -11,10 +11,6 @@
       "import": "./module/sinuous.js",
       "require": "./dist/sinuous.js"
     },
-    "./all": {
-      "import": "./module/all.js",
-      "require": "./dist/all.js"
-    },
     "./h": {
       "import": "./module/h.js",
       "require": "./dist/h.js"

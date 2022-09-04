@@ -26,15 +26,6 @@
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |
 | ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template)     | Pre-rendered Template                   |
 
-### All-in-one
-
-| Size                                                                                                                                | Name                                    | Description                                                  |
-| ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------ |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/all.min.js?compression=gzip&label=gzip&style=flat-square&v=1) | [`sinuous/all`](./src/all) | All modules in one bundle for easy use with a `<script>` tag |
-
-**cdn**: https://unpkg.com/sinuous/dist/all  
-**module**: https://unpkg.com/sinuous/module/all
-
 ### Community
 
 - [**sinuous-context**](https://github.com/theSherwood/sinuous-context) ([@theSherwood](https://github.com/theSherwood)): A light-weight, fast, and easy to use context api for Sinuous.

@@ -100,12 +100,6 @@ const bundleSnippets = [
     input: `${src}/babel-plugin-htm/src/index.js`,
     [ESM + CJS]: { output: { exports: 'default' } },
   }),
-  mk('all', {
-    // Multiple globals - @see https://github.com/rollup/rollup/issues/494
-    input: `${src}/all/src/index.js`,
-    [ESM]: {},
-    [UMD + IIFE]: { output: { name: 'window', extend: true } },
-  }),
 ]
   .flat(); // Config snippets are split into their own full configs as an array
 
