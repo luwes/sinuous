@@ -9028,11 +9028,6 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-sinuous@0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.28.0.tgz#48bb529a707e5241296342ddc06bc50e3748d658"
-  integrity sha512-DdTpVWHdHzl/paqLXscU7+LAtOqAW5T82wxcmQrVD//SeL71MEN+SGV6naeqZWRrf5pmZ77dwhQYGEVhMllb/A==
-
 size-plugin-core@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/size-plugin-core/-/size-plugin-core-0.0.7.tgz#f63875902d6ae694d3989b7385286934a78020cd"
