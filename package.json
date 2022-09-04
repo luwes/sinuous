@@ -43,9 +43,7 @@
   "files": [
     "module",
     "dist",
-    "src",
-    "src/jsx.d.ts",
-    "src/shared.d.ts"
+    "src"
   ],
   "workspaces": {
     "packages": [
