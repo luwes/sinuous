@@ -1,263 +1,228 @@
-const EMPTY_ARR = [];
+/***** TYPES ******/
+/*****  SHARED STATE  *****/
+const NONE = Symbol();
 let tracking;
 let queue;
-
+/*****  MAIN  *****/
 /**
  * Returns true if there is an active observer.
- * @return {boolean}
  */
-export function isListening() {
-  return !!tracking;
+function isListening() {
+    return Boolean(tracking);
 }
-
 /**
- * Creates a root and executes the passed function that can contain computations.
- * The executed function receives an `unsubscribe` argument which can be called to
- * unsubscribe all inner computations.
+ * Creates a root and executes the passed function
+ * which can contain computations.
  *
- * @param  {Function} fn
- * @return {*}
+ * The function to be executed recieves a callback
+ * which can be called to unsubscribe all inner
+ * computations.
  */
-export function root(fn) {
-  const prevTracking = tracking;
-  const rootUpdate = () => {};
-  tracking = rootUpdate;
-  resetUpdate(rootUpdate);
-  const result = fn(() => {
-    _unsubscribe(rootUpdate);
-    tracking = undefined;
-  });
-  tracking = prevTracking;
-  return result;
-}
-
-/**
- * Sample the current value of an observable but don't create a dependency on it.
- *
- * @example
- * computed(() => { if (foo()) bar(sample(bar) + 1); });
- *
- * @param  {Function} fn
- * @return {*}
- */
-export function sample(fn) {
-  const prevTracking = tracking;
-  tracking = undefined;
-  const value = fn();
-  tracking = prevTracking;
-  return value;
-}
-
-/**
- * Creates a transaction in which an observable can be set multiple times
- * but only trigger a computation once.
- * @param  {Function} fn
- * @return {*}
- */
-export function transaction(fn) {
-  let prevQueue = queue;
-  queue = [];
-  const result = fn();
-  let q = queue;
-  queue = prevQueue;
-  q.forEach((data) => {
-    if (data._pending !== EMPTY_ARR) {
-      const pending = data._pending;
-      data._pending = EMPTY_ARR;
-      data(pending);
-    }
-  });
-  return result;
-}
-
-/**
- * Creates a new observable, returns a function which can be used to get
- * the observable's value by calling the function without any arguments
- * and set the value by passing one argument of any type.
- *
- * @param  {*} value - Initial value.
- * @return {Function}
- */
-function observable(value) {
-  function data(nextValue) {
-    if (arguments.length === 0) {
-      if (tracking && !data._observers.has(tracking)) {
-        data._observers.add(tracking);
-        tracking._observables.push(data);
-      }
-      return value;
-    }
-
-    if (queue) {
-      if (data._pending === EMPTY_ARR) {
-        queue.push(data);
-      }
-      data._pending = nextValue;
-      return nextValue;
-    }
-
-    value = nextValue;
-
-    // Clear `tracking` otherwise a computed triggered by a set
-    // in another computed is seen as a child of that other computed.
-    const clearedUpdate = tracking;
-    tracking = undefined;
-
-    // Update can alter data._observers, make a copy before running.
-    data._runObservers = new Set(data._observers);
-    data._runObservers.forEach((observer) => (observer._fresh = false));
-    data._runObservers.forEach((observer) => {
-      if (!observer._fresh) observer();
-    });
-
-    tracking = clearedUpdate;
-    return value;
-  }
-
-  // Tiny indicator that this is an observable function.
-  // Used in sinuous/h/src/property.js
-  data.$o = 1;
-  data._observers = new Set();
-  // The 'not set' value must be unique, so `nullish` can be set in a transaction.
-  data._pending = EMPTY_ARR;
-
-  return data;
-}
-
-/**
- * @namespace
- * @borrows observable as o
- */
-export { observable, observable as o };
-
-/**
- * Creates a new computation which runs when defined and automatically re-runs
- * when any of the used observable's values are set.
- *
- * @param {Function} observer
- * @param {*} value - Seed value.
- * @return {Function} Computation which can be used in other computations.
- */
-function computed(observer, value) {
-  observer._update = update;
-
-  // if (tracking == null) {
-  //   console.warn("computations created without a root or parent will never be disposed");
-  // }
-
-  resetUpdate(update);
-  update();
-
-  function update() {
+function root(fn) {
     const prevTracking = tracking;
-    if (tracking) {
-      tracking._children.push(update);
-    }
-
-    _unsubscribe(update);
-    update._fresh = true;
-    tracking = update;
-    value = observer(value);
-
+    const rootUpdate = () => { };
+    tracking = rootUpdate;
+    resetUpdate(rootUpdate);
+    const result = fn(() => {
+        _unsubscribe(rootUpdate);
+        tracking = undefined;
+    });
+    tracking = prevTracking;
+    return result;
+}
+/**
+ * Provides current values of observables without
+ * establishing dependencies.
+ *
+ * Example:
+ * ```ts
+ * computed(() => {
+ *     if (foo()) bar(sample(bar) + 1)
+ * })
+ * ```
+ */
+function sample(fn) {
+    const prevTracking = tracking;
+    tracking = undefined;
+    const value = fn();
     tracking = prevTracking;
     return value;
-  }
-
-  // Tiny indicator that this is an observable function.
-  // Used in sinuous/h/src/property.js
-  data.$o = 1;
-
-  function data() {
-    if (update._fresh) {
-      if (tracking) {
-        // If being read from inside another computed, pass observables to it
-        update._observables.forEach((o) => o());
-      }
-    } else {
-      value = update();
-    }
-    return value;
-  }
-
-  return data;
 }
-
 /**
- * @namespace
- * @borrows computed as S
+ * Creates a transaction in which an observable
+ * can be set multiple times but trigger a
+ * computation only once.
  */
-export { computed, computed as S };
-
-/**
- * Run the given function just before the enclosing computation updates
- * or is disposed.
- * @param  {Function} fn
- * @return {Function}
- */
-export function cleanup(fn) {
-  if (tracking) {
-    tracking._cleanups.push(fn);
-  }
-  return fn;
-}
-
-/**
- * Subscribe to updates of an observable.
- * @param  {Function} observer
- * @return {Function}
- */
-export function subscribe(observer) {
-  computed(observer);
-  return () => _unsubscribe(observer._update);
-}
-
-/**
- * Statically declare a computation's dependencies.
- *
- * @param  {Function|Array}   obs
- * @param  {Function} fn - Callback function.
- * @param  {*} [seed] - Seed value.
- * @param  {boolean} [onchanges] - If true the initial run is skipped.
- * @return {Function} Computation which can be used in other computations.
- */
-export function on(obs, fn, seed, onchanges) {
-  obs = [].concat(obs);
-  return computed((value) => {
-    obs.forEach((o) => o());
-
-    let result = value;
-    if (!onchanges) {
-      result = sample(() => fn(value));
-    }
-
-    onchanges = false;
+function transaction(fn) {
+    const previousQueue = queue;
+    queue = [];
+    const result = fn();
+    const transactionQueue = queue;
+    queue = previousQueue;
+    transactionQueue.forEach(observable => {
+        if (observable._pending !== NONE) {
+            const pending = observable._pending;
+            observable._pending = NONE;
+            observable(pending);
+        }
+    });
     return result;
-  }, seed);
 }
-
 /**
- * Unsubscribe from an observer.
- * @param  {Function} observer
+ * Creates a new observable and returns it.
+ * An observable can be called without an argument
+ * to get its current value, and be called with an
+ * argument to update its value while also
+ * triggering any computations that depend on it.
  */
-export function unsubscribe(observer) {
-  _unsubscribe(observer._update);
-}
-
-function _unsubscribe(update) {
-  update._children.forEach(_unsubscribe);
-  update._observables.forEach((o) => {
-    o._observers.delete(update);
-    if (o._runObservers) {
-      o._runObservers.delete(update);
+function observable(value) {
+    function data(nextValue) {
+        if (arguments.length === 0 &&
+            tracking &&
+            !data._observers.has(tracking)) {
+            data._observers.add(tracking);
+            tracking._observables?.push(data);
+            return value;
+        }
+        if (arguments.length === 0) {
+            return value;
+        }
+        if (queue) {
+            if (data._pending === NONE)
+                queue.push(data);
+            // @ts-ignore code is reachable only if
+            // nextValue is provided, and tsc checks that
+            // the type is T
+            data._pending = nextValue;
+            return nextValue;
+        }
+        // @ts-ignore code is reachable only if nextValue
+        // is provided, and tsc checks that the type is T
+        value = nextValue;
+        // Clear `tracking`
+        // otherwise a computed triggered by a set
+        // operation in another computed is seen as
+        // a child of that other computed
+        const clearedUpdate = tracking;
+        tracking = undefined;
+        // Updates can queue more updates
+        // so we create a copy of all the observers
+        // we want to run beforehand
+        data._queuedObservers =
+            new Set(data._observers);
+        data._queuedObservers.forEach(observer => {
+            observer._fresh = false;
+        });
+        data._queuedObservers.forEach(observer => {
+            if (observer._fresh === false) {
+                observer();
+            }
+        });
+        tracking = clearedUpdate;
+        return value;
     }
-  });
-  update._cleanups.forEach((c) => c());
-  resetUpdate(update);
+    data.$o = 1;
+    data._observers = new Set;
+    data._queuedObservers = new Set;
+    data._pending = NONE;
+    return data;
 }
-
+/**
+ * Creates a new computation which runs when
+ * defined and automatically re-runs when any of
+ * the used observable's values are updated.
+ */
+function computed(observer, value) {
+    function update() {
+        const prevTracking = tracking;
+        if (tracking)
+            tracking._children?.push(update);
+        _unsubscribe(update);
+        update._fresh = true;
+        tracking = update;
+        value = observer(value);
+        tracking = prevTracking;
+        return value;
+    }
+    update._fresh = false;
+    update._observables = new Array;
+    function data() {
+        if (update._fresh && tracking) {
+            update._observables.forEach(o => o());
+        }
+        if (update._fresh !== true) {
+            value = update();
+        }
+        // @ts-ignore `value` should not be
+        // undefined by this point
+        return value;
+    }
+    data.$o = 1;
+    data._observers = new Set;
+    data._queuedObservers = new Set;
+    data._pending = NONE;
+    resetUpdate(update);
+    update();
+    observer._update = update;
+    return data;
+}
+/**
+ * Run the given function just before the enclosing
+ * computation updates or is disposed
+ */
+function cleanup(fn) {
+    if (tracking)
+        tracking._cleanups?.push(fn);
+    return fn;
+}
+/**
+ * Subscribe to updates of an observable
+ */
+function subscribe(observer) {
+    computed(observer);
+    return () => {
+        if (observer._update)
+            _unsubscribe(observer._update);
+    };
+}
+function on(observables, fn, seed, onchanges = false) {
+    const obs = (new Array)
+        .concat(observables);
+    return computed((value) => {
+        obs.forEach(o => o());
+        // @ts-ignore onchanges being true
+        // implies a seed value was provided
+        // as the parameter preceding it, which
+        // will be used as `value` here
+        const result = onchanges == true
+            ? value
+            : sample(() => fn(value));
+        onchanges = false;
+        return result;
+    }, seed);
+}
+/**
+ * Unsubscribe from an observer
+ */
+function unsubscribe(observer) {
+    observer._update && _unsubscribe(observer._update);
+}
+/*****  HELPER FUNCTIONS  *****/
+function _unsubscribe(update) {
+    update._children?.forEach(_unsubscribe);
+    update._observables?.forEach(observable => {
+        observable._observers.delete(update);
+        observable._queuedObservers.delete(update);
+    });
+    update._cleanups?.forEach(cleanup => cleanup());
+    resetUpdate(update);
+}
 function resetUpdate(update) {
-  // Keep track of which observables trigger updates. Needed for unsubscribe.
-  update._observables = [];
-  update._children = [];
-  update._cleanups = [];
+    // Keep track of which observables trigger
+    // an update, needed for unsubscribe
+    update._observables = [];
+    update._children = [];
+    update._cleanups = [];
 }
+/*****  EXPORTS  *****/
+export { isListening, root, sample, transaction, observable, observable as o, computed, computed as S, cleanup, subscribe, on, unsubscribe };
