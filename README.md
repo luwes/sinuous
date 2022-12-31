@@ -41,7 +41,7 @@
 - [**Analog SVG Clock**](https://sinuous.dev/examples/clock/) ⏰
 - [**Classic TodoMVC**](https://luwes.github.io/sinuous-todomvc/) _([GitHub Project](https://github.com/luwes/sinuous-todomvc))_
 - [**JS Framework Benchmark**](https://github.com/krausest/js-framework-benchmark/blob/master/frameworks/keyed/sinuous/src/main.js) (@ GitHub)
-- [**Sierpinski Triangle**](https://luwes.github.io/sinuous-sierpinski-triangle-demo/) _([GitHub Project](https://github.com/luwes/sinuous-sierpinski-triangle-demo))_
+- [**Sierpinski Triangle**](https://replit.com/@luwes/sinuous-sierpinski-triangle-demo)
 - [**Three.js Boxes**](https://luwes.github.io/sinuous-three-boxes/) _([GitHub Project](https://github.com/luwes/sinuous-three-boxes))_ 📦
 - [**JSX**](https://github.com/heyheyhello/sinuous-tsx-example/tree/jsx/) _([GitHub Project @heyheyhello](https://github.com/heyheyhello/sinuous-tsx-example/tree/jsx/))_
 - [**TSX**](https://github.com/heyheyhello/sinuous-tsx-example/tree/tsx/) _([GitHub Project @heyheyhello](https://github.com/heyheyhello/sinuous-tsx-example/tree/tsx/))_
