@@ -7,52 +7,11 @@ const minimist = require('minimist');
 const c = require('ansi-colors');
 const argv = minimist(process.argv.slice(2));
 
-var coverage = String(process.env.COVERAGE) === 'true',
-  ci = String(process.env.CI).match(/^(1|true)$/gi),
-  pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
-  mainBranch = String(process.env.TRAVIS_BRANCH).match(/^main$/gi),
-  sauceLabs = ci && !pullRequest && mainBranch;
-
-var sauceLabsLaunchers = {
-  sl_chrome: {
-    base: 'SauceLabs',
-    browserName: 'chrome',
-    browserVersion: '98',
-    platform: 'Windows 10'
-  },
-  sl_firefox: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    platform: 'Windows 10'
-  },
-  sl_safari: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    platform: 'macOS 10.13'
-  },
-  sl_edge: {
-    base: 'SauceLabs',
-    browserName: 'MicrosoftEdge',
-    browserVersion: '98',
-    platform: 'Windows 10'
-  }
-};
+var coverage = String(process.env.COVERAGE) === 'true';
 
 module.exports = function(config) {
   config.set({
-    browsers: sauceLabs
-      ? Object.keys(sauceLabsLaunchers)
-      : ['FirefoxHeadless'],
-
-    customLaunchers: sauceLabs ? sauceLabsLaunchers : undefined,
-
-    sauceLabs: {
-      build: 'CI #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
-      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER || ('local'+require('./package.json').version),
-      connectLocationForSERelay: 'localhost',
-      connectPortForSERelay: 4445,
-      startConnect: false
-    },
+    browsers: ['FirefoxHeadless'],
 
     // browserLogOptions: { terminal: true },
     // browserConsoleLogOptions: { terminal: true },
@@ -79,8 +38,7 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['tap-pretty'].concat(
-      coverage ? 'coverage' : [],
-      sauceLabs ? 'saucelabs' : []
+      coverage ? 'coverage' : []
     ),
 
     tapReporter: {

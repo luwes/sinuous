@@ -194,12 +194,6 @@ Sinuous started as a little experiment to get similar behavior as [Surplus](http
 
 Sinuous returns a [hyperscript](https://github.com/hyperhype/hyperscript) function which is armed to handle the callback functions from the reactive library and updates the DOM accordingly.
 
-## Browser Support
-
-Sinuous supports all modern browsers.
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinuous.svg)](https://saucelabs.com/u/sinuous)
-
 ## Contributors
 
 ### Code Contributors
@@ -229,9 +223,3 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/sinuous/organization/7/website"><img src="https://opencollective.com/sinuous/organization/7/avatar.svg"></a>
 <a href="https://opencollective.com/sinuous/organization/8/website"><img src="https://opencollective.com/sinuous/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/sinuous/organization/9/website"><img src="https://opencollective.com/sinuous/organization/9/avatar.svg"></a>
-
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source ❤ Provided by [Sauce Labs][homepage]
-
-[homepage]: https://saucelabs.com
