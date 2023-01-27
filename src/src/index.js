@@ -6,6 +6,7 @@ import {
   o,
   observable,
   subscribe,
+  computed,
   cleanup,
   root,
   sample,
@@ -39,4 +40,4 @@ export const html = (...args) => htm.apply(h, args);
 // `export const svg = htm.bind(hs)` is not tree-shakeable!
 export const svg = (...args) => htm.apply(hs, args);
 
-export { api, o, observable };
+export { api, o, observable, computed };
