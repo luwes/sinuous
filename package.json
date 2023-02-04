@@ -41,7 +41,7 @@
     "test": "cross-env COVERAGE=true yarn test:htm && karma start",
     "test:htm": "tape -r esm test/htm/*.js | faucet",
     "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist",
-    "prepublishOnly": "yarn lint"
+    "prepublishOnly": "npm run lint"
   },
   "eslintConfig": {
     "root": true,
