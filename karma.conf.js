@@ -74,12 +74,6 @@ module.exports = function(config) {
     },
 
     rollupPreprocessor: {
-      output: {
-        format: 'iife', // Helps prevent naming collisions.
-        name: 'sinuousTest', // Required for 'iife' format.
-        sourcemap: 'inline' // Sensible for testing.
-      },
-      preserveSymlinks: true,
       plugins: [
         alias({
           entries: {
