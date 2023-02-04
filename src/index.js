@@ -40,4 +40,4 @@ export const html = (...args) => htm.apply(h, args);
 // `export const svg = htm.bind(hs)` is not tree-shakeable!
 export const svg = (...args) => htm.apply(hs, args);
 
-export { api, o, observable, computed };
+export { api, o, observable, computed, subscribe };
