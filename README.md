@@ -1,12 +1,11 @@
 # <a href="https://github.com/luwes/sinuous"><img src="https://sinuous.netlify.app/images/sinuous-logo.svg?sanitize=true" height="40" alt="Sinuous" /></a>
 
 [![Version](https://img.shields.io/npm/v/sinuous.svg?color=success&style=flat-square)](https://www.npmjs.com/package/sinuous)
-![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/module/sinuous-observable.js?compression=gzip&label=gzip&style=flat-square)
+![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/+esm?compression=gzip&label=gzip&style=flat-square)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/sinuous)
 
 **npm**: `npm i sinuous`  
-**cdn**: https://unpkg.com/sinuous  
-**module**: https://unpkg.com/sinuous?module
+**cdn**: https://cdn.jsdelivr.net/npm/sinuous/+esm
 
 ---
 
@@ -21,10 +20,10 @@
 
 | Size                                                                                                                                   | Name                                     | Description                             |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/observable.min.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable) | Tiny observable _(included by default)_ |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/map.min.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map)               | Fast list renderer                      |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |
-| ![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/template.min.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template)     | Pre-rendered Template                   |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable) | Tiny observable _(included by default)_ |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/map.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map)               | Fast list renderer                      |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/hydrate.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/template.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template)     | Pre-rendered Template                   |
 
 ### Community
 
