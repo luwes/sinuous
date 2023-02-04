@@ -2,3 +2,4 @@ rules:
   no-var: off
   no-cond-assign: off
   no-negated-condition: error
+  no-constant-condition: off

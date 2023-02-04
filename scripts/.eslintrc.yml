@@ -1,8 +1,0 @@
-env:
-  node: true
-
-parserOptions:
-  ecmaVersion: 9
-
-rules:
-  no-console: off

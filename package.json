@@ -1,48 +1,39 @@
 {
-  "private": false,
+  "private": true,
   "name": "sinuous",
   "version": "0.29.1",
   "description": "🧬 Small, fast, reactive render engine",
-  "module": "module/sinuous.js",
-  "main": "dist/sinuous.js",
+  "module": "src/index.js",
+  "main": "src/index.js",
   "types": "src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./module/sinuous.js",
-      "require": "./dist/sinuous.js"
+      "import": "./src/index.js"
     },
     "./h": {
-      "import": "./module/h.js",
-      "require": "./dist/h.js"
+      "import": "./src/h.js"
     },
     "./babel-plugin-htm": {
-      "import": "./module/babel-plugin-htm.js",
+      "import": "./src/babel-plugin-htm.js",
       "require": "./dist/babel-plugin-htm.js"
     },
     "./htm": {
-      "import": "./module/htm.js",
-      "require": "./dist/htm.js"
+      "import": "./src/htm.js"
     },
     "./hydrate": {
-      "import": "./module/hydrate.js",
-      "require": "./dist/hydrate.js"
+      "import": "./src/hydrate.js"
     },
     "./map": {
-      "import": "./module/map.js",
-      "require": "./dist/map.js"
+      "import": "./src/map.js"
     },
     "./observable": {
-      "import": "./module/observable.js",
-      "require": "./dist/observable.js"
+      "import": "./src/observable.js"
     },
     "./template": {
-      "import": "./module/template.js",
-      "require": "./dist/template.js"
+      "import": "./src/template.js"
     }
   },
   "files": [
-    "module",
-    "dist",
     "src",
     "!**/test/**"
   ],
@@ -54,23 +45,15 @@
     ]
   },
   "scripts": {
-    "lint": "eslint 'src/{*,*/*,}/src/**/*.js'",
-    "format": "prettier --write '**/src/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**' '!**/test/**' '!**/htm/**' '!**/babel-plugin-htm/**' '!**/site/**'",
+    "lint": "eslint 'src/*.js'",
     "test": "cross-env COVERAGE=true yarn test:htm && karma start",
-    "test:htm": "tape -r esm src/htm/test/*.js | faucet",
-    "test:performance": "PERSIST=true time node --expose-gc src/observable/test/perf/index.js",
-    "build": "rollup -c scripts/rollup.js --silent",
-    "watch": "rollup -wc scripts/rollup.js --silent",
-    "serve": "(cd site && yarn dev)",
-    "dev": "run-p watch serve",
-    "prepublishOnly": "yarn lint && yarn build"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "singleQuote": true,
-    "semi": true
+    "test:htm": "tape -r esm test/htm/*.js | faucet",
+    "dev": "(cd site && yarn dev)",
+    "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist && (cd site && yarn build)",
+    "prepublishOnly": "yarn lint"
   },
   "eslintConfig": {
+    "root": true,
     "env": {
       "browser": true,
       "es6": true,
@@ -107,14 +90,10 @@
   },
   "homepage": "https://github.com/luwes/sinuous#readme",
   "devDependencies": {
-    "@babel/core": "^7.18.13",
-    "@babel/preset-env": "^7.18.10",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-replace": "^4.0.0",
     "ansi-colors": "^4.1.3",
-    "babel-plugin-transform-jsx-to-htm": "^2.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.23.0",
     "eslint-plugin-import": "^2.26.0",
@@ -128,17 +107,10 @@
     "karma-tap": "^4.2.0",
     "karma-tap-pretty-reporter": "^4.2.0",
     "minimist": "^1.2.6",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.7.1",
     "rollup": "^2.79.0",
-    "rollup-plugin-gzip": "^3.0.1",
     "rollup-plugin-istanbul": "^3.0.0",
-    "rollup-plugin-size": "^0.2.2",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-terser": "^7.0.2",
     "tape": "5.6.0",
     "tape-browser": "^4.13.0",
     "typescript": "^4.8.2"
-  },
-  "dependencies": {}
+  }
 }
