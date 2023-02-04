@@ -1,5 +1,5 @@
 {
-  "private": false,
+  "private": true,
   "name": "sinuous",
   "version": "0.30.0",
   "description": "🧬 Small, fast, reactive render engine",
