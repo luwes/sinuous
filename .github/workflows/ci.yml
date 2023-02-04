@@ -24,7 +24,7 @@ jobs:
         with:
           cache: npm
       - run: npm ci
-      - run: COVERAGE=true npm test --single-run --console --stack --log-level debug
+      - run: COVERAGE=true npm test -- --single-run --console --stack --log-level debug
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
