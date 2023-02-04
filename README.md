@@ -169,7 +169,7 @@ api.h = (...args) => {
 
 ### Methods
 
-These are defined in [sinuous/src](./src/src/index.js) and [sinuous/h](./src/h/index.js).
+These are defined in [sinuous/src](./src/index.js) and [sinuous/h](./src/h.js).
 
 - `h(type: string, props: object, ...children)`
 - `hs(type: string, props: object, ...children)`

@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "sinuous",
   "version": "0.30.0",
   "description": "🧬 Small, fast, reactive render engine",
@@ -37,19 +36,11 @@
     "src",
     "!**/test/**"
   ],
-  "workspaces": {
-    "packages": [
-      "./",
-      "site",
-      "site/src/**/*"
-    ]
-  },
   "scripts": {
     "lint": "eslint 'src/*.js'",
     "test": "cross-env COVERAGE=true yarn test:htm && karma start",
     "test:htm": "tape -r esm test/htm/*.js | faucet",
-    "dev": "(cd site && yarn dev)",
-    "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist && (cd site && yarn build)",
+    "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist",
     "prepublishOnly": "yarn lint"
   },
   "eslintConfig": {
