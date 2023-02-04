@@ -78,7 +78,7 @@ export function transaction(fn) {
  * @param  {*} value - Initial value.
  * @return {Function}
  */
-function observable(value) {
+function observable(value,comparator) {
   function data(nextValue) {
     if (arguments.length === 0) {
       if (tracking && !data._observers.has(tracking)) {
@@ -94,6 +94,13 @@ function observable(value) {
       }
       data._pending = nextValue;
       return nextValue;
+    }
+
+    // do not set the same value again
+    if (typeof comparator === 'function') {
+      if (comparator(nextValue,value) == true) { return value }
+    } else {
+      if (nextValue === value) { return value }
     }
 
     value = nextValue;
