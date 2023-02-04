@@ -1,8 +1,5 @@
 # Sinuous Hydrate
 
-![Badge size](https://img.badgesize.io/https://unpkg.com/sinuous/dist/hydrate.min.js?compression=gzip&label=gzip&style=flat-square)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/sinuous.svg?style=flat-square)](https://codecov.io/gh/luwes/sinuous)
-
 Sinuous Hydrate is a small add-on for [Sinuous](https://github.com/luwes/sinuous) that provides fast hydration of static HTML. The HTML or SVG that is defined with this API doesn't have to be exactly the same as the HTML coming from the server. It's perfectly valid to only define the attributes that have any dynamic values in it. This is intentionally done to minimize duplication.
 
 # Example
