@@ -64,13 +64,13 @@ module.exports = function(config) {
 
     files: [
       {
-        pattern: config.grep || 'src/test/test.js',
+        pattern: config.grep || 'test/test.js',
         watched: false
       },
     ],
 
     preprocessors: {
-      'src/test/test.js': ['rollup']
+      'test/test.js': ['rollup']
     },
 
     rollupPreprocessor: {
@@ -84,13 +84,13 @@ module.exports = function(config) {
         alias({
           entries: {
             tape: 'tape-browser',
-            'sinuous/h': __dirname + '/src/h/src/index.js',
-            'sinuous/htm': __dirname + '/src/htm/src/index.js',
-            'sinuous/observable': __dirname + '/src/observable/src/observable.js',
-            'sinuous/template': __dirname + '/src/template/src/template.js',
-            'sinuous/hydrate': __dirname + '/src/hydrate/src/index.js',
-            'sinuous/map': __dirname + '/src/map/src/index.js',
-            'sinuous': __dirname + '/src/src/index.js'
+            'sinuous/h': __dirname + '/src/h.js',
+            'sinuous/htm': __dirname + '/src/htm.js',
+            'sinuous/observable': __dirname + '/src/observable.js',
+            'sinuous/template': __dirname + '/src/template.js',
+            'sinuous/hydrate': __dirname + '/src/hydrate.js',
+            'sinuous/map': __dirname + '/src/map.js',
+            'sinuous': __dirname + '/src/index.js'
           }
         }),
         nodeResolve(),

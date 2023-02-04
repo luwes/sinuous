@@ -1,4 +1,4 @@
-import { Observable } from './observable/src';
+import { Observable } from './observable';
 
 export namespace JSXInternal {
   type OrObservable<T> = T | Observable<T>
