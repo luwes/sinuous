@@ -20,10 +20,10 @@
 
 | Size                                                                                                                                   | Name                                     | Description                             |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------- |
-| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable) | Tiny observable _(included by default)_ |
-| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/map.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map)               | Fast list renderer                      |
-| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/hydrate.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate)       | Hydrate static HTML                     |
-| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/template.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template)     | Pre-rendered Template                   |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/observable.js?compression=gzip&label=gzip&style=flat-square) | [`sinuous/observable`](./src/observable.md) | Tiny observable _(included by default)_ |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/map.js?compression=gzip&label=gzip&style=flat-square)        | [`sinuous/map`](./src/map.js)               | Fast list renderer                      |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/hydrate.js?compression=gzip&label=gzip&style=flat-square)    | [`sinuous/hydrate`](./src/hydrate.md)       | Hydrate static HTML                     |
+| ![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/sinuous/src/template.js?compression=gzip&label=gzip&style=flat-square)   | [`sinuous/template`](./src/template.md)     | Pre-rendered Template                   |
 
 ### Community
 
