@@ -1,7 +1,7 @@
 {
-  "private": true,
+  "private": false,
   "name": "sinuous",
-  "version": "0.29.1",
+  "version": "0.30.0",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "src/index.js",
   "main": "src/index.js",
