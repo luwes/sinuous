@@ -15,7 +15,7 @@
     },
     "./babel-plugin-htm": {
       "import": "./src/babel-plugin-htm.js",
-      "require": "./dist/babel-plugin-htm.js"
+      "require": "./dist/babel-plugin-htm.cjs"
     },
     "./htm": {
       "import": "./src/htm.js"
@@ -41,7 +41,7 @@
     "lint": "eslint 'src/*.js'",
     "test": "cross-env COVERAGE=true npm run test:htm && karma start karma.conf.cjs",
     "test:htm": "tape -r esm test/htm/*.js | faucet",
-    "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist",
+    "build": "rollup -i src/babel-plugin-htm.js -f cjs -o dist/babel-plugin-htm.cjs",
     "prepublishOnly": "npm run lint"
   },
   "eslintConfig": {
