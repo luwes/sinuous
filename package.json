@@ -5,6 +5,7 @@
   "module": "src/index.js",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "import": "./src/index.js"
@@ -38,7 +39,7 @@
   ],
   "scripts": {
     "lint": "eslint 'src/*.js'",
-    "test": "cross-env COVERAGE=true npm run test:htm && karma start",
+    "test": "cross-env COVERAGE=true npm run test:htm && karma start karma.conf.cjs",
     "test:htm": "tape -r esm test/htm/*.js | faucet",
     "build": "rollup -i src/babel-plugin-htm.js -f cjs -d dist",
     "prepublishOnly": "npm run lint"
