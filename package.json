@@ -1,6 +1,6 @@
 {
   "name": "sinuous",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "🧬 Small, fast, reactive render engine",
   "module": "src/index.js",
   "main": "src/index.js",
